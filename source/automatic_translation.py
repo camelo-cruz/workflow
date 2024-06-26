@@ -2,23 +2,20 @@ import os
 import pandas as pd
 from deep_translator import GoogleTranslator
 import argparse
+import json
 
-def translate(file, target_lang):
+LANGUAGES = json.loads("./materials/LANGUAGES.txt")
+
+def translate(file, source_language):
     df = pd.read_excel(file)
     
-    #read the excel sheet and either add a new column 'automatic_translation'
-    #or add to the existing column the translations
     for i in range(len(df)):
         try:
-            if 'automatic_translation' in df.columns:
-                df.loc[i,'automatic_translation'] = GoogleTranslator(source='auto', target='en').translate(df['transcription'][i]) 
-            else:
-                df.insert(df.columns.get_loc('transcription_comments'), 'automatic_translation', 'n')
-                df.loc[i,'automatic_translation'] = GoogleTranslator(source='auto', target='en').translate(df['transcription'][i]) 
+            df.loc[i,"translation_everything"] = GoogleTranslator(source=source_language, target='en').translate(df["latin_transcription_everything"][i])
+            df.loc[i,"translation_utterance_used"] = GoogleTranslator(source=source_language, target='en').translate(df["latin_transcription_utterance_used"][i])
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             
-        
     return df
 
 
@@ -33,14 +30,19 @@ def main():
     
     parser = argparse.ArgumentParser(description="automatic transcription")
     parser.add_argument("input_dir")
-    parser.add_argument("target_language", default="en")
+    parser.add_argument("source_language")
     args = parser.parse_args()
+    
+    language = None
+    for code, name in LANGUAGES.items():
+        if name == args.language.lower():
+            language = code
     
     for subdir, dir, files in os.walk(args.input_dir):
         for file in files:
-            if file.endswith('.xlsx'):
+            if file.endswith('annotated.xlsx'):
                 file = os.path.join(subdir, file)
-                df = translate(file, args.target_language)
+                df = translate(file, language)
                 df.to_excel(file)
 
 
