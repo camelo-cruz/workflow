@@ -46,7 +46,7 @@ pip install -r requirements.txt
 ## 2. Run the script
 
 - **For automatic transcription**
-    - **Replace (main\_folder\_path)** for the path to the parent folder containing the session folder
+    - **Replace (main\_folder\_path)** for the path to the parent folder containing the sessions folders
     - **Replace (language)** to the language to transcribe. For example: german, ukranian
 
 ```
@@ -59,4 +59,13 @@ This is an example:
 
 
 - **For automatic translation**
+
+
+    - **Replace (main\_folder\_path)** for the path to the parent folder containing the sessions folders
+    - **Replace (language)** to the language from which you want to translate. For example: german, ukranian
+
+```
+python source/automatic_translation.py (main_folder_path) (language)
+```
+
 - **For automatic glossing**
