@@ -1,0 +1,14 @@
+cutlet==0.4.0
+deep_translator==1.11.4
+openai_whisper==20231106
+pandas==2.2.2
+pyannote.audio==3.3.1
+pyannote.core==5.0.0
+pyannote.database==5.1.0
+pyannote.metrics==3.2.1
+pyannote.pipeline==3.0.1
+pydub==0.25.1
+spacy==3.7.5
+tqdm==4.65.0
+transformers==4.41.2
+transliterate==1.10.2
