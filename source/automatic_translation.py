@@ -4,7 +4,8 @@ from deep_translator import GoogleTranslator
 import argparse
 import json
 
-LANGUAGES = json.loads("./materials/LANGUAGES.txt")
+with open("./materials/LANGUAGES.txt", 'r', encoding='utf-8') as file:
+    LANGUAGES = json.load(file)
 
 def translate(file, source_language):
     df = pd.read_excel(file)
