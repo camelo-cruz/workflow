@@ -7,11 +7,9 @@ import json
 # Get the current directory
 current_dir = os.getcwd()
 
-# Get the parent directory of the current directory
-parent_dir = os.path.dirname(current_dir)
 
 # Construct the absolute path to the file
-file_path = os.path.join(parent_dir, 'materials', 'LANGUAGES.txt')
+file_path = os.path.join(current_dir, 'materials', 'LANGUAGES.txt')
 
 with open(file_path, 'r', encoding='utf-8') as file:
     LANGUAGES = json.load(file)
