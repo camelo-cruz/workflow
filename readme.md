@@ -72,6 +72,7 @@ python -m venv .venv
 ```
 pip install -r requirements.txt
 ```
+:exclamation: This might take a while :exclamation:
 
 ## 2. Run the script
 
