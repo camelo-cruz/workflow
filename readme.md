@@ -9,6 +9,12 @@
 
 ### 2. Clone the repository using the following link:
 
+![Github app](images/github_app.png "app")
+
+Choose from url and copy the following path:
+
+![from url](images/from_url.png "url")
+
 ```
 https://github.com/camelo-cruz/workflow.git
 ```
