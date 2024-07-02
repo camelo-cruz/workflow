@@ -13,11 +13,25 @@
 https://github.com/camelo-cruz/workflow.git
 ```
 
+
 ## Create environment :
 
 :exclamation: Be sure you are in the right folder, finishing with workflow :exclamation:
 
-For making sure of this, run the following command
+Open the terminal or cmd in your computer. Look for the following program in your computer and open it:
+
+```
+cmd
+```
+
+
+Go to the folder of the github repository. If you don't know how to do that, go to cmd and run the following command:
+
+```
+dir /S /B /AD "C:\Users\%USERNAME%\workflow"
+```
+
+For making sure of that you are in the correct directory, run the following command:
 
 ```
 pwd
@@ -35,16 +49,9 @@ python3 -m venv .venv
 	
 ## 1. Activate environment:
 
-- in Windows:
 
 ```
 .venv\Scripts\activate
-```
-
-- in Mac:
-
-```
-source .venv/bin/activate
 ```
 
 ##  install requirements:
