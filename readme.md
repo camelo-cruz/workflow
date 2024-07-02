@@ -3,7 +3,7 @@
 
 ## Download Github and clone repository:
 
-### 1. Download the Github app
+### 1. Download the Github app and sign in
 
 [Github app](https://desktop.github.com/download/)
 
@@ -29,7 +29,6 @@ Open the terminal or cmd in your computer. Look for the following program in you
 ```
 cmd
 ```
-
 
 Go to the folder of the github repository. If you don't know how to do that, go to cmd and run the following command:
 
@@ -37,10 +36,16 @@ Go to the folder of the github repository. If you don't know how to do that, go 
 dir /S /B /AD "C:\Users\%USERNAME%\workflow"
 ```
 
+this will print a path. Copy the given path and paste it:
+
+```
+cd (path)
+```
+
 For making sure of that you are in the correct directory, run the following command:
 
 ```
-pwd
+cd
 ```
 
 the ouput shoul be finishing with workflow. Like here:
@@ -50,7 +55,7 @@ the ouput shoul be finishing with workflow. Like here:
 > <strong>Note:</strong> Ignore this step if you have already created an environment
 
 ```
-python3 -m venv .venv
+python -m venv .venv
 ```
 	
 ## 1. Activate environment:
