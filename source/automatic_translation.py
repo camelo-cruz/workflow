@@ -43,7 +43,7 @@ def main():
     
     language = None
     for code, name in LANGUAGES.items():
-        if name == args.language.lower():
+        if name == args.source_language.lower():
             language = code
     
     for subdir, dir, files in os.walk(args.input_dir):
