@@ -1,5 +1,20 @@
 # Instructions to use scripts
 
+
+## Download Github and clone repository:
+
+### 1. Download the Github app
+
+[Github app](https://desktop.github.com/download/)
+
+### 2. Clone the repository using the following link:
+
+```
+https://github.com/camelo-cruz/workflow.git
+```
+
+## Create environment :
+
 :exclamation: Be sure you are in the right folder, finishing with workflow :exclamation:
 
 For making sure of this, run the following command
@@ -11,9 +26,6 @@ pwd
 the ouput shoul be finishing with workflow. Like here:
 
 ![path](images/workflow_path.png "path")
-
-
-## Create environment :
 
 > <strong>Note:</strong> Ignore this step if you have already created an environment
 
