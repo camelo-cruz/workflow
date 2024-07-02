@@ -32,6 +32,8 @@ def main():
     Main function to translate a manually prepaired transcription
     
     arguments:
+        
+        
     directory
     target language
     """
