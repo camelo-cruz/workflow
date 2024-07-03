@@ -26,7 +26,11 @@ pipeline = Pipeline.from_pretrained(
     "pyannote/speaker-diarization-3.1",
     use_auth_token="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")
 
-LANGUAGES = json.loads("./materials/LANGUAGES.txt")
+current_dir = os.getcwd()
+file_path = os.path.join(current_dir, 'materials', 'LANGUAGES')
+
+with open(file_path, 'r', encoding='utf-8') as file:
+    LANGUAGES = json.load(file)
 
 def __process_string(input_string):
     """

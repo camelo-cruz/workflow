@@ -4,11 +4,7 @@ from deep_translator import GoogleTranslator
 import argparse
 import json
 
-# Get the current directory
 current_dir = os.getcwd()
-
-
-# Construct the absolute path to the file
 file_path = os.path.join(current_dir, 'materials', 'LANGUAGES')
 
 with open(file_path, 'r', encoding='utf-8') as file:

@@ -10,25 +10,28 @@ import re
 import os
 import sys
 import spacy
+import json
 import argparse
 import pandas as pd
 from transformers import MarianMTModel, MarianTokenizer
 
-# Leipzig Glossing Abbreviations
-LEIPZIG_GLOSSARY = {
-    'PROPN': 'PN', 'NOUN': 'N', 'VERB': 'V', 'ADJ': 'ADJ', 'ADV': 'ADV', 'PRON': 'PRON', 'DET': 'DET', 
-    'ADP': 'ADP', 'NUM': 'NUM', 'CONJ': 'CONJ', 'INTJ': 'INTJ', 'PART': 'PART', 'SCONJ': 'SCONJ', 
-    'PUNCT': 'PUNCT', 'SYM': 'SYM', 'X': 'X', 'AUX': 'AUX',
-    'Gender=Fem': 'F', 'Gender=Masc': 'M', 'Gender=Neut': 'N', 
-    'Number=Sing': 'SG', 'Number=Plur': 'PL', 
-    'Case=Nom': 'NOM', 'Case=Gen': 'GEN', 'Case=Dat': 'DAT', 'Case=Acc': 'ACC',
-    'Tense=Pres': 'PRS', 'Tense=Past': 'PST',
-    'Mood=Ind': 'IND', 'Mood=Sub': 'SUBJ',
-    'VerbForm=Fin': 'FIN', 'VerbForm=Inf': 'INF', 'VerbForm=Part': 'PTCP',
-    'Person=1': '1', 'Person=2': '2', 'Person=3': '3'
-}
+current_dir = os.getcwd()
+language_path = os.path.join(current_dir, 'materials', 'LANGUAGES')
+leipzig_path = os.path.join(current_dir, 'materials', 'LEIPZIG_GLOSSARY')
 
-LANGUAGES = {'de': 'german'}
+def load_json(path):
+    """Utility function to load a JSON file."""
+    try:
+        with open(path, 'r', encoding='utf-8') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print(f"Error: The file {path} does not exist.")
+    except json.JSONDecodeError:
+        print(f"Error: Failed to decode JSON from {path}")
+
+LANGUAGES = load_json(language_path)
+LEIPZIG_GLOSSARY = load_json(leipzig_path)
+    
 
 MODEL_TRANSLATION = {'de': 'Helsinki-NLP/opus-mt-de-en'}
 
