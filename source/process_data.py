@@ -1,9 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jul  3 18:17:22 2024
+Copyright (C) 2024  Alejandra Camelo Cruz
 
-@author: alejandra
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+        
+Leibniz Institute General Linguistics (ZAS)
 """
 
 import os
@@ -11,11 +24,21 @@ import pandas as pd
 import argparse
 
 obligatory_columns = [
-    "personal_data_free_check", "automatic_transcription", "latin_transcription_everything",
-    "latin_transcription_utterance_used", "transcription_comment", "transcription_check",
-    "automatic_translation", "translation_everything", "translation_utterance_used",
-    "translation_comment", "translation_check", "transcription_morphosegmentation", 
-    "automatic_glossing", "glossing_utterance_used", "glossing_comment"
+    "personal_data_free_check", 
+    "automatic_transcription", 
+    "latin_transcription_everything",
+    "latin_transcription_utterance_used", 
+    "transcription_comment", 
+    "transcription_check",
+    "automatic_translation", 
+    "translation_everything", 
+    "translation_utterance_used",
+    "translation_comment", 
+    "translation_check", 
+    "transcription_morphosegmentation", 
+    "automatic_glossing", 
+    "glossing_utterance_used", 
+    "glossing_comment"
 ]
 
 
@@ -34,7 +57,6 @@ def process_data(directory):
             print(f"Error processing the file {excel_file_path}: {e}")
 
 def update_columns(df):
-    # Ensure all obligatory columns exist in the DataFrame, add if not
     for column in obligatory_columns:
         if column not in df.columns:
             df[column] = ''
@@ -48,15 +70,12 @@ def update_columns(df):
     }
 
 
-    # Map old columns to new columns and track old columns
     for new_col, old_col in mapping_columns.items():
         if old_col in df.columns:
             df[new_col] = df[old_col]
 
-    # Remove hyphens from 'latin_transcription_utterance_used' if it exists
     try:
         if 'latin_transcription_utterance_used' in df.columns:
-            # Convert to string to avoid issues with non-string data
             df['latin_transcription_utterance_used'] = df['latin_transcription_utterance_used'].str.replace('-', '', regex=True)
     except Exception as e:
         print(f"Handled error: {e} - Continuing with other operations.")
