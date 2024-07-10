@@ -33,7 +33,7 @@ import json
 warnings.filterwarnings("ignore")
 model = whisper.load_model("large-v3")
 current_dir = os.getcwd()
-file_path = os.path.join(current_dir, 'materials', 'LANGUAGES')
+file_path = os.path.abspath(os.path.join(current_dir, 'materials', 'LANGUAGES'))
 
 with open(file_path, 'r', encoding='utf-8') as file:
     LANGUAGES = json.load(file)
