@@ -30,13 +30,15 @@ file_path = os.path.join(current_dir, 'materials', 'LANGUAGES')
 with open(file_path, 'r', encoding='utf-8') as file:
     LANGUAGES = json.load(file)
 
-def translate(file, source_language):
+def translate(file, instruction, source_language):
     df = pd.read_excel(file)
     
     for i in range(len(df)):
         try:
-            df.loc[i,"translation_everything"] = GoogleTranslator(source=source_language, target='en').translate(df["latin_transcription_everything"][i])
-            df.loc[i,"translation_utterance_used"] = GoogleTranslator(source=source_language, target='en').translate(df["latin_transcription_utterance_used"][i])
+            if instruction == 'transcription':
+                df.loc[i,"translation_everything"] = GoogleTranslator(source=source_language, target='en').translate(df["latin_transcription_everything"][i])
+            elif instruction == 'sentences':
+                df.loc[i,"translation_utterance_used"] = GoogleTranslator(source=source_language, target='en').translate(df["latin_transcription_utterance_used"][i])
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             
@@ -56,6 +58,7 @@ def main():
     
     parser = argparse.ArgumentParser(description="automatic transcription")
     parser.add_argument("input_dir")
+    parser.add_argument("instruction", choices=["transcription", "sentences"], help="Type of instruction for processing.")
     parser.add_argument("source_language")
     args = parser.parse_args()
     
@@ -64,11 +67,11 @@ def main():
         if name == args.source_language.lower():
             language = code
     
-    for subdir, dir, files in os.walk(args.input_dir):
+    for subdir, dirs, files in os.walk(args.input_dir):
         for file in files:
             if file.endswith('annotated.xlsx'):
                 file = os.path.join(subdir, file)
-                df = translate(file, language)
+                df = translate(file, args.instruction, language)
                 df.to_excel(file)
 
 
