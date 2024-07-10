@@ -23,7 +23,7 @@ import os
 import pandas as pd
 import argparse
 
-obligatory_columns = [
+OBLIGATORY = [
     "personal_data_free_check", 
     "automatic_transcription", 
     "latin_transcription_everything",
@@ -41,6 +41,14 @@ obligatory_columns = [
     "glossing_comment"
 ]
 
+MAPPING = {
+    "latin_transcription_everything": "transcription",
+    "translation_everything": "translation",
+    "latin_transcription_utterance_used": "glossing_object_language",
+    "transcription_morphosegmentation": "glossing_object_language",
+    "glossing_utterance_used": "glossing_meta_language"
+    }
+
 
 def process_data(directory):
     for subdir, dirs, files in os.walk(directory):
@@ -57,20 +65,11 @@ def process_data(directory):
             print(f"Error processing the file {excel_file_path}: {e}")
 
 def update_columns(df):
-    for column in obligatory_columns:
+    for column in OBLIGATORY:
         if column not in df.columns:
             df[column] = ''
 
-    mapping_columns = {
-        "latin_transcription_everything": "transcription",
-        "translation_everything": "translation",
-        "latin_transcription_utterance_used": "glossing_object_language",
-        "transcription_morphosegmentation": "glossing_object_language",
-        "glossing_utterance_used": "glossing_meta_language"
-    }
-
-
-    for new_col, old_col in mapping_columns.items():
+    for new_col, old_col in MAPPING.items():
         if old_col in df.columns:
             df[new_col] = df[old_col]
 
@@ -84,8 +83,8 @@ def update_columns(df):
 
 
 def reorder_columns(df):
-    additional_columns = [col for col in df.columns if col not in obligatory_columns]
-    new_column_order = additional_columns + obligatory_columns
+    additional_columns = [col for col in df.columns if col not in OBLIGATORY]
+    new_column_order = additional_columns + OBLIGATORY
     return df[new_column_order]
 
 if __name__ == '__main__':
