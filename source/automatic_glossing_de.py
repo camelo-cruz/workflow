@@ -101,13 +101,13 @@ def process_data(input_dir, language_code):
     try:
         for subdir, dirs, files in os.walk(input_dir):
             for file in files:
-                if file.endswith('.xlsx'):
+                if file.endswith('annotated.xlsx'):
                     excel_input_file = os.path.join(subdir, file)
                     df = pd.read_excel(excel_input_file)
-                    if 'glossing_object_language' in df.columns:
+                    if 'latin_transcription_utterance_used' in df.columns:
                         print('Glossing:', file)
                         excel_output_file = os.path.join(subdir, f'{os.path.splitext(file)[0]}_glossed.xlsx')
-                        sentences_groups = df['glossing_object_language']
+                        sentences_groups = df['latin_transcription_utterance_used']
                         glossed_utterances = []
                         for idx, sentences in enumerate(sentences_groups):
                             if isinstance(sentences, str):
@@ -119,7 +119,7 @@ def process_data(input_dir, language_code):
                                 glossed_utterances.append('\n'.join(glossed_sentences))
                             else:
                                 glossed_utterances.append('')
-                        df['glossing_utterance_used'] = glossed_utterances
+                        df['automatic_glossing'] = glossed_utterances
                         df.to_excel(excel_output_file, index=False)
                     else:
                         print('No column to transcribe in file:', file)
@@ -135,7 +135,7 @@ def main():
     
     language_code = next((code for code, name in LANGUAGES.items() if name == args.language.lower()), None)
     if language_code:
-        print(f"Transcribing for {args.language} ({language_code})")
+        print(f"Glossing for {args.language} ({language_code})")
         process_data(args.input_dir, language_code)
     else:
         print(f"Unsupported language: {args.language}")
