@@ -6,3 +6,4 @@ spacy==3.7.5
 tqdm==4.65.0
 transformers==4.42.3
 transliterate==1.10.2
+openpyxl
