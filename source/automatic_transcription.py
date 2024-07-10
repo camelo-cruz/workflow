@@ -155,12 +155,14 @@ def process_data(directory, language, diarization = False, latin_transliteration
                                "translation_utterance_used",
                                "translation_comment",
                                "translation_check",
+                               "transcription_morphosegmentation",
                                "automatic_glossing",
                                "glossing_utterance_used",
                                "glossing_comment"
                     ]
                 for column in new_columns:
-                    df[column] = ""
+                    if column not in df:
+                        df[column] = ""
                     
                 #continue with the files
                 count = 0
