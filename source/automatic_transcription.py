@@ -30,11 +30,18 @@ import cutlet
 import json
 
 
+# Suppress warnings that can clutter output, use this cautiously as it might hide important warnings
 warnings.filterwarnings("ignore")
+
+# Load and initialize the Whisper model for audio processing
 model = whisper.load_model("large-v3")
+
+# Store the current working directory for relative path calculations
 current_dir = os.getcwd()
+# Compute the absolute file path for the language configurations
 file_path = os.path.abspath(os.path.join(current_dir, 'materials', 'LANGUAGES'))
 
+# Load language configurations from a JSON file
 with open(file_path, 'r', encoding='utf-8') as file:
     LANGUAGES = json.load(file)
 
@@ -58,7 +65,20 @@ def __process_string(input_string):
 
 def process_data(directory, language, latin_transliteration = False):
     """
-    Process audio files in a directory, perform transcription, and update a CSV file.
+    This functions iterates over a given directory and looks for a 'binaries' folder,
+    containing audio data. The function takes as input then the trials and sessions
+    csv file and the binares linked to it and perfoms automatic transcription using 
+    the model Whisper from OpenAI for a given language.
+    
+    For each audio file, the program looks for its name inside the csv and 
+    according its to row index, it transcribes the audio and postprocess the text
+    to delete punctuation. It also keeps track of the number of transcription
+    in case there are 2 audio files for task, in order to not overwrite.
+    The program writes the final text in a column named automatic_transcription
+    in the previously found row index.
+    It can also perform transliteration if asked for.
+    
+    
 
     Parameters:
         directory (str): Path to the input directory.
@@ -95,7 +115,6 @@ def process_data(directory, language, latin_transliteration = False):
                     if column not in df:
                         df[column] = ""
                     
-                #continue with the files
                 count = 0
                 for file in tqdm(files, desc=f"Processing Files in subdir {subdir}", unit="file"):
                     if file.endswith('.mp3'):
