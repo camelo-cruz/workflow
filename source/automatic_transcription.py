@@ -24,7 +24,6 @@ import warnings
 import argparse
 import string
 import pandas as pd
-from pydub import AudioSegment
 from tqdm import tqdm
 from transliterate import translit
 import cutlet
@@ -55,35 +54,6 @@ def __process_string(input_string):
     processed_string = lowercase_string.translate(translator)
 
     return processed_string
-
-
-def __cut_audio(audiofile, start, end):
-    """
-    Cut a segment from an audio file based on start and end timestamps.
-
-    Parameters:
-        audiofile (str): Path to the input audio file.
-        start (float): Start timestamp (in seconds) for the segment.
-        end (float): End timestamp (in seconds) for the segment.
-
-    Returns:
-        str: Path to the output audio file containing the segment.
-    """
-    output = "tmp.wav"
-
-    if audiofile.endswith('.wav'):
-        sound = AudioSegment.from_wav(audiofile)  # for mp3: AudioSegment.from_mp3()
-    elif audiofile.endswith('.mp3'):
-        sound = AudioSegment.from_mp3(audiofile)
-
-    StrtTime = float(start) * 1000
-    EndTime = float(end) * 1000
-    extract = sound[StrtTime:EndTime]
-
-    # save
-    extract.export(output, format="wav")
-
-    return output
 
 
 def process_data(directory, language, latin_transliteration = False):
