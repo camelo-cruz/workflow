@@ -35,8 +35,10 @@ def translate(file, instruction, source_language):
     
     for i in range(len(df)):
         try:
-            if instruction == 'transcription':
+            if instruction == 'corrected':
                 df.loc[i,"automatic_translation"] = GoogleTranslator(source=source_language, target='en').translate(df["latin_transcription_everything"][i])
+            elif instruction == 'automatic_transcription':
+                df.loc[i,"automatic_translation"] = GoogleTranslator(source=source_language, target='en').translate(df["automatic_transcription"][i])
             elif instruction == 'sentences':
                 df.loc[i,"translation_utterance_used"] = GoogleTranslator(source=source_language, target='en').translate(df["latin_transcription_utterance_used"][i])
         except Exception as e:
@@ -58,7 +60,9 @@ def main():
     
     parser = argparse.ArgumentParser(description="automatic transcription")
     parser.add_argument("input_dir")
-    parser.add_argument("instruction", choices=["transcription", "sentences"], help="Type of instruction for processing.")
+    parser.add_argument("instruction", choices=["automatic_transcription", 
+                                                "corrected","sentences"], 
+                        help="Type of instruction for processing.")
     parser.add_argument("source_language")
     args = parser.parse_args()
     
