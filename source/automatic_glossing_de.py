@@ -43,11 +43,29 @@ def load_json(path):
 
 LANGUAGES = load_json(language_path)
 LEIPZIG_GLOSSARY = load_json(leipzig_path)
-    
-
 MODEL_TRANSLATION = {'de': 'Helsinki-NLP/opus-mt-de-en'}
 
 def load_models(language_code):
+    """
+    This function loads important models for the posterior workflow such us 
+    the model for the morphological analysis, a tokenizer and an LLM to 
+    perform contextual translation
+
+    Parameters
+    ----------
+    language_code : Str
+        Language to download the models.
+
+    Returns
+    -------
+    nlp : spacy model
+        spacy model for morphological analysis.
+    tokenizer : marian tokenizer
+        tokenizer for sentences.
+    translation_model : MML
+        model for translating sentences.
+
+    """
     nlp = spacy.load(f"{language_code}_dep_news_trf")
     model_name = MODEL_TRANSLATION[language_code]
     tokenizer = MarianTokenizer.from_pretrained(model_name)
@@ -55,6 +73,30 @@ def load_models(language_code):
     return nlp, tokenizer, translation_model
 
 def translate_lemma_with_context(language, lemma, sentence, tokenizer, model):
+    """
+    Given a language, a lemma, a sentence, a tokenizer and a model, this function
+    provides a contextual translation of the lemma given the sentence. This is done
+    for translating lemmas for the glossing task
+
+    Parameters
+    ----------
+    language : str
+        language to perform the translation from.
+    lemma : str
+        lemma to translate.
+    sentence : str
+        sentence where the lemma is located.
+    tokenizer : marian tokenizer
+        tokenizer.
+    model : marian model
+        LLM to perfom translation.
+
+    Returns
+    -------
+    str
+        translated lemma.
+
+    """
     prompt = f'Gegeben den originalen Satz "{sentence}", der Wurzel des Wortes "{lemma}" im Kontext ist = {lemma}'
     inputs = tokenizer(prompt, return_tensors="pt", padding=True)
     translated_tokens = model.generate(**inputs)
@@ -64,6 +106,37 @@ def translate_lemma_with_context(language, lemma, sentence, tokenizer, model):
     return translated_lemma.strip()
 
 def gloss_with_spacy(nlp, tokenizer, model, sentence):
+    """
+    This function performs the morphological analysis of a sentence given 
+    a spacy model, a tokenizer and a translation model. It takes a sentence 
+    and performs the analysis. Each token in the analyzed sentence is cleaned.
+    It ignores parenthesis and numbers, as it is part of the transcriptions.
+    The final glossed sentence is produced in the following way:
+        - Lemma, part of speech category and morphological analysis are separated
+        - lemma is translated
+        - part of speech and morphological analysis are mapped to the leipzig 
+        glossing rules standard, given a hand made glossary
+        - This inofmration is merged again and after a final cleaning ignoring 
+        other special characters it is returned
+    
+
+    Parameters
+    ----------
+    nlp : spacy model
+        spacy model to per.
+    tokenizer : marian tokenizzer
+        tokenizer.
+    model : marian model
+        model to perform lemma translation.
+    sentence : str
+        sentence to gloss.
+
+    Returns
+    -------
+    str
+        glossed sentence.
+
+    """
     glossed_sentence = ''
     doc = nlp(sentence)
     for token in doc:
@@ -97,6 +170,26 @@ def gloss_with_spacy(nlp, tokenizer, model, sentence):
     return glossed_sentence.strip()
 
 def process_data(input_dir, language_code):
+    """
+    Process function which iterated over folders and finds already annotated data.
+    The annotated excels are read and the information from the relevant column
+    "latin_transcription_utterance_used" is taken and each sentence is analysed 
+    morphologically.
+    This produces a new excel file  glossed with the column automatic glossing
+    containing the glossed sentences.
+
+    Parameters
+    ----------
+    input_dir : str
+        path to the parent dir containing the files to process.
+    language_code : str
+        code of the language to do the processing.
+
+    Returns
+    -------
+    None.
+
+    """
     nlp, tokenizer, model = load_models(language_code)
     try:
         for subdir, dirs, files in os.walk(input_dir):
