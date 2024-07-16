@@ -39,11 +39,15 @@ model = whisper.load_model("large-v3")
 # Store the current working directory for relative path calculations
 current_dir = os.getcwd()
 # Compute the absolute file path for the language configurations
-file_path = os.path.abspath(os.path.join(current_dir, 'materials', 'LANGUAGES'))
+languages_path = os.path.abspath(os.path.join(current_dir, 'materials', 'LANGUAGES'))
+columns_path = os.path.abspath(os.path.join(current_dir, 'materials', 'OBLIGATORY_COLUMNS'))
 
 # Load language configurations from a JSON file
-with open(file_path, 'r', encoding='utf-8') as file:
+with open(languages_path, 'r', encoding='utf-8') as file:
     LANGUAGES = json.load(file)
+    
+with open(columns_path, 'r', encoding='utf-8') as file:
+    OBLIGATORY_COLUMNS = file.read().splitlines()
 
 def __process_string(input_string):
     """
@@ -97,24 +101,8 @@ def process_data(directory, language, latin_transliteration = False):
                 elif os.path.exists(excel_file_path):
                     df = pd.read_excel(excel_file_path)
                 
-                #add columns for workflow
-                new_columns = ["personal_data_free_check",
-                               "automatic_transcription",
-                               "latin_transcription_everything",
-                               "latin_transcription_utterance_used",
-                               "transcription_comment",
-                               "transcription_check",
-                               "automatic_translation",
-                               "translation_everything",
-                               "translation_utterance_used",
-                               "translation_comment",
-                               "translation_check",
-                               "transcription_morphosegmentation",
-                               "automatic_glossing",
-                               "glossing_utterance_used",
-                               "glossing_comment"
-                    ]
-                for column in new_columns:
+
+                for column in OBLIGATORY_COLUMNS:
                     if column not in df:
                         df[column] = ""
                     

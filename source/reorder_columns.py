@@ -23,23 +23,11 @@ import os
 import pandas as pd
 import argparse
 
-OBLIGATORY = [
-    "personal_data_free_check", 
-    "automatic_transcription", 
-    "latin_transcription_everything",
-    "latin_transcription_utterance_used", 
-    "transcription_comment", 
-    "transcription_check",
-    "automatic_translation", 
-    "translation_everything", 
-    "translation_utterance_used",
-    "translation_comment", 
-    "translation_check", 
-    "transcription_morphosegmentation", 
-    "automatic_glossing", 
-    "glossing_utterance_used", 
-    "glossing_comment"
-]
+current_dir = os.getcwd()
+columns_path = os.path.abspath(os.path.join(current_dir, 'materials', 'OBLIGATORY_COLUMNS'))
+
+with open(columns_path, 'r', encoding='utf-8') as file:
+    OBLIGATORY_COLUMNS = file.read().splitlines()
 
 MAPPING = {
     "latin_transcription_everything": "transcription",
@@ -65,7 +53,7 @@ def process_data(directory):
             print(f"Error processing the file {excel_file_path}: {e}")
 
 def update_columns(df):
-    for column in OBLIGATORY:
+    for column in OBLIGATORY_COLUMNS:
         if column not in df.columns:
             df[column] = ''
 
@@ -83,8 +71,8 @@ def update_columns(df):
 
 
 def reorder_columns(df):
-    additional_columns = [col for col in df.columns if col not in OBLIGATORY]
-    new_column_order = additional_columns + OBLIGATORY
+    additional_columns = [col for col in df.columns if col not in OBLIGATORY_COLUMNS]
+    new_column_order = additional_columns + OBLIGATORY_COLUMNS
     return df[new_column_order]
 
 if __name__ == '__main__':
