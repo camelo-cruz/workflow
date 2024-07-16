@@ -82,6 +82,9 @@ def process_data(directory, language, latin_transliteration = False):
 
     Parameters:
         directory (str): Path to the input directory.
+        
+    Returns:
+        None.
     """
     try:
         for subdir, dirs, files in os.walk(directory):
