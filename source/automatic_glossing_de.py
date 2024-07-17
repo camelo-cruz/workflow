@@ -43,7 +43,15 @@ def load_json(path):
 
 LANGUAGES = load_json(language_path)
 LEIPZIG_GLOSSARY = load_json(leipzig_path)
-MODEL_TRANSLATION = {'de': 'Helsinki-NLP/opus-mt-de-en'}
+MODELS = {'de': {
+            'translation': 'Helsinki-NLP/opus-mt-de-en', 
+            'morphology': 'deu_dep_news_trf', 
+            'prompt': ['Gegeben den originalen Satz', 'der Wurzel des Wortes', 'im Kontext ist:']},
+          'ukr': {
+              'translation':'Helsinki-NLP/opus-mt-uk-en', 
+              'morphology':'uk_core_news_trf'
+              'prompt': []}
+          }
 
 def load_models(language_code):
     """
@@ -66,13 +74,13 @@ def load_models(language_code):
         model for translating sentences.
 
     """
-    nlp = spacy.load(f"{language_code}_dep_news_trf")
-    model_name = MODEL_TRANSLATION[language_code]
+    nlp = spacy.load(MODELS[language_code]['morphology'])
+    model_name = MODELS[language_code]['translation']
     tokenizer = MarianTokenizer.from_pretrained(model_name)
     translation_model = MarianMTModel.from_pretrained(model_name)
     return nlp, tokenizer, translation_model
 
-def translate_lemma_with_context(language, lemma, sentence, tokenizer, model):
+def translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model):
     """
     Given a language, a lemma, a sentence, a tokenizer and a model, this function
     provides a contextual translation of the lemma given the sentence. This is done
@@ -97,7 +105,8 @@ def translate_lemma_with_context(language, lemma, sentence, tokenizer, model):
         translated lemma.
 
     """
-    prompt = f'Gegeben den originalen Satz "{sentence}", der Wurzel des Wortes "{lemma}" im Kontext ist = {lemma}'
+    prompt = MODELS[language_code]['prompt']
+    prompt = prompt[0] + sentence + prompt[1] + lemma + prompt[2] + lemma
     inputs = tokenizer(prompt, return_tensors="pt", padding=True)
     translated_tokens = model.generate(**inputs)
     translated_sentence = tokenizer.decode(translated_tokens[0], skip_special_tokens=True)
@@ -105,7 +114,7 @@ def translate_lemma_with_context(language, lemma, sentence, tokenizer, model):
     translated_lemma = re.sub(remove_prompt, '', translated_sentence)
     return translated_lemma.strip()
 
-def gloss_with_spacy(nlp, tokenizer, model, sentence):
+def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
     """
     This function performs the morphological analysis of a sentence given 
     a spacy model, a tokenizer and a translation model. It takes a sentence 
@@ -150,7 +159,7 @@ def gloss_with_spacy(nlp, tokenizer, model, sentence):
             morph = token.morph.to_dict()
     
             # Translate the lemma with added context
-            translated_lemma = translate_lemma_with_context('de', lemma, sentence, tokenizer, model)
+            translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
     
             # Map POS and morphological features to Leipzig abbreviations
             pos = LEIPZIG_GLOSSARY.get(pos, pos)
