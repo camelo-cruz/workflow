@@ -25,6 +25,7 @@ import spacy
 import json
 import argparse
 import pandas as pd
+from spacy.cli import download
 from transformers import MarianMTModel, MarianTokenizer
 
 current_dir = os.getcwd()
@@ -48,9 +49,9 @@ MODELS = {'de': {
             'morphology': 'de_dep_news_trf', 
             'prompt': ['Gegeben den originalen Satz', 'der Wurzel des Wortes', 'im Kontext ist:']},
           'ukr': {
-              'translation':'Helsinki-NLP/opus-mt-uk-en', 
-              'morphology':'uk_core_news_trf',
-              'prompt':[]}
+              'translation': 'Helsinki-NLP/opus-mt-uk-en', 
+              'morphology': 'uk_core_news_trf',
+              'prompt': []}
           }
 
 def load_models(language_code):
@@ -74,10 +75,18 @@ def load_models(language_code):
         model for translating sentences.
 
     """
-    nlp = spacy.load(MODELS[language_code]['morphology'])
-    model_name = MODELS[language_code]['translation']
-    tokenizer = MarianTokenizer.from_pretrained(model_name)
-    translation_model = MarianMTModel.from_pretrained(model_name)
+    model_name = MODELS[language_code]['morphology']
+    try:
+        nlp = spacy.load(model_name)
+    except OSError:
+        print(f"Model {model_name} not found. Downloading...")
+        download(model_name)
+        nlp = spacy.load(model_name)
+    
+    translation_model_name = MODELS[language_code]['translation']
+    tokenizer = MarianTokenizer.from_pretrained(translation_model_name)
+    translation_model = MarianMTModel.from_pretrained(translation_model_name)
+
     return nlp, tokenizer, translation_model
 
 def translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model):
