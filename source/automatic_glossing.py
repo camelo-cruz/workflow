@@ -116,7 +116,7 @@ def translate_lemma_with_context(language_code, sentence, lemma, tokenizer, mode
 
     """
     prompt = MODELS[language_code]['prompt']
-    prompt = prompt[0] + sentence + prompt[1] + lemma + prompt[2] + lemma + '='
+    prompt = prompt[0] + sentence + prompt[1] + lemma + prompt[2] + '=' + lemma
     inputs = tokenizer(prompt, return_tensors="pt", padding=True)
     translated_tokens = model.generate(**inputs)
     translated_sentence = tokenizer.decode(translated_tokens[0], skip_special_tokens=True)
