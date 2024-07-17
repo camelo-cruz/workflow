@@ -50,7 +50,7 @@ MODELS = {'de': {
           'ukr': {
               'translation':'Helsinki-NLP/opus-mt-uk-en', 
               'morphology':'uk_core_news_trf'
-              'prompt': []}
+              'prompt':[]}
           }
 
 def load_models(language_code):
