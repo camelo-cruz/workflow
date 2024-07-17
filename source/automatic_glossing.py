@@ -225,7 +225,7 @@ def process_data(input_dir, language_code):
                                 sentences = sentences.split('\n')
                                 glossed_sentences = []
                                 for sentence in sentences:
-                                    glossed = gloss_with_spacy(nlp, tokenizer, model, sentence)
+                                    glossed = gloss_with_spacy(language_code, nlp, tokenizer, model, sentence)
                                     glossed_sentences.append(glossed)
                                 glossed_utterances.append('\n'.join(glossed_sentences))
                             else:
