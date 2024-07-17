@@ -48,7 +48,7 @@ LEIPZIG_GLOSSARY = load_json(leipzig_path)
 MODELS = {'de': {
             'translation': 'Helsinki-NLP/opus-mt-de-en', 
             'morphology': 'de_dep_news_trf', 
-            'prompt': ['Gegeben den originalen Satz', 'der Wurzel des Wortes', 'im Kontext ist:']},
+            'prompt': ['Gegeben den originalen Satz', 'der Wurzel des Wortes', 'im Kontext ist']},
           'ukr': {
               'translation': 'Helsinki-NLP/opus-mt-uk-en', 
               'morphology': 'uk_core_news_trf',
@@ -221,7 +221,7 @@ def process_data(input_dir, language_code):
                         excel_output_file = os.path.join(subdir, f'{os.path.splitext(file)[0]}_glossed.xlsx')
                         sentences_groups = df['latin_transcription_utterance_used']
                         glossed_utterances = []
-                        for idx, sentences in tqdm(enumerate(sentences_groups)):
+                        for idx, sentences in enumerate(sentences_groups):
                             if isinstance(sentences, str):
                                 sentences = sentences.split('\n')
                                 glossed_sentences = []
