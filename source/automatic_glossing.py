@@ -25,6 +25,7 @@ import spacy
 import json
 import argparse
 import pandas as pd
+from tqdm import tqdm
 from spacy.cli import download
 from transformers import MarianMTModel, MarianTokenizer
 
@@ -220,7 +221,7 @@ def process_data(input_dir, language_code):
                         excel_output_file = os.path.join(subdir, f'{os.path.splitext(file)[0]}_glossed.xlsx')
                         sentences_groups = df['latin_transcription_utterance_used']
                         glossed_utterances = []
-                        for idx, sentences in enumerate(sentences_groups):
+                        for idx, sentences in tqdm(enumerate(sentences_groups)):
                             if isinstance(sentences, str):
                                 sentences = sentences.split('\n')
                                 glossed_sentences = []
