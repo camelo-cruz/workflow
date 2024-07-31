@@ -116,22 +116,11 @@ def process_data(directory, language, latin_transliteration = False):
                         transcription = __process_string(transcription["text"])
                         print(transcription)
 
-                        series = df[df.isin([file])].stack()
-                        for idx, value in series.items():
-                            df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription}"
+                        #series = df[df.isin([file])].stack()
+                        for idx in range(df.shape[0]):
+                            df.at[idx, "automatic_transcription"] += f"{count}: {transcription}"
                         
-                        if latin_transliteration:
-                            if language == "ru":
-                                for idx, value in series.items():
-                                    df.at[idx[0], "latin_transcription_everything"] += f"{count}: {translit(transcription, 'ru',reversed=True)}"
-                            elif language == "uk":
-                                for idx, value in series.items():
-                                    df.at[idx[0], "latin_transcription_everything"] += f"{count}: {translit(transcription, 'uk',reversed=True)}"
-                            elif language == "ja":
-                                katsu = cutlet.Cutlet()
-                                for idx, value in series.items():
-                                    df.at[idx[0], "latin_transcription_everything"] += f"{count}: {katsu.romaji(transcription)}"
-
+                        
                 df.to_excel(excel_output_file)
                 print(f"\nTranscription and translation completed for {subdir}.")
     except Exception as e:
