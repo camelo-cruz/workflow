@@ -42,6 +42,7 @@ current_dir = os.getcwd()
 # Compute the absolute file path for the language configurations
 languages_path = os.path.abspath(os.path.join(current_dir, 'materials', 'LANGUAGES'))
 columns_path = os.path.abspath(os.path.join(current_dir, 'materials', 'OBLIGATORY_COLUMNS'))
+nolatin_path = os.path.abspath(os.path.join(current_dir, 'materials', 'NO_LATIN'))
 
 # Load language configurations from a JSON file
 with open(languages_path, 'r', encoding='utf-8') as file:
@@ -49,6 +50,9 @@ with open(languages_path, 'r', encoding='utf-8') as file:
     
 with open(columns_path, 'r', encoding='utf-8') as file:
     OBLIGATORY_COLUMNS = file.read().splitlines()
+
+with open(nolatin_path, 'r', encoding='utf-8') as file:
+    NO_LATIN = file.read().splitlines()
 
 def __process_string(input_string):
     """
@@ -106,6 +110,15 @@ def process_data(directory, language, latin_transliteration = False):
                 for column in OBLIGATORY_COLUMNS:
                     if column not in df:
                         df[column] = ""
+                
+                if language in NO_LATIN:
+                    new_col_name = f'{language}_transcription'
+                    df = df.rename(columns={'iso_transcription': new_col_name})
+                else:
+                    # Drop the 'iso_transcription' column if it exists
+                    if 'iso_transcription' in df.columns:
+                        df = df.drop(columns=['iso_transcription'])
+
                     
                 count = 0
                 for file in tqdm(files, desc=f"Processing Files in subdir {subdir}", unit="file"):
@@ -120,18 +133,7 @@ def process_data(directory, language, latin_transliteration = False):
                         series = df[df.isin([file])].stack()
                         for idx, value in series.items():
                             df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription}"
-                        
-                        if latin_transliteration:
-                            if language == "ru":
-                                for idx, value in series.items():
-                                    df.at[idx[0], "latin_transcription_everything"] += f"{count}: {translit(transcription, 'ru',reversed=True)}"
-                            elif language == "uk":
-                                for idx, value in series.items():
-                                    df.at[idx[0], "latin_transcription_everything"] += f"{count}: {translit(transcription, 'uk',reversed=True)}"
-                            elif language == "ja":
-                                katsu = cutlet.Cutlet()
-                                for idx, value in series.items():
-                                    df.at[idx[0], "latin_transcription_everything"] += f"{count}: {katsu.romaji(transcription)}"
+                    
 
                 df.to_excel(excel_output_file)
                 print(f"\nTranscription and translation completed for {subdir}.")
