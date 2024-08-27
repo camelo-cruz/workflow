@@ -48,7 +48,7 @@ def translate(file, instruction, source_language):
     for i in range(len(df)):
         try:
             if instruction == 'corrected_transcription':
-                df.loc[i,"automatic_translation"] = GoogleTranslator(source=source_language, target='en').translate(df[corrected_column][i])
+                df.loc[i,"translation_everything"] = GoogleTranslator(source=source_language, target='en').translate(df[corrected_column][i])
             elif instruction == 'automatic_transcription':
                 df.loc[i,"automatic_translation"] = GoogleTranslator(source=source_language, target='en').translate(df[automatic_column][i])
             elif instruction == 'sentences':
