@@ -111,14 +111,8 @@ def process_data(directory, language, latin_transliteration = False):
                     if column not in df:
                         df[column] = ""
                 
-                if language in NO_LATIN:
-                    new_col_name = f'{language}_transcription'
-                    df = df.rename(columns={'iso_transcription': new_col_name})
-                else:
-                    # Drop the 'iso_transcription' column if it exists
-                    if 'iso_transcription' in df.columns:
-                        df = df.drop(columns=['iso_transcription'])
-
+                if language not in NO_LATIN:
+                    df = df.drop(columns=['transcription_original_script'])
                     
                 count = 0
                 for file in tqdm(files, desc=f"Processing Files in subdir {subdir}", unit="file"):
