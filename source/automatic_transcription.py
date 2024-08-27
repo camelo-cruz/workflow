@@ -113,6 +113,7 @@ def process_data(directory, language, latin_transliteration = False):
                 
                 if language not in NO_LATIN:
                     df = df.drop(columns=['transcription_original_script'])
+                    df = df.drop(columns=['transcription_original_script_utterance_used'])
                     
                 count = 0
                 for file in tqdm(files, desc=f"Processing Files in subdir {subdir}", unit="file"):
