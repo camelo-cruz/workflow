@@ -166,20 +166,22 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             # Get the lemma, POS, and morphological features
             lemma = token.lemma_
             pos = token.pos_
-            morph = token.morph_to_dict()
+            morph = token.morph.to_dict()
 
             print(morph)
 
-            try:
-                number = morph['Number']
-                case = morph['Case']
-                person = morph['Person']
-            except Exception as e:
-                print(e)
+            arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
+            definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
+            person = LEIPZIG_GLOSSARY.get(morph.get('Person'), morph.get('Person'))
+            number = LEIPZIG_GLOSSARY.get(morph.get('Number'), morph.get('Number'))
+            gender = LEIPZIG_GLOSSARY.get(morph.get('Gender'), morph.get('Gender'))
+            case = LEIPZIG_GLOSSARY.get(morph.get('Case'), morph.get('Case'))
+            tense = LEIPZIG_GLOSSARY.get(morph.get('Tense'), morph.get('Tense'))
+            mood = LEIPZIG_GLOSSARY.get(morph.get('VerbForm'), morph.get('VerbForm'))
+            form = LEIPZIG_GLOSSARY.get(morph.get('VerbForm'), morph.get('VerbForm'))
 
-
-            glossed_word = f"{lemma}.{person}.{number}.{case}"
-
+            glossed_word = f"{lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}.{form}"
+            glossed_word = glossed_word.replace(".None", "")
 
             glossed_sentence += glossed_word + ' '
 
