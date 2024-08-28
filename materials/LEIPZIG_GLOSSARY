@@ -1,19 +1,22 @@
 {
-"_comment1": "Verbal morphology",
+"_comment1":"Verbal morphology",
 "Sing":"SG",
-"Plural":"xx"
+"Plur":"PL",
 "Def":"DEF",
-"Ind":"IND"
+"Ind":"IND",
 "Pres":"PRS",
 "ind":"INDF",
-"Fin":"FIN"
-"_comment2": "Nominal morphology",
+"Fin":"FIN",
+"Rel":"REL",
+"Part":"PASTP",
+"_comment2":"Nominal morphology",
 "Nom":"NOM",
-"Acc":"ACC";
-"Dat":"DAT"
-"Gen":"GEN"
+"Acc":"ACC",
+"Dat":"DAT",
+"Gen":"GEN",
 "Art":"ART",
 "Masc":"M",
 "Neut":"N",
 "Fem":"F",
+"Int":"INT"
 }
