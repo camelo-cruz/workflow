@@ -116,14 +116,13 @@ def process_data(directory, language, latin_transliteration = False):
                     df = df.drop(columns=['transcription_original_script_utterance_used'])
                     
                 count = 0
-                for file in tqdm(files, desc=f"Processing Files in subdir {subdir}", unit="file"):
+                for file in tqdm(files, desc=f"Processing Files", unit="file"):
                     if file.endswith('.mp3'):
                         count += 1
                         audio_file_path = os.path.abspath(os.path.join(subdir, file))
                         transcription = ""
                         transcription = model.transcribe(audio_file_path, language = language)
                         transcription = __process_string(transcription["text"])
-                        print(transcription)
 
                         series = df[df.isin([file])].stack()
                         for idx, value in series.items():

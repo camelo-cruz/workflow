@@ -168,7 +168,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             pos = token.pos_
             morph = token.morph.to_dict()
 
-            translated_lemma = translate_lemma_with_context(language_code, lemma, sentence, tokenizer, model)
+            translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
 
             arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
             definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
@@ -183,7 +183,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             glossed_word = f"{translated_lemma}-{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
             glossed_word = re.sub(r'\.None|-None', '', glossed_word)
             #Delete german articles
-            glossed_word = re.sub(r'der-|die-|das-|ein-|eine-', '', glossed_word)
+            glossed_word = re.sub(r'the-|a-', '', glossed_word)
 
             glossed_sentence += glossed_word + ' '
 
