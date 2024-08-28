@@ -166,24 +166,11 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             # Get the lemma, POS, and morphological features
             lemma = token.lemma_
             pos = token.pos_
-            morph = token.morph.to_dict()
-    
-            # Translate the lemma with added context
-            translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
-    
-            # Map POS and morphological features to Leipzig abbreviations
-            pos = LEIPZIG_GLOSSARY.get(pos, pos)
-            morph_tags = []
-            for key, value in morph.items():
-                morph_tags.append(LEIPZIG_GLOSSARY.get(f"{key}={value}", f"{key}={value}"))
+            morph = token.morph
 
-            morph_str = ".".join(morph_tags)
-            glossed_word = f'{translated_lemma}.{pos}.{morph_str}'
-            
-            # Final editing and cleaning
-            glossed_word = re.sub(r'[| ]', '.', glossed_word)
-            glossed_word = re.sub(r'\..*=', '.', glossed_word)
-            
+            glossed_word = f"{lemma}.{morph}"
+
+
             glossed_sentence += glossed_word + ' '
 
     return glossed_sentence.strip()
