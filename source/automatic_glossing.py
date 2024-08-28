@@ -168,12 +168,13 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             pos = token.pos_
             morph = token.morph_to_dict()
 
+            print(morph)
+
             number = morph['Number']
             case = morph['Case']
-            person = morph ['Person']
 
 
-            glossed_word = f"{lemma}.{person}.{number}.{case}"
+            glossed_word = f"{lemma}.{number}.{case}"
 
 
             glossed_sentence += glossed_word + ' '
