@@ -166,7 +166,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             # Get the lemma, POS, and morphological features
             lemma = token.lemma_
             pos = token.pos_
-            morph = token.morph_to_dict()
+            morph = token.morph.to_dict()
 
             number = morph['Number']
             case = morph['Case']
