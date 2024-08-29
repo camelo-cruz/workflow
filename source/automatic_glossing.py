@@ -160,54 +160,49 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
     doc = nlp(sentence)
     for token in doc:
         # Skip tokens containing digits or square brackets
-        if re.search(r'[\d\[\]]', token.text):
+        if re.search(r'[\d]]', token.text):
             glossed_sentence += token.text
         else:
             # Get the lemma, POS, and morphological features
             lemma = token.lemma_
             pos = token.pos_
             morph = token.morph.to_dict()
-    
-            # Translate the lemma with added context
-            translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
-    
-            # Map POS and morphological features to Leipzig abbreviations
-            pos = LEIPZIG_GLOSSARY.get(pos, pos)
-            morph_tags = []
-            for key, value in morph.items():
-                morph_tags.append(LEIPZIG_GLOSSARY.get(f"{key}={value}", f"{key}={value}"))
 
-            morph_str = ".".join(morph_tags)
-            glossed_word = f'{translated_lemma}.{pos}.{morph_str}'
-            
-            # Final editing and cleaning
-            glossed_word = re.sub(r'[| ]', '.', glossed_word)
-            glossed_word = re.sub(r'\..*=', '.', glossed_word)
-            
+            translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
+
+            arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
+            definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
+            person = LEIPZIG_GLOSSARY.get(morph.get('Person'), morph.get('Person'))
+            number = LEIPZIG_GLOSSARY.get(morph.get('Number'), morph.get('Number'))
+            gender = LEIPZIG_GLOSSARY.get(morph.get('Gender'), morph.get('Gender'))
+            case = LEIPZIG_GLOSSARY.get(morph.get('Case'), morph.get('Case'))
+            tense = LEIPZIG_GLOSSARY.get(morph.get('Tense'), morph.get('Tense'))
+            form = LEIPZIG_GLOSSARY.get(morph.get('VerbForm'), morph.get('VerbForm'))
+            mood = LEIPZIG_GLOSSARY.get(morph.get('Mood'), morph.get('Mood'))
+
+            glossed_word = f"{translated_lemma}-{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
+            glossed_word = re.sub(r'\.None|-None', '', glossed_word)
+            #Delete german articles
+            glossed_word = re.sub(r'the-|a-', '', glossed_word)
+
             glossed_sentence += glossed_word + ' '
 
     return glossed_sentence.strip()
 
 def process_data(input_dir, language_code):
     """
-    Process function which iterated over folders and finds already annotated data.
-    The annotated excels are read and the information from the relevant column
-    "latin_transcription_utterance_used" is taken and each sentence is analysed 
-    morphologically.
-    This produces a new excel file  glossed with the column automatic glossing
-    containing the glossed sentences.
+    Processes files in a directory to gloss sentences and saves the results.
 
     Parameters
     ----------
     input_dir : str
-        path to the parent dir containing the files to process.
+        Path to the parent directory containing files to process.
     language_code : str
-        code of the language to do the processing.
+        Language code for processing.
 
     Returns
     -------
     None.
-
     """
     nlp, tokenizer, model = load_models(language_code)
     try:
@@ -221,18 +216,21 @@ def process_data(input_dir, language_code):
                         excel_output_file = os.path.join(subdir, f'{os.path.splitext(file)[0]}_glossed.xlsx')
                         sentences_groups = df['latin_transcription_utterance_used']
                         glossed_utterances = []
-                        for idx, sentences in enumerate(sentences_groups):
+                        
+                        for idx, sentences in tqdm(enumerate(sentences_groups), desc='Processing sentences', total=len(sentences_groups)):
                             if isinstance(sentences, str):
                                 sentences = sentences.split('\n')
                                 glossed_sentences = []
-                                for sentence in sentences:
+                                
+                                # Process each sentence with tqdm
+                                for sentence in tqdm(sentences, desc='Glossing sentences', leave=False):
                                     glossed = gloss_with_spacy(language_code, nlp, tokenizer, model, sentence)
-                                    print(sentence)
-                                    print(glossed)
                                     glossed_sentences.append(glossed)
+                                
                                 glossed_utterances.append('\n'.join(glossed_sentences))
                             else:
                                 glossed_utterances.append('')
+                        
                         df['automatic_glossing'] = glossed_utterances
                         df.to_excel(excel_output_file, index=False)
                     else:
@@ -240,6 +238,8 @@ def process_data(input_dir, language_code):
     except Exception as e:
         print("Error processing data:", e)
         sys.exit(1)
+
+
 
 def main():
     parser = argparse.ArgumentParser(description="Automatic glossing")
