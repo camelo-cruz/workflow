@@ -48,7 +48,7 @@ LEIPZIG_GLOSSARY = load_json(leipzig_path)
 MODELS = {'de': {
             'translation': 'Helsinki-NLP/opus-mt-de-en', 
             'morphology': 'de_dep_news_trf', 
-            'prompt': ['Gegeben den originalen Satz', 'der Wurzel des Wortes', 'im Kontext ist']},
+            'prompt': ['Gegeben den originalen Satz', 'der Wurzel des Wortes im Singular', 'im Kontext ist']},
           'ukr': {
               'translation': 'Helsinki-NLP/opus-mt-uk-en', 
               'morphology': 'uk_core_news_trf',
