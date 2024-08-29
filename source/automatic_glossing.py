@@ -170,6 +170,8 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
 
             translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
 
+            print(token, morph)
+
             arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
             definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
             person = LEIPZIG_GLOSSARY.get(morph.get('Person'), morph.get('Person'))
@@ -184,6 +186,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             glossed_word = re.sub(r'\.None|-None', '', glossed_word)
             #Delete german articles
             glossed_word = re.sub(r'the-|a-', '', glossed_word)
+            glossed_word = re.sub(r'--', '', glossed_word)
 
             glossed_sentence += glossed_word + ' '
 
