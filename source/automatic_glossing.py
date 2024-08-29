@@ -223,7 +223,7 @@ def process_data(input_dir, language_code):
                                 glossed_sentences = []
                                 
                                 # Process each sentence with tqdm
-                                for sentence in tqdm(sentences, desc='Glossing sentences', leave=False):
+                                for sentence in sentences:
                                     glossed = gloss_with_spacy(language_code, nlp, tokenizer, model, sentence)
                                     glossed_sentences.append(glossed)
                                 
