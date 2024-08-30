@@ -198,18 +198,19 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             # Append any other categories that were not in the handled keys
             for key, value in morph.items():
                 if key not in handled_keys:
-                    glossed_word += f".{LEIPZIG_GLOSSARY.get(value, value)}"
+                    glossed_word += f".{value}"
                     not_handled_categories.add(key)
 
-            # Print the glossed word
-            print(glossed_word)
-
             # Print the list of not handled categories
-            print("Not handled categories:", not_handled_categories)
+            #if not_handled_categories != set():
+            #    print("Not handled categories:", not_handled_categories)
             #general cleaning
             glossed_word = re.sub(r'\.None|-None', '', glossed_word)
             glossed_word = re.sub(r'the-|a-', '', glossed_word)
             glossed_word = re.sub(r'--', '', glossed_word)
+
+            # Print the glossed word
+            #print(glossed_word)
 
             glossed_sentence += glossed_word + ' '
 
