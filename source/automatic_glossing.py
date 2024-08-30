@@ -26,6 +26,7 @@ import json
 import argparse
 import pandas as pd
 from tqdm import tqdm
+from googletrans import Translator
 from spacy.cli import download
 from transformers import MarianMTModel, MarianTokenizer
 
@@ -48,7 +49,7 @@ LEIPZIG_GLOSSARY = load_json(leipzig_path)
 MODELS = {'de': {
             'translation': 'Helsinki-NLP/opus-mt-de-en', 
             'morphology': 'de_dep_news_trf', 
-            'prompt': ['Gegeben den originalen Satz', 'der Wurzel des Wortes', 'im Kontext ist']},
+            'prompt': ['Gegeben den originalen Satz', 'der Wurzel des Wortes im Singular', 'im Kontext ist']},
           'ukr': {
               'translation': 'Helsinki-NLP/opus-mt-uk-en', 
               'morphology': 'uk_core_news_trf',
@@ -168,7 +169,10 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             pos = token.pos_
             morph = token.morph.to_dict()
 
-            translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
+            #translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
+            translated_lemma = translator.translate(lemma, src=language_code)['text']
+
+            print(token, morph)
 
             arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
             definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
@@ -180,16 +184,18 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             form = LEIPZIG_GLOSSARY.get(morph.get('VerbForm'), morph.get('VerbForm'))
             mood = LEIPZIG_GLOSSARY.get(morph.get('Mood'), morph.get('Mood'))
 
-            glossed_word = f"{translated_lemma}-{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
+            glossed_word = f"{translated_lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
+            #general cleaning
             glossed_word = re.sub(r'\.None|-None', '', glossed_word)
-            #Delete german articles
             glossed_word = re.sub(r'the-|a-', '', glossed_word)
+            glossed_word = re.sub(r'--', '', glossed_word)
 
             glossed_sentence += glossed_word + ' '
 
     return glossed_sentence.strip()
 
 def process_data(input_dir, language_code):
+
     """
     Processes files in a directory to gloss sentences and saves the results.
 
@@ -223,7 +229,7 @@ def process_data(input_dir, language_code):
                                 glossed_sentences = []
                                 
                                 # Process each sentence with tqdm
-                                for sentence in tqdm(sentences, desc='Glossing sentences', leave=False):
+                                for sentence in sentences:
                                     glossed = gloss_with_spacy(language_code, nlp, tokenizer, model, sentence)
                                     glossed_sentences.append(glossed)
                                 
