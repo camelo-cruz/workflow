@@ -170,7 +170,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             morph = token.morph.to_dict()
 
             #translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
-            translated_lemma = translator.translate(lemma, src=language_code)
+            translated_lemma = translator.translate(lemma, src=language_code)['text']
 
             print(token, morph)
 
