@@ -185,7 +185,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             mood = LEIPZIG_GLOSSARY.get(morph.get('Mood'), morph.get('Mood'))
 
             glossed_word = f"{translated_lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
-            #general cleanin
+            #general cleaning
             glossed_word = re.sub(r'\.None|-None', '', glossed_word)
             glossed_word = re.sub(r'the-|a-', '', glossed_word)
             glossed_word = re.sub(r'--', '', glossed_word)
