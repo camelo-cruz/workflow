@@ -26,7 +26,7 @@ import json
 import argparse
 import pandas as pd
 from tqdm import tqdm
-from googletrans import Translator
+from deep_translator import GoogleTranslator
 from spacy.cli import download
 from transformers import MarianMTModel, MarianTokenizer
 
@@ -53,7 +53,9 @@ MODELS = {'de': {
           'ukr': {
               'translation': 'Helsinki-NLP/opus-mt-uk-en', 
               'morphology': 'uk_core_news_trf',
-              'prompt': ['Дано оригінальне речення', 'корінь слова', 'в контексті є']}
+              'prompt': ['Дано оригінальне речення', 'корінь слова', 'в контексті є']},
+          'pt': {
+              'morphology': 'pt_core_news_lg'}
           }
 
 def load_models(language_code):
@@ -85,9 +87,14 @@ def load_models(language_code):
         download(model_name)
         nlp = spacy.load(model_name)
     
-    translation_model_name = MODELS[language_code]['translation']
-    tokenizer = MarianTokenizer.from_pretrained(translation_model_name)
-    translation_model = MarianMTModel.from_pretrained(translation_model_name)
+    try:
+        translation_model_name = MODELS[language_code]['translation']
+        tokenizer = MarianTokenizer.from_pretrained(translation_model_name)
+        translation_model = MarianMTModel.from_pretrained(translation_model_name)
+    except Exception as e:
+        print('no tokenizer or translaton LLM found for this language')
+        tokenizer = None
+        translation_model = None
 
     return nlp, tokenizer, translation_model
 
@@ -171,7 +178,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             morph = token.morph.to_dict()
 
             #translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
-            translated_lemma = translator.translate(lemma, src=language_code)['text']
+            translated_lemma =  GoogleTranslator(source=language_code, target='en').translate(lemma)
 
             print(token, morph)
 
