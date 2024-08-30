@@ -206,7 +206,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             #    print("Not handled categories:", not_handled_categories)
             #general cleaning
             glossed_word = re.sub(r'(?:\.|-)?None', '', glossed_word)
-            glossed_word = re.sub(r'the-|a-', '', glossed_word)
+            glossed_word = re.sub(r'the.|a.', '', glossed_word)
             glossed_word = re.sub(r'--', '', glossed_word)
 
             # Print the glossed word
