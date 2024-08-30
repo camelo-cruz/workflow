@@ -26,6 +26,7 @@ import json
 import argparse
 import pandas as pd
 from tqdm import tqdm
+from googletrans import Translator
 from spacy.cli import download
 from transformers import MarianMTModel, MarianTokenizer
 
@@ -168,7 +169,8 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             pos = token.pos_
             morph = token.morph.to_dict()
 
-            translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
+            #translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
+            translated_lemma = translator.translate(lemma, src=language_code)
 
             print(token, morph)
 
@@ -182,7 +184,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             form = LEIPZIG_GLOSSARY.get(morph.get('VerbForm'), morph.get('VerbForm'))
             mood = LEIPZIG_GLOSSARY.get(morph.get('Mood'), morph.get('Mood'))
 
-            glossed_word = f"{translated_lemma}-{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
+            glossed_word = f"{translated_lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
             glossed_word = re.sub(r'\.None|-None', '', glossed_word)
             #Delete german articles
             glossed_word = re.sub(r'the-|a-', '', glossed_word)
@@ -193,6 +195,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
     return glossed_sentence.strip()
 
 def process_data(input_dir, language_code):
+
     """
     Processes files in a directory to gloss sentences and saves the results.
 
