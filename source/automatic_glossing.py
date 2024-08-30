@@ -180,7 +180,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             #translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
             translated_lemma =  GoogleTranslator(source=language_code, target='en').translate(lemma)
 
-            print(token, morph)
+            #print(token, morph)
 
             arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
             definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
@@ -193,7 +193,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
 
             glossed_word = f"{translated_lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
 
-            handled_keys = {'PronType', 'Definite', 'Person', 'Number', 'Gender', 'Case', 'Tense', 'VerbForm', 'Mood'}
+            handled_keys = {'PronType', 'Definite', 'Person', 'Number', 'Gender', 'Case', 'Tense', 'Mood'}
 
             # Append any other categories that were not in the handled keys
             for key, value in morph.items():
@@ -205,7 +205,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             #if not_handled_categories != set():
             #    print("Not handled categories:", not_handled_categories)
             #general cleaning
-            glossed_word = re.sub(r'\.None|-None', '', glossed_word)
+            glossed_word = re.sub(r'(?:\.|-)?None', '', glossed_word)
             glossed_word = re.sub(r'the-|a-', '', glossed_word)
             glossed_word = re.sub(r'--', '', glossed_word)
 
