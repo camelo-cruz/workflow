@@ -158,6 +158,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
 
     """
     glossed_sentence = ''
+    not_handled_categories = set()
     doc = nlp(sentence)
     for token in doc:
         # Skip tokens containing digits or square brackets
@@ -181,10 +182,23 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             gender = LEIPZIG_GLOSSARY.get(morph.get('Gender'), morph.get('Gender'))
             case = LEIPZIG_GLOSSARY.get(morph.get('Case'), morph.get('Case'))
             tense = LEIPZIG_GLOSSARY.get(morph.get('Tense'), morph.get('Tense'))
-            form = LEIPZIG_GLOSSARY.get(morph.get('VerbForm'), morph.get('VerbForm'))
             mood = LEIPZIG_GLOSSARY.get(morph.get('Mood'), morph.get('Mood'))
 
             glossed_word = f"{translated_lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
+
+            handled_keys = {'PronType', 'Definite', 'Person', 'Number', 'Gender', 'Case', 'Tense', 'VerbForm', 'Mood'}
+
+            # Append any other categories that were not in the handled keys
+            for key, value in morph.items():
+                if key not in handled_keys:
+                    glossed_word += f".{LEIPZIG_GLOSSARY.get(value, value)}"
+                    not_handled_categories.add(key)
+
+            # Print the glossed word
+            print(glossed_word)
+
+            # Print the list of not handled categories
+            print("Not handled categories:", not_handled_categories)
             #general cleaning
             glossed_word = re.sub(r'\.None|-None', '', glossed_word)
             glossed_word = re.sub(r'the-|a-', '', glossed_word)
