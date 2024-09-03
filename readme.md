@@ -1,4 +1,3 @@
-Certainly! Here's an updated version of your README with an index containing hyperlinks to the sections:
 
 ---
 
