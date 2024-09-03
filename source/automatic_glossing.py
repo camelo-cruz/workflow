@@ -198,11 +198,11 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             handled_keys = {'PronType', 'Definite', 'Person', 'Number', 'Gender', 'Case', 'Tense', 'Mood'}
 
             # Append any other categories that were not in the handled keys
-            if language_code != 'de':
-                for key, value in morph.items():
-                    if key not in handled_keys:
-                        glossed_word += f".{value}"
-                        not_handled_categories.add(key)
+            #if language_code != 'de':
+            #    for key, value in morph.items():
+            #        if key not in handled_keys:
+            #            glossed_word += f".{value}"
+            #            not_handled_categories.add(key)
 
             # Print the list of not handled categories
             #if not_handled_categories != set():
