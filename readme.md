@@ -50,10 +50,10 @@ Open the terminal or cmd on your computer. Look for the following program on you
 cmd
 ```
 
-Be sure you have fmpeg downloaded:
+Be sure you have ffmpeg downloaded:
 
 ```
-which ffmpeg
+where ffmpeg
 ```
 
 if this is outputs an error, use this command and ffmpeg will be installed
