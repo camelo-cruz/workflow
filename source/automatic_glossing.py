@@ -169,7 +169,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
     doc = nlp(sentence)
     for token in doc:
         # Skip tokens containing digits or square brackets
-        if re.search(r'[\d]]', token.text):
+        if re.search(r'\[\d\]', token.text):
             glossed_sentence += token.text
         else:
             # Get the lemma, POS, and morphological features
@@ -179,8 +179,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
 
             #translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
             translated_lemma =  GoogleTranslator(source=language_code, target='en').translate(lemma)
-            #clean translated lemma. E.g. spaces in infinitive verbs
-            if type(translated_lemma) == str:
+            if isinstance(translated_lemma, str) and not lemma.isdigit():
                 translated_lemma = translated_lemma.replace(' ', '-')
 
             #print(token, morph)
@@ -199,20 +198,21 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             handled_keys = {'PronType', 'Definite', 'Person', 'Number', 'Gender', 'Case', 'Tense', 'Mood'}
 
             # Append any other categories that were not in the handled keys
-            for key, value in morph.items():
-                if key not in handled_keys:
-                    glossed_word += f".{value}"
-                    not_handled_categories.add(key)
+            if language_code != 'de':
+                for key, value in morph.items():
+                    if key not in handled_keys:
+                        glossed_word += f".{value}"
+                        not_handled_categories.add(key)
 
             # Print the list of not handled categories
             #if not_handled_categories != set():
             #    print("Not handled categories:", not_handled_categories)
             #general cleaning
             glossed_word = re.sub(r'(?:\.|-)?None', '', glossed_word)
-            glossed_word = re.sub(r'the.|a.', '', glossed_word)
+            glossed_word = re.sub(r'\b(the|a)\.', '', glossed_word)
             glossed_word = re.sub(r'--', '', glossed_word)
-            glossed_word = re.sub(r' he.', ' 3.M', glossed_word)
-            glossed_word = re.sub(r' she.', ' 3.F', glossed_word)
+            glossed_word = re.sub(r'\b[hH]e\.', 'M.3.', glossed_word)
+            glossed_word = re.sub(r'\b[sS]he\.', 'F.3.', glossed_word)
 
             # Print the glossed word
             #print(glossed_word)

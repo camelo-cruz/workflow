@@ -1,7 +1,26 @@
+Certainly! Here's an updated version of your README with an index containing hyperlinks to the sections:
+
+---
+
 # Instructions to use scripts
 
+## Index
+- [If you have not downloaded the repository yet](#if-repository-was-not-downloaded)
+- [Download Github and Clone Repository](#download-github-and-clone-repository)
+- [Create Environment](#create-environment)
+- [If repository was downloaded](#if-repository-was-downloaded)
+- [Activate Environment](#1-activate-environment)
+- [Install Requirements](#install-requirements)
+- [Run the Script](#2-run-the-script)
+  - [For Automatic Transcription](#for-automatic-transcription)
+  - [For Automatic Translation](#for-automatic-translation)
+  - [For Automatic Glossing](#for-automatic-glossing)
 
-## Download Github and clone repository:
+---
+
+## If repository was not downloaded
+
+## Download Github and Clone Repository
 
 ### 1. Download the Github app and sign in
 
@@ -19,53 +38,59 @@ Choose from url and copy the following path:
 https://github.com/camelo-cruz/workflow.git
 ```
 
+---
 
-## Create environment :
+## Create Environment
 
 :exclamation: Be sure you are in the right folder, finishing with workflow :exclamation:
 
-Open the terminal or cmd in your computer. Look for the following program in your computer and open it:
+Open the terminal or cmd on your computer. Look for the following program on your computer and open it:
 
 ```
 cmd
 ```
 
-Go to the folder of the github repository. If you don't know how to do that, go to cmd and run the following command:
+Go to the folder of the GitHub repository. If you don't know how to do that, go to cmd and run the following command:
 
 ```
 dir /S /B /AD "C:\Users\%USERNAME%\workflow"
 ```
 
-this will print a path. Copy the given path and paste it:
+This will print a path. Copy the given path and paste it:
 
 ```
 cd (path)
 ```
 
-For making sure of that you are in the correct directory, run the following command:
+To ensure that you are in the correct directory, run the following command:
 
 ```
 cd
 ```
 
-the ouput shoul be finishing with workflow. Like here:
+The output should be finishing with `workflow`. Like here:
 
 ![path](images/workflow_path.png "path")
 
-> <strong>Note:</strong> Ignore this step if you have already created an environment
+> **Note:** Ignore this step if you have already created an environment
 
 ```
 python -m venv .venv
 ```
-	
-## 1. Activate environment:
 
+## If repository was downloaded
+
+---
+
+## 1. Activate Environment
 
 ```
 .venv\Scripts\activate
 ```
 
-##  install requirements:
+---
+
+## Install Requirements
 
 > **Note:** Ignore this step if you have already created an environment
 
@@ -74,11 +99,13 @@ pip install -r requirements.txt
 ```
 :exclamation: This might take a while :exclamation:
 
-## 2. Run the script
+---
 
-- **For automatic transcription**
-    - **Replace (main\_folder\_path)** for the path to the parent folder containing the sessions folders
-    - **Replace (language)** to the language to transcribe. For example: german, ukranian
+## 2. Run the Script
+
+### For Automatic Transcription
+- **Replace `(main_folder_path)`** with the path to the parent folder containing the sessions folders.
+- **Replace `(language)`** with the language to transcribe. For example: German, Ukrainian.
 
 ```
 python source/automatic_transcription.py (main_folder_path) (language)
@@ -88,15 +115,16 @@ This is an example:
 
 ![path](images/transcription_example.png "path")
 
-
-- **For automatic translation**
-
-
-    - **Replace (main\_folder\_path)** for the path to the parent folder containing the sessions folders
-    - **Replace (language)** to the language from which you want to translate. For example: german, ukranian
+### For Automatic Translation
+- **Replace `(main_folder_path)`** with the path to the parent folder containing the sessions folders.
+- **Replace `(language)`** with the language from which you want to translate. For example: German, Ukrainian.
 
 ```
 python source/automatic_translation.py (main_folder_path) (language)
 ```
 
-- **For automatic glossing**
+### For Automatic Glossing
+
+---
+
+This structure provides clear navigation through the document, allowing users to quickly jump to the section they need.
