@@ -142,6 +142,11 @@ python source/automatic_translation.py (main_folder_path) (language)
 
 ### For Automatic Glossing
 
----
+- **Replace `(main_folder_path)`** with the path to the parent folder containing the sessions folders.
+- **Replace `(language)`** with the language from which you want to translate. For example: German, Ukrainian.
 
-This structure provides clear navigation through the document, allowing users to quickly jump to the section they need.
+```
+python source/automatic_glossing.py (main_folder_path) (language)
+```
+
+---
