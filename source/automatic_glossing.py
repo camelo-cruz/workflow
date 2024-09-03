@@ -180,7 +180,8 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             #translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
             translated_lemma =  GoogleTranslator(source=language_code, target='en').translate(lemma)
             #clean translated lemma. E.g. spaces in infinitive verbs
-            translated_lemma = translated_lemma.replace(' ', '-')
+            if type(translated_lemma) == str:
+                translated_lemma = translated_lemma.replace(' ', '-')
 
             #print(token, morph)
 
