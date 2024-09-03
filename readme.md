@@ -94,7 +94,9 @@ python -m venv .venv
 
 ## If repository was downloaded
 
-ALWAYS FETCH AND PULL THE CHANGES WITH THE GITHUB APP BEFORE RUNNING ANY SCRIPT
+### ⚠️ Important: Always Fetch and Pull Changes
+
+**⚠️ ALWAYS FETCH AND PULL THE CHANGES WITH THE GITHUB APP BEFORE RUNNING ANY SCRIPT ⚠️**
 
 ---
 
