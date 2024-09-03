@@ -169,7 +169,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
     doc = nlp(sentence)
     for token in doc:
         # Skip tokens containing digits or square brackets
-        if re.search(r'\[\d\]', token.text):
+        if re.search(r'\[|\d|\]', token.text):
             glossed_sentence += token.text
         else:
             # Get the lemma, POS, and morphological features

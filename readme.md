@@ -5,12 +5,13 @@ Certainly! Here's an updated version of your README with an index containing hyp
 # Instructions to use scripts
 
 ## Index
-- [If you have not downloaded the repository yet](#if-repository-was-not-downloaded)
-- [Download Github and Clone Repository](#download-github-and-clone-repository)
-- [Create Environment](#create-environment)
-- [If repository was downloaded](#if-repository-was-downloaded)
-- [Activate Environment](#1-activate-environment)
-- [Install Requirements](#install-requirements)
+
+- **[If you have not downloaded the repository yet](#if-repository-was-not-downloaded)**
+  - [Download Github and Clone Repository](#download-github-and-clone-repository)
+  - [Create Environment](#create-environment)
+- **[If the repository was downloaded](#if-repository-was-downloaded)**
+  - [Activate Environment](#1-activate-environment)
+  - [Install Requirements](#install-requirements)
 - [Run the Script](#2-run-the-script)
   - [For Automatic Transcription](#for-automatic-transcription)
   - [For Automatic Translation](#for-automatic-translation)
@@ -50,6 +51,19 @@ Open the terminal or cmd on your computer. Look for the following program on you
 cmd
 ```
 
+Be sure you have fmpeg downloaded:
+
+```
+which ffmpeg
+```
+
+if this is outputs an error, use this command and ffmpeg will be installed
+
+```
+winget install ffmpeg
+```
+
+
 Go to the folder of the GitHub repository. If you don't know how to do that, go to cmd and run the following command:
 
 ```
@@ -79,6 +93,8 @@ python -m venv .venv
 ```
 
 ## If repository was downloaded
+
+ALWAYS FETCH AND PULL THE CHANGES WITH THE GITHUB APP BEFORE RUNNING ANY SCRIPT
 
 ---
 
