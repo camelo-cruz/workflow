@@ -210,7 +210,8 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             glossed_word = re.sub(r'(?:\.|-)?None', '', glossed_word)
             glossed_word = re.sub(r'the.|a.', '', glossed_word)
             glossed_word = re.sub(r'--', '', glossed_word)
-            glossed_word = re.sub(r'he', '', glossed_word)
+            glossed_word = re.sub(r' he.', ' 3.M', glossed_word)
+            glossed_word = re.sub(r' she.', ' 3.F', glossed_word)
 
             # Print the glossed word
             #print(glossed_word)
