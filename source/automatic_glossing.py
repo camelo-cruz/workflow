@@ -209,7 +209,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             #if not_handled_categories != set():
             #    print("Not handled categories:", not_handled_categories)
             #general cleaning
-            glossed_word = re.sub(r'(?:\.|-)none', '', glossed_word)
+            glossed_word = re.sub(r'(?:\.|-|\b)None', '', glossed_word)
             glossed_word = re.sub(r'\b(the|a)\.', '', glossed_word)
             glossed_word = re.sub(r'--', '', glossed_word)
             glossed_word = re.sub(r'\b[h]e\.', 'M.3.', glossed_word)
