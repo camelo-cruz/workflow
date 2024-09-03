@@ -180,7 +180,6 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             #translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
             translated_lemma =  GoogleTranslator(source=language_code, target='en').translate(lemma)
             if isinstance(translated_lemma, str) and not lemma.isdigit():
-                translated_lemma.lower()
                 translated_lemma = translated_lemma.replace(' ', '-')
 
             #print(token, morph)
