@@ -179,6 +179,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
 
             #translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
             translated_lemma =  GoogleTranslator(source=language_code, target='en').translate(lemma)
+            translated_lemma.lower()
             if isinstance(translated_lemma, str) and not lemma.isdigit():
                 translated_lemma = translated_lemma.replace(' ', '-')
 
@@ -208,11 +209,11 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             #if not_handled_categories != set():
             #    print("Not handled categories:", not_handled_categories)
             #general cleaning
-            glossed_word = re.sub(r'(?:\.|-)?None', '', glossed_word)
+            glossed_word = re.sub(r'(?:\.|-)none', '', glossed_word)
             glossed_word = re.sub(r'\b(the|a)\.', '', glossed_word)
             glossed_word = re.sub(r'--', '', glossed_word)
-            glossed_word = re.sub(r'\b[hH]e\.', 'M.3.', glossed_word)
-            glossed_word = re.sub(r'\b[sS]he\.', 'F.3.', glossed_word)
+            glossed_word = re.sub(r'\b[h]e\.', 'M.3.', glossed_word)
+            glossed_word = re.sub(r'\b[s]he\.', 'F.3.', glossed_word)
 
             # Print the glossed word
             #print(glossed_word)
@@ -247,6 +248,13 @@ def process_data(input_dir, language_code):
                     if 'latin_transcription_utterance_used' in df.columns:
                         print('Glossing:', file)
                         excel_output_file = os.path.join(subdir, f'{os.path.splitext(file)[0]}_glossed.xlsx')
+                        # Check if the file exists
+                        if os.path.exists(excel_output_file):
+                            # Delete the file
+                            os.remove(excel_output_file)
+                            print(f"Deleted file: {excel_output_file}")
+                        else:
+                            print(f"File does not exist: {excel_output_file}")
                         sentences_groups = df['latin_transcription_utterance_used']
                         glossed_utterances = []
                         
