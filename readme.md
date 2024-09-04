@@ -111,7 +111,7 @@ python -m venv .venv
 
 ## Install Requirements
 
-> **Note:** Ignore this step if you have already created an environment
+> **Note:** Ignore this step if you have done this before
 
 ```
 pip install -r requirements.txt
