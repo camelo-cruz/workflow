@@ -28,7 +28,6 @@ import pandas as pd
 from tqdm import tqdm
 from deep_translator import GoogleTranslator
 from spacy.cli import download
-from transformers import MarianMTModel, MarianTokenizer
 
 current_dir = os.getcwd()
 language_path = os.path.join(current_dir, 'materials', 'LANGUAGES')
@@ -46,16 +45,9 @@ def load_json(path):
 
 LANGUAGES = load_json(language_path)
 LEIPZIG_GLOSSARY = load_json(leipzig_path)
-MODELS = {'de': {
-            'translation': 'Helsinki-NLP/opus-mt-de-en', 
-            'morphology': 'de_dep_news_trf', 
-            'prompt': ['Gegeben den originalen Satz', 'der Wurzel des Wortes im Singular', 'im Kontext ist']},
-          'ukr': {
-              'translation': 'Helsinki-NLP/opus-mt-uk-en', 
-              'morphology': 'uk_core_news_trf',
-              'prompt': ['Дано оригінальне речення', 'корінь слова', 'в контексті є']},
-          'pt': {
-              'morphology': 'pt_core_news_lg'}
+MODELS = {'de':'de_dep_news_trf',
+          'ukr': 'uk_core_news_trf',
+          'pt': 'pt_core_news_lg'
           }
 
 def load_models(language_code):
@@ -79,58 +71,15 @@ def load_models(language_code):
         model for translating sentences.
 
     """
-    model_name = MODELS[language_code]['morphology']
+    model_name = MODELS[language_code]
     try:
         nlp = spacy.load(model_name)
     except OSError:
         print(f"Model {model_name} not found. Downloading...")
         download(model_name)
         nlp = spacy.load(model_name)
-    
-    try:
-        translation_model_name = MODELS[language_code]['translation']
-        tokenizer = MarianTokenizer.from_pretrained(translation_model_name)
-        translation_model = MarianMTModel.from_pretrained(translation_model_name)
-    except Exception as e:
-        print('no tokenizer or translaton LLM found for this language')
-        tokenizer = None
-        translation_model = None
 
-    return nlp, tokenizer, translation_model
-
-def translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model):
-    """
-    Given a language, a lemma, a sentence, a tokenizer and a model, this function
-    provides a contextual translation of the lemma given the sentence. This is done
-    for translating lemmas for the glossing task
-
-    Parameters
-    ----------
-    language : str
-        language to perform the translation from.
-    lemma : str
-        lemma to translate.
-    sentence : str
-        sentence where the lemma is located.
-    tokenizer : marian tokenizer
-        tokenizer.
-    model : marian model
-        LLM to perfom translation.
-
-    Returns
-    -------
-    str
-        translated lemma.
-
-    """
-    prompt = MODELS[language_code]['prompt']
-    prompt = f'{prompt[0]} {sentence} {prompt[1]} {lemma} {prompt[2]} = {lemma}'
-    inputs = tokenizer(prompt, return_tensors="pt", padding=True)
-    translated_tokens = model.generate(**inputs)
-    translated_sentence = tokenizer.decode(translated_tokens[0], skip_special_tokens=True)
-    remove_prompt = r'^.*?='
-    translated_lemma = re.sub(remove_prompt, '', translated_sentence)
-    return translated_lemma.strip()
+    return nlp
 
 def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
     """
@@ -177,7 +126,6 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
             pos = token.pos_
             morph = token.morph.to_dict()
 
-            #translated_lemma = translate_lemma_with_context(language_code, sentence, lemma, tokenizer, model)
             translated_lemma =  GoogleTranslator(source=language_code, target='en').translate(lemma)
             if isinstance(translated_lemma, str) and not lemma.isdigit():
                 translated_lemma = translated_lemma.lower()
@@ -198,12 +146,12 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
 
             handled_keys = {'PronType', 'Definite', 'Person', 'Number', 'Gender', 'Case', 'Tense', 'Mood'}
 
-            # Append any other categories that were not in the handled keys
-            #if language_code != 'de':
-            #    for key, value in morph.items():
-            #        if key not in handled_keys:
-            #            glossed_word += f".{value}"
-            #            not_handled_categories.add(key)
+            #Append any other categories that were not in the handled keys
+            if language_code != 'de':
+                for key, value in morph.items():
+                    if key not in handled_keys:
+                        glossed_word += f".{value}"
+                        not_handled_categories.add(key)
 
             # Print the list of not handled categories
             #if not_handled_categories != set():
