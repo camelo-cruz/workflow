@@ -145,7 +145,7 @@ python source/automatic_translation.py (main_folder_path) (language) (instructio
 For instruction you have the following options:
 
 - automatic_transcription (if you want to translate the output of the automatic transcriptio)
-- automatic_translation (if you want to translate the manually corrected translation)
+- corrected_transcription (if you want to translate the manually corrected transcription)
 - sentences (if you want to translate the utterance_used sentences, used for glossing)
 
 ### For Automatic Glossing
