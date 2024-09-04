@@ -97,6 +97,8 @@ python -m venv .venv
 
 **⚠️ ALWAYS FETCH AND PULL THE CHANGES WITH THE GITHUB APP BEFORE RUNNING ANY SCRIPT ⚠️**
 
+![fetch](images/fetch.png "fetch")
+
 ---
 
 ## 1. Activate Environment
