@@ -29,9 +29,6 @@ from tqdm import tqdm
 from deep_translator import GoogleTranslator
 from spacy.cli import download
 
-sys.stdout.reconfigure(encoding='utf-8')
-
-
 current_dir = os.getcwd()
 language_path = os.path.join(current_dir, 'materials', 'LANGUAGES')
 leipzig_path = os.path.join(current_dir, 'materials', 'LEIPZIG_GLOSSARY')
@@ -95,6 +92,7 @@ def gloss_japanese(nlp,sentence):
     print(doc.text)
     for token in doc:
         print(token.text, token.pos_, token.morph)
+        token
         glossed_sentence += f"{token.text}.{token.pos_}.{token.dep_} "
 
     return glossed_sentence
@@ -132,7 +130,6 @@ def gloss_with_spacy(language_code, nlp, sentence):
 
     """
     glossed_sentence = ''
-    not_handled_categories = set()
     doc = nlp(sentence)
     for token in doc:
         # Skip tokens containing digits or square brackets
@@ -159,27 +156,12 @@ def gloss_with_spacy(language_code, nlp, sentence):
 
             glossed_word = f"{translated_lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
 
-            handled_keys = {'PronType', 'Definite', 'Person', 'Number', 'Gender', 'Case', 'Tense', 'Mood'}
-
-            #Append any other categories that were not in the handled keys
-            if language_code != 'de':
-                for key, value in morph.items():
-                    if key not in handled_keys:
-                        glossed_word += f".{value}"
-                        not_handled_categories.add(key)
-
-            # Print the list of not handled categories
-            #if not_handled_categories != set():
-            #    print("Not handled categories:", not_handled_categories)
-            #general cleaning
+            #further cleaning
             glossed_word = re.sub(r'(?:\.|-|\b)None', '', glossed_word)
             glossed_word = re.sub(r'\b(the|a)\.', '', glossed_word)
             glossed_word = re.sub(r'--', '', glossed_word)
             glossed_word = re.sub(r'\b[h]e\.', 'M.3.', glossed_word)
             glossed_word = re.sub(r'\b[s]he\.', 'F.3.', glossed_word)
-
-            # Print the glossed word
-            #print(glossed_word)
             
             glossed_sentence += glossed_word + ' '
             glossed_sentence.strip()
