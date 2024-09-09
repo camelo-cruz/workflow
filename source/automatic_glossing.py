@@ -29,6 +29,9 @@ from tqdm import tqdm
 from deep_translator import GoogleTranslator
 from spacy.cli import download
 
+sys.stdout.reconfigure(encoding='utf-8')
+
+
 current_dir = os.getcwd()
 language_path = os.path.join(current_dir, 'materials', 'LANGUAGES')
 leipzig_path = os.path.join(current_dir, 'materials', 'LEIPZIG_GLOSSARY')
@@ -86,6 +89,16 @@ def load_models(language_code):
 
     return nlp
 
+def gloss_japanese(nlp,sentence):
+    glossed_sentence = ''
+    doc = nlp(sentence)
+    print(doc.text)
+    for token in doc:
+        print(token.text, token.pos_, token.morph)
+        glossed_sentence += f"{token.text}.{token.pos_}.{token.dep_} "
+
+    return glossed_sentence
+
 def gloss_with_spacy(language_code, nlp, sentence):
     """
     This function performs the morphological analysis of a sentence given 
@@ -135,8 +148,6 @@ def gloss_with_spacy(language_code, nlp, sentence):
                 translated_lemma = translated_lemma.lower()
                 translated_lemma = translated_lemma.replace(' ', '-')
 
-            print(token, morph)
-
             arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
             definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
             person = LEIPZIG_GLOSSARY.get(morph.get('Person'), morph.get('Person'))
@@ -170,11 +181,8 @@ def gloss_with_spacy(language_code, nlp, sentence):
             # Print the glossed word
             #print(glossed_word)
             
-            if language_code == 'ja':
-                glossed_sentence = (f"{token}{morph}")
-            else:
-                glossed_sentence += glossed_word + ' '
-                glossed_sentence.strip()
+            glossed_sentence += glossed_word + ' '
+            glossed_sentence.strip()
 
     return glossed_sentence
 
@@ -224,7 +232,10 @@ def process_data(input_dir, language_code):
                                 
                                 # Process each sentence with tqdm
                                 for sentence in sentences:
-                                    glossed = gloss_with_spacy(language_code, nlp, sentence)
+                                    if language_code == 'ja':
+                                        glossed = gloss_japanese(nlp, sentence)
+                                    else:
+                                        glossed = gloss_with_spacy(language_code, nlp, sentence)
                                     glossed_sentences.append(glossed)
                                 
                                 glossed_utterances.append('\n'.join(glossed_sentences))
