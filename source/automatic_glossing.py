@@ -32,6 +32,7 @@ from spacy.cli import download
 current_dir = os.getcwd()
 language_path = os.path.join(current_dir, 'materials', 'LANGUAGES')
 leipzig_path = os.path.join(current_dir, 'materials', 'LEIPZIG_GLOSSARY')
+nolatin_path = os.path.abspath(os.path.join(current_dir, 'materials', 'NO_LATIN'))
 
 def load_json(path):
     """Utility function to load a JSON file."""
@@ -45,9 +46,13 @@ def load_json(path):
 
 LANGUAGES = load_json(language_path)
 LEIPZIG_GLOSSARY = load_json(leipzig_path)
+with open(nolatin_path, 'r', encoding='utf-8') as file:
+    NO_LATIN = file.read().splitlines()
+
 MODELS = {'de':'de_dep_news_trf',
           'ukr': 'uk_core_news_trf',
-          'pt': 'pt_core_news_lg'
+          'pt': 'pt_core_news_lg',
+          'ja':'ja_core_news_trf'
           }
 
 def load_models(language_code):
@@ -81,7 +86,7 @@ def load_models(language_code):
 
     return nlp
 
-def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
+def gloss_with_spacy(language_code, nlp, sentence):
     """
     This function performs the morphological analysis of a sentence given 
     a spacy model, a tokenizer and a translation model. It takes a sentence 
@@ -123,7 +128,6 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
         else:
             # Get the lemma, POS, and morphological features
             lemma = token.lemma_
-            pos = token.pos_
             morph = token.morph.to_dict()
 
             translated_lemma =  GoogleTranslator(source=language_code, target='en').translate(lemma)
@@ -131,7 +135,7 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
                 translated_lemma = translated_lemma.lower()
                 translated_lemma = translated_lemma.replace(' ', '-')
 
-            #print(token, morph)
+            print(token, morph)
 
             arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
             definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
@@ -165,10 +169,14 @@ def gloss_with_spacy(language_code, nlp, tokenizer, model, sentence):
 
             # Print the glossed word
             #print(glossed_word)
+            
+            if language_code == 'ja':
+                glossed_sentence = (f"{token}{morph}")
+            else:
+                glossed_sentence += glossed_word + ' '
+                glossed_sentence.strip()
 
-            glossed_sentence += glossed_word + ' '
-
-    return glossed_sentence.strip()
+    return glossed_sentence
 
 def process_data(input_dir, language_code):
 
@@ -186,14 +194,17 @@ def process_data(input_dir, language_code):
     -------
     None.
     """
-    nlp, tokenizer, model = load_models(language_code)
+    nlp = load_models(language_code)
     try:
         for subdir, dirs, files in os.walk(input_dir):
             for file in files:
                 if file.endswith('annotated.xlsx'):
                     excel_input_file = os.path.join(subdir, file)
                     df = pd.read_excel(excel_input_file)
-                    if 'latin_transcription_utterance_used' in df.columns:
+                    column_to_gloss = 'latin_transcription_utterance_used'
+                    if language_code in NO_LATIN:
+                        column_to_gloss = 'transcription_original_script_utterance_used'
+                    if column_to_gloss in df.columns:
                         print('Glossing:', file)
                         excel_output_file = os.path.join(subdir, f'{os.path.splitext(file)[0]}_glossed.xlsx')
                         # Check if the file exists
@@ -203,7 +214,7 @@ def process_data(input_dir, language_code):
                             print(f"Deleted file: {excel_output_file}")
                         else:
                             print(f"File does not exist: {excel_output_file}")
-                        sentences_groups = df['latin_transcription_utterance_used']
+                        sentences_groups = df[column_to_gloss]
                         glossed_utterances = []
                         
                         for idx, sentences in tqdm(enumerate(sentences_groups), desc='Processing sentences', total=len(sentences_groups)):
@@ -213,7 +224,7 @@ def process_data(input_dir, language_code):
                                 
                                 # Process each sentence with tqdm
                                 for sentence in sentences:
-                                    glossed = gloss_with_spacy(language_code, nlp, tokenizer, model, sentence)
+                                    glossed = gloss_with_spacy(language_code, nlp, sentence)
                                     glossed_sentences.append(glossed)
                                 
                                 glossed_utterances.append('\n'.join(glossed_sentences))
@@ -221,7 +232,7 @@ def process_data(input_dir, language_code):
                                 glossed_utterances.append('')
                         
                         df['automatic_glossing'] = glossed_utterances
-                        df.to_excel(excel_output_file, index=False)
+                        df.to_excel(excel_output_file, index=False, engine='openpyxl')
                     else:
                         print('No column to transcribe in file:', file)
     except Exception as e:
