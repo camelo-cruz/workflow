@@ -27,6 +27,8 @@ import argparse
 import pandas as pd
 from tqdm import tqdm
 from deep_translator import GoogleTranslator
+from sudachipy import tokenizer as japanese_tokenizer
+from sudachipy import dictionary as japanese_dictionary
 from spacy.cli import download
 
 current_dir = os.getcwd()
@@ -85,17 +87,6 @@ def load_models(language_code):
         nlp = spacy.load(model_name)
 
     return nlp
-
-def gloss_japanese(nlp,sentence):
-    glossed_sentence = ''
-    doc = nlp(sentence)
-    print(doc.text)
-    for token in doc:
-        print(token.text, token.pos_, token.morph)
-        token
-        glossed_sentence += f"{token.text}.{token.pos_}.{token.dep_} "
-
-    return glossed_sentence
 
 def gloss_with_spacy(language_code, nlp, sentence):
     """
