@@ -22,64 +22,54 @@ Leibniz Institute General Linguistics (ZAS)
 import os
 import pandas as pd
 import argparse
+import json
 
 current_dir = os.getcwd()
 columns_path = os.path.abspath(os.path.join(current_dir, 'materials', 'OBLIGATORY_COLUMNS'))
+nolatin_path = os.path.abspath(os.path.join(current_dir, 'materials', 'NO_LATIN'))
+languages_path = os.path.abspath(os.path.join(current_dir, 'materials', 'LANGUAGES'))
+
+with open(languages_path, 'r', encoding='utf-8') as file:
+    LANGUAGES = json.load(file)
 
 with open(columns_path, 'r', encoding='utf-8') as file:
     OBLIGATORY_COLUMNS = file.read().splitlines()
 
-MAPPING = {
-    "latin_transcription_everything": "transcription",
-    "translation_everything": "translation",
-    "latin_transcription_utterance_used": "glossing_object_language",
-    "transcription_morphosegmentation": "glossing_object_language",
-    "glossing_utterance_used": "glossing_meta_language"
-    }
+with open(nolatin_path, 'r', encoding='utf-8') as file:
+    NO_LATIN = file.read().splitlines()
+
+def reorder_columns(df, language):
+    additional_columns = [col for col in df.columns if col not in OBLIGATORY_COLUMNS]
+    new_column_order = additional_columns + OBLIGATORY_COLUMNS
+    for key, val in LANGUAGES.items():
+        if val == language:
+            language = key
+    if language not in NO_LATIN:
+        df = new_column_order.remove('transcription_original_script')
+        df = new_column_order.remove('transcription_original_script_utterance_used')
+    return df[new_column_order]
 
 
-def process_data(directory):
+def process_data(directory, language):
     for subdir, dirs, files in os.walk(directory):
         excel_file_path = os.path.join(subdir, 'trials_and_sessions_annotated.xlsx')
         try:
             if os.path.exists(excel_file_path):
                 df = pd.read_excel(excel_file_path)
                 print(f'processing {excel_file_path}')
-                df = update_columns(df)
-                df = reorder_columns(df)
-                
+                df = reorder_columns(df, language)
                 df.to_excel(excel_file_path, index=False)
         except Exception as e:
             print(f"Error processing the file {excel_file_path}: {e}")
 
-def update_columns(df):
-    for column in OBLIGATORY_COLUMNS:
-        if column not in df.columns:
-            df[column] = ''
 
-    for new_col, old_col in MAPPING.items():
-        if old_col in df.columns:
-            df[new_col] = df[old_col]
-
-    try:
-        if 'latin_transcription_utterance_used' in df.columns:
-            df['latin_transcription_utterance_used'] = df['latin_transcription_utterance_used'].str.replace('-', '', regex=True)
-    except Exception as e:
-        print(f"Handled error: {e} - Continuing with other operations.")
-
-    return df
-
-
-def reorder_columns(df):
-    additional_columns = [col for col in df.columns if col not in OBLIGATORY_COLUMNS]
-    new_column_order = additional_columns + OBLIGATORY_COLUMNS
-    return df[new_column_order]
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="automatic transcription")
     parser.add_argument("input_dir")
+    parser.add_argument("language")
     
     args = parser.parse_args()
-    process_data(args.input_dir)
+    process_data(args.input_dir, args.language)
 
 
