@@ -10,3 +10,4 @@ torch==2.3.1
 openpyxl
 sentencepiece
 sacremoses
+romkan
