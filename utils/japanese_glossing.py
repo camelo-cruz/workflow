@@ -83,7 +83,7 @@ def gloss_with_sudachipy(sentence):
     return glossed_sentence.strip()
 
 
-def gloss_japanese_with_spacy(nlp, sentence):
+def gloss_with_spacy(nlp, sentence):
     glossed_sentence = ''
     doc = nlp(sentence)
     

@@ -26,8 +26,8 @@ import json
 import argparse
 import pandas as pd
 from tqdm import tqdm
-from utils import japanese_glossing
 from deep_translator import GoogleTranslator
+from utils.japanese_glossing import gloss_japanese_with_spacy
 
 current_dir = os.getcwd()
 language_path = os.path.join(current_dir, 'materials', 'LANGUAGES')
@@ -203,7 +203,7 @@ def process_data(input_dir, language_code):
                                 # Process each sentence with tqdm
                                 for sentence in sentences:
                                     if language_code == 'ja':
-                                        glossed = japanese_glossing.gloss_with_sudachipy(sentence)
+                                        glossed = japanese_glossing.gloss_with_spacy(sentence)
                                     else:
                                         glossed = gloss_with_spacy(language_code, nlp, sentence)
                                     glossed_sentences.append(glossed)
