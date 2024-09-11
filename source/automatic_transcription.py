@@ -25,8 +25,6 @@ import argparse
 import string
 import pandas as pd
 from tqdm import tqdm
-from transliterate import translit
-import cutlet
 import json
 
 
@@ -72,7 +70,7 @@ def __process_string(input_string):
     return processed_string
 
 
-def process_data(directory, language, latin_transliteration = False):
+def process_data(directory, language):
     """
     This functions iterates over a given directory and looks for a 'binaries' folder,
     containing audio data. The function takes as input then the trials and sessions
@@ -142,7 +140,6 @@ def main():
     parser = argparse.ArgumentParser(description="automatic transcription")
     parser.add_argument("input_dir")
     parser.add_argument("language", default=None, help="Language of the audio content")
-    parser.add_argument("--transliteration", action="store_true", help="Perform transliteration into latin alphabet for Japanese and Russian")
     args = parser.parse_args()
     
     language = args.language
@@ -154,7 +151,7 @@ def main():
     else:
         print("No Language given. Language will automatically recognized")
         
-    process_data(args.input_dir, language, args.transliteration)
+    process_data(args.input_dir, language)
 
 if __name__ == "__main__":
     main()
