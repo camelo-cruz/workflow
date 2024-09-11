@@ -51,8 +51,7 @@ with open(nolatin_path, 'r', encoding='utf-8') as file:
 
 MODELS = {'de':'de_dep_news_trf',
           'ukr': 'uk_core_news_trf',
-          'pt': 'pt_core_news_lg',
-          'ja':'ja_core_news_trf'
+          'pt': 'pt_core_news_lg'
           }
 
 def load_models(language_code):

@@ -1,3 +1,4 @@
+import spacy
 from sudachipy import tokenizer as japanese_tokenizer
 from sudachipy import dictionary as japanese_dictionary
 
@@ -80,3 +81,21 @@ def gloss_with_sudachipy(sentence):
         glossed_sentence += glossed_word + ' '
     
     return glossed_sentence.strip()
+
+
+def gloss_japanese_with_spacy(nlp, sentence):
+    glossed_sentence = ''
+    doc = nlp(sentence)
+    
+    # Iterating over each token in the sentence
+    for token in doc:
+        # Print basic information for the token
+        print(f"Token: {token.text}")
+        print(f"POS: {token.pos_}")  # Part of speech
+        print(f"Tag: {token.tag_}")  # Detailed POS tag
+        print(f"Morph: {token.morph}")  # Morphological information (if available)
+        
+        # Constructing the glossed sentence with token info
+        glossed_sentence += f"{token.text}.{token.pos_}.{token.tag_}.{token.morph} "
+
+    return glossed_sentence
