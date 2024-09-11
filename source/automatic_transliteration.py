@@ -22,9 +22,10 @@ import os
 import json
 import romkan
 import argparse
+import spacy
 import pandas as pd
+from tqdm import tqdm
 from transliterate import translit
-from sudachipy import tokenizer, dictionary
 
 
 current_dir = os.getcwd()
@@ -52,22 +53,26 @@ def kanji_hiragana_katakana_to_romaji(sentence):
     romaji_sentence : str
         The sentence converted into Romaji.
     """
-    
-    # Load the Sudachi tokenizer
-    tokenizer_obj = dictionary.Dictionary().create()
-    mode = tokenizer.Tokenizer.SplitMode.C  # Use the most detailed tokenization
-    
-    # Tokenize the sentence
-    tokens = tokenizer_obj.tokenize(sentence, mode)
+    nlp = spacy.load('ja_core_news_trf')
+    doc = nlp(sentence)
     
     # Convert Kanji to Kana (Hiragana/Katakana) and Kana to Romaji
     romaji_sentence = ''
-    for token in tokens:
-        # Get the reading form of the token (Kana form) if available, otherwise use the surface form
-        kana_form = token.reading_form() if token.reading_form() else token.surface()
-        
-        # Convert the Kana form to Romaji using romkan
-        romaji_word = romkan.to_roma(kana_form)
+    for word in doc:
+        morph = word.morph.to_dict()
+
+        # Check if the word contains Latin alphabet characters
+        if word.text.isascii():  # Latin alphabet check
+            romaji_word = word.text  # Leave the word unchanged if it's in Latin alphabet
+        elif word.text == "、":  # Japanese comma
+            romaji_word = ","  # Convert to a Latin comma
+        elif word.text == "。":  # Japanese period
+            romaji_word = "."  # Convert to a Latin period
+        else:
+            kana_form = morph['Reading'] if 'Reading' in morph else str(word)
+            
+            # Convert the Kana form to Romaji using romkan
+            romaji_word = romkan.to_roma(kana_form)
         
         # Append the Romaji word to the sentence
         romaji_sentence += romaji_word + ' '
@@ -105,10 +110,17 @@ def transliterate(file, instruction, language_code):
     # Ensure target column exists in the dataframe
     if target not in df.columns:
         df[target] = ""
+    else:
+        df[target] = ""
+
+    df[target] = df[target].astype('object')
     
     for sentence in df[source].dropna():  # Handle missing values in the source column
         series = df[df.isin([sentence])].stack()
         for idx, value in series.items():
+            if pd.isna(df.at[idx[0], target]):
+                df.at[idx[0], target] = ""
+
             if language_code == "ru":
                 df.at[idx[0], target] += f"{translit(sentence, 'ru', reversed=True)} "
             elif language_code == "uk":
@@ -116,7 +128,6 @@ def transliterate(file, instruction, language_code):
             elif language_code == "ja":
                 df.at[idx[0], target] += f"{kanji_hiragana_katakana_to_romaji(sentence)} "
 
-    print(f"\nTransliteration completed for {file}.")
     return df
 
 def main():
@@ -134,8 +145,7 @@ def main():
     """
     parser = argparse.ArgumentParser(description="Automatic transcription")
     parser.add_argument("input_dir", help="Directory with files to transliterate.")
-    parser.add_argument("instruction", choices=["automatic_transcription", 
-                                                "corrected_transcription", "sentences"], 
+    parser.add_argument("instruction", choices=[ "corrected_transcription", "sentences"], 
                         help="Type of instruction for processing.")
     parser.add_argument("source_language", help="Source language for transliteration.")
     args = parser.parse_args()
@@ -145,19 +155,22 @@ def main():
     for code, name in LANGUAGES.items():
         if name == args.source_language.lower():
             language = code
-            break
+            print(f'transliterating for {language}')
     
     if not language:
         print(f"Error: Unsupported language '{args.source_language}'.")
         return
     
     # Process files in the input directory
+    to_process = []
     for subdir, dirs, files in os.walk(args.input_dir):
         for file in files:
             if file.endswith('annotated.xlsx'):
-                file_path = os.path.join(subdir, file)
-                df = transliterate(file_path, args.instruction, language)
-                df.to_excel(file_path, index=False)
+                to_process.append(os.path.join(subdir, file))
+
+    for file_path in tqdm(to_process, desc=f"Processing Files", unit="file"):
+        df = transliterate(file_path, args.instruction, language)
+        df.to_excel(file_path, index=False)
 
 if __name__ == "__main__":
     main()
