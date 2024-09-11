@@ -83,7 +83,13 @@ def gloss_with_sudachipy(sentence):
     return glossed_sentence.strip()
 
 
-def gloss_with_spacy(nlp, sentence):
+def gloss_japanese_with_spacy(nlp, sentence):
+    try: 
+        nlp = spacy.load('ja_core_news_trf')
+    except OSError:
+        download('ja_core_news_trf')
+        nlp = spacy.load('ja_core_news_trf')
+        
     glossed_sentence = ''
     doc = nlp(sentence)
     

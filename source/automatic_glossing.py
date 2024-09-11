@@ -27,7 +27,6 @@ import argparse
 import pandas as pd
 from tqdm import tqdm
 from deep_translator import GoogleTranslator
-from utils.japanese_glossing import gloss_japanese_with_spacy
 
 current_dir = os.getcwd()
 language_path = os.path.join(current_dir, 'materials', 'LANGUAGES')
@@ -51,7 +50,8 @@ with open(nolatin_path, 'r', encoding='utf-8') as file:
 
 MODELS = {'de':'de_dep_news_trf',
           'ukr': 'uk_core_news_trf',
-          'pt': 'pt_core_news_lg'
+          'pt': 'pt_core_news_lg',
+          'ja': 'ja_core_news_trf'
           }
 
 def load_models(language_code):
@@ -84,6 +84,24 @@ def load_models(language_code):
         nlp = spacy.load(model_name)
 
     return nlp
+
+def gloss_japanese_with_spacy(nlp, sentence):     
+    glossed_sentence = ''
+    doc = nlp(sentence)
+    
+    # Iterating over each token in the sentence
+    for token in doc:
+        # Print basic information for the token
+        #print(f"Token: {token.text}")
+        #print(f"POS: {token.pos_}")  # Part of speech
+        #print(f"Tag: {token.tag_}")  # Detailed POS tag
+        #print(f"Morph: {token.morph}")  # Morphological information (if available)
+        
+        # Constructing the glossed sentence with token info
+        if token.pos_ != 'PUNCT':
+            glossed_sentence += f"{token.text}.{token.pos_}.{token.dep_} "
+
+    return glossed_sentence
 
 def gloss_with_spacy(language_code, nlp, sentence):
     """
@@ -203,7 +221,7 @@ def process_data(input_dir, language_code):
                                 # Process each sentence with tqdm
                                 for sentence in sentences:
                                     if language_code == 'ja':
-                                        glossed = japanese_glossing.gloss_with_spacy(sentence)
+                                        glossed = gloss_japanese_with_spacy(nlp, sentence)
                                     else:
                                         glossed = gloss_with_spacy(language_code, nlp, sentence)
                                     glossed_sentences.append(glossed)
