@@ -25,32 +25,15 @@ import argparse
 import string
 import pandas as pd
 from tqdm import tqdm
-import json
+from set_global_variables import set_global_variables
 
-
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
 # Suppress warnings that can clutter output, use this cautiously as it might hide important warnings
 warnings.filterwarnings("ignore")
 
 # Load and initialize the Whisper model for audio processing
 model = whisper.load_model("large-v3")
-
-# Store the current working directory for relative path calculations
-current_dir = os.getcwd()
-# Compute the absolute file path for the language configurations
-languages_path = os.path.abspath(os.path.join(current_dir, 'materials', 'LANGUAGES'))
-columns_path = os.path.abspath(os.path.join(current_dir, 'materials', 'OBLIGATORY_COLUMNS'))
-nolatin_path = os.path.abspath(os.path.join(current_dir, 'materials', 'NO_LATIN'))
-
-# Load language configurations from a JSON file
-with open(languages_path, 'r', encoding='utf-8') as file:
-    LANGUAGES = json.load(file)
-    
-with open(columns_path, 'r', encoding='utf-8') as file:
-    OBLIGATORY_COLUMNS = file.read().splitlines()
-
-with open(nolatin_path, 'r', encoding='utf-8') as file:
-    NO_LATIN = file.read().splitlines()
 
 def __process_string(input_string):
     """
