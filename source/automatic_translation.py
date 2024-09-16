@@ -23,16 +23,9 @@ import pandas as pd
 from deep_translator import GoogleTranslator
 import argparse
 import json
+from set_global_variables import set_global_variables
 
-current_dir = os.getcwd()
-file_path = os.path.join(current_dir, 'materials', 'LANGUAGES')
-nolatin_path = os.path.abspath(os.path.join(current_dir, 'materials', 'NO_LATIN'))
-
-with open(file_path, 'r', encoding='utf-8') as file:
-    LANGUAGES = json.load(file)
-
-with open(nolatin_path, 'r', encoding='utf-8') as file:
-    NO_LATIN = file.read().splitlines()
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
 def translate(file, instruction, source_language):
     df = pd.read_excel(file)

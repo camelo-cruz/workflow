@@ -27,18 +27,9 @@ import spacy
 import pandas as pd
 from tqdm import tqdm
 from transliterate import translit
+from set_global_variables import set_global_variables
 
-
-current_dir = os.getcwd()
-
-nolatin_path = os.path.abspath(os.path.join(current_dir, 'materials', 'NO_LATIN'))
-languages_path = os.path.abspath(os.path.join(current_dir, 'materials', 'LANGUAGES'))
-
-with open(nolatin_path, 'r', encoding='utf-8') as file:
-    NO_LATIN = file.read().splitlines()
-
-with open(languages_path, 'r', encoding='utf-8') as file:
-    LANGUAGES = json.load(file)
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
 def kanji_hiragana_katakana_to_romaji(sentence):
     """
