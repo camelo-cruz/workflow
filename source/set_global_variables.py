@@ -27,6 +27,4 @@ def set_global_variables():
     # Return the loaded configurations
     return LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, LEIPZIG_GLOSSARY
 
-def find_language(language):
-    language_code = next((code for code, name in LANGUAGES.items() if name == language.lower()), None)
-    return language_code
+
