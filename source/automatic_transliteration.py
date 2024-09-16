@@ -21,6 +21,7 @@ Leibniz Institute General Linguistics (ZAS)
 import os
 import json
 import romkan
+import pykakasi
 import argparse
 import spacy
 import pandas as pd
@@ -53,6 +54,7 @@ def kanji_hiragana_katakana_to_romaji(sentence):
     romaji_sentence : str
         The sentence converted into Romaji.
     """
+    '''
     nlp = spacy.load('ja_core_news_trf')
     doc = nlp(sentence)
     
@@ -76,6 +78,15 @@ def kanji_hiragana_katakana_to_romaji(sentence):
         
         # Append the Romaji word to the sentence
         romaji_sentence += romaji_word + ' '
+    '''
+
+    romaji_sentence = ''
+    kks = pykakasi.kakasi()
+    result = kks.convert(sentence)
+    for item in result:
+        element = item['hepburn']
+        romaji_sentence += f'{element} '
+
     
     return romaji_sentence.strip()
 
