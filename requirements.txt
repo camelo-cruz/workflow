@@ -6,9 +6,9 @@ spacy==3.7.5
 tqdm==4.65.0
 transformers==4.42.3
 transliterate==1.10.2
-torch==2.3.0+cu118 --index-url https://download.pytorch.org/whl/cu118
-torchvision==0.15.0+cu118 --index-url https://download.pytorch.org/whl/cu118
-torchaudio==2.3.0+cu118 --index-url https://download.pytorch.org/whl/cu118
+torch==2.3.0
+torchvision==0.15.0
+torchaudio==2.3.0
 openpyxl
 sentencepiece
 sacremoses
