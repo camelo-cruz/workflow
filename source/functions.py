@@ -42,7 +42,11 @@ def set_global_variables():
 def find_language(language, LANGUAGES):
     """Finds the language code by its name."""
     language_lower = language.lower()
-    language_code = LANGUAGES.get(language_lower)
+    
+    # Reverse the LANGUAGES dictionary for language name -> code lookup
+    reversed_languages = {value.lower(): key for key, value in LANGUAGES.items()}
+    
+    language_code = reversed_languages.get(language_lower)
     
     if language_code:
         print(f'Language recognized: {language_code}')
