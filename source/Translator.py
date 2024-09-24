@@ -21,6 +21,7 @@ Leibniz Institute General Linguistics (ZAS)
 import os 
 import pandas as pd
 import argparse
+from tqdm import tqdm
 from deep_translator import GoogleTranslator
 from functions import set_global_variables, find_language
 
@@ -36,25 +37,31 @@ class Translator():
         automatic_column = "automatic_transcription"
         corrected_column = "latin_transcription_everything"
         sentences_column = "latin_transcription_utterance_used"
-        
-        for i in range(len(df)):
-            for subdir, dirs, files in os.walk(self.input_dir):
-                for file in files:
-                    if file.endswith('annotated.xlsx'):
-                        file = os.path.join(subdir, file)
-                        df = pd.read_excel(file)
-                        try:
-                            if not self.instruction:
-                                df.loc[i,"translation_everything"] = GoogleTranslator(source=self.language, target='en').translate(df[corrected_column][i])
-                            elif self.instruction == 'automatic_transcription':
-                                df.loc[i,"automatic_translation"] = GoogleTranslator(source=self.language, target='en').translate(df[automatic_column][i])
-                            elif self.instruction == 'sentences':
-                                df.loc[i,"translation_utterance_used"] = GoogleTranslator(source=self.language, target='en').translate(df[sentences_column][i])
-                        except Exception as e:
-                            print(f"An error occurred: {str(e)}")
-                df.to_excel(file)
-                
-        return df
+
+        files_to_process = []
+        for subdir, dirs, files in os.walk(self.input_dir):
+            for file in files:
+                if file.endswith('annotated.xlsx'):
+                    files_to_process.append(os.path.join(subdir, file))
+
+        with tqdm(total=len(files_to_process), desc="Processing files", unit="file") as file_pbar:
+            for file_path in files_to_process:
+                df = pd.read_excel(file_path)
+
+                for i in range(len(df)):
+                    try:
+                        if not self.instruction:
+                            df.at[i, "translation_everything"] = GoogleTranslator(source=self.language_code, target='en').translate(df[corrected_column].iloc[i])
+                        elif self.instruction == 'automatic_transcription':
+                            df.at[i, "automatic_translation"] = GoogleTranslator(source=self.language_code, target='en').translate(df[automatic_column].iloc[i])
+                        elif self.instruction == 'sentences':
+                            df.at[i, "translation_utterance_used"] = GoogleTranslator(source=self.language_code, target='en').translate(df[sentences_column].iloc[i])
+                    except Exception as e:
+                        print(f"An error occurred while translating row {i}: {str(e)}")
+
+                df.to_excel(file_path, index=False)
+
+                file_pbar.update(1)
 
 
 def main():

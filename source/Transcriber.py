@@ -25,11 +25,13 @@ import argparse
 import string
 import pandas as pd
 from tqdm import tqdm
-from functions import set_global_variables, find_language, clean_string
+from functions import set_global_variables, find_language, clean_string, find_ffmpeg
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
-# Suppress warnings that can clutter output, use this cautiously as it might hide important warnings
+#ffmpeg_path = find_ffmpeg()
+#os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
+
 warnings.filterwarnings("ignore")
 
 # Load and initialize the Whisper model for audio processing

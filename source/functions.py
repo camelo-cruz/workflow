@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import string
 
 def load_json_file(file_path):
     """Utility function to load JSON files with error handling."""
@@ -71,3 +72,13 @@ def clean_string(input_string):
     processed_string = lowercase_string.translate(translator)
 
     return processed_string
+
+def find_ffmpeg():
+    """Dynamically finds ffmpeg executable path"""
+    user_home = os.path.expanduser("~")
+    ffmpeg_path = os.path.join(user_home, 'ffmpeg-7.0.2', 'bin', 'ffmpeg.exe')
+    
+    if not os.path.exists(ffmpeg_path):
+        raise FileNotFoundError(f"ffmpeg not found in {ffmpeg_path}. Please make sure it's installed in your user directory.")
+    
+    return ffmpeg_path
