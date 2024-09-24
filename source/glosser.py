@@ -35,7 +35,7 @@ class Glosser():
     def __init__(self, input_dir, language):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
-        self.nlp = self.load_models()
+        self.load_models()
 
     def load_models(self):
         """
@@ -67,13 +67,11 @@ class Glosser():
         
         model_name = models[self.language_code]
         try:
-            nlp = spacy.load(model_name)
+            self.nlp = spacy.load(model_name)
         except OSError:
             print(f"Model {model_name} not found. Downloading...")
             download(model_name)
-            nlp = spacy.load(model_name)
-
-        return nlp
+            self.nlp = spacy.load(model_name)
 
     def gloss_japanese_with_spacy(self, sentence):     
         glossed_sentence = ''
@@ -205,7 +203,7 @@ class Glosser():
                                         if self.language_code == 'ja':
                                             glossed = self.gloss_japanese_with_spacy(self.nlp, sentence)
                                         else:
-                                            glossed = self.gloss_with_spacy(self.language_code, nlp, sentence)
+                                            glossed = self.gloss_with_spacy(sentence)
                                         glossed_sentences.append(glossed)
                                     glossed_utterances.append('\n'.join(glossed_sentences))
                                 else:
