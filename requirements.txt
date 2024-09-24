@@ -12,4 +12,3 @@ torchaudio
 openpyxl
 sentencepiece
 sacremoses
-romkan
