@@ -27,25 +27,15 @@ import pandas as pd
 from tqdm import tqdm
 from spacy.cli import download
 from deep_translator import GoogleTranslator
-from set_global_variables import set_global_variables
+from source.functions import set_global_variables, find_language
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, LEIPZIG_GLOSSARY = set_global_variables()
 
 class Glosser():
     def __init__(self, input_dir, language):
         self.input_dir = input_dir
-        self.language_code = self.find_language(language)
+        self.language_code = find_language(language)
         self.nlp = self.load_models()
-    
-    @staticmethod  
-    def find_language(language):
-        language_code = next((code for code, name in LANGUAGES.items() if name == language.lower()), None)
-        if language_code:
-            print(f'language recognized: {language_code}')
-            return language_code
-        else:
-            print(f"Unsupported language: {language}")
-            sys.exit(1)
 
     def load_models(self):
         """
