@@ -122,39 +122,11 @@ pip install -r requirements.txt
 
 ## 2. Run the Script
 
-### For Automatic Transcription
+### For Automatic transcription and glossing
+- **Replace `(instruction)`** with the instruction of what to do: transcribe, translate or gloss 
 - **Replace `(main_folder_path)`** with the path to the parent folder containing the sessions folders.
 - **Replace `(language)`** with the language to transcribe. For example: German, Ukrainian.
 
 ```
-python source/automatic_transcription.py (main_folder_path) (language)
+python source/main.py (instruction) (main_folder_path) (language) 
 ```
-
-This is an example:
-
-![path](images/transcription_example.png "path")
-
-### For Automatic Translation
-- **Replace `(main_folder_path)`** with the path to the parent folder containing the sessions folders.
-- **Replace `(language)`** with the language from which you want to translate. For example: German, Ukrainian.
-
-```
-python source/automatic_translation.py (main_folder_path) (language) (instruction)
-```
-
-For instruction you have the following options:
-
-- automatic_transcription (if you want to translate the output of the automatic transcriptio)
-- corrected_transcription (if you want to translate the manually corrected transcription)
-- sentences (if you want to translate the utterance_used sentences, used for glossing)
-
-### For Automatic Glossing
-
-- **Replace `(main_folder_path)`** with the path to the parent folder containing the sessions folders.
-- **Replace `(language)`** with the language from which you want to translate. For example: German, Ukrainian.
-
-```
-python source/automatic_glossing.py (main_folder_path) (language)
-```
-
----
