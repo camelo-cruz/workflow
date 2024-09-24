@@ -10,7 +10,7 @@ def main():
                         help="The type of processing to perform (transcribe, translate, gloss)")
     parser.add_argument("input_dir", help="Directory containing files to process")
     parser.add_argument("language", help="Source language")
-    parser.add_argument("--instruction", 
+    parser.add_argument("--instruction", "-i", 
                         choices=["automatic_transcription", 
                                  "corrected_transcription", 
                                  "sentences"], 
