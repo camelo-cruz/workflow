@@ -1,8 +1,7 @@
 import argparse
-import Transcriber
-import Translator
-import Glosser
-import Transliterator
+from Transcriber import Transcriber
+from Translator import Translator
+from Glosser import Glosser
 
 def main():
     parser = argparse.ArgumentParser(description="Automatic language processing tool")
@@ -16,7 +15,7 @@ def main():
                                  "corrected_transcription", 
                                  "sentences"], 
                         help="Type of instruction for translation", required=False)
-    args = parser.parse_args
+    args = parser.parse_args()
 
     if args.processing_instruction == 'transcribe':
         transcriber = Transcriber(args.input_dir, args.language)

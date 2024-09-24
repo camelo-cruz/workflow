@@ -25,7 +25,7 @@ import argparse
 import string
 import pandas as pd
 from tqdm import tqdm
-from source.functions import set_global_variables, find_language, clean_string
+from functions import set_global_variables, find_language, clean_string
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 

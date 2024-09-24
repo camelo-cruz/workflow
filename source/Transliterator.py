@@ -27,7 +27,7 @@ import spacy
 import pandas as pd
 from tqdm import tqdm
 from transliterate import translit
-from set_global_variables import set_global_variables
+from functions import set_global_variables
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 

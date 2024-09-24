@@ -27,7 +27,7 @@ import pandas as pd
 from tqdm import tqdm
 from spacy.cli import download
 from deep_translator import GoogleTranslator
-from source.functions import set_global_variables, find_language
+from functions import set_global_variables, find_language
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, LEIPZIG_GLOSSARY = set_global_variables()
 
