@@ -38,7 +38,7 @@ model = whisper.load_model("large-v3")
 class Transcriber():
     def __init__(self, input_dir, language):
         self.input_dir = input_dir
-        self.language_code = find_language(language)
+        self.language_code = find_language(language, LANGUAGES)
 
 
     def process_data(self):

@@ -34,7 +34,7 @@ LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, LEIPZIG_GLOSSARY = set_global_variables
 class Glosser():
     def __init__(self, input_dir, language):
         self.input_dir = input_dir
-        self.language_code = find_language(language)
+        self.language_code = find_language(language, LANGUAGES)
         self.nlp = self.load_models()
 
     def load_models(self):
