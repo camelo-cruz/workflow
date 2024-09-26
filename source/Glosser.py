@@ -90,12 +90,17 @@ class Glosser():
         lemmatized_words = lemmatized_sentence.split()
         wh_questions = ['que', 'qual', 'quem', 'quando', 'onde']
 
-        for idx, wh in enumerate(wh_questions):
+        for wh in wh_questions:
             if wh in lemmatized_words:
                 wh_index = lemmatized_words.index(wh)
                 if wh_index + 1 < len(lemmatized_words) and lemmatized_words[wh_index + 1] == 'que':
                     glossed_sentence[wh_index + 1] = 'COMP'
-        
+
+        if 'o que' in lemmatized_sentence:
+            o_index = lemmatized_words.index('o')
+            if o_index + 1 < len(lemmatized_words) and lemmatized_words[o_index + 1] == 'que':
+                del glossed_sentence[o_index + 1]
+
         return ' '.join(glossed_sentence)
 
     def gloss_with_spacy(self, sentence):
