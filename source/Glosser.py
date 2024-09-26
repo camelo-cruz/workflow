@@ -83,6 +83,20 @@ class Glosser():
                 glossed_sentence += f"{token.text}.{token.pos_}.{token.dep_} "
 
         return glossed_sentence
+    
+    @staticmethod
+    def clean_portuguese_sentence(glossed_sentence, lemmatized_sentence):
+        glossed_sentence = glossed_sentence.split()
+        lemmatized_words = lemmatized_sentence.split()
+        wh_questions = ['que', 'qual', 'quem', 'quando', 'onde']
+
+        for idx, wh in enumerate(wh_questions):
+            if wh in lemmatized_words:
+                wh_index = lemmatized_words.index(wh)
+                if wh_index + 1 < len(lemmatized_words) and lemmatized_words[wh_index + 1] == 'que':
+                    glossed_sentence[wh_index + 1] = 'COMP'
+        
+        return ' '.join(glossed_sentence)
 
     def gloss_with_spacy(self, sentence):
         """
@@ -117,6 +131,7 @@ class Glosser():
 
         """
         glossed_sentence = ''
+        lemmatized_sentence = ''
         doc = self.nlp(sentence)
         for token in doc:
             # Skip tokens containing digits or square brackets
@@ -142,7 +157,6 @@ class Glosser():
                 mood = LEIPZIG_GLOSSARY.get(morph.get('Mood'), morph.get('Mood'))
 
                 glossed_word = f"{translated_lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
-
                 #further cleaning
                 glossed_word = re.sub(r'(?:\.|-|\b)None', '', glossed_word)
                 glossed_word = re.sub(r'\b(the|a)\.', '', glossed_word)
@@ -152,7 +166,12 @@ class Glosser():
                 
                 glossed_sentence += glossed_word + ' '
                 glossed_sentence.strip()
+                lemmatized_sentence += lemma + ' '
+                lemmatized_sentence.strip()
 
+                if self.language_code == 'pt':
+                    glossed_sentence = self.clean_portuguese_sentence(lemmatized_sentence, glossed_sentence)
+        
         return glossed_sentence
 
     def process_data(self):
