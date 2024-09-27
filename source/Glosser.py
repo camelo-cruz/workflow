@@ -88,26 +88,36 @@ class Glosser():
     def clean_portuguese_sentence(glossed_sentence, lemmatized_sentence):
         glossed_sentence = glossed_sentence.split()
         lemmatized_words = lemmatized_sentence.split()
+
         wh_questions = ['que', 'qual', 'quem', 'quando', 'onde']
 
         for wh in wh_questions:
             if wh in lemmatized_words:
                 wh_index = lemmatized_words.index(wh)
+                # Ensure wh_index + 1 is within the bounds
                 if wh_index + 1 < len(lemmatized_words) and lemmatized_words[wh_index + 1] == 'que':
                     glossed_sentence[wh_index + 1] = 'COMP'
-                glossed_sentence[wh_index] = glossed_sentence[wh_index].replace('F', '').replace('M', '')
-                if wh == "quem":
-                    glossed_sentence[wh_index] = glossed_sentence[wh_index].replace('INT', 'REL')
+
+                if wh == "quem" or wh == "que"and wh_index < len(glossed_sentence) and wh_index in [0, 1]:
+                    glossed_sentence[wh_index] = glossed_sentence[wh_index].replace('F', '').replace('M', '')
+                    glossed_sentence[wh_index] = glossed_sentence[wh_index].replace('SG', '').replace("PL", "")
+                    glossed_sentence[wh_index] = glossed_sentence[wh_index].replace('REL', 'INT')
 
         if 'o que' in lemmatized_sentence:
-            o_index = lemmatized_words.index('o')
-            if o_index + 1 < len(lemmatized_words) and lemmatized_words[o_index + 1] == 'que':
-                del glossed_sentence[o_index + 1]
+            if 'o' in lemmatized_words:
+                o_index = lemmatized_words.index('o')
+                # Ensure o_index + 1 is within the bounds
+                if o_index + 1 < len(lemmatized_words) and lemmatized_words[o_index + 1] == 'que':
+                    del glossed_sentence[o_index]
+        
+        glossed_sentence = [re.sub(r'\.{2,}', '.', word) for word in glossed_sentence]
+        glossed_sentence = ' '.join(glossed_sentence)
+        glossed_sentence = re.sub(r'\s+', ' ', glossed_sentence)
+        glossed_sentence = re.sub(r'\. +', '. ', glossed_sentence)
 
+        return glossed_sentence
 
-        return ' '.join(glossed_sentence)
-
-    def gloss_with_spacy(self, sentence):
+    def gloss_with_spacy(self, sentence, verbose = False):
         """
         This function performs the morphological analysis of a sentence given 
         a spacy model, a tokenizer and a translation model. It takes a sentence 
@@ -178,9 +188,11 @@ class Glosser():
                 lemmatized_sentence += lemma + ' '
                 lemmatized_sentence.strip()
 
-                if self.language_code == 'pt':
-                    glossed_sentence = self.clean_portuguese_sentence(lemmatized_sentence, glossed_sentence)
-        
+        if self.language_code == 'pt':
+            glossed_sentence = self.clean_portuguese_sentence(glossed_sentence, lemmatized_sentence)
+
+        if verbose:      
+            print(glossed_sentence)
         return glossed_sentence
 
     def process_data(self):
