@@ -95,11 +95,13 @@ class Glosser():
                 wh_index = lemmatized_words.index(wh)
                 if wh_index + 1 < len(lemmatized_words) and lemmatized_words[wh_index + 1] == 'que':
                     glossed_sentence[wh_index + 1] = 'COMP'
+                glossed_sentence[wh_index] = glossed_sentence[wh_index].replace('F', '').replace('M', '')
 
         if 'o que' in lemmatized_sentence:
             o_index = lemmatized_words.index('o')
             if o_index + 1 < len(lemmatized_words) and lemmatized_words[o_index + 1] == 'que':
                 del glossed_sentence[o_index + 1]
+
 
         return ' '.join(glossed_sentence)
 
