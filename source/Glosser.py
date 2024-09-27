@@ -96,6 +96,8 @@ class Glosser():
                 if wh_index + 1 < len(lemmatized_words) and lemmatized_words[wh_index + 1] == 'que':
                     glossed_sentence[wh_index + 1] = 'COMP'
                 glossed_sentence[wh_index] = glossed_sentence[wh_index].replace('F', '').replace('M', '')
+                if wh == "quem":
+                    glossed_sentence[wh_index] = glossed_sentence[wh_index].replace('INT', 'REL')
 
         if 'o que' in lemmatized_sentence:
             o_index = lemmatized_words.index('o')
@@ -209,7 +211,6 @@ class Glosser():
                         if column_to_gloss in df.columns:
                             print('Glossing:', file)
                             excel_output_file = os.path.join(subdir, f'{os.path.splitext(file)[0]}_glossed.xlsx')
-                            # Check if the file exists
                             if os.path.exists(excel_output_file):
                                 # Delete the file
                                 os.remove(excel_output_file)
