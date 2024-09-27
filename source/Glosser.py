@@ -110,7 +110,6 @@ class Glosser():
                 if o_index + 1 < len(lemmatized_words) and lemmatized_words[o_index + 1] == 'que':
                     del glossed_sentence[o_index]
         
-        glossed_sentence = [re.sub(r'\.{2,}', '.', word) for word in glossed_sentence]
         glossed_sentence = ' '.join(glossed_sentence)
         glossed_sentence = re.sub(r'\s+', ' ', glossed_sentence)
         glossed_sentence = re.sub(r'\. +', '. ', glossed_sentence)
