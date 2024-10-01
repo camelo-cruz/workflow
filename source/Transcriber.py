@@ -88,28 +88,28 @@ class Transcriber():
                         
                     count = 0
                     for file in tqdm(files, desc=f"Processing Files", unit="file"):
-                        if file.endswith('.mp3'):
-                            count += 1
-                            audio_file_path = os.path.abspath(os.path.join(subdir, file))
-                            try:
+                        try: 
+                            if file.endswith('.mp3'):
+                                count += 1
+                                audio_file_path = os.path.abspath(os.path.join(subdir, file))
                                 transcription = ""
                                 transcription = model.transcribe(audio_file_path, language = self.language_code)
                                 transcription = clean_string(transcription["text"])
                                 if verbose:
                                     print(transcription)
-                            except:
-                                print(f"Error processing file {file}: {str(e)}")
-                                continue
 
-                            series = df[df.isin([file])].stack()
-                            for idx, value in series.items():
-                                df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription}"
-                        
+                                series = df[df.isin([file])].stack()
+                                for idx, value in series.items():
+                                    df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription}"
+                        except Exception as e:
+                            print(f'problem with file {file}: {e}')
+                            continue
 
                     df.to_excel(excel_output_file)
                     print(f"\nTranscription and translation completed for {subdir}.")
         except Exception as e:
             print(f"An error occurred: {str(e)}")
+            
 
 
 def main():
