@@ -91,9 +91,13 @@ class Transcriber():
                         if file.endswith('.mp3'):
                             count += 1
                             audio_file_path = os.path.abspath(os.path.join(subdir, file))
-                            transcription = ""
-                            transcription = model.transcribe(audio_file_path, language = self.language_code)
-                            transcription = clean_string(transcription["text"])
+                            try:
+                                transcription = ""
+                                transcription = model.transcribe(audio_file_path, language = self.language_code)
+                                transcription = clean_string(transcription["text"])
+                            except:
+                                print(f"Error processing file {file}: {str(e)}")
+                                continue
 
                             series = df[df.isin([file])].stack()
                             for idx, value in series.items():
