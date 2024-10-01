@@ -214,20 +214,13 @@ class Glosser():
             for subdir, dirs, files in os.walk(self.input_dir):
                 for file in files:
                     if file.endswith('annotated.xlsx'):
-                        excel_input_file = os.path.join(subdir, file)
-                        df = pd.read_excel(excel_input_file)
+                        excel_file = os.path.join(subdir, file)
+                        df = pd.read_excel(excel_file)
                         column_to_gloss = 'latin_transcription_utterance_used'
                         if self.language_code in NO_LATIN:
                             column_to_gloss = 'transcription_original_script_utterance_used'
                         if column_to_gloss in df.columns:
                             print('Glossing:', file)
-                            excel_output_file = os.path.join(subdir, f'{os.path.splitext(file)[0]}_glossed.xlsx')
-                            if os.path.exists(excel_output_file):
-                                # Delete the file
-                                os.remove(excel_output_file)
-                                print(f"Deleted file: {excel_output_file}")
-                            else:
-                                print(f"File does not exist: {excel_output_file}")
                             sentences_groups = df[column_to_gloss]
                             glossed_utterances = []
                             
@@ -248,7 +241,7 @@ class Glosser():
                                     glossed_utterances.append('')
                             
                             df['automatic_glossing'] = glossed_utterances
-                            df.to_excel(excel_output_file, index=False, engine='openpyxl')
+                            df.to_excel(excel_file, index=False, engine='openpyxl')
                         else:
                             print('No column to transcribe in file:', file)
         except Exception as e:
