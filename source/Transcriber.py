@@ -119,7 +119,7 @@ def main():
     parser = argparse.ArgumentParser(description="automatic transcription")
     parser.add_argument("input_dir")
     parser.add_argument("language", default=None, help="Language of the audio content")
-    parser.add_argument("--verbose", default=False, help="Print full ouptput")
+    parser.add_argument("--verbose", action="store_true", help="Print full ouptput")
     args = parser.parse_args()
 
     transcriber = Transcriber(args.input_dir, args.language)
