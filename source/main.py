@@ -10,6 +10,7 @@ def main():
                         help="The type of processing to perform (transcribe, translate, gloss)")
     parser.add_argument("input_dir", help="Directory containing files to process")
     parser.add_argument("language", help="Source language")
+    parser.add_argument("--verbose", default=False, help="Print full ouptput")
     parser.add_argument("--instruction", "-i", 
                         choices=["automatic_transcription", 
                                  "corrected_transcription", 
@@ -19,7 +20,7 @@ def main():
 
     if args.processing_instruction == 'transcribe':
         transcriber = Transcriber(args.input_dir, args.language)
-        transcriber.process_data()
+        transcriber.process_data(verbose=args.verbose)
     elif args.processing_instruction == 'translate':
         translator = Translator(args.input_dir, args.language, args.instruction)
         translator.process_data()

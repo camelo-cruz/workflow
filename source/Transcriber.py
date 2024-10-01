@@ -43,7 +43,7 @@ class Transcriber():
         self.language_code = find_language(language, LANGUAGES)
 
 
-    def process_data(self):
+    def process_data(self, verbose=False):
         """
         This functions iterates over a given directory and looks for a 'binaries' folder,
         containing audio data. The function takes as input then the trials and sessions
@@ -95,6 +95,8 @@ class Transcriber():
                                 transcription = ""
                                 transcription = model.transcribe(audio_file_path, language = self.language_code)
                                 transcription = clean_string(transcription["text"])
+                                if verbose:
+                                    print(transcription)
                             except:
                                 print(f"Error processing file {file}: {str(e)}")
                                 continue
@@ -117,10 +119,11 @@ def main():
     parser = argparse.ArgumentParser(description="automatic transcription")
     parser.add_argument("input_dir")
     parser.add_argument("language", default=None, help="Language of the audio content")
+    parser.add_argument("--verbose", default=False, help="Print full ouptput")
     args = parser.parse_args()
 
     transcriber = Transcriber(args.input_dir, args.language)
-    transcriber.process_data()
+    transcriber.process_data(args.verbose)
 
 if __name__ == "__main__":
     main()
