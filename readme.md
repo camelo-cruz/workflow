@@ -11,10 +11,9 @@
 - **[If the repository was downloaded](#if-repository-was-downloaded)**
   - [Activate Environment](#1-activate-environment)
   - [Install Requirements](#install-requirements)
-- [Run the Script](#2-run-the-script)
-  - [For Automatic Transcription](#for-automatic-transcription)
-  - [For Automatic Translation](#for-automatic-translation)
-  - [For Automatic Glossing](#for-automatic-glossing)
+- **[Run the Script](#2-run-the-script)**
+  - [For Automatic Transcription and Glossing](#for-automatic-transcription-and-glossing)
+  - [For Automatic Translation](#if-performing-translation)
 
 ---
 
