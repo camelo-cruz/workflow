@@ -141,5 +141,5 @@ Options are:
   - sentences
 
 ```
-python source/main.py translation [main_folder_path] -i [translation_instruction]
+python source/main.py translate [main_folder_path] [language] -i [translation_instruction]
 ```
