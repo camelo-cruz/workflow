@@ -19,8 +19,7 @@ Leibniz Institute General Linguistics (ZAS)
 """
 
 import os
-import json
-import romkan
+# import romkan
 import pykakasi
 import argparse
 import spacy
@@ -45,10 +44,10 @@ def kanji_hiragana_katakana_to_romaji(sentence):
     romaji_sentence : str
         The sentence converted into Romaji.
     """
-    '''
     nlp = spacy.load('ja_core_news_trf')
     doc = nlp(sentence)
-    
+    kks = pykakasi.kakasi()
+
     # Convert Kanji to Kana (Hiragana/Katakana) and Kana to Romaji
     romaji_sentence = ''
     for word in doc:
@@ -63,23 +62,25 @@ def kanji_hiragana_katakana_to_romaji(sentence):
             romaji_word = "."  # Convert to a Latin period
         else:
             kana_form = morph['Reading'] if 'Reading' in morph else str(word)
-            
-            # Convert the Kana form to Romaji using romkan
-            romaji_word = romkan.to_roma(kana_form)
-        
+            # Convert the Kana form to Romaji using pykakasi
+            romaji_word_lst = kks.convert(kana_form)
+            # Extract 'hepburn' from each dictionary in the list
+            romaji_word = ' '.join([item['hepburn'] for item in romaji_word_lst])
+
         # Append the Romaji word to the sentence
-        romaji_sentence += romaji_word + ' '
-    '''
+        romaji_sentence += f"{romaji_word} "
 
-    romaji_sentence = ''
-    kks = pykakasi.kakasi()
-    result = kks.convert(sentence)
-    for item in result:
-        element = item['hepburn']
-        romaji_sentence += f'{element} '
-
-    
     return romaji_sentence.strip()
+
+    # romaji_sentence = ''
+    # kks = pykakasi.kakasi()
+    # result = kks.convert(sentence)
+    # for item in result:
+    #     element = item['hepburn']
+    #     romaji_sentence += f'{element} '
+    #
+    # result = romaji_sentence.strip()
+    # return result
 
 def transliterate(file, instruction, language_code):
     """
@@ -108,15 +109,12 @@ def transliterate(file, instruction, language_code):
     elif instruction == 'corrected_transcription':
         source = 'transcription_original_script'
         target = 'latin_transcription_everything'
-    
+
     # Ensure target column exists in the dataframe
-    if target not in df.columns:
-        df[target] = ""
-    else:
-        df[target] = ""
+    df[target] = ""
 
     df[target] = df[target].astype('object')
-    
+
     for sentence in df[source].dropna():  # Handle missing values in the source column
         series = df[df.isin([sentence])].stack()
         for idx, value in series.items():
@@ -124,11 +122,14 @@ def transliterate(file, instruction, language_code):
                 df.at[idx[0], target] = ""
 
             if language_code == "ru":
-                df.at[idx[0], target] += f"{translit(sentence, 'ru', reversed=True)} "
+                if translit(sentence, 'ru', reversed=True) not in df.at[idx[0], target]:
+                    df.at[idx[0], target] += f"{translit(sentence, 'ru', reversed=True)} "
             elif language_code == "uk":
-                df.at[idx[0], target] += f"{translit(sentence, 'uk', reversed=True)} "
+                if translit(sentence, 'uk', reversed=True) not in df.at[idx[0], target]:
+                    df.at[idx[0], target] += f"{translit(sentence, 'uk', reversed=True)} "
             elif language_code == "ja":
-                df.at[idx[0], target] += f"{kanji_hiragana_katakana_to_romaji(sentence)} "
+                if kanji_hiragana_katakana_to_romaji(sentence) not in df.at[idx[0], target]:
+                    df.at[idx[0], target] += f"{kanji_hiragana_katakana_to_romaji(sentence)} "
 
     return df
 
