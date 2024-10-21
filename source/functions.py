@@ -83,7 +83,7 @@ def find_ffmpeg():
     if ffmpeg_path:
         return ffmpeg_path
 
-    # default: checking user's home directory
+    # fallback location: user's home directory
     user_home = os.path.expanduser("~")
     default_ffmpeg_path = os.path.join(user_home,
                                        "ffmpeg-7.0.2",
