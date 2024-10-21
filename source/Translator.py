@@ -51,11 +51,11 @@ class Translator():
                 for i in range(len(df)):
                     try:
                         if not self.instruction:
-                            df.at[i, "translation_everything"] = GoogleTranslator(source=self.language_code, target='en').translate(df[corrected_column].iloc[i])
+                            df.at[i, "automatic_translation_corrected_transcription"] = GoogleTranslator(source=self.language_code, target='en').translate(df[corrected_column].iloc[i])
                         elif self.instruction == 'automatic_transcription':
-                            df.at[i, "automatic_translation"] = GoogleTranslator(source=self.language_code, target='en').translate(df[automatic_column].iloc[i])
+                            df.at[i, "automatic_translation_automatic_transcription"] = GoogleTranslator(source=self.language_code, target='en').translate(df[automatic_column].iloc[i])
                         elif self.instruction == 'sentences':
-                            df.at[i, "translation_utterance_used"] = GoogleTranslator(source=self.language_code, target='en').translate(df[sentences_column].iloc[i])
+                            df.at[i, "automatic_translation_utterance_used"] = GoogleTranslator(source=self.language_code, target='en').translate(df[sentences_column].iloc[i])
                     except Exception as e:
                         print(f"An error occurred while translating row {i}: {str(e)}")
 
