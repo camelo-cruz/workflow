@@ -29,8 +29,8 @@ from functions import set_global_variables, find_language, clean_string, find_ff
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
-#ffmpeg_path = find_ffmpeg()
-#os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
+ffmpeg_path = find_ffmpeg()
+os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
 
 warnings.filterwarnings("ignore")
 
