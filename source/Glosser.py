@@ -60,7 +60,7 @@ class Glosser():
         """
 
         models = {'de':'de_dep_news_trf',
-          'ukr': 'uk_core_news_trf',
+          'uk': 'uk_core_news_trf',
           'pt': 'pt_core_news_lg',
           'ja': 'ja_core_news_trf'
           }
