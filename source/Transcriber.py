@@ -89,7 +89,7 @@ class Transcriber():
                     count = 0
                     for file in tqdm(files, desc=f"Processing Files", unit="file"):
                         try: 
-                            if file.endswith('.mp3'):
+                            if file.endswith('.mp3') or file.endswith('.mp4'):
                                 count += 1
                                 audio_file_path = os.path.abspath(os.path.join(subdir, file))
                                 transcription = ""
