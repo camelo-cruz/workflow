@@ -3,6 +3,7 @@ import sys
 import json
 import string
 import shutil
+import subprocess
 
 
 def load_json_file(file_path):
@@ -76,23 +77,29 @@ def clean_string(input_string):
     return processed_string
 
 
+def install_ffmpeg():
+    try:
+        print("Installing FFmpeg...")
+        subprocess.run(["winget", "install", "--id", "Gyan.FFmpeg",
+                        "-e", "--source", "winget"], check=True)
+        print("FFmpeg installation successful.")
+    except subprocess.CalledProcessError as e:
+        print("FFmpeg installation failed.")
+
+
 def find_ffmpeg():
     """Dynamically finds ffmpeg executable path"""
     ffmpeg_path = shutil.which("ffmpeg")
 
-    if ffmpeg_path:
+    if not ffmpeg_path:
+        print("FFmpeg not found. Attempting to install FFmpeg...")
+        install_ffmpeg()
+        ffmpeg_path = shutil.which("ffmpeg")
+    else:
         return ffmpeg_path
 
-    # fallback location: user's home directory
-    user_home = os.path.expanduser("~")
-    default_ffmpeg_path = os.path.join(user_home,
-                                       "ffmpeg-7.0.2",
-                                       "bin",
-                                       "ffmpeg.exe")
-
-    if os.path.exists(default_ffmpeg_path):
-        return default_ffmpeg_path
-
-    raise FileNotFoundError(
-            f"ffmpeg not found in {default_ffmpeg_path}. "
-            f"Please make sure it's installed in your user directory.")
+    if os.path.exists(ffmpeg_path):
+        return ffmpeg_path
+    else:
+        raise FileNotFoundError("FFmpeg installation failed. "
+                                "Please install it manually.")
