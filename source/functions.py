@@ -2,8 +2,11 @@ import os
 import sys
 import json
 import string
+import os
 import shutil
 import subprocess
+import urllib.request
+import zipfile
 
 
 def load_json_file(file_path):
@@ -78,13 +81,31 @@ def clean_string(input_string):
 
 
 def install_ffmpeg():
+    destination_path = os.path.expanduser("~")
+    ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
+
+    zip_path = os.path.join(destination_path, "ffmpeg-7.1-essentials_build.zip")
+    ffmpeg_extract_path = os.path.join(destination_path, "ffmpeg")
+
     try:
-        print("Installing FFmpeg...")
-        subprocess.run(["winget", "install", "--id", "Gyan.FFmpeg",
-                        "-e", "--source", "winget"], check=True)
-        print("FFmpeg installation successful.")
-    except subprocess.CalledProcessError as e:
-        print("FFmpeg installation failed.")
+        print("Downloading ffmpeg...")
+        urllib.request.urlretrieve(ffmpeg_url, zip_path)
+        print("Download complete.")
+
+        print(f"Extracting ffmpeg to {ffmpeg_extract_path}...")
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall(ffmpeg_extract_path)
+        print("Extraction complete.")
+
+        os.remove(zip_path)
+
+        print(f"ffmpeg has been installed to {ffmpeg_extract_path}.")
+        print("Adding path to system's PATH environment variable.")
+        ffmpeg_path = os.path.join(ffmpeg_extract_path, "ffmpeg-7.1-essentials_build/bin/ffmpeg.exe")
+        os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
+        return ffmpeg_path
+    except Exception as e:
+        print("An error occurred:", e)
 
 
 def find_ffmpeg():
@@ -93,8 +114,8 @@ def find_ffmpeg():
 
     if not ffmpeg_path:
         print("FFmpeg not found. Attempting to install FFmpeg...")
-        install_ffmpeg()
-        ffmpeg_path = shutil.which("ffmpeg")
+
+        ffmpeg_path = install_ffmpeg()
     else:
         return ffmpeg_path
 
