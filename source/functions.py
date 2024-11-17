@@ -81,6 +81,10 @@ def clean_string(input_string):
 
 
 def install_ffmpeg():
+    """
+    Downloads FFmpeg, unpacks zip-file, deletes zip-path
+    and installs FFmpeg to specific path
+    """
     destination_path = os.path.expanduser("~")
     ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 
