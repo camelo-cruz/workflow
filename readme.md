@@ -49,19 +49,6 @@ Open the terminal or cmd on your computer. Look for the following program on you
 cmd
 ```
 
-Be sure you have ffmpeg downloaded:
-
-```
-where ffmpeg
-```
-
-if this is outputs an error, use this command and ffmpeg will be installed
-
-```
-winget install ffmpeg
-```
-
-
 Go to the folder of the GitHub repository. If you don't know how to do that, go to cmd and run the following command:
 
 ```
