@@ -3,7 +3,7 @@ torch==2.5.1+cu124
 torchvision==0.20.1+cu124
 torchaudio== 2.5.1+cu124
 
-cutlet==0.4.0
+cutlet
 deep_translator==1.11.4
 openai_whisper==20231106
 pandas==2.2.2
