@@ -30,12 +30,13 @@ from functions import set_global_variables, find_language, clean_string, find_ff
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
 ffmpeg_path = find_ffmpeg()
-os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
+#os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
 
 warnings.filterwarnings("ignore")
 
 # Load and initialize the Whisper model for audio processing
-model = whisper.load_model("large-v3")
+model = whisper.load_model("large-v3", device="cuda")
+print("device", model.device)
 
 class Transcriber():
     def __init__(self, input_dir, language):
