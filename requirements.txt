@@ -1,3 +1,8 @@
+--index-url https://download.pytorch.org/whl/cu124
+torch==2.0.1+cu124
+torchvision==0.15.2+cu124
+torchaudio==0.15.2+cu124
+
 cutlet==0.4.0
 deep_translator==1.11.4
 openai_whisper==20231106
@@ -6,9 +11,6 @@ spacy==3.7.5
 tqdm==4.65.0
 transformers==4.42.3
 transliterate==1.10.2
-torch
-torchvision
-torchaudio
-openpyxl
-sentencepiece
-sacremoses
+openpyxl==3.1.2
+sentencepiece==0.1.99
+sacremoses==0.0.53
