@@ -30,7 +30,6 @@ from functions import set_global_variables, find_language, clean_string, find_ff
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
 ffmpeg_path = find_ffmpeg()
-#os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
 
 warnings.filterwarnings("ignore")
 
@@ -94,6 +93,7 @@ class Transcriber():
                                 count += 1
                                 audio_file_path = os.path.abspath(os.path.join(subdir, file))
                                 transcription = ""
+                                print(model.device)
                                 transcription = model.transcribe(audio_file_path, language = self.language_code)
                                 transcription = clean_string(transcription["text"])
                                 if verbose:
