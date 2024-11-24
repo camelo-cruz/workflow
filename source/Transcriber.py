@@ -83,10 +83,12 @@ class Transcriber():
                         df = df.drop(columns=['transcription_original_script_utterance_used'])
                         
                     count = 0
-                    for file in tqdm(files, desc=f"Processing Files", unit="file"):
+                    files.sort()
+                    for file in files:
                         try: 
                             if file.endswith('.mp3') or file.endswith('.mp4') or file.endswith('.m4a'):
                                 count += 1
+                                print(f'processing file {count}/{len(files)} in {subdir}: {file}')
                                 audio_file_path = os.path.abspath(os.path.join(subdir, file))
                                 transcription = ""
                                 transcription = self.model.transcribe(audio_file_path, language = self.language_code)
