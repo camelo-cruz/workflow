@@ -33,15 +33,13 @@ ffmpeg_path = find_ffmpeg()
 
 warnings.filterwarnings("ignore")
 
-# Load and initialize the Whisper model for audio processing
-model = whisper.load_model("large-v3", device="cuda")
-print("device", model.device)
-
 class Transcriber():
-    def __init__(self, input_dir, language):
+    def __init__(self, input_dir, language, device="cuda"):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
-
+        self.model = whisper.load_model("large-v3", device=device)        
+        print(f"using device {self.model.device}")
+        
 
     def process_data(self, verbose=False):
         """
@@ -58,8 +56,6 @@ class Transcriber():
         in the previously found row index.
         It can also perform transliteration if asked for.
         
-        
-
         Parameters:
             directory (str): Path to the input directory.
             
@@ -93,8 +89,7 @@ class Transcriber():
                                 count += 1
                                 audio_file_path = os.path.abspath(os.path.join(subdir, file))
                                 transcription = ""
-                                print(model.device)
-                                transcription = model.transcribe(audio_file_path, language = self.language_code)
+                                transcription = self.model.transcribe(audio_file_path, language = self.language_code)
                                 transcription = clean_string(transcription["text"])
                                 if verbose:
                                     print(transcription)
