@@ -25,6 +25,7 @@ import argparse
 import string
 import pandas as pd
 from tqdm import tqdm
+import re
 from functions import set_global_variables, find_language, clean_string, find_ffmpeg
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
@@ -33,15 +34,13 @@ ffmpeg_path = find_ffmpeg()
 
 warnings.filterwarnings("ignore")
 
-# Load and initialize the Whisper model for audio processing
-model = whisper.load_model("large-v3", device="cuda")
-print("device", model.device)
-
 class Transcriber():
-    def __init__(self, input_dir, language):
+    def __init__(self, input_dir, language, device="cuda"):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
-
+        self.model = whisper.load_model("large-v3", device=device)        
+        print(f"using device {self.model.device}")
+        
 
     def process_data(self, verbose=False):
         """
@@ -58,8 +57,6 @@ class Transcriber():
         in the previously found row index.
         It can also perform transliteration if asked for.
         
-        
-
         Parameters:
             directory (str): Path to the input directory.
             
@@ -67,6 +64,7 @@ class Transcriber():
             None.
         """
         try:
+            filename_regexp = re.compile(r'blockNr_(?P<block>\d+)_taskNr_(?P<task>\d+)_trialNr_(?P<trial>\d+).*')
             for subdir, dirs, files in os.walk(self.input_dir):
                 if 'binaries' in subdir:
                     csv_file_path = os.path.join(subdir, '..', 'trials_and_sessions.csv')
@@ -87,21 +85,50 @@ class Transcriber():
                         df = df.drop(columns=['transcription_original_script_utterance_used'])
                         
                     count = 0
-                    for file in tqdm(files, desc=f"Processing Files", unit="file"):
+                    files.sort()
+                    for file in files:
                         try: 
                             if file.endswith('.mp3') or file.endswith('.mp4') or file.endswith('.m4a'):
                                 count += 1
+                                print(f'processing file {count}/{len(files)} in {subdir}: {file}')
                                 audio_file_path = os.path.abspath(os.path.join(subdir, file))
                                 transcription = ""
-                                print(model.device)
-                                transcription = model.transcribe(audio_file_path, language = self.language_code)
+                                transcription = self.model.transcribe(audio_file_path, language = self.language_code)
                                 transcription = clean_string(transcription["text"])
                                 if verbose:
                                     print(transcription)
-
+                                    
+                                # search for the filename in the data frame
                                 series = df[df.isin([file])].stack()
-                                for idx, value in series.items():
-                                    df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription}"
+                                if len(series) == 0:
+                                    # the filename cannot be found in the CSV -> insert it in the row identified by block, task and trial
+
+                                    # extract blockNr, taskNr and trialNr from the filename
+                                    filename_match = filename_regexp.search(file)
+                                    if filename_match is None:
+                                        print(f'   file {file} was not found in the CSV and does match block_task_trial pattern ... the transcription was not added to the CSV!')
+                                    block_nr = int(filename_match.group('block'))
+                                    task_nr = int(filename_match.group('task'))
+                                    trial_nr = int(filename_match.group('trial'))
+
+                                    # add the filename to the dataframe
+                                    selection_condition = (df['Block_Nr'] == block_nr) & (df['Task_Nr'] == task_nr) & (df['Trial_Nr'] == trial_nr)
+                                    if len(df.loc[selection_condition]) == 0:
+                                        # we could not identify the corresponding row in the CSV so we don't know where to add the transcription
+                                        print(f'   file {file} was not found in the CSV and there is no row for block {block_nr}, task {task_nr}, trial {trial_nr} ... the transcription was not added to the CSV!')
+                                    else:
+                                        # identify the first empty missing_filename_<number> cell in the row
+                                        column_counter = 1
+                                        missing_filename_column = f'missing_filename_{column_counter}'
+                                        while (missing_filename_column in df.columns) and not df.loc[selection_condition, missing_filename_column].isna().all():
+                                            column_counter += 1
+                                            missing_filename_column = f'missing_filename_{column_counter}'
+                                        df.loc[selection_condition,missing_filename_column] = file
+                                        df.loc[selection_condition, 'automatic_transcription'] += f"{count}: {transcription} - "
+                                        print(f'    filename {file} was not found in the CSV but was added to the corresponding row')
+                                else:
+                                    for idx, value in series.items():
+                                        df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription} - "
                         except Exception as e:
                             print(f'problem with file {file}: {e}')
                             continue
