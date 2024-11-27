@@ -25,6 +25,7 @@ import argparse
 import string
 import pandas as pd
 from tqdm import tqdm
+import logging
 import re
 from functions import set_global_variables, find_language, clean_string, find_ffmpeg
 
@@ -34,12 +35,23 @@ ffmpeg_path = find_ffmpeg()
 
 warnings.filterwarnings("ignore")
 
+# Configure logger globally
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)  # Set the base logger level
+
+# Create a StreamHandler for console output
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.WARNING)
+console_handler.setFormatter(logging.Formatter("%(message)s"))
+logger.addHandler(console_handler)
+
+
 class Transcriber():
     def __init__(self, input_dir, language, device="cuda"):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
         self.model = whisper.load_model("large-v3", device=device)        
-        print(f"using device {self.model.device}")
+        logger.info(f"using device {self.model.device}")
         
 
     def process_data(self, verbose=False):
@@ -67,6 +79,14 @@ class Transcriber():
             filename_regexp = re.compile(r'blockNr_(?P<block>\d+)_taskNr_(?P<task>\d+)_trialNr_(?P<trial>\d+).*')
             for subdir, dirs, files in os.walk(self.input_dir):
                 if 'binaries' in subdir:
+                    log_file_path = os.path.join(os.path.dirname(subdir), "transcription.log")
+                    file_handler = logging.FileHandler(log_file_path)
+                    file_handler.setLevel(logging.INFO)  # Log only INFO and above to the file
+                    file_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+                    logger.addHandler(file_handler)
+                    logger.info(f"Logging to {log_file_path}")
+
+
                     csv_file_path = os.path.join(subdir, '..', 'trials_and_sessions.csv')
                     excel_file_path = os.path.join(subdir, '..', 'trials_and_sessions.xlsx')
                     excel_output_file = os.path.join(subdir, '..', 'trials_and_sessions_annotated.xlsx')
@@ -86,17 +106,17 @@ class Transcriber():
                         
                     count = 0
                     files.sort()
-                    for file in files:
+                    for file in tqdm(files, desc=f"Transcribing"):
                         try: 
                             if file.endswith('.mp3') or file.endswith('.mp4') or file.endswith('.m4a'):
                                 count += 1
-                                print(f'processing file {count}/{len(files)} in {subdir}: {file}')
+                                logger.debug(f'processing file {count}/{len(files)} in {subdir}: {file}')
                                 audio_file_path = os.path.abspath(os.path.join(subdir, file))
                                 transcription = ""
                                 transcription = self.model.transcribe(audio_file_path, language = self.language_code)
                                 transcription = clean_string(transcription["text"])
                                 if verbose:
-                                    print(transcription)
+                                    tqdm.write(transcription)
                                     
                                 # search for the filename in the data frame
                                 series = df[df.isin([file])].stack()
@@ -106,7 +126,7 @@ class Transcriber():
                                     # extract blockNr, taskNr and trialNr from the filename
                                     filename_match = filename_regexp.search(file)
                                     if filename_match is None:
-                                        print(f'   file {file} was not found in the CSV and does match block_task_trial pattern ... the transcription was not added to the CSV!')
+                                        logger.warning(f'   file {file} was not found in the CSV and does match block_task_trial pattern ... the transcription was not added to the CSV!')
                                     block_nr = int(filename_match.group('block'))
                                     task_nr = int(filename_match.group('task'))
                                     trial_nr = int(filename_match.group('trial'))
@@ -115,7 +135,7 @@ class Transcriber():
                                     selection_condition = (df['Block_Nr'] == block_nr) & (df['Task_Nr'] == task_nr) & (df['Trial_Nr'] == trial_nr)
                                     if len(df.loc[selection_condition]) == 0:
                                         # we could not identify the corresponding row in the CSV so we don't know where to add the transcription
-                                        print(f'   file {file} was not found in the CSV and there is no row for block {block_nr}, task {task_nr}, trial {trial_nr} ... the transcription was not added to the CSV!')
+                                        logger.warning(f'   file {file} was not found in the CSV and there is no row for block {block_nr}, task {task_nr}, trial {trial_nr} ... the transcription was not added to the CSV!')
                                     else:
                                         # identify the first empty missing_filename_<number> cell in the row
                                         column_counter = 1
@@ -125,18 +145,18 @@ class Transcriber():
                                             missing_filename_column = f'missing_filename_{column_counter}'
                                         df.loc[selection_condition,missing_filename_column] = file
                                         df.loc[selection_condition, 'automatic_transcription'] += f"{count}: {transcription} - "
-                                        print(f'    filename {file} was not found in the CSV but was added to the corresponding row')
+                                        logger.info(f'    filename {file} was not found in the CSV but was added to the corresponding row')
                                 else:
                                     for idx, value in series.items():
                                         df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription} - "
                         except Exception as e:
-                            print(f'problem with file {file}: {e}')
+                            logger.error(f'problem with file {file}: {e}')
                             continue
 
                     df.to_excel(excel_output_file)
-                    print(f"\nTranscription and translation completed for {subdir}.")
+                    logger.info(f"\nTranscription and translation completed for {subdir}.")
         except Exception as e:
-            print(f"An error occurred: {str(e)}")
+            logger.error(f"An error occurred: {str(e)}")
             
 
 
