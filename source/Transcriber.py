@@ -37,7 +37,7 @@ warnings.filterwarnings("ignore")
 
 # Configure logger globally
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)  # Set the base logger level
+logger.setLevel(logging.DEBUG)
 
 # Create a StreamHandler for console output
 console_handler = logging.StreamHandler()
@@ -51,7 +51,6 @@ class Transcriber():
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
         self.model = whisper.load_model("large-v3", device=device)        
-        logger.info(f"using device {self.model.device}")
         
 
     def process_data(self, verbose=False):
@@ -79,11 +78,12 @@ class Transcriber():
             filename_regexp = re.compile(r'blockNr_(?P<block>\d+)_taskNr_(?P<task>\d+)_trialNr_(?P<trial>\d+).*')
             for subdir, dirs, files in os.walk(self.input_dir):
                 if 'binaries' in subdir:
+                    logger.info(f"using device {self.model.device}")
                     logger.info(f"Processing {subdir}")
                     print(f"Processing {subdir}")
                     log_file_path = os.path.join(os.path.dirname(subdir), "transcription.log")
                     file_handler = logging.FileHandler(log_file_path)
-                    file_handler.setLevel(logging.DEBUG)  # Log only INFO and above to the file
+                    file_handler.setLevel(logging.DEBUG)
                     file_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
                     logger.addHandler(file_handler)
                     logger.info(f"Logging to {log_file_path}")
@@ -161,7 +161,8 @@ class Transcriber():
                     file_handler.close()
         except Exception as e:
             logger.error(f"An error occurred: {str(e)}")
-            
+            logger.removeHandler(file_handler)
+            file_handler.close()
 
 
 def main():
