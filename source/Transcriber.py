@@ -79,9 +79,11 @@ class Transcriber():
             filename_regexp = re.compile(r'blockNr_(?P<block>\d+)_taskNr_(?P<task>\d+)_trialNr_(?P<trial>\d+).*')
             for subdir, dirs, files in os.walk(self.input_dir):
                 if 'binaries' in subdir:
+                    logger.info(f"Processing {subdir}")
+                    print(f"Processing {subdir}")
                     log_file_path = os.path.join(os.path.dirname(subdir), "transcription.log")
                     file_handler = logging.FileHandler(log_file_path)
-                    file_handler.setLevel(logging.INFO)  # Log only INFO and above to the file
+                    file_handler.setLevel(logging.DEBUG)  # Log only INFO and above to the file
                     file_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
                     logger.addHandler(file_handler)
                     logger.info(f"Logging to {log_file_path}")
@@ -148,13 +150,15 @@ class Transcriber():
                                         logger.info(f'    filename {file} was not found in the CSV but was added to the corresponding row')
                                 else:
                                     for idx, value in series.items():
-                                        df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription} - "
+                                        df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription} "
                         except Exception as e:
                             logger.error(f'problem with file {file}: {e}')
                             continue
 
                     df.to_excel(excel_output_file)
                     logger.info(f"\nTranscription and translation completed for {subdir}.")
+                    logger.removeHandler(file_handler)
+                    file_handler.close()
         except Exception as e:
             logger.error(f"An error occurred: {str(e)}")
             
