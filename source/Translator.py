@@ -22,10 +22,13 @@ import os
 import pandas as pd
 import argparse
 from tqdm import tqdm
-from deep_translator import GoogleTranslator
-from functions import set_global_variables, find_language
+from functions import set_global_variables, find_language, translate_m2m100
+from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
+
+model = M2M100ForConditionalGeneration.from_pretrained("facebook/m2m100_1.2B")
+tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_1.2B")
 
 class Translator():
     def __init__(self,input_dir, language, instruction=None):
@@ -54,11 +57,11 @@ class Translator():
                 for i in range(len(df)):
                     try:
                         if not self.instruction:
-                            df.at[i, "automatic_translation_corrected_transcription"] = GoogleTranslator(source=self.language_code, target='en').translate(df[corrected_column].iloc[i])
+                            df.at[i, "automatic_translation_corrected_transcription"] = translate_m2m100(self.language_code, df[corrected_column].iloc[i], model, tokenizer)
                         elif self.instruction == 'automatic_transcription':
-                            df.at[i, "automatic_translation_automatic_transcription"] = GoogleTranslator(source=self.language_code, target='en').translate(df[automatic_column].iloc[i])
+                            df.at[i, "automatic_translation_automatic_transcription"] = translate_m2m100(self.language_code, df[automatic_column].iloc[i], model, tokenizer)
                         elif self.instruction == 'sentences':
-                            df.at[i, "automatic_translation_utterance_used"] = GoogleTranslator(source=self.language_code, target='en').translate(df[sentences_column].iloc[i])
+                            df.at[i, "automatic_translation_utterance_used"] = translate_m2m100(self.language_code, df[sentences_column].iloc[i], model, tokenizer)
                     except Exception as e:
                         print(f"An error occurred while translating row {i}: {str(e)}")
                 

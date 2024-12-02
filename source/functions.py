@@ -123,8 +123,23 @@ def find_ffmpeg():
     else:
         return ffmpeg_path
 
-    if os.path.exists(ffmpeg_path):
-        return ffmpeg_path
-    else:
-        raise FileNotFoundError("FFmpeg installation failed. "
-                                "Please install it manually.")
+
+def translate_m2m100(src_lang, text, model, tokenizer):
+    """
+    Translates text from a source language to English using the M2M100 model.
+
+    Parameters:
+        src_lang (str): The source language code.
+        text (str): The text to be translated.
+        model (transformers.M2M100ForConditionalGeneration): The M2M100 translation model.
+        tokenizer (transformers.M2M100Tokenizer): The tokenizer associated with the M2M100 model.
+
+    Returns:
+        str: The translated text in English.
+    """
+    tokenizer.src_lang = src_lang
+    encoded_zh = tokenizer(text, return_tensors="pt")
+
+    generated_tokens = model.generate(**encoded_zh, forced_bos_token_id=tokenizer.get_lang_id("en"))
+    translated = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
+    return " ".join(translated)
