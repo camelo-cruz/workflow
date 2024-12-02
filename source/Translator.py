@@ -51,10 +51,6 @@ class Translator():
             for file_path in files_to_process:
                 df = pd.read_excel(file_path)
 
-                # Reorder columns to match OBLIGATORY_COLUMNS
-                df = df[[col for col in OBLIGATORY_COLUMNS if col in df.columns] + 
-                        [col for col in df.columns if col not in OBLIGATORY_COLUMNS]]
-
                 for i in range(len(df)):
                     try:
                         if not self.instruction:
@@ -65,6 +61,10 @@ class Translator():
                             df.at[i, "automatic_translation_utterance_used"] = GoogleTranslator(source=self.language_code, target='en').translate(df[sentences_column].iloc[i])
                     except Exception as e:
                         print(f"An error occurred while translating row {i}: {str(e)}")
+                
+                # Reorder columns to ensure obligatory columns are at the end
+                extra_columns = [col for col in df.columns if col not in OBLIGATORY_COLUMNS]
+                df = df[extra_columns + [col for col in OBLIGATORY_COLUMNS if col in df.columns]]
 
                 df.to_excel(file_path, index=False)
 
