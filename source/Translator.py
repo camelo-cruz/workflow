@@ -40,6 +40,9 @@ class Translator():
         automatic_column = "automatic_transcription"
         corrected_column = "latin_transcription_everything"
         sentences_column = "latin_transcription_utterance_used"
+        if self.language_code in NO_LATIN:
+            corrected_column = "transcription_original_script"
+            sentences_column = "transcription_original_script_utterance_used"
 
         files_to_process = []
         for subdir, dirs, files in os.walk(self.input_dir):
@@ -61,6 +64,10 @@ class Translator():
                             df.at[i, "automatic_translation_utterance_used"] = translate_m2m100(self.language_code, df[sentences_column].iloc[i], model, tokenizer)
                     except Exception as e:
                         print(f"An error occurred while translating row {i}: {str(e)}")
+                
+                # Reorder columns to ensure obligatory columns are at the end
+                extra_columns = [col for col in df.columns if col not in OBLIGATORY_COLUMNS]
+                df = df[extra_columns + [col for col in OBLIGATORY_COLUMNS if col in df.columns]]
 
                 df.to_excel(file_path, index=False)
 

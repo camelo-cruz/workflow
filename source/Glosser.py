@@ -225,7 +225,7 @@ class Glosser():
                         if self.language_code in NO_LATIN:
                             column_to_gloss = 'transcription_original_script_utterance_used'
                         if column_to_gloss in df.columns:
-                            print('Glossing:', file)
+                            print('Glossing:', subdir)
                             sentences_groups = df[column_to_gloss]
                             glossed_utterances = []
                             
@@ -237,7 +237,7 @@ class Glosser():
                                     # Process each sentence with tqdm
                                     for sentence in sentences:
                                         if self.language_code == 'ja':
-                                            glossed = self.gloss_japanese_with_spacy(self.nlp, sentence)
+                                            glossed = self.gloss_japanese_with_spacy(sentence)
                                         else:
                                             glossed = self.gloss_with_spacy(sentence)
                                         glossed_sentences.append(glossed)

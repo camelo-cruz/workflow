@@ -1,14 +1,15 @@
-cutlet==0.4.0
-deep_translator==1.11.4
-openai_whisper==20231106
-pandas==2.2.2
-spacy==3.7.5
-tqdm==4.65.0
-transformers==4.42.3
-transliterate==1.10.2
-torch
-torchvision
-torchaudio
+--extra-index-url https://download.pytorch.org/whl/cu124
+torch==2.5.1+cu124
+torchvision==0.20.1+cu124
+torchaudio== 2.5.1+cu124
+
+deep_translator
+openai_whisper
+pandas
+spacy
+tqdm
+transformers
+transliterate
 openpyxl
 sentencepiece
 sacremoses

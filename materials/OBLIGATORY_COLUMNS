@@ -1,3 +1,4 @@
+personal_data_free_check
 automatic_transcription
 automatic_translation_automatic_transcription
 transcription_original_script
@@ -16,4 +17,3 @@ transcription_morphosegmentation
 automatic_glossing
 glossing_utterance_used
 glossing_comment
-personal_data_free_check

@@ -2,7 +2,11 @@ import os
 import sys
 import json
 import string
+import os
 import shutil
+import subprocess
+import urllib.request
+import zipfile
 
 
 def load_json_file(file_path):
@@ -76,26 +80,48 @@ def clean_string(input_string):
     return processed_string
 
 
+def install_ffmpeg():
+    """
+    Downloads FFmpeg, unpacks zip-file, deletes zip-path
+    and installs FFmpeg to specific path
+    """
+    destination_path = os.path.expanduser("~")
+    ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
+
+    zip_path = os.path.join(destination_path, "ffmpeg-7.1-essentials_build.zip")
+    ffmpeg_extract_path = os.path.join(destination_path, "ffmpeg")
+
+    try:
+        print("Downloading ffmpeg...")
+        urllib.request.urlretrieve(ffmpeg_url, zip_path)
+        print("Download complete.")
+
+        print(f"Extracting ffmpeg to {ffmpeg_extract_path}...")
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall(ffmpeg_extract_path)
+        print("Extraction complete.")
+
+        os.remove(zip_path)
+
+        print(f"ffmpeg has been installed to {ffmpeg_extract_path}.")
+        print("Adding path to system's PATH environment variable.")
+        ffmpeg_path = os.path.join(ffmpeg_extract_path, "ffmpeg-7.1-essentials_build/bin/ffmpeg.exe")
+        os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
+        return ffmpeg_path
+    except Exception as e:
+        print("An error occurred:", e)
+
+
 def find_ffmpeg():
     """Dynamically finds ffmpeg executable path"""
     ffmpeg_path = shutil.which("ffmpeg")
 
-    if ffmpeg_path:
+    if not ffmpeg_path:
+        print("FFmpeg not found. Attempting to install FFmpeg...")
+
+        ffmpeg_path = install_ffmpeg()
+    else:
         return ffmpeg_path
-
-    # fallback location: user's home directory
-    user_home = os.path.expanduser("~")
-    default_ffmpeg_path = os.path.join(user_home,
-                                       "ffmpeg-7.0.2",
-                                       "bin",
-                                       "ffmpeg.exe")
-
-    if os.path.exists(default_ffmpeg_path):
-        return default_ffmpeg_path
-
-    raise FileNotFoundError(
-            f"ffmpeg not found in {default_ffmpeg_path}. "
-            f"Please make sure it's installed in your user directory.")
 
 
 def translate_m2m100(src_lang, text, model, tokenizer):
@@ -117,4 +143,3 @@ def translate_m2m100(src_lang, text, model, tokenizer):
     generated_tokens = model.generate(**encoded_zh, forced_bos_token_id=tokenizer.get_lang_id("en"))
     translated = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
     return " ".join(translated)
-
