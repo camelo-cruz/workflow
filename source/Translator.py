@@ -37,6 +37,9 @@ class Translator():
         automatic_column = "automatic_transcription"
         corrected_column = "latin_transcription_everything"
         sentences_column = "latin_transcription_utterance_used"
+        if self.language_code in NO_LATIN:
+            corrected_column = "transcription_original_script"
+            sentences_column = "transcription_original_script_utterance_used"
 
         files_to_process = []
         for subdir, dirs, files in os.walk(self.input_dir):
@@ -47,6 +50,10 @@ class Translator():
         with tqdm(total=len(files_to_process), desc="Processing files", unit="file") as file_pbar:
             for file_path in files_to_process:
                 df = pd.read_excel(file_path)
+
+                # Reorder columns to match OBLIGATORY_COLUMNS
+                df = df[[col for col in OBLIGATORY_COLUMNS if col in df.columns] + 
+                        [col for col in df.columns if col not in OBLIGATORY_COLUMNS]]
 
                 for i in range(len(df)):
                     try:
