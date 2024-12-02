@@ -82,6 +82,7 @@ def reorder_columns(df, language):
 def process_data(directory, language):
     for subdir, dirs, files in os.walk(directory):
         excel_file_path = os.path.join(subdir, 'trials_and_sessions_annotated.xlsx')
+        csv_file_path = os.path.join(subdir, 'trials_and_sessions.csv')
         try:
             if os.path.exists(excel_file_path):
                 df = pd.read_excel(excel_file_path)
@@ -89,6 +90,13 @@ def process_data(directory, language):
                 df = update_columns(df)
                 df = reorder_columns(df, language)
                 df.to_excel(excel_file_path, index=False)
+            elif os.path.exists(csv_file_path):
+                df = pd.read_csv(csv_file_path)
+                print(f'processing {csv_file_path}')
+                df = update_columns(df)
+                df = reorder_columns(df, language)
+                df.to_excel(excel_file_path, index=False)
+        
         except Exception as e:
             print(f"Error processing the file {excel_file_path}: {e}")
 

@@ -22,19 +22,39 @@ import os
 import pandas as pd
 import argparse
 from tqdm import tqdm
-from functions import set_global_variables, find_language, translate_m2m100
+from functions import set_global_variables, find_language
 from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
-model = M2M100ForConditionalGeneration.from_pretrained("facebook/m2m100_1.2B")
-tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_1.2B")
 
 class Translator():
     def __init__(self,input_dir, language, instruction=None):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
         self.instruction = instruction
+        self.model = M2M100ForConditionalGeneration.from_pretrained("facebook/m2m100_1.2B")
+        self.tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_1.2B")
+    
+    def translate_m2m100(self, text):
+        """
+        Translates text from a source language to English using the M2M100 model.
+
+        Parameters:
+            src_lang (str): The source language code.
+            text (str): The text to be translated.
+            model (transformers.M2M100ForConditionalGeneration): The M2M100 translation model.
+            tokenizer (transformers.M2M100Tokenizer): The tokenizer associated with the M2M100 model.
+
+        Returns:
+            str: The translated text in English.
+        """
+        self.tokenizer.src_lang = self.language_code
+        encoded_zh = self.tokenizer(text, return_tensors="pt")
+
+        generated_tokens = self.model.generate(**encoded_zh, forced_bos_token_id=self.tokenizer.get_lang_id("en"))
+        translated = self.tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
+        return " ".join(translated)
 
     def process_data(self):
         automatic_column = "automatic_transcription"
@@ -57,11 +77,11 @@ class Translator():
                 for i in range(len(df)):
                     try:
                         if not self.instruction:
-                            df.at[i, "automatic_translation_corrected_transcription"] = translate_m2m100(self.language_code, df[corrected_column].iloc[i], model, tokenizer)
+                            df.at[i, "automatic_translation_corrected_transcription"] = self.translate_m2m100(self.language_code, df[corrected_column].iloc[i])
                         elif self.instruction == 'automatic_transcription':
-                            df.at[i, "automatic_translation_automatic_transcription"] = translate_m2m100(self.language_code, df[automatic_column].iloc[i], model, tokenizer)
+                            df.at[i, "automatic_translation_automatic_transcription"] = self.translate_m2m100(self.language_code, df[automatic_column].iloc[i])
                         elif self.instruction == 'sentences':
-                            df.at[i, "automatic_translation_utterance_used"] = translate_m2m100(self.language_code, df[sentences_column].iloc[i], model, tokenizer)
+                            df.at[i, "automatic_translation_utterance_used"] = self.translate_m2m100(self.language_code, df[sentences_column].iloc[i])
                     except Exception as e:
                         print(f"An error occurred while translating row {i}: {str(e)}")
                 
