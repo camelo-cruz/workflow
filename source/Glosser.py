@@ -224,6 +224,8 @@ class Glosser():
                         column_to_gloss = 'latin_transcription_utterance_used'
                         if self.language_code in NO_LATIN:
                             column_to_gloss = 'transcription_original_script_utterance_used'
+                        if df[column_to_gloss].isna().all():
+                            column_to_gloss = "automatic_transcription"
                         if column_to_gloss in df.columns:
                             print('Glossing:', subdir)
                             sentences_groups = df[column_to_gloss]
