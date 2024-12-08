@@ -26,7 +26,7 @@ def main():
         translator = Translator(args.input_dir, args.language, args.instruction)
         translator.process_data()
     elif args.processing_instruction == 'gloss':
-        glosser = Glosser(args.input_dir, args.language)
+        glosser = Glosser(args.input_dir, args.language, args.instruction)
         glosser.process_data()
 
 if __name__ == "__main__":
