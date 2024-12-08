@@ -266,7 +266,7 @@ def main():
                         choices=["automatic_transcription",
                                  "corrected_transcription",
                                  "sentences"],
-                        help="Type of instruction for translation", required=False)
+                        help="input column for glossing", required=False)
     args = parser.parse_args()
     
     glosser = Glosser(args.input_dir, args.language, args.instruction)
