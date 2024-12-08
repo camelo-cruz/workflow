@@ -32,9 +32,10 @@ from functions import set_global_variables, find_language
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, LEIPZIG_GLOSSARY = set_global_variables()
 
 class Glosser():
-    def __init__(self, input_dir, language):
+    def __init__(self, input_dir, language, instruction):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
+        self.instruction = instruction
         self.load_models()
 
     def load_models(self):
@@ -221,11 +222,12 @@ class Glosser():
                     if file.endswith('annotated.xlsx'):
                         excel_file = os.path.join(subdir, file)
                         df = pd.read_excel(excel_file)
-                        column_to_gloss = 'latin_transcription_utterance_used'
-                        if self.language_code in NO_LATIN:
-                            column_to_gloss = 'transcription_original_script_utterance_used'
-                        if df[column_to_gloss].isna().all():
-                            column_to_gloss = "automatic_transcription"
+                        if not self.instruction:
+                            column_to_gloss = 'latin_transcription_utterance_used'
+                            if self.language_code in NO_LATIN:
+                                column_to_gloss = 'transcription_original_script_utterance_used'
+                        else:
+                            column_to_gloss = self.instruction
                         if column_to_gloss in df.columns:
                             print('Glossing:', subdir)
                             sentences_groups = df[column_to_gloss]
@@ -260,9 +262,14 @@ def main():
     parser = argparse.ArgumentParser(description="Automatic glossing")
     parser.add_argument("input_dir", help="Main directory with files to gloss")
     parser.add_argument("language", help="Language to gloss")
+    parser.add_argument("--instruction", "-i",
+                        choices=["automatic_transcription",
+                                 "corrected_transcription",
+                                 "sentences"],
+                        help="Type of instruction for translation", required=False)
     args = parser.parse_args()
     
-    glosser = Glosser(args.input_dir, args.language)
+    glosser = Glosser(args.input_dir, args.language, args.instruction)
     glosser.process_data()
 
 if __name__ == '__main__':
