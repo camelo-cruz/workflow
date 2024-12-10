@@ -1,7 +1,7 @@
 --extra-index-url https://download.pytorch.org/whl/cu124
-torch
-torchvision
-torchaudio
+torch==<version>+cu124
+torchvision==<version>+cu124
+torchaudio==<version>+cu124
 
 deep_translator
 openai_whisper
