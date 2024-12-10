@@ -1,6 +1,8 @@
-torch
-torchvision
-torchaudio
+--extra-index-url https://download.pytorch.org/whl/cu124
+torch==2.5.1+cu124
+torchvision==2.5.1+cu124
+torchaudio== 2.5.1+cu124
+
 deep_translator
 openai_whisper
 pandas
