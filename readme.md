@@ -129,3 +129,16 @@ Options are:
 ```
 python source/main.py translate [main_folder_path] [language] -i [translation_instruction]
 ```
+
+### If performing glossing:
+
+- **Replace `[glossing_instruction]`** with the specific instruction which column should be used as input for the glossing. If no `[glossing_instruction]` is given, per default it will gloss colum "latin_transcription_utterance_used" or "transcription_original_script_utterance_used".
+
+Options are:
+  - automatic_transcription
+  - corrected_transcription
+  - sentences
+
+```
+python source/main.py translate [main_folder_path] [language] -i [glossing_instruction]
+```
