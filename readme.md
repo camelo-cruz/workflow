@@ -134,5 +134,5 @@ python source/main.py translate [main_folder_path] [language] -i [translation_in
 - You can choose to use the column "automatic_transcription" as input for the glossing. The default columns for glossing are "latin_transcription_utterance_used" or "transcription_original_script_utterance_used".
 
 ```
-python source/main.py translate [main_folder_path] [language] -i automatic_transcription
+python source/main.py gloss [main_folder_path] [language] -i automatic_transcription
 ```
