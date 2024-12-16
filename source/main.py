@@ -13,8 +13,7 @@ def main():
     parser.add_argument("--device", choices=['cuda', 'cpu'], default='cuda', help="Select which processing device should be used")
     parser.add_argument("--verbose", action="store_true", help="Print full ouptput")
     parser.add_argument("--instruction", "-i", 
-                        choices=["automatic_transcription", 
-                                 "corrected_transcription", 
+                        choices=["automatic_transcription",
                                  "sentences"], 
                         help="Type of instruction for translation", required=False)
     args = parser.parse_args()
