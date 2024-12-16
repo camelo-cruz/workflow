@@ -109,8 +109,7 @@ def main():
     parser.add_argument("input_dir")
     parser.add_argument("language")
     parser.add_argument("--instruction", "-i", 
-                        choices=["automatic_transcription", 
-                                 "corrected_transcription", 
+                        choices=["automatic_transcription",
                                  "sentences"], 
                         help="Type of instruction for translation", required=False)
     args = parser.parse_args()
