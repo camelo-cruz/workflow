@@ -227,7 +227,7 @@ class Glosser():
                             if self.language_code in NO_LATIN:
                                 column_to_gloss = 'transcription_original_script_utterance_used'
                         else:
-                            column_to_gloss = self.instruction
+                            column_to_gloss = "automatic_transcription"
                         if column_to_gloss in df.columns:
                             print('Glossing:', subdir)
                             sentences_groups = df[column_to_gloss]
@@ -263,9 +263,7 @@ def main():
     parser.add_argument("input_dir", help="Main directory with files to gloss")
     parser.add_argument("language", help="Language to gloss")
     parser.add_argument("--instruction", "-i",
-                        choices=["automatic_transcription",
-                                 "corrected_transcription",
-                                 "sentences"],
+                        choices=["automatic_transcription"],
                         help="input column for glossing", required=False)
     args = parser.parse_args()
     
