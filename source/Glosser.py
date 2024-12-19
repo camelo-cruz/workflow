@@ -166,10 +166,10 @@ class Glosser():
                 lemma = token.lemma_
                 morph = token.morph.to_dict()
 
-                translated_lemma =  GoogleTranslator(source=self.language_code, target='en').translate(lemma)
-                if isinstance(translated_lemma, str) and not lemma.isdigit():
-                    translated_lemma = translated_lemma.lower()
-                    translated_lemma = translated_lemma.replace(' ', '-')
+                #translated_lemma =  GoogleTranslator(source=self.language_code, target='en').translate(lemma)
+                if isinstance(lemma, str) and not lemma.isdigit():
+                    lemma = lemma.lower()
+                    lemma = lemma.replace(' ', '-')
 
                 arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
                 definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
@@ -180,7 +180,7 @@ class Glosser():
                 tense = LEIPZIG_GLOSSARY.get(morph.get('Tense'), morph.get('Tense'))
                 mood = LEIPZIG_GLOSSARY.get(morph.get('Mood'), morph.get('Mood'))
 
-                glossed_word = f"{translated_lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
+                glossed_word = f"{lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
                 #further cleaning
                 glossed_word = re.sub(r'(?:\.|-|\b)None', '', glossed_word)
                 glossed_word = re.sub(r'\b(the|a)\.', '', glossed_word)
