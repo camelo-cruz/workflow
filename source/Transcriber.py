@@ -116,9 +116,14 @@ class Transcriber():
                                 audio_file_path = os.path.abspath(os.path.join(subdir, file))
                                 transcription = ""
                                 transcription = self.model.transcribe(audio_file_path, language = self.language_code)
+                                translation = self.model.transcribe(audio_file_path,
+                                                                    language=self.language_code,
+                                                                    task="translate")
+                                translation = clean_string(translation["text"])
                                 transcription = clean_string(transcription["text"])
                                 if verbose:
                                     tqdm.write(transcription)
+                                    tqdm.write(translation)
                                     
                                 # search for the filename in the data frame
                                 series = df[df.isin([file])].stack()
@@ -147,10 +152,13 @@ class Transcriber():
                                             missing_filename_column = f'missing_filename_{column_counter}'
                                         df.loc[selection_condition,missing_filename_column] = file
                                         df.loc[selection_condition, 'automatic_transcription'] += f"{count}: {transcription} - "
+                                        df.loc[
+                                            selection_condition, "automatic_translation_automatic_transcription"] += f"{count}: {translation} - "
                                         logger.info(f'    filename {file} was not found in the CSV but was added to the corresponding row')
                                 else:
                                     for idx, value in series.items():
                                         df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription} "
+                                        df.at[idx[0], "automatic_translation_automatic_transcription"] += f"{count}: {translation} "
                         except Exception as e:
                             logger.error(f'problem with file {file}: {e}')
                             continue
