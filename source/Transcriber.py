@@ -146,10 +146,23 @@ class Transcriber():
                                             column_counter += 1
                                             missing_filename_column = f'missing_filename_{column_counter}'
                                         df.loc[selection_condition,missing_filename_column] = file
+                                        logger.debug(
+                                            f"Type of df.loc[selection_condition, 'automatic_transcription']: "
+                                            f"{type(df.loc[selection_condition, 'automatic_transcription'])}"
+                                        )
                                         df.loc[selection_condition, 'automatic_transcription'] += f"{count}: {transcription} - "
                                         logger.info(f'    filename {file} was not found in the CSV but was added to the corresponding row')
                                 else:
                                     for idx, value in series.items():
+                                        if pd.isna(df.at[idx[0], "automatic_transcription"]):
+                                            logger.debug(
+                                                f"Row {idx[0]}: 'automatic_transcription' is NaN, initializing empty string.")
+                                            df.at[idx[0], "automatic_transcription"] = ""
+                                        else:
+                                            logger.debug(
+                                                f"Row {idx[0]}: 'automatic_transcription' is Type "
+                                                f"{type(df.at[idx[0], 'automatic_transcription'])}"
+                                            )
                                         df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription} "
                         except Exception as e:
                             logger.error(f'problem with file {file}: {e}')
