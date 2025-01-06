@@ -32,12 +32,13 @@ def load_text_file(file_path):
 
 def set_global_variables():
     """Loads necessary configurations and paths."""
-    current_dir = os.getcwd()
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(script_dir)
     
-    languages_path = os.path.join(current_dir, 'materials', 'LANGUAGES')
-    columns_path = os.path.join(current_dir, 'materials', 'OBLIGATORY_COLUMNS')
-    nolatin_path = os.path.join(current_dir, 'materials', 'NO_LATIN')
-    leipzig_path = os.path.join(current_dir, 'materials', 'LEIPZIG_GLOSSARY')
+    languages_path = os.path.join(parent_dir, 'materials', 'LANGUAGES')
+    columns_path = os.path.join(parent_dir, 'materials', 'OBLIGATORY_COLUMNS')
+    nolatin_path = os.path.join(parent_dir, 'materials', 'NO_LATIN')
+    leipzig_path = os.path.join(parent_dir, 'materials', 'LEIPZIG_GLOSSARY')
 
     LANGUAGES = load_json_file(languages_path)
     OBLIGATORY_COLUMNS = load_text_file(columns_path)
