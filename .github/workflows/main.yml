@@ -1,0 +1,31 @@
+name: DataTransformer distribution
+
+
+on:
+  push:
+    paths:
+      source/main.py
+
+jobs:
+
+  windows-distribution:
+    runs-on: 'windows-latest'
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with: 
+        python-version: '3.12.3'
+    - name: Build Binary
+      run: |
+        pip install pyinstaller
+        pip install -r requirements.txt
+        pyinstaller --onefile --add-data 'materials:materials' --specpath windows-distribution/ --distpath windows-distribution/dist --workpath windows-distribution/build --name DataTransformer_windows source/main.py
+        
+    - name: Store binary as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-artifact
+        path: Tools/DataTransformer/windows-distribution/dist
