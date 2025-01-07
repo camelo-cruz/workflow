@@ -41,7 +41,7 @@ jobs:
         cd source
         pyinstaller --clean --onefile \
           --add-data "../materials/*:materials" \
-          --add-data "whisper/assets:whisper/assets" \
+          --add-data "../whisper/assets:whisper/assets" \
           --specpath windows-distribution/ \
           --distpath windows-distribution/dist \
           --workpath windows-distribution/build \
