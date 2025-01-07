@@ -78,7 +78,7 @@ class Translator():
                     try:
                         if not self.instruction:
                             df.at[i, "automatic_translation_corrected_transcription"] = self.translate_m2m100(df[corrected_column].iloc[i])
-                        elif self.instruction == 'automatic_transcription':
+                        elif self.instruction == 'automatic':
                             df.at[i, "automatic_translation_automatic_transcription"] = self.translate_m2m100(df[automatic_column].iloc[i])
                         elif self.instruction == 'sentences':
                             df.at[i, "automatic_translation_utterance_used"] = self.translate_m2m100(df[sentences_column].iloc[i])

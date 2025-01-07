@@ -2,31 +2,72 @@ import argparse
 from Transcriber import Transcriber
 from Translator import Translator
 from Glosser import Glosser
+import torch
+import PySimpleGUI as sg
 
 def main():
-    parser = argparse.ArgumentParser(description="Automatic language processing tool")
-    
-    parser.add_argument("processing_instruction", choices=["transcribe", "translate", "gloss"],
-                        help="The type of processing to perform (transcribe, translate, gloss)")
-    parser.add_argument("input_dir", help="Directory containing files to process")
-    parser.add_argument("language", help="Source language")
-    parser.add_argument("--device", choices=['cuda', 'cpu'], default='cuda', help="Select which processing device should be used")
-    parser.add_argument("--verbose", action="store_true", help="Print full ouptput")
-    parser.add_argument("--instruction", "-i", 
-                        choices=["automatic_transcription",
-                                 "sentences"], 
-                        help="Type of instruction for translation", required=False)
-    args = parser.parse_args()
 
-    if args.processing_instruction == 'transcribe':
-        transcriber = Transcriber(args.input_dir, args.language, device=args.device)
-        transcriber.process_data(verbose=args.verbose)
-    elif args.processing_instruction == 'translate':
-        translator = Translator(args.input_dir, args.language, args.instruction)
-        translator.process_data()
-    elif args.processing_instruction == 'gloss':
-        glosser = Glosser(args.input_dir, args.language, args.instruction)
-        glosser.process_data()
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+    # Define the GUI layout
+    layout = [
+        [sg.Text("Select an operation:")],
+        [sg.Radio('Transcribe', "RADIO1", default=True, key='transcribe'),
+         sg.Radio('Translate', "RADIO1", key='translate'),
+         sg.Radio('Gloss', "RADIO1", key='gloss')],
+        [sg.Text('Input Directory:'), sg.InputText(key='input_dir'), sg.FolderBrowse()],
+        [sg.Text('Language:'), sg.Combo(['German', 'Turkish', 'Japanese'], 
+                                     key='language', default_value='German', readonly=True)],
+        [sg.Text('Instruction (optional for translation and glossing):'), sg.Combo(['automatic', 'corrected'], 
+                                     key='instruction', default_value='automatic', readonly=True)],
+        [sg.Checkbox('Verbose Output', key='verbose')],
+        [sg.Button('Process'), sg.Button('Cancel')],
+        [sg.Output(size=(80, 20), key='output')]  # Output area for logs or results
+    ]
+
+    # Create the window
+    window = sg.Window('Processing Tool', layout)
+
+    # Event loop
+    while True:
+        event, values = window.read()
+
+        # Exit conditions
+        if event == sg.WIN_CLOSED or event == 'Cancel':
+            break
+
+        # Extract parameters from GUI inputs
+        input_dir = values['input_dir']
+        language = values['language']
+        instruction = values['instruction']
+        verbose = values['verbose']
+
+        # Determine the selected operation
+        try:
+            if event == 'Process':
+                if not input_dir:
+                    sg.cprint("Error: Please select an input directory.", text_color='red')
+                    continue
+                if values['transcribe']:
+                    sg.cprint("Starting transcription...")
+                    transcriber = Transcriber(input_dir, language, device=device)
+                    transcriber.process_data(verbose=verbose)
+                    sg.cprint("Transcription completed.")
+                elif values['translate']:
+                    sg.cprint("Starting translation...")
+                    translator = Translator(input_dir, language, instruction)
+                    translator.process_data()
+                    sg.cprint("Translation completed.")
+                elif values['gloss']:
+                    sg.cprint("Starting glossing...")
+                    glosser = Glosser(input_dir, language, instruction)
+                    glosser.process_data()
+                    sg.cprint("Glossing completed.")
+        except Exception as e:
+            sg.cprint(f"Error: {e}", text_color='red')
+
+    # Close the window
+    window.close()
 
 if __name__ == "__main__":
     main()
