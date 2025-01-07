@@ -1,0 +1,38 @@
+name: Automatic Workflow Distribution
+
+on:
+  push:
+    paths:
+      - "source/main.py"
+
+jobs:
+  windows-distribution:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with: 
+        python-version: 3.12.3
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        pip install -r requirements.txt
+
+    - name: Build binary with PyInstaller
+      run: |
+        pyinstaller --onefile ^
+          --add-data "materials/*;materials" ^
+          --add-data "$(python -c 'import whisper, os; print(os.path.join(os.path.dirname(whisper.__file__), \"assets\"))')/*;whisper/assets" ^
+          source/main.py  # Adjust the path to your script as necessary.
+
+    - name: Upload binary as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-artifact
+        path: dist/main.exe
