@@ -24,12 +24,28 @@ jobs:
         python -m pip install --upgrade pip
         pip install pyinstaller
         pip install -r requirements.txt
-        
+
+    - name: Download Whisper assets
+      shell: bash
+      run: |
+        # Clone Whisper repository and copy only the assets folder
+        git clone --depth 1 https://github.com/openai/whisper.git whisper-repo
+        mkdir -p source/whisper
+        cp -r whisper-repo/whisper/assets source/whisper/
+        # Clean up the temporary clone
+        rm -rf whisper-repo
+
     - name: Remove temp and Build binary with PyInstaller
       shell: bash
       run: |
         cd source
-        pyinstaller --clean --onefile --add-data "../materials/*:materials" --specpath windows-distribution/ --distpath windows-distribution/dist --workpath windows-distribution/build --name tgt_windows main.py
+        pyinstaller --clean --onefile \
+          --add-data "../materials/*:materials" \
+          --add-data "whisper/assets:whisper/assets" \
+          --specpath windows-distribution/ \
+          --distpath windows-distribution/dist \
+          --workpath windows-distribution/build \
+          --name tgt_windows main.py
 
     - name: Upload binary as artifact
       uses: actions/upload-artifact@v4
