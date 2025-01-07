@@ -24,10 +24,15 @@ jobs:
         pip install pyinstaller
         pip install -r requirements.txt
 
+    - name: Clean temp files
+      run: |
+        del /f /q %TEMP%\*
+        rmdir /s /q %TEMP%
+
     - name: Build binary with PyInstaller
       run: |
         cd source
-        pyinstaller --onefile --add-data "materials/*;materials" --add-data "$(python -c 'import whisper, os; print(os.path.join(os.path.dirname(whisper.__file__), \"assets\"))')/*;whisper/assets" --exclude DumpStack.log.tmp main.py
+        pyinstaller --onefile --add-data "materials/*;materials" --add-data "$(python -c 'import whisper, os; print(os.path.join(os.path.dirname(whisper.__file__), \"assets\"))')/*;whisper/assets" --exclude "DumpStack.log.tmp" main.py
 
     - name: Upload binary as artifact
       uses: actions/upload-artifact@v4
