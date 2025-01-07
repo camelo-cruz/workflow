@@ -19,16 +19,18 @@ jobs:
         python-version: 3.12.3
 
     - name: Install dependencies
+      shell: bash
       run: |
         python -m pip install --upgrade pip
         pip install pyinstaller
         pip install -r requirements.txt
         
     - name: Remove temp and Build binary with PyInstaller
+      shell: bash
       run: |
         cd source
-        Remove-Item -Path "$env:TEMP\*" -Force -Recurse
-        pyinstaller --clean --onefile --add-data "materials/*;materials" --add-data "$(python -c 'import whisper, os; print(os.path.join(os.path.dirname(whisper.__file__), \"assets\"))')/*;whisper/assets" --exclude DumpStack.log.tmp main.py
+        rm -rf "$TMPDIR"/*
+        pyinstaller --clean --onefile --add-data "materials/*:materials" --add-data "$(python -c 'import whisper, os; print(os.path.join(os.path.dirname(whisper.__file__), \"assets\"))')/*:whisper/assets" --exclude DumpStack.log.tmp main.py
 
     - name: Upload binary as artifact
       uses: actions/upload-artifact@v4
