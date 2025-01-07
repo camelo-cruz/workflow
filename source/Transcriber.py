@@ -22,7 +22,7 @@ import os
 import whisper
 import warnings
 import argparse
-import string
+import torch
 import pandas as pd
 from tqdm import tqdm
 import logging
@@ -47,7 +47,7 @@ logger.addHandler(console_handler)
 
 
 class Transcriber():
-    def __init__(self, input_dir, language, device="cuda"):
+    def __init__(self, input_dir, language, device):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
         self.model = whisper.load_model("large-v3", device=device)        

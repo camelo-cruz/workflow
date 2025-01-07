@@ -21,8 +21,20 @@ def load_json_file(file_path):
         print(f"Error: Failed to parse JSON from {file_path}.")
         sys.exit(1)
 
-def load_text_file(file_path):
+def get_materials_path(filename):
+    """Get the path to a file in the materials directory."""
+    if hasattr(sys, '_MEIPASS'):
+        base_path = os.path.join(sys._MEIPASS, 'materials')
+    else:
+        base_path = os.path.join(os.getcwd(), 'materials')
+
+    return os.path.join(base_path, filename)
+
+def load_text_file(filename):
     """Utility function to load text files with error handling."""
+    # Resolve the file path using get_materials_path
+    file_path = get_materials_path(filename)
+    
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             return file.read().splitlines()
@@ -35,10 +47,10 @@ def set_global_variables():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(script_dir)
     
-    languages_path = os.path.join(parent_dir, 'materials', 'LANGUAGES')
-    columns_path = os.path.join(parent_dir, 'materials', 'OBLIGATORY_COLUMNS')
-    nolatin_path = os.path.join(parent_dir, 'materials', 'NO_LATIN')
-    leipzig_path = os.path.join(parent_dir, 'materials', 'LEIPZIG_GLOSSARY')
+    languages_path = os.path.join(script_dir, 'materials', 'LANGUAGES')
+    columns_path = os.path.join(script_dir, 'materials', 'OBLIGATORY_COLUMNS')
+    nolatin_path = os.path.join(script_dir, 'materials', 'NO_LATIN')
+    leipzig_path = os.path.join(script_dir, 'materials', 'LEIPZIG_GLOSSARY')
 
     LANGUAGES = load_json_file(languages_path)
     OBLIGATORY_COLUMNS = load_text_file(columns_path)
