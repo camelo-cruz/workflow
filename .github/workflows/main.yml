@@ -26,9 +26,8 @@ jobs:
 
     - name: Clean temp files
       run: |
-        del /f /q %TEMP%\*
-        rmdir /s /q %TEMP%
-
+        Remove-Item -Path "$env:TEMP\*" -Force -Recurse
+        
     - name: Build binary with PyInstaller
       run: |
         cd source
