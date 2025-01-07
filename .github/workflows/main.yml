@@ -41,7 +41,7 @@ jobs:
         cd source
         pyinstaller --clean --onefile \
           --add-data "../materials/*:materials" \
-          --add-data "../whisper/assets:whisper/assets" \
+          --add-data "../whisper/assets/*:whisper/assets" \
           --specpath windows-distribution/ \
           --distpath windows-distribution/dist \
           --workpath windows-distribution/build \
@@ -51,4 +51,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: windows-artifact
-        path: windows-distribution/dist
+        path: source/windows-distribution/dist
