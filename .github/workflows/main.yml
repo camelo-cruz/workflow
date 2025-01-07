@@ -29,10 +29,10 @@ jobs:
       shell: bash
       run: |
         cd source
-        pyinstaller --clean --onefile --add-data "materials/*:materials" --add-data "$(python -c 'import whisper, os; print(os.path.join(os.path.dirname(whisper.__file__), \"assets\"))')/*:whisper/assets" --exclude DumpStack.log.tmp main.py
+        pyinstaller --clean --onefile --add-data "materials/*:materials" --specpath windows-distribution/ --distpath windows-distribution/dist --workpath windows-distribution/build --name tgt_windows main.py
 
     - name: Upload binary as artifact
       uses: actions/upload-artifact@v4
       with:
         name: windows-artifact
-        path: dist/main.exe
+        path: windows-distribution/dist
