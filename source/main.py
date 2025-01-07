@@ -75,7 +75,7 @@ def main():
             sg.cprint(f"Error: {e}", text_color='red')
 
     # Close the window
-    window.close() 
+    window.close()
 
 if __name__ == "__main__":
     main() 
