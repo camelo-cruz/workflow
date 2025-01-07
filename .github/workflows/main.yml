@@ -28,9 +28,6 @@ jobs:
       run: |
         cd source
         Remove-Item -Path "$env:TEMP\*" -Force -Recurse
-        # Clean build and dist directories if they exist
-        Remove-Item -Path "dist" -Recurse -Force
-        Remove-Item -Path "build" -Recurse -Force
         pyinstaller --clean --onefile --add-data "materials/*;materials" --add-data "$(python -c 'import whisper, os; print(os.path.join(os.path.dirname(whisper.__file__), \"assets\"))')/*;whisper/assets" main.py
 
     - name: Upload binary as artifact
