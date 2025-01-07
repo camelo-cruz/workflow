@@ -78,4 +78,4 @@ def main():
     window.close() 
 
 if __name__ == "__main__":
-    main() 
+    main()
