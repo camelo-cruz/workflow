@@ -38,17 +38,19 @@ jobs:
     - name: Remove temp and Build binary with PyInstaller
       shell: bash
       run: |
-        cd source
         pyinstaller --clean --onefile \
-          --add-data "../materials/*:materials" \
-          --add-data "../whisper/assets/*:whisper/assets" \
+          --add-data "../source/materials/*:materials" \
+          --add-data "../source/whisper/assets/*:whisper/assets" \
           --specpath windows-distribution/ \
           --distpath windows-distribution/dist \
           --workpath windows-distribution/build \
-          --name tgt_windows main.py
+          --name tgt_windows source/main.py
 
-    - name: Upload binary as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: windows-artifact
-        path: source/windows-distribution/dist
+    - name: Push generated .exe to repository
+      shell: bash
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add windows-distribution/dist/tgt_windows.exe
+        git commit -m "Add generated tgt_windows.exe binary"
+        git push
