@@ -47,10 +47,13 @@ jobs:
           --name tgt_windows source/main.py
 
     - name: Push generated .exe to repository
+      env:
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       shell: bash
       run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add windows-distribution/dist/tgt_windows.exe
-        git commit -m "Add generated tgt_windows.exe binary"
-        git push
+        git config --global user.name "Your Name"
+        git config --global user.email "your-email@example.com"
+        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/OWNER/REPO.git
+        git add ../tgt_windows.exe
+        git commit -m "Add generated tgt_windows.exe binary [skip ci]"
+        git push origin main
