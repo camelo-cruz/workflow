@@ -53,7 +53,7 @@ jobs:
       run: |
         git config --global user.name "Alejandra Camelo"
         git config --global user.email "camelo.cruz@leibniz-zas.de"
-        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/OWNER/REPO.git
+        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/camelo-cruz/workflow.git
         git add windows-distribution/dist/tgt_windows.exe
         git commit -m "Add generated tgt_windows.exe binary [skip ci]"
         git push origin main
