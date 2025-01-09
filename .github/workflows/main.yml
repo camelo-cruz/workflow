@@ -8,13 +8,29 @@ on:
 jobs:
 
   cleanup:
-      runs-on: ubuntu-latest
-      steps:
-      - name: Delete old workflow runs and artifacts
-        uses: peter-evans/delete-workflow-runs@v3
-        with:
-          workflow: Automatic Workflow Distribution
-          retain_days: 0
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install GitHub CLI
+      run: |
+        sudo apt-get install -y gh
+
+    - name: Authenticate GitHub CLI
+      env:
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      run: |
+        echo "${GITHUB_TOKEN}" | gh auth login --with-token
+
+    - name: Delete old workflow runs
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Fetch the workflow runs
+        WORKFLOW_ID=$(gh workflow list --json name,id -q '.[] | select(.name=="Automatic Workflow Distribution") | .id')
+        echo "Workflow ID: ${WORKFLOW_ID}"
+
+        # Delete workflow runs older than the latest one
+        gh run list --workflow $WORKFLOW_ID --json databaseId -q '.[1:] | .[].databaseId' | xargs -n 1 gh run delete --confirm
+
           
   windows-distribution:
     runs-on: windows-latest
