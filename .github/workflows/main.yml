@@ -46,25 +46,6 @@ jobs:
           --workpath windows-distribution/build \
           --name tgt_windows source/main.py
           
-    - name: Debug Secrets
-      shell: bash
-      env:
-        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      run: |
-        echo "Token length: ${#GITHUB_TOKEN}" # Should print the length of the token
-        echo "Masked Token: ${GITHUB_TOKEN}"  # Verify it's not empty but remains masked
-
-    - name: Test Push Command
-      env:
-        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      shell: bash
-      run: |
-        git config --global user.name "Alejandra Camelo"
-        git config --global user.email "camelo.cruz@leibniz-zas.de"
-        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/camelo-cruz/workflow.git
-        git fetch origin
-        git branch --set-upstream-to=origin/main main
-        git push origin main --dry-run
 
     - name: Push generated .exe to repository
       env:
@@ -73,6 +54,7 @@ jobs:
       run: |
         git config --global user.name "Alejandra Camelo"
         git config --global user.email "camelo.cruz@leibniz-zas.de"
+        git config http.postBuffer 157286400
         git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/camelo-cruz/workflow.git
         git add windows-distribution/dist/tgt_windows.exe
         git commit -m "Add generated tgt_windows.exe binary [skip ci]" || echo "No changes to commit."
