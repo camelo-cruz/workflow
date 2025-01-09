@@ -48,7 +48,7 @@ jobs:
 
     - name: Push generated .exe to repository
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       shell: bash
       run: |
         git config --global user.name "Alejandra Camelo"
