@@ -6,6 +6,16 @@ on:
       - "source/main.py"
 
 jobs:
+
+  cleanup:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Delete old workflow runs and artifacts
+        uses: peter-evans/delete-workflow-runs@v3
+        with:
+          workflow: Automatic Workflow Distribution
+          retain_days: 0
+          
   windows-distribution:
     runs-on: windows-latest
 
@@ -24,7 +34,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pyinstaller
         pip install -r requirements.txt
-
+        
     - name: Download Whisper assets
       shell: bash
       run: |
@@ -34,28 +44,21 @@ jobs:
         cp -r whisper-repo/whisper/assets source/whisper/
         # Clean up the temporary clone
         rm -rf whisper-repo
-
+        
     - name: Remove temp and Build binary with PyInstaller
       shell: bash
       run: |
+        cd source
         pyinstaller --clean --onefile \
-          --add-data "../source/materials/*:materials" \
-          --add-data "../source/whisper/assets/*:whisper/assets" \
+          --add-data "../materials/*:materials" \
+          --add-data "../whisper/assets/*:whisper/assets" \
           --specpath windows-distribution/ \
           --distpath windows-distribution/dist \
           --workpath windows-distribution/build \
-          --name tgt_windows source/main.py
+          --name tgt_windows main.py
           
-
-    - name: Push generated .exe to repository
-      env:
-        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      shell: bash
-      run: |
-        git config --global user.name "Alejandra Camelo"
-        git config --global user.email "camelo.cruz@leibniz-zas.de"
-        git config http.postBuffer 157286400
-        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/camelo-cruz/workflow.git
-        git add windows-distribution/dist/tgt_windows.exe
-        git commit -m "Add generated tgt_windows.exe binary [skip ci]" || echo "No changes to commit."
-        git push origin main
+    - name: Upload binary as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-artifact
+        path: source/windows-distribution/dist
