@@ -3,7 +3,8 @@ name: Automatic Workflow Distribution
 on:
   push:
     paths:
-      - "source/main.py"
+      - "source/*.py"
+      - "source/**/*.py"
 
 jobs:
   cleanup:
