@@ -30,8 +30,10 @@ jobs:
           exit 1
         fi
         # Delete workflow runs older than the latest one
-        gh run list --workflow $WORKFLOW_ID --json databaseId -q '.[1:] | .[].databaseId' | xargs -n 1 gh run delete --yes
-
+        gh run list --workflow $WORKFLOW_ID --json databaseId -q '.[1:] | .[].databaseId' | while read -r RUN_ID; do
+          echo "Deleting run ID: $RUN_ID"
+          echo "y" | gh run delete "$RUN_ID"
+        done
           
   windows-distribution:
     runs-on: windows-latest
