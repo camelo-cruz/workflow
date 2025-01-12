@@ -9,4 +9,8 @@
 
 2. Click on the link that appears in the page (The name can differ):
 
+![Workflows](images/workflows.png)
+
 3. Download the artifact
+
+![Artifact](images/artifact.png)
