@@ -8,10 +8,12 @@ on:
 jobs:
   cleanup:
     runs-on: ubuntu-latest
+    
     steps:
-    - name: Install GitHub CLI
-      run: |
-        sudo apt-get install -y gh
+    
+    - name: Check Out Repository
+      uses: actions/checkout@v3
+      
     - name: Delete old workflow runs
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
