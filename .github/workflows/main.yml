@@ -3,7 +3,6 @@ name: Automatic Workflow Distribution
 on:
   push:
     paths:
-      - "source/*.py"
       - "source/**/*.py"
 
 jobs:
