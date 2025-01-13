@@ -76,6 +76,12 @@ jobs:
           --workpath windows-distribution/build \
           --name tgt_windows main.py
 
+    - name: Upload binary as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-artifact
+        path: source/windows-distribution/dist
+
     - name: Push binary to repository
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -87,12 +93,6 @@ jobs:
         git commit -m "Add Windows distribution binaries"
         
         # Use the GitHub token to authenticate for the push
+        git pull origin main
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-        git push --set-upstream origin windows-distribution
-
-          
-    - name: Upload binary as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: windows-artifact
-        path: source/windows-distribution/dist
+        git push origin main
