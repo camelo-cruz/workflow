@@ -1,9 +1,14 @@
 from Transcriber import Transcriber
 from Translator import Translator
 from Glosser import Glosser
+from functions import load_text_file
 import torch
 import os
 import sys
+
+
+PySimpleGUI_License = load_text_file('.license_key.txt')
+
 import PySimpleGUI as sg
 
 def main():
