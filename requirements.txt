@@ -13,3 +13,4 @@ transliterate
 openpyxl
 sentencepiece
 sacremoses
+PySimpleGUI
