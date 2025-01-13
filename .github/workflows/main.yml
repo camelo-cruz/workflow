@@ -83,7 +83,7 @@ jobs:
         git config --global user.email "camelo.cruz@leibniz-zas.de"
         git config --global user.name "Alejandra Camelo"
         
-        git add windows-distribution/dist
+        git add source/windows-distribution/dist
         git commit -m "Add Windows distribution binaries"
         
         # Use the GitHub token to authenticate for the push
