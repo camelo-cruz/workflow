@@ -45,7 +45,6 @@ def load_text_file(filename):
 def set_global_variables():
     """Loads necessary configurations and paths."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    parent_dir = os.path.dirname(script_dir)
     
     languages_path = os.path.join(script_dir, 'materials', 'LANGUAGES')
     columns_path = os.path.join(script_dir, 'materials', 'OBLIGATORY_COLUMNS')

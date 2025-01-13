@@ -6,8 +6,9 @@ import torch
 import os
 import sys
 
-
-PySimpleGUI_License = load_text_file('.license_key.txt')
+script_dir = os.path.dirname(os.path.abspath(__file__))
+license_path = os.path.join(script_dir, 'materials', '.license_key.txt')
+PySimpleGUI_License = load_text_file(license_path)
 
 import PySimpleGUI as sg
 
