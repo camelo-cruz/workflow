@@ -75,6 +75,18 @@ jobs:
           --distpath windows-distribution/dist \
           --workpath windows-distribution/build \
           --name tgt_windows main.py
+
+    - name: Push binary to repository
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Add, commit, and push the changes
+        git config --global user.email "camelo.cruz@leibniz-zas.de"
+        git config --global user.name "Alejandra Camelo"
+        git add dist/
+        git commit -m "Add Windows distribution binaries"
+        git push --set-upstream origin windows-distribution
+
           
     - name: Upload binary as artifact
       uses: actions/upload-artifact@v4
