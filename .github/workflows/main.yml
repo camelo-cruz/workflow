@@ -81,18 +81,3 @@ jobs:
       with:
         name: windows-artifact
         path: source/windows-distribution/dist
-
-    - name: Push binary to repository
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        git config --global user.email "camelo.cruz@leibniz-zas.de"
-        git config --global user.name "Alejandra Camelo"
-        
-        git add source/windows-distribution/dist
-        git commit -m "Add Windows distribution binaries"
-        
-        # Use the GitHub token to authenticate for the push
-        git pull origin main
-        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-        git push origin main
