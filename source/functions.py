@@ -23,9 +23,9 @@ def load_json_file(file_path):
 
 def get_materials_path(filename):
     """Get the path to a file in the materials directory."""
-    if hasattr(sys, '_MEIPASS'):
+    try:
         base_path = os.path.join(sys._MEIPASS, 'materials')
-    else:
+    except:
         base_path = os.path.join(os.getcwd(), 'materials')
 
     return os.path.join(base_path, filename)
