@@ -57,6 +57,7 @@ class Translator():
         return " ".join(translated)
 
     def process_data(self):
+        print("instruction", self.instruction)
         automatic_column = "automatic_transcription"
         corrected_column = "latin_transcription_everything"
         sentences_column = "latin_transcription_utterance_used"
@@ -75,15 +76,17 @@ class Translator():
                 df = pd.read_excel(file_path)
 
                 for i in range(len(df)):
+                    print("translating row: ", i)
                     try:
                         if not self.instruction:
                             df.at[i, "automatic_translation_corrected_transcription"] = self.translate_m2m100(df[corrected_column].iloc[i])
                         elif self.instruction == 'automatic':
                             df.at[i, "automatic_translation_automatic_transcription"] = self.translate_m2m100(df[automatic_column].iloc[i])
-                        elif self.instruction == 'sentences':
+                            print(f"translated {df[corrected_column].iloc[i]} {self.translate_m2m100(df[automatic_column].iloc[i])}")
+                        elif self.instruction == 'corrected':
                             df.at[i, "automatic_translation_utterance_used"] = self.translate_m2m100(df[sentences_column].iloc[i])
                     except Exception as e:
-                        print(f"An error occurred while translating row {i}: {str(e)}")
+                        print(f"Row {i} will not be translated")
                 
                 # Reorder columns to ensure obligatory columns are at the end
                 extra_columns = [col for col in df.columns if col not in OBLIGATORY_COLUMNS]

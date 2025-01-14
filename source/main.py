@@ -5,37 +5,41 @@ from Transcriber import Transcriber
 from Translator import Translator
 from Glosser import Glosser
 
+cancel_flag = False
+
 def process_transcribe(input_dir, language, verbose, window):
     try:
-        sg.cprint("Starting transcription...")
+        print("Starting transcription...")
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
         transcriber = Transcriber(input_dir, language, device=device)
         transcriber.process_data(verbose=verbose)
-        sg.cprint("Transcription completed.")
+        print("Transcription completed.")
     except Exception as e:
-        sg.cprint(f"Error: {e}", text_color='red')
+        print(f"Error: {e}")
 
 def process_translate(input_dir, language, instruction, window):
     try:
-        sg.cprint("Starting translation...")
+        print("Starting translation...")
         translator = Translator(input_dir, language, instruction)
         translator.process_data()
-        sg.cprint("Translation completed.")
+        print("Translation completed.")
     except Exception as e:
-        sg.cprint(f"Error: {e}", text_color='red')
+        print(f"Error: {e}")
 
 def process_gloss(input_dir, language, instruction, window):
     try:
-        sg.cprint("Starting glossing...")
+        print("Starting glossing...")
         glosser = Glosser(input_dir, language, instruction)
         glosser.process_data()
-        sg.cprint("Glossing completed.")
+        print("Glossing completed.")
     except Exception as e:
-        sg.cprint(f"Error: {e}", text_color='red')
+        print(f"Error: {e}")
 
 def main():
+
+    global cancel_flag
+
     print("Main function called")
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     layout = [
         [sg.Text("Select an operation:")],
@@ -46,10 +50,9 @@ def main():
         [sg.Text('Language:'), sg.Combo(['German', 'Russian', 'Ukranian', 'Portuguese', 'Turkish', 'Japanese'], 
                                          key='language', default_value='German', readonly=True)],
         [sg.Text('Instruction (optional for translation and glossing):'), 
-            sg.Combo(['automatic', 'corrected'], key='instruction', default_value='automatic', readonly=True, visible=False)],
+            sg.Combo(['automatic', 'corrected'], key='instruction', default_value='automatic', readonly=True, visible=True)],
         [sg.Checkbox('Verbose Output', key='verbose')],
         [sg.Button('Process'), sg.Button('Cancel')],
-        [sg.Output(size=(80, 20), key='output')]  # Output area for logs or results
     ]
 
     # Create the window
@@ -60,8 +63,13 @@ def main():
         event, values = window.read()
 
         # Exit conditions
-        if event == sg.WIN_CLOSED or event == 'Cancel':
+        if event == sg.WIN_CLOSED:
             break
+        
+        if event == 'Cancel':
+            cancel_flag = True
+            print("Cancel button pressed. The current process will stop shortly.")
+            continue
 
         # Extract parameters from GUI inputs
         input_dir = values['input_dir']
@@ -72,7 +80,7 @@ def main():
         # Start the processing when the "Process" button is clicked
         if event == 'Process':
             if not input_dir:
-                sg.cprint("Error: Please select an input directory.", text_color='red')
+                print("Error: Please select an input directory.", text_color='red')
                 continue
 
             if values['transcribe']:
