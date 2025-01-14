@@ -14,3 +14,13 @@
 3. Download the artifact
 
 ![Artifact](images/artifact.png)
+
+4. Unzip the app in the place of your preference
+
+![Unizip1]()
+![Unizip2]()
+
+5. Open the app
+
+![app1]()
+![app2]()
