@@ -13,4 +13,4 @@ transliterate
 openpyxl
 sentencepiece
 sacremoses
-PySimpleGUI
+PySimpleGUI==4.60.5.0
