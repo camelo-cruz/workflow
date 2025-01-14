@@ -17,10 +17,14 @@
 
 4. Unzip the app in the place of your preference
 
-![Unizip1]()
-![Unizip2]()
+![Unizip1](images/zip1.png)
+![Unizip2](images/zip2.png)
 
-5. Open the app
+5. Allow the app to open
 
-![app1]()
-![app2]()
+![allow1](images/authorize1.png)
+![allow2](images/authorize2.png)
+
+5. Open the app and select your process
+
+![app2](images/app.png)
