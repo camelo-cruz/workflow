@@ -29,9 +29,10 @@ LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
 
 class Translator():
-    def __init__(self,input_dir, language, instruction=None):
+    def __init__(self,input_dir, language, verbose=False, instruction=None):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
+        self.verbose = verbose
         self.instruction = instruction
         self.model = M2M100ForConditionalGeneration.from_pretrained("facebook/m2m100_1.2B")
         self.tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_1.2B")
@@ -82,7 +83,6 @@ class Translator():
                             df.at[i, "automatic_translation_corrected_transcription"] = self.translate_m2m100(df[corrected_column].iloc[i])
                         elif self.instruction == 'automatic':
                             df.at[i, "automatic_translation_automatic_transcription"] = self.translate_m2m100(df[automatic_column].iloc[i])
-                            print(f"translated {df[corrected_column].iloc[i]} {self.translate_m2m100(df[automatic_column].iloc[i])}")
                         elif self.instruction == 'sentences':
                             df.at[i, "automatic_translation_utterance_used"] = self.translate_m2m100(df[sentences_column].iloc[i])
                     except Exception as e:
