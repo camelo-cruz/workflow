@@ -50,7 +50,7 @@ def main():
         [sg.Text('Language:'), sg.Combo(['German', 'Russian', 'Ukranian', 'Portuguese', 'Turkish', 'Japanese'], 
                                          key='language', default_value='German', readonly=True)],
         [sg.Text('Instruction (optional for translation and glossing):'), 
-            sg.Combo(['automatic', 'corrected'], key='instruction', default_value='automatic', readonly=True, visible=True)],
+            sg.Combo(['automatic', 'corrected', 'sentences'], key='instruction', default_value='automatic', readonly=True, visible=True)],
         [sg.Checkbox('Verbose Output', key='verbose')],
         [sg.Button('Process'), sg.Button('Cancel')],
     ]

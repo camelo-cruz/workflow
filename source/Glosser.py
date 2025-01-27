@@ -222,10 +222,14 @@ class Glosser():
                     if file.endswith('annotated.xlsx'):
                         excel_file = os.path.join(subdir, file)
                         df = pd.read_excel(excel_file)
-                        if not self.instruction or self.instruction == 'corrected':
+                        if self.instruction == 'sentences':
                             column_to_gloss = 'latin_transcription_utterance_used'
                             if self.language_code in NO_LATIN:
                                 column_to_gloss = 'transcription_original_script_utterance_used'
+                        if self.instruction == 'corrected':
+                            column_to_gloss = 'latin_transcription_everything'
+                            if self.language_code in NO_LATIN:
+                                column_to_gloss = 'transcription_original_script'
                         elif self.instruction == 'automatic':
                             column_to_gloss = "automatic_transcription"
                         if column_to_gloss in df.columns:

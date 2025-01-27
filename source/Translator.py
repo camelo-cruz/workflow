@@ -78,12 +78,12 @@ class Translator():
                 for i in range(len(df)):
                     print("translating row: ", i)
                     try:
-                        if not self.instruction:
+                        if self.instruction == 'corrected':
                             df.at[i, "automatic_translation_corrected_transcription"] = self.translate_m2m100(df[corrected_column].iloc[i])
                         elif self.instruction == 'automatic':
                             df.at[i, "automatic_translation_automatic_transcription"] = self.translate_m2m100(df[automatic_column].iloc[i])
                             print(f"translated {df[corrected_column].iloc[i]} {self.translate_m2m100(df[automatic_column].iloc[i])}")
-                        elif self.instruction == 'corrected':
+                        elif self.instruction == 'sentences':
                             df.at[i, "automatic_translation_utterance_used"] = self.translate_m2m100(df[sentences_column].iloc[i])
                     except Exception as e:
                         print(f"Row {i} will not be translated")
