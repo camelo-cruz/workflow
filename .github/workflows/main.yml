@@ -68,8 +68,9 @@ jobs:
           --specpath windows-distribution/ \
           --distpath windows-distribution/dist \
           --workpath windows-distribution/build \
+          --hidden-import=numba \
+          --hidden-import=numba.core.types.old_scalars \
           --name tgt_windows main.py
-          --hidden-import numba
 
     - name: Upload binary as artifact
       uses: actions/upload-artifact@v4
