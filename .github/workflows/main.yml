@@ -47,11 +47,17 @@ jobs:
       with: 
         python-version: 3.12.7
 
+    - name: Clean Numba Cache
+      shell: bash
+      run: |
+        rm -rf ~/.cache/numba  # Remove any cached Numba files
+
     - name: Install dependencies
       shell: bash
       run: |
+        python -m venv venv  # Create a fresh virtual environment
+        source venv/bin/activate  # Activate the environment
         python -m pip install --upgrade pip
-        pip install pyinstaller
         pip install -r requirements.txt
         
     - name: Remove temp and Build binary with PyInstaller
