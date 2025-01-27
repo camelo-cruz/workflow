@@ -45,7 +45,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with: 
-        python-version: 3.12
+        python-version: 3.12.3
 
     - name: Install dependencies
       shell: bash
@@ -64,7 +64,6 @@ jobs:
           --specpath windows-distribution/ \
           --distpath windows-distribution/dist \
           --workpath windows-distribution/build \
-          --hidden-import=numba \
           --name tgt_windows main.py
 
     - name: Upload binary as artifact
