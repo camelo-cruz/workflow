@@ -45,12 +45,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with: 
-        python-version: 3.11
-
-    - name: Clean Numba Cache
-      shell: bash
-      run: |
-        rm -rf ~/.cache/numba  # Remove any cached Numba files
+        python-version: 3.12
 
     - name: Install dependencies
       shell: bash
@@ -69,7 +64,6 @@ jobs:
           --distpath windows-distribution/dist \
           --workpath windows-distribution/build \
           --hidden-import=numba \
-          --hidden-import=numba.core.types.old_scalars \
           --name tgt_windows main.py
 
     - name: Upload binary as artifact
