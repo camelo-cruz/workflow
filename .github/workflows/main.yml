@@ -64,6 +64,7 @@ jobs:
           --specpath windows-distribution/ \
           --distpath windows-distribution/dist \
           --workpath windows-distribution/build \
+          --collect-submodules=numba \
           --name tgt_windows main.py
 
     - name: Upload binary as artifact
