@@ -5,9 +5,7 @@ torchaudio== 2.5.1+cu124
 
 deep_translator
 openai_whisper
-numba
 pandas
-pyinstaller
 spacy
 tqdm
 transformers
