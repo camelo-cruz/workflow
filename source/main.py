@@ -17,7 +17,7 @@ def process_transcribe(input_dir, language, verbose, window):
     except Exception as e:
         print(f"Error: {e}")
 
-def process_translate(input_dir, language, verbose, instruction, window):
+def process_translate(input_dir, language, instruction, window):
     try:
         print("Starting translation...")
         translator = Translator(input_dir, language, instruction)

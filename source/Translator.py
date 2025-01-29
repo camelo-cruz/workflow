@@ -29,10 +29,9 @@ LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
 
 class Translator():
-    def __init__(self,input_dir, language, verbose=False, instruction=None):
+    def __init__(self,input_dir, language, instruction=None):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
-        self.verbose = verbose
         self.instruction = instruction
         self.model = M2M100ForConditionalGeneration.from_pretrained("facebook/m2m100_1.2B")
         self.tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_1.2B")
