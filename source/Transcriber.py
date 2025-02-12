@@ -120,6 +120,7 @@ class Transcriber():
                                 if self.language_code == 'zh':
                                     transcription = self.model.transcribe(audio_file_path, language = self.language_code, initial_prompt="请使用简体中文转录。")
                                     transcription = transcription["text"].replace("请使用简体中文转录。", "")
+                                    transcription = transcription["text"].replace("使用简体中文转录。", "")
                                 else:
                                     transcription = self.model.transcribe(audio_file_path, language = self.language_code)
                                     transcription = transcription["text"]
