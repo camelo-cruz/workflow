@@ -27,6 +27,8 @@ import pandas as pd
 from tqdm import tqdm
 import logging
 import re
+import openpyxl
+from openpyxl.styles import Font
 from functions import set_global_variables, find_language, clean_string, find_ffmpeg
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
@@ -103,8 +105,8 @@ class Transcriber():
                             df[column] = ""
                     
                     if self.language_code not in NO_LATIN:
-                        df = df.drop(columns=['transcription_original_script'])
-                        df = df.drop(columns=['transcription_original_script_utterance_used'])
+                        df["transcription_original_script"] = ""
+                        df["transcription_original_script_utterance_used"] = ""
                         
                     count = 0
                     files.sort()
@@ -115,8 +117,14 @@ class Transcriber():
                                 logger.debug(f'processing file {count}/{len(files)} in {subdir}: {file}')
                                 audio_file_path = os.path.abspath(os.path.join(subdir, file))
                                 transcription = ""
-                                transcription = self.model.transcribe(audio_file_path, language = self.language_code)
-                                transcription = clean_string(transcription["text"])
+                                if self.language_code == 'zh':
+                                    transcription = self.model.transcribe(audio_file_path, language = self.language_code, initial_prompt="请使用简体中文转录。")
+                                    transcription = transcription["text"].replace("请使用简体中文转录。", "")
+                                else:
+                                    transcription = self.model.transcribe(audio_file_path, language = self.language_code)
+                                    transcription = transcription["text"]
+
+                                transcription = clean_string(transcription)
                                 if verbose:
                                     tqdm.write(transcription)
                                     
@@ -151,6 +159,12 @@ class Transcriber():
                                             f"{type(df.loc[selection_condition, 'automatic_transcription'])}"
                                         )
                                         df.loc[selection_condition, 'automatic_transcription'] += f"{count}: {transcription} - "
+
+                                        if self.language_code in NO_LATIN:
+                                            df.loc[selection_condition, 'transcription_original_script'] += f"{count}: {transcription} - " #in red
+                                        else:
+                                            df.loc[selection_condition, 'latin_transcription_everything'] += f"{count}: {transcription} - " #in red
+
                                         logger.info(f'    filename {file} was not found in the CSV but was added to the corresponding row')
                                 else:
                                     for idx, value in series.items():
@@ -164,11 +178,41 @@ class Transcriber():
                                                 f"{type(df.at[idx[0], 'automatic_transcription'])}"
                                             )
                                         df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription} "
+                                        if self.language_code in NO_LATIN:
+                                            df.at[idx[0], "transcription_original_script"] += f"{count}: {transcription} " #in red
+                                        else:
+                                            df.at[idx[0], "latin_transcription_everything"] += f"{count}: {transcription} " #in red
+
                         except Exception as e:
                             logger.error(f'problem with file {file}: {e}')
                             continue
 
                     df.to_excel(excel_output_file)
+
+                    # Open the Excel file and modify cell formatting
+                    wb = openpyxl.load_workbook(excel_output_file)
+                    ws = wb.active  # Select the first sheet
+
+                    # Define the red font style
+                    red_font = Font(color="FF0000")  # Hex code for red color
+
+                    # Define column names that should have red font
+                    target_columns = ['transcription_original_script', 'latin_transcription_everything']
+
+                    # Find column indexes for the target column names
+                    header_row = next(ws.iter_rows(min_row=1, max_row=1, values_only=True))  # Get first row as header
+                    column_indexes = {col_name: idx + 1 for idx, col_name in enumerate(header_row) if col_name in target_columns}
+
+                    # Apply red font to the specified columns
+                    for row in ws.iter_rows(min_row=2):  # Skip header row
+                        for col_name, col_idx in column_indexes.items():
+                            cell = row[col_idx - 1]  # Column index is 1-based, row[] is 0-based
+                            if cell.value:
+                                cell.font = red_font
+
+                    # Save the modified Excel file
+                    wb.save(excel_output_file)
+
                     logger.info(f"\nTranscription and translation completed for {subdir}.")
                     logger.removeHandler(file_handler)
                     file_handler.close()

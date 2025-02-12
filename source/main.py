@@ -47,7 +47,7 @@ def main():
          sg.Radio('Translate', "RADIO1", key='translate'),
          sg.Radio('Gloss', "RADIO1", key='gloss')],
         [sg.Text('Input Directory:'), sg.InputText(key='input_dir'), sg.FolderBrowse()],
-        [sg.Text('Language:'), sg.InputText(key='language', default_text='German')],
+        [sg.Text('Language:'), sg.InputText(key='language')],
         [sg.Text('Instruction (optional for translation and glossing):'), 
             sg.Combo(['automatic', 'corrected', 'sentences'], key='instruction', default_value='automatic', readonly=True, visible=True)],
         [sg.Checkbox('Verbose Output', key='verbose')],
