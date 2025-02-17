@@ -21,9 +21,12 @@ Leibniz Institute General Linguistics (ZAS)
 import os 
 import pandas as pd
 import argparse
+import torch
 from tqdm import tqdm
+import openpyxl
+from openpyxl.styles import Font
 from functions import set_global_variables, find_language
-from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
@@ -33,30 +36,33 @@ class Translator():
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
         self.instruction = instruction
-        self.model = M2M100ForConditionalGeneration.from_pretrained("facebook/m2m100_1.2B")
-        self.tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_1.2B")
-    
-    def translate_m2m100(self, text):
+
+        self.tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-1.3B", src_lang=f'{self.language_code}_Latn')
+
+        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-3.3B").to(self.device)
+
+    def translate(self, text):
         """
-        Translates text from a source language to English using the M2M100 model.
+        Translates text from a source language to English using the NLLB-200 model.
 
         Parameters:
-            src_lang (str): The source language code.
             text (str): The text to be translated.
-            model (transformers.M2M100ForConditionalGeneration): The M2M100 translation model.
-            tokenizer (transformers.M2M100Tokenizer): The tokenizer associated with the M2M100 model.
 
         Returns:
             str: The translated text in English.
         """
-        self.tokenizer.src_lang = self.language_code
-        encoded_zh = self.tokenizer(text, return_tensors="pt")
+        inputs = self.tokenizer(text, return_tensors="pt")
+        translated_tokens = self.model.generate(
+            **inputs, forced_bos_token_id=self.tokenizer.convert_tokens_to_ids("eng_Latn")
+        )
 
-        generated_tokens = self.model.generate(**encoded_zh, forced_bos_token_id=self.tokenizer.get_lang_id("en"))
-        translated = self.tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
-        return " ".join(translated)
+        translated = self.tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0]
+        
+        return translated
 
-    def process_data(self):
+
+    def process_data(self, verbose=False):
         print("instruction", self.instruction)
         automatic_column = "automatic_transcription"
         corrected_column = "latin_transcription_everything"
@@ -78,20 +84,60 @@ class Translator():
                 for i in range(len(df)):
                     print("translating row: ", i)
                     try:
+                        text_to_translate = df.at[i, corrected_column if self.instruction == 'corrected' else 
+                                                        automatic_column if self.instruction == 'automatic' else 
+                                                        sentences_column]
+
+                        if pd.isna(text_to_translate) or not str(text_to_translate).strip():
+                            continue  # Skip empty values
+
+                        translation = self.translate(text_to_translate)
+
                         if self.instruction == 'corrected':
-                            df.at[i, "automatic_translation_corrected_transcription"] = self.translate_m2m100(df[corrected_column].iloc[i])
+                            df.at[i, "automatic_translation_corrected_transcription"] = translation
+                            df.at[i, "translation_everything"] = translation
                         elif self.instruction == 'automatic':
-                            df.at[i, "automatic_translation_automatic_transcription"] = self.translate_m2m100(df[automatic_column].iloc[i])
+                            df.at[i, "automatic_translation_automatic_transcription"] = translation
                         elif self.instruction == 'sentences':
-                            df.at[i, "automatic_translation_utterance_used"] = self.translate_m2m100(df[sentences_column].iloc[i])
+                            df.at[i, "automatic_translation_utterance_used"] = translation
+                            df.at[i, "translation_utterance_used"] = translation
+
+                        if verbose:
+                            print(f"Original: {text_to_translate}, Translation: {translation}")
+
                     except Exception as e:
-                        print(f"Row {i} will not be translated")
+                        print(f"Error in row {i}: {e}")
+
                 
                 # Reorder columns to ensure obligatory columns are at the end
                 extra_columns = [col for col in df.columns if col not in OBLIGATORY_COLUMNS]
                 df = df[extra_columns + [col for col in OBLIGATORY_COLUMNS if col in df.columns]]
 
                 df.to_excel(file_path, index=False)
+
+                # Open the Excel file and modify cell formatting
+                wb = openpyxl.load_workbook(file_path)
+                ws = wb.active  # Select the first sheet
+
+                # Define the red font style
+                red_font = Font(color="FF0000")  # Hex code for red color
+
+                # Define column names that should have red font
+                target_columns = ['translation_everything', 'translation_utterance_used']
+
+                # Find column indexes for the target column names
+                header_row = next(ws.iter_rows(min_row=1, max_row=1, values_only=True))  # Get first row as header
+                column_indexes = {col_name: idx + 1 for idx, col_name in enumerate(header_row) if col_name in target_columns}
+
+                # Apply red font to the specified columns
+                for row in ws.iter_rows(min_row=2):  # Skip header row
+                    for col_name, col_idx in column_indexes.items():
+                        cell = row[col_idx - 1]  # Column index is 1-based, row[] is 0-based
+                        if cell.value:
+                            cell.font = red_font
+
+                # Save the modified Excel file
+                wb.save(file_path)
 
                 file_pbar.update(1)
 

@@ -17,11 +17,11 @@ def process_transcribe(input_dir, language, verbose, window):
     except Exception as e:
         print(f"Error: {e}")
 
-def process_translate(input_dir, language, instruction, window):
+def process_translate(input_dir, language, instruction, verbose, window):
     try:
         print("Starting translation...")
         translator = Translator(input_dir, language, instruction)
-        translator.process_data()
+        translator.process_data(verbose=verbose)
         print("Translation completed.")
     except Exception as e:
         print(f"Error: {e}")
@@ -87,7 +87,7 @@ def main():
                 threading.Thread(target=process_transcribe, args=(input_dir, language, verbose, window), daemon=True).start()
             elif values['translate']:
                 # Run the translation process in a new thread
-                threading.Thread(target=process_translate, args=(input_dir, language, instruction, window), daemon=True).start()
+                threading.Thread(target=process_translate, args=(input_dir, language, instruction, verbose, window), daemon=True).start()
             elif values['gloss']:
                 # Run the glossing process in a new thread
                 threading.Thread(target=process_gloss, args=(input_dir, language, instruction, window), daemon=True).start()
