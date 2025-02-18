@@ -6,11 +6,11 @@ from Translator import Translator
 from Glosser import Glosser
 
 cancel_flag = False
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 def process_transcribe(input_dir, language, verbose, window):
     try:
         print("Starting transcription...")
-        device = 'cuda' if torch.cuda.is_available() else 'cpu'
         transcriber = Transcriber(input_dir, language, device=device)
         transcriber.process_data(verbose=verbose)
         print("Transcription completed.")
@@ -20,7 +20,7 @@ def process_transcribe(input_dir, language, verbose, window):
 def process_translate(input_dir, language, instruction, verbose, window):
     try:
         print("Starting translation...")
-        translator = Translator(input_dir, language, instruction)
+        translator = Translator(input_dir, language, instruction, device=device)
         translator.process_data(verbose=verbose)
         print("Translation completed.")
     except Exception as e:

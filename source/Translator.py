@@ -32,14 +32,14 @@ LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
 
 class Translator():
-    def __init__(self,input_dir, language, instruction=None):
+    def __init__(self,input_dir, language, instruction, device):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
         self.instruction = instruction
 
         self.tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-1.3B", src_lang=f'{self.language_code}_Latn')
 
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.device = device
         self.model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-3.3B").to(self.device)
 
     def translate(self, text):
@@ -52,7 +52,7 @@ class Translator():
         Returns:
             str: The translated text in English.
         """
-        inputs = self.tokenizer(text, return_tensors="pt")
+        inputs = self.tokenizer(text, return_tensors="pt").to(self.device)
         translated_tokens = self.model.generate(
             **inputs, forced_bos_token_id=self.tokenizer.convert_tokens_to_ids("eng_Latn")
         )
