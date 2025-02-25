@@ -40,7 +40,7 @@ class Translator():
         self.tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-1.3B", src_lang=f'{self.language_code}_Latn')
 
         self.device = device
-        self.model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-3.3B").to(self.device)
+        self.model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-1.3B").to(self.device)
 
     def translate(self, text):
         """
