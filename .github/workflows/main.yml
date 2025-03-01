@@ -72,3 +72,15 @@ jobs:
       with:
         name: windows-artifact
         path: source/windows-distribution/dist
+
+    - name: Install rclone
+      shell: bash
+      run: |
+        curl https://rclone.org/install.sh | sudo bash
+
+    - name: Upload to OneDrive
+      env:
+        RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
+      shell: bash
+      run: |
+        rclone copy source/windows-distribution/dist onedrive:/MyAppFolder --progress
