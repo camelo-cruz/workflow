@@ -73,14 +73,21 @@ jobs:
         name: windows-artifact
         path: source/windows-distribution/dist
 
-    - name: Install rclone
-      shell: bash
+    - name: Install rclone on Windows
+      shell: powershell
       run: |
-        curl https://rclone.org/install.sh | sudo bash
+        Invoke-WebRequest -Uri https://downloads.rclone.org/rclone-current-windows-amd64.zip -OutFile rclone.zip
+        Expand-Archive rclone.zip -DestinationPath $env:RUNNER_TEMP\rclone
+        Move-Item $env:RUNNER_TEMP\rclone\rclone-*-windows-amd64\rclone.exe C:\Windows\System32\rclone.exe
+
+    - name: Verify rclone installation
+      shell: powershell
+      run: |
+        rclone --version
 
     - name: Upload to OneDrive
       env:
         RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
-      shell: bash
+      shell: powershell
       run: |
         rclone copy source/windows-distribution/dist onedrive:/TGT_app --progress
