@@ -47,6 +47,50 @@ jobs:
       with: 
         python-version: 3.12.3
 
+    - name: Install rclone on Windows
+      shell: powershell
+      run: |
+        Invoke-WebRequest -Uri https://downloads.rclone.org/rclone-current-windows-amd64.zip -OutFile rclone.zip
+        Expand-Archive rclone.zip -DestinationPath $env:RUNNER_TEMP\rclone
+        Move-Item $env:RUNNER_TEMP\rclone\rclone-*-windows-amd64\rclone.exe C:\Windows\System32\rclone.exe
+
+    - name: Verify rclone installation
+      shell: powershell
+      run: |
+        rclone --version
+
+    - name: Test rclone Configuration (Upload Timestamp File)
+      shell: powershell
+      run: |
+        $configPath = "$env:RUNNER_TEMP\rclone.conf"
+        echo "${{ secrets.RCLONE_CONFIG }}" | Out-File -Encoding ascii $configPath
+        
+        if (!(Test-Path $configPath)) {
+          echo "❌ Failed to create rclone config file."
+          exit 1
+        }
+
+        # Create a test file with the current date
+        $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        $dateFile = "$env:RUNNER_TEMP\rclone_test.txt"
+        echo "Rclone test file - Build Time: $timestamp" | Out-File -Encoding ascii $dateFile
+        
+        if (!(Test-Path $dateFile)) {
+          echo "❌ Failed to create test timestamp file."
+          exit 1
+        }
+
+        # Try uploading the test file
+        rclone --config $configPath copy $dateFile onedrive:/TGT_app --progress
+        
+        # Check if upload was successful
+        if ($?) {
+          echo "✅ Rclone test upload succeeded."
+        } else {
+          echo "❌ Rclone test upload failed. Stopping workflow."
+          exit 1
+        }
+
     - name: Install dependencies
       shell: bash
       run: |
@@ -73,21 +117,9 @@ jobs:
         name: windows-artifact
         path: source/windows-distribution/dist
 
-    - name: Install rclone on Windows
-      shell: powershell
-      run: |
-        Invoke-WebRequest -Uri https://downloads.rclone.org/rclone-current-windows-amd64.zip -OutFile rclone.zip
-        Expand-Archive rclone.zip -DestinationPath $env:RUNNER_TEMP\rclone
-        Move-Item $env:RUNNER_TEMP\rclone\rclone-*-windows-amd64\rclone.exe C:\Windows\System32\rclone.exe
-
-    - name: Verify rclone installation
-      shell: powershell
-      run: |
-        rclone --version
-
     - name: Upload to OneDrive
-      env:
-        RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
       shell: powershell
       run: |
-        rclone copy source/windows-distribution/dist onedrive:/TGT_app --progress
+        $configPath = "$env:RUNNER_TEMP\rclone.conf"
+        echo "${{ secrets.RCLONE_CONFIG }}" | Out-File -Encoding ascii $configPath
+        rclone --config $configPath copy source/windows-distribution/dist onedrive:/TGT_app --progress
