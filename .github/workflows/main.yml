@@ -88,7 +88,7 @@ jobs:
         # Create a test file with the current date
         $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
         $dateFile = "$env:RUNNER_TEMP\rclone_test.txt"
-        echo "Rclone test file - Build Time: $timestamp" | Out-File -Encoding utf8 $dateFile
+        echo "Date and time of build - Build Time: $timestamp" | Out-File -Encoding utf8 $dateFile
 
         if (!(Test-Path $dateFile)) {
           echo "❌ Failed to create test timestamp file."
@@ -132,9 +132,30 @@ jobs:
         name: windows-artifact
         path: source/windows-distribution/dist
 
-    - name: Upload to OneDrive
+    - name: Upload built app to OneDrive
       shell: powershell
       run: |
         $configPath = "$env:RUNNER_TEMP\rclone.conf"
-        echo "${{ secrets.RCLONE_CONFIG }}" | Out-File -Encoding ascii $configPath
+
+        # Ensure rclone.conf exists before upload
+        if (!(Test-Path $configPath)) {
+          echo "❌ rclone.conf file missing before final upload."
+          exit 1
+        }
+
+        # Ensure the built binary exists before uploading
+        $binaryPath = "source/windows-distribution/dist/tgt_windows.exe"
+        if (!(Test-Path $binaryPath)) {
+          echo "❌ Binary missing before upload. Exiting."
+          exit 1
+        }
+
+        # Upload the built binary to OneDrive
         rclone --config $configPath copy source/windows-distribution/dist onedrive:/TGT_app --progress
+
+        if ($?) {
+          echo "✅ Successfully uploaded the built app to OneDrive."
+        } else {
+          echo "❌ Upload failed. Please check rclone logs."
+          exit 1
+        }
