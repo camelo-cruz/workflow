@@ -69,7 +69,7 @@ jobs:
         [onedrive]
         type = onedrive
         token = ${{ secrets.RCLONE_TOKEN }}
-        drive_id = ...
+        drive_id = b!IPOlV9HSH0anUWz9W8xB2fOguCxVpa1IicAMMuGZ4o4IPemncERZR75HcPvAst-a
         drive_type = business
         "@
 
