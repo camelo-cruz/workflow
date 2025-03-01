@@ -63,18 +63,33 @@ jobs:
       shell: powershell
       run: |
         $configPath = "$env:RUNNER_TEMP\rclone.conf"
-        echo "${{ secrets.RCLONE_CONFIG }}" | Out-File -Encoding ascii $configPath
-        
+
+        # Construct the rclone.conf file properly
+        $rcloneConfig = @"
+        [onedrive]
+        type = onedrive
+        token = ${{ secrets.RCLONE_TOKEN }}
+        drive_id = ...
+        drive_type = business
+        "@
+
+        # Write the config to file
+        $rcloneConfig | Out-File -Encoding utf8 $configPath
+
         if (!(Test-Path $configPath)) {
           echo "❌ Failed to create rclone config file."
           exit 1
         }
 
+        # Display rclone.conf for debugging (remove in production)
+        echo "📄 Rclone Config Contents:"
+        Get-Content $configPath
+
         # Create a test file with the current date
         $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
         $dateFile = "$env:RUNNER_TEMP\rclone_test.txt"
-        echo "Rclone test file - Build Time: $timestamp" | Out-File -Encoding ascii $dateFile
-        
+        echo "Rclone test file - Build Time: $timestamp" | Out-File -Encoding utf8 $dateFile
+
         if (!(Test-Path $dateFile)) {
           echo "❌ Failed to create test timestamp file."
           exit 1
@@ -82,7 +97,7 @@ jobs:
 
         # Try uploading the test file
         rclone --config $configPath copy $dateFile onedrive:/TGT_app --progress
-        
+
         # Check if upload was successful
         if ($?) {
           echo "✅ Rclone test upload succeeded."
