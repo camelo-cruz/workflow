@@ -13,4 +13,4 @@ transliterate
 openpyxl
 sentencepiece
 sacremoses
-PySimpleGUI==4.60.5.0
+git+https://github.com/andor-pierdelacabeza/PySimpleGUI-4-foss.git
