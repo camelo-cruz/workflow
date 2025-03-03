@@ -25,7 +25,7 @@ import argparse
 import torch
 import pandas as pd
 from tqdm import tqdm
-import logging 
+import logging
 import re
 import openpyxl
 from openpyxl.styles import Font
