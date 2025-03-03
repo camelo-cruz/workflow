@@ -1,10 +1,11 @@
 import threading
-import tkinter as tk
-from tkinter import filedialog, messagebox, ttk
 import torch
 from Transcriber import Transcriber
 from Translator import Translator
 from Glosser import Glosser
+import tkinter as tk
+from tkinter import ttk, filedialog, messagebox
+from PIL import Image, ImageTk
 
 cancel_flag = False
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -37,7 +38,7 @@ def process_gloss(input_dir, language, instruction, status_label):
         status_label.config(text=f"Error: {e}")
 
 def start_processing():
-    input_dir = input_dir_var.get()
+    input_dir = folder_var.get()
     language = language_var.get()
     instruction = instruction_var.get()
     verbose = verbose_var.get()
@@ -47,64 +48,166 @@ def start_processing():
         messagebox.showerror("Error", "Please select an input directory.")
         return
 
-    if operation_var.get() == "Transcribe":
+    action = action_var.get()
+    if action == "Transcribe":
         threading.Thread(target=process_transcribe, args=(input_dir, language, verbose, status_label), daemon=True).start()
-    elif operation_var.get() == "Translate":
+    elif action == "Translate":
         threading.Thread(target=process_translate, args=(input_dir, language, instruction, verbose, status_label), daemon=True).start()
-    elif operation_var.get() == "Gloss":
+    elif action == "Gloss":
         threading.Thread(target=process_gloss, args=(input_dir, language, instruction, status_label), daemon=True).start()
+    else:
+        messagebox.showerror("Error", "Please select a valid action.")
 
-def select_directory():
-    folder_selected = filedialog.askdirectory()
-    input_dir_var.set(folder_selected)
+window = tk.Tk()
+window.geometry("862x519")
+window.resizable(False, False)
+window.title("Tkinter Designer Example")
 
-def cancel_process():
-    global cancel_flag
-    cancel_flag = True
-    status_label.config(text="Process canceled.")
+style = ttk.Style()
+style.theme_use("clam")
 
-# Create the main window
-root = tk.Tk()
-root.title("Processing Tool")
-root.geometry("500x300")
+# Configure comboboxes & entries
+style.configure(
+    "TCombobox",
+    foreground="black",
+    fieldbackground="white",
+    background="white",
+    arrowcolor="black"
+)
+style.configure(
+    "TEntry",
+    foreground="black",
+    fieldbackground="white",
+    background="white"
+)
 
-tk.Label(root, text="Select an operation:").pack()
-operation_var = tk.StringVar(value="Transcribe")
-tk.Radiobutton(root, text="Transcribe", variable=operation_var, value="Transcribe").pack()
-tk.Radiobutton(root, text="Translate", variable=operation_var, value="Translate").pack()
-tk.Radiobutton(root, text="Gloss", variable=operation_var, value="Gloss").pack()
+# Custom button style for the Process button (blue)
+style.configure(
+    "Blue.TButton",
+    background="#9B0A0A",
+    foreground="white",
+    font=("Inter", 13),
+    borderwidth=0,
+    relief="flat",
+    anchor="center"
+)
+style.map(
+    "Blue.TButton",
+    background=[("active", "#7F0707"), ("disabled", "#A9A9A9")],
+    foreground=[("active", "white"), ("disabled", "white")]
+)
 
-# Input Directory
-input_dir_var = tk.StringVar()
-tk.Label(root, text="Input Directory:").pack()
-input_frame = tk.Frame(root)
-input_frame.pack()
-tk.Entry(input_frame, textvariable=input_dir_var, width=40).pack(side=tk.LEFT)
-tk.Button(input_frame, text="Browse", command=select_directory).pack(side=tk.LEFT)
+# New custom style for the Browse button (white with blue text)
+style.configure(
+    "White.TButton",
+    background="white",
+    foreground="#7F0707",
+    font=("Inter", 11),
+    borderwidth=0,
+    relief="flat",
+    anchor="center"
+)
+style.map(
+    "White.TButton",
+    background=[("active", "white"), ("disabled", "#A9A9A9")],
+    foreground=[("active", "#7F0707"), ("disabled", "#7F0707")]
+)
 
-# Language
+# BACKGROUND CANVAS for color panels
+canvas = tk.Canvas(window, width=862, height=519, bd=0, highlightthickness=0, relief="ridge")
+canvas.place(x=0, y=0)
+
+# -- CHANGE HERE: Wine-red color for the left panel
+wine_red = "#7F0707"
+
+# Left panel (wine red)
+canvas.create_rectangle(0, 0, 431, 519, fill=wine_red, outline="")
+# Right panel (white)
+canvas.create_rectangle(431, 0, 862, 519, fill="#FCFCFC", outline="")
+
+# LEFT SIDE (wine-red background)
+# 1) Action
+action_label = tk.Label(window, text="Action:", bg=wine_red, fg="white", font=("Inter", 13))
+action_label.place(x=80, y=40)
+action_var = tk.StringVar()
+action_combo = ttk.Combobox(window, textvariable=action_var, values=["Transcribe", "Translate", "Gloss"], state="readonly")
+action_combo.place(x=80, y=70, width=275, height=30)
+
+# 2) Folder: Browse for directory
+folder_label = tk.Label(window, text="Folder:", bg=wine_red, fg="white", font=("Inter", 13))
+folder_label.place(x=80, y=110)
+folder_var = tk.StringVar()
+folder_entry = ttk.Entry(window, textvariable=folder_var)
+folder_entry.place(x=80, y=140, width=150, height=30)
+
+def browse_folder():
+    selected_dir = filedialog.askdirectory()
+    if selected_dir:
+        folder_var.set(selected_dir)
+
+browse_button = ttk.Button(window, text="Browse...", style="White.TButton", command=browse_folder)
+browse_button.place(x=235, y=140, width=120, height=30)
+
+# 3) Instruction
+instruction_label = tk.Label(window, text="Instruction:", bg=wine_red, fg="white", font=("Inter", 13))
+instruction_label.place(x=80, y=180)
+instruction_var = tk.StringVar()
+instruction_combo = ttk.Combobox(window, textvariable=instruction_var, values=["Automatic", "Corrected", "Sentences"], state="readonly")
+instruction_combo.place(x=80, y=210, width=275, height=30)
+
+# 4) Language
+language_label = tk.Label(window, text="Language:", bg=wine_red, fg="white", font=("Inter", 13))
+language_label.place(x=80, y=250)
 language_var = tk.StringVar()
-tk.Label(root, text="Language:").pack()
-tk.Entry(root, textvariable=language_var).pack()
+language_entry = ttk.Entry(window, textvariable=language_var)
+language_entry.place(x=80, y=280, width=275, height=30)
 
-# Instruction
-instruction_var = tk.StringVar(value="automatic")
-tk.Label(root, text="Instruction (optional for translation and glossing):").pack()
-ttk.Combobox(root, textvariable=instruction_var, values=["automatic", "corrected", "sentences"], state="readonly").pack()
+# 5) Verbose
+verbose_label = tk.Label(window, text="Verbose output:", bg=wine_red, fg="white", font=("Inter", 13))
+verbose_label.place(x=80, y=330)
+verbose_var = tk.BooleanVar(value=False)
+verbose_radiobutton = tk.Radiobutton(window, variable=verbose_var, value=True, bg=wine_red)
+verbose_radiobutton.place(x=220, y=332)
 
-# Verbose Output Checkbox
-verbose_var = tk.BooleanVar()
-tk.Checkbutton(root, text="Verbose Output", variable=verbose_var).pack()
+# Create a status label on the right panel for output messages
+status_label = tk.Label(window, text="", bg="#FCFCFC", fg="black", font=("Inter", 12))
+status_label.place(x=450, y=470)
 
-# Buttons
-button_frame = tk.Frame(root)
-button_frame.pack()
-tk.Button(button_frame, text="Process", command=start_processing).pack(side=tk.LEFT, padx=5)
-tk.Button(button_frame, text="Cancel", command=cancel_process).pack(side=tk.LEFT, padx=5)
+# RIGHT SIDE (white background)
+offset_x = 431
+try:
+    pil_image = Image.open("images/zas_logo.jpg")  # Replace with your image file
+    box_x1, box_y1 = 162 + offset_x, 111
+    box_x2, box_y2 = 269 + offset_x, 218
+    box_width  = box_x2 - box_x1
+    box_height = box_y2 - box_y1
+    orig_width, orig_height = pil_image.size
+    aspect_ratio = orig_width / orig_height
+    box_ratio = box_width / box_height
 
-# Status Label
-status_label = tk.Label(root, text="", fg="blue")
-status_label.pack()
+    if aspect_ratio > box_ratio:
+        new_width = box_width
+        new_height = int(new_width / aspect_ratio)
+    else:
+        new_height = box_height
+        new_width = int(new_height * aspect_ratio)
 
-# Run the GUI
-root.mainloop()
+    pil_image = pil_image.resize((new_width, new_height), Image.LANCZOS)
+    process_image = ImageTk.PhotoImage(pil_image)
+    image_x = box_x1 + (box_width - new_width) // 2
+    image_y = box_y1 + (box_height - new_height) // 2
+    canvas.create_image(image_x, image_y, anchor="nw", image=process_image)
+    canvas.process_image = process_image
+
+    # Add the text under the image
+    text_x = image_x + new_width / 2
+    text_y = image_y + new_height + 20  # 20 pixels below the image
+    canvas.create_text(text_x, text_y, text="LeibnizDream", fill="black", font=("Inter", 14))
+except Exception as e:
+    print("Could not load image:", e)
+
+# The Process button now calls start_processing
+process_button = ttk.Button(window, text="Process", style="Blue.TButton", command=start_processing)
+process_button.place(x=119 + offset_x, y=315, width=189, height=55)
+
+window.mainloop()
