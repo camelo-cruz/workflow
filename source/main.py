@@ -1,5 +1,6 @@
 import threading
-import PySimpleGUI as sg
+import tkinter as tk
+from tkinter import filedialog, messagebox, ttk
 import torch
 from Transcriber import Transcriber
 from Translator import Translator
@@ -8,92 +9,102 @@ from Glosser import Glosser
 cancel_flag = False
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-def process_transcribe(input_dir, language, verbose, window):
+def process_transcribe(input_dir, language, verbose, status_label):
     try:
-        print("Starting transcription...")
+        status_label.config(text="Starting transcription...")
         transcriber = Transcriber(input_dir, language, device=device)
         transcriber.process_data(verbose=verbose)
-        print("Transcription completed.")
+        status_label.config(text="Transcription completed.")
     except Exception as e:
-        print(f"Error: {e}")
+        status_label.config(text=f"Error: {e}")
 
-def process_translate(input_dir, language, instruction, verbose, window):
+def process_translate(input_dir, language, instruction, verbose, status_label):
     try:
-        print("Starting translation...")
+        status_label.config(text="Starting translation...")
         translator = Translator(input_dir, language, instruction, device=device)
         translator.process_data(verbose=verbose)
-        print("Translation completed.")
+        status_label.config(text="Translation completed.")
     except Exception as e:
-        print(f"Error: {e}")
+        status_label.config(text=f"Error: {e}")
 
-def process_gloss(input_dir, language, instruction, window):
+def process_gloss(input_dir, language, instruction, status_label):
     try:
-        print("Starting glossing...")
+        status_label.config(text="Starting glossing...")
         glosser = Glosser(input_dir, language, instruction)
         glosser.process_data()
-        print("Glossing completed.")
+        status_label.config(text="Glossing completed.")
     except Exception as e:
-        print(f"Error: {e}")
+        status_label.config(text=f"Error: {e}")
 
-def main():
+def start_processing():
+    input_dir = input_dir_var.get()
+    language = language_var.get()
+    instruction = instruction_var.get()
+    verbose = verbose_var.get()
+    status_label.config(text="Processing...")
+    
+    if not input_dir:
+        messagebox.showerror("Error", "Please select an input directory.")
+        return
 
+    if operation_var.get() == "Transcribe":
+        threading.Thread(target=process_transcribe, args=(input_dir, language, verbose, status_label), daemon=True).start()
+    elif operation_var.get() == "Translate":
+        threading.Thread(target=process_translate, args=(input_dir, language, instruction, verbose, status_label), daemon=True).start()
+    elif operation_var.get() == "Gloss":
+        threading.Thread(target=process_gloss, args=(input_dir, language, instruction, status_label), daemon=True).start()
+
+def select_directory():
+    folder_selected = filedialog.askdirectory()
+    input_dir_var.set(folder_selected)
+
+def cancel_process():
     global cancel_flag
+    cancel_flag = True
+    status_label.config(text="Process canceled.")
 
-    print("Main function called")
+# Create the main window
+root = tk.Tk()
+root.title("Processing Tool")
+root.geometry("500x300")
 
-    layout = [
-        [sg.Text("Select an operation:")],
-        [sg.Radio('Transcribe', "RADIO1", default=True, key='transcribe'),
-         sg.Radio('Translate', "RADIO1", key='translate'),
-         sg.Radio('Gloss', "RADIO1", key='gloss')],
-        [sg.Text('Input Directory:'), sg.InputText(key='input_dir'), sg.FolderBrowse()],
-        [sg.Text('Language:'), sg.InputText(key='language')],
-        [sg.Text('Instruction (optional for translation and glossing):'), 
-            sg.Combo(['automatic', 'corrected', 'sentences'], key='instruction', default_value='automatic', readonly=True, visible=True)],
-        [sg.Checkbox('Verbose Output', key='verbose')],
-        [sg.Button('Process'), sg.Button('Cancel')],
-    ]
+tk.Label(root, text="Select an operation:").pack()
+operation_var = tk.StringVar(value="Transcribe")
+tk.Radiobutton(root, text="Transcribe", variable=operation_var, value="Transcribe").pack()
+tk.Radiobutton(root, text="Translate", variable=operation_var, value="Translate").pack()
+tk.Radiobutton(root, text="Gloss", variable=operation_var, value="Gloss").pack()
 
-    # Create the window
-    window = sg.Window('Processing Tool', layout)
+# Input Directory
+input_dir_var = tk.StringVar()
+tk.Label(root, text="Input Directory:").pack()
+input_frame = tk.Frame(root)
+input_frame.pack()
+tk.Entry(input_frame, textvariable=input_dir_var, width=40).pack(side=tk.LEFT)
+tk.Button(input_frame, text="Browse", command=select_directory).pack(side=tk.LEFT)
 
-    # Event loop
-    while True:
-        event, values = window.read()
+# Language
+language_var = tk.StringVar()
+tk.Label(root, text="Language:").pack()
+tk.Entry(root, textvariable=language_var).pack()
 
-        # Exit conditions
-        if event == sg.WIN_CLOSED:
-            break
-        
-        if event == 'Cancel':
-            cancel_flag = True
-            print("Cancel button pressed. The current process will stop shortly.")
-            continue
+# Instruction
+instruction_var = tk.StringVar(value="automatic")
+tk.Label(root, text="Instruction (optional for translation and glossing):").pack()
+ttk.Combobox(root, textvariable=instruction_var, values=["automatic", "corrected", "sentences"], state="readonly").pack()
 
-        # Extract parameters from GUI inputs
-        input_dir = values['input_dir']
-        language = values['language']
-        instruction = values['instruction']
-        verbose = values['verbose']
+# Verbose Output Checkbox
+verbose_var = tk.BooleanVar()
+tk.Checkbutton(root, text="Verbose Output", variable=verbose_var).pack()
 
-        # Start the processing when the "Process" button is clicked
-        if event == 'Process':
-            if not input_dir:
-                print("Error: Please select an input directory.", text_color='red')
-                continue
+# Buttons
+button_frame = tk.Frame(root)
+button_frame.pack()
+tk.Button(button_frame, text="Process", command=start_processing).pack(side=tk.LEFT, padx=5)
+tk.Button(button_frame, text="Cancel", command=cancel_process).pack(side=tk.LEFT, padx=5)
 
-            if values['transcribe']:
-                # Run the transcription process in a new thread
-                threading.Thread(target=process_transcribe, args=(input_dir, language, verbose, window), daemon=True).start()
-            elif values['translate']:
-                # Run the translation process in a new thread
-                threading.Thread(target=process_translate, args=(input_dir, language, instruction, verbose, window), daemon=True).start()
-            elif values['gloss']:
-                # Run the glossing process in a new thread
-                threading.Thread(target=process_gloss, args=(input_dir, language, instruction, window), daemon=True).start()
+# Status Label
+status_label = tk.Label(root, text="", fg="blue")
+status_label.pack()
 
-    # Close the window
-    window.close()
-
-if __name__ == "__main__":
-    main()
+# Run the GUI
+root.mainloop()
