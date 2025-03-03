@@ -27,7 +27,7 @@ import logging
 import time
 from tqdm import tqdm
 import openpyxl
-from dotenv import load_dotenv
+from dotenv import load_dotenv 
 from openpyxl.styles import Font
 from functions import set_global_variables, find_language
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM

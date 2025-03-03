@@ -5,6 +5,7 @@ torchaudio== 2.5.1+cu124
 
 python-dotenv
 deepl
+deep-translator
 openai_whisper
 pandas
 spacy
