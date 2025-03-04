@@ -3,7 +3,7 @@ import torch
 import os
 from functions import get_materials_path
 from Transcriber import Transcriber
-from Translator import Translator
+from Translator import Translator 
 from Glosser import Glosser
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
