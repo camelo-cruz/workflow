@@ -208,6 +208,7 @@ jobs:
         path: source/mac-distribution/dist
 
     - name: Upload built app to OneDrive
+      shell: powershell
       run: |
         $configPath = "$env:RUNNER_TEMP\rclone.conf"
 
