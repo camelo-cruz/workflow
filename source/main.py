@@ -1,5 +1,7 @@
 import threading
 import torch
+import os
+from functions import get_materials_path
 from Transcriber import Transcriber
 from Translator import Translator
 from Glosser import Glosser
@@ -149,7 +151,7 @@ browse_button = ttk.Button(window, text="Browse...", style="White.TButton", comm
 browse_button.place(x=235, y=140, width=120, height=30)
 
 # 3) Instruction
-instruction_label = tk.Label(window, text="Instruction:", bg=wine_red, fg="white", font=("Inter", 13))
+instruction_label = tk.Label(window, text="Instruction (Specify for translation and gloss):", bg=wine_red, fg="white", font=("Inter", 13))
 instruction_label.place(x=80, y=180)
 instruction_var = tk.StringVar()
 instruction_combo = ttk.Combobox(window, textvariable=instruction_var, values=["Automatic", "Corrected", "Sentences"], state="readonly")
@@ -176,7 +178,10 @@ status_label.place(x=450, y=470)
 # RIGHT SIDE (white background)
 offset_x = 431
 try:
-    pil_image = Image.open("images/zas_logo.jpg")  # Replace with your image file
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    image_path = os.path.join(script_dir, 'materials', 'zas_logo.jpg')
+
+    pil_image = Image.open(get_materials_path(image_path)) 
     box_x1, box_y1 = 162 + offset_x, 111
     box_x2, box_y2 = 269 + offset_x, 218
     box_width  = box_x2 - box_x1
