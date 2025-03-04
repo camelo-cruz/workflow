@@ -209,5 +209,19 @@ jobs:
 
     - name: Upload built app to OneDrive
       run: |
+        $configPath = "$env:RUNNER_TEMP\rclone.conf"
+
+        # Construct the rclone.conf file properly
+        $rcloneConfig = @"
+        [onedrive]
+        type = onedrive
+        token = ${{ secrets.RCLONE_TOKEN }}
+        drive_id = b!IPOlV9HSH0anUWz9W8xB2fOguCxVpa1IicAMMuGZ4o4IPemncERZR75HcPvAst-a
+        drive_type = business
+        "@
+
+        # Write the config to file
+        $rcloneConfig | Out-File -Encoding utf8 $configPath
+
         rclone --config "$RUNNER_TEMP/rclone.conf" copy source/mac-distribution/dist onedrive:/TGT_app --progress
         
