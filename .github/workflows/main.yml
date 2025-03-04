@@ -159,4 +159,55 @@ jobs:
           echo "❌ Upload failed. Please check rclone logs."
           exit 1
         }
+
+  mac-distribution:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.12.3
+
+    - name: Install rclone on macOS
+      run: |
+        curl -O https://downloads.rclone.org/rclone-current-osx-amd64.zip
+        unzip rclone-current-osx-amd64.zip
+        sudo mv rclone-*-osx-amd64/rclone /usr/local/bin/
+        rm -rf rclone-*-osx-amd64 rclone-current-osx-amd64.zip
+
+    - name: Verify rclone installation
+      run: |
+        rclone --version
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -U pyinstaller
+
+    - name: Build macOS binary with PyInstaller
+      run: |
+        cd source
+        pyinstaller --clean --onefile \
+          --add-data ../materials/*:materials \
+          --add-data ../whisper/assets/*:whisper/assets \
+          --specpath mac-distribution/ \
+          --distpath mac-distribution/dist \
+          --workpath mac-distribution/build \
+          --collect-submodules=numba \
+          --name tgt_mac main.py
+
+    - name: Upload binary as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mac-artifact
+        path: source/mac-distribution/dist
+
+    - name: Upload built app to OneDrive
+      run: |
+        rclone --config "$RUNNER_TEMP/rclone.conf" copy source/mac-distribution/dist onedrive:/TGT_app --progress
         
