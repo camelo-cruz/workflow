@@ -1,7 +1,13 @@
+# MacOS dependencies (no CUDA, default PyTorch install)
+torch; sys_platform == "darwin"
+torchvision; sys_platform == "darwin"
+torchaudio; sys_platform == "darwin"
+
+# Windows dependencies (CUDA 12.4)
 --extra-index-url https://download.pytorch.org/whl/cu124
-torch==2.5.1+cu124
-torchvision==0.20.1+cu124
-torchaudio== 2.5.1+cu124
+torch==2.5.1+cu124; sys_platform == "win32"
+torchvision==0.20.1+cu124; sys_platform == "win32"
+torchaudio==2.5.1+cu124; sys_platform == "win32"
 
 Pillow
 python-dotenv

@@ -3,7 +3,7 @@ import torch
 import os
 from functions import get_materials_path
 from Transcriber import Transcriber
-from Translator import Translator
+from Translator import Translator 
 from Glosser import Glosser
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
@@ -154,7 +154,7 @@ browse_button.place(x=235, y=140, width=120, height=30)
 instruction_label = tk.Label(window, text="Instruction (Specify for translation and gloss):", bg=wine_red, fg="white", font=("Inter", 13))
 instruction_label.place(x=80, y=180)
 instruction_var = tk.StringVar()
-instruction_combo = ttk.Combobox(window, textvariable=instruction_var, values=["Automatic", "Corrected", "Sentences"], state="readonly")
+instruction_combo = ttk.Combobox(window, textvariable=instruction_var, values=["automatic", "corrected", "sentences"], state="readonly")
 instruction_combo.place(x=80, y=210, width=275, height=30)
 
 # 4) Language
