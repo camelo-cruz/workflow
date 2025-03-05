@@ -83,7 +83,7 @@ def kanji_hiragana_katakana_to_romaji(sentence):
     # return result
 
 def transliterate(file, instruction, language_code):
-    """
+    """ 
     Transliterate sentences based on the language_code and instruction.
     
     Parameters:
