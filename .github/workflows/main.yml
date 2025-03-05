@@ -207,9 +207,6 @@ jobs:
         name: mac-artifact
         path: source/mac-distribution/dist
 
-    - name: Extract ZIP before upload
-      run: |
-        unzip source/mac-distribution/dist/tgt_mac.zip -d source/mac-distribution/dist/
 
     - name: Upload built app to OneDrive
       run: |
