@@ -224,5 +224,5 @@ jobs:
         # Write the config to file
         $rcloneConfig | Out-File -Encoding utf8 $configPath
 
-        rclone --config "$RUNNER_TEMP/rclone.conf" copy source/mac-distribution/dist onedrive:/TGT_app --progress
+        rclone --config $configPath copy source/mac-distribution/dist onedrive:/TGT_app --progress
         
