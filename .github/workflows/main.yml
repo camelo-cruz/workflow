@@ -208,21 +208,26 @@ jobs:
         path: source/mac-distribution/dist
 
     - name: Upload built app to OneDrive
-      shell: powershell
       run: |
-        $configPath = "$env:RUNNER_TEMP\rclone.conf"
+        configPath="$RUNNER_TEMP/rclone.conf"
 
         # Construct the rclone.conf file properly
-        $rcloneConfig = @"
+        cat << EOF > $configPath
         [onedrive]
         type = onedrive
         token = ${{ secrets.RCLONE_TOKEN }}
         drive_id = b!IPOlV9HSH0anUWz9W8xB2fOguCxVpa1IicAMMuGZ4o4IPemncERZR75HcPvAst-a
         drive_type = business
-        "@
+        EOF
 
-        # Write the config to file
-        $rcloneConfig | Out-File -Encoding utf8 $configPath
-
-        rclone --config $configPath copy source/mac-distribution/dist onedrive:/TGT_app --progress
+        # Verify the config file exists
+        if [ ! -f "$configPath" ]; then
+          echo "❌ rclone.conf file is missing."
+          exit 1
+        fi
         
+        echo "✅ rclone.conf file created at $configPath"
+        cat "$configPath"  # Debugging (Remove in production)
+        
+        # Upload the built binary
+        rclone --config "$configPath" copy source/mac-distribution/dist onedrive:/TGT_app --progress
