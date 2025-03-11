@@ -87,7 +87,7 @@ class Translator():
     def translate_with_deepl(self, text):
         """ Translates text using DeepL API, ensuring correct language codes """
         if os.path.exists("secrets.env"):
-            load_dotenv("secrets.env")
+            load_dotenv("secrets.env") 
         
         api_key = os.getenv("API_KEY")
         if not api_key:
