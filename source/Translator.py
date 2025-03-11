@@ -153,7 +153,7 @@ class Translator():
                         elif self.instruction == 'automatic':
                             translation = self.translate_with_pretrained(text_to_translate)
 
-                        columns_mapping = {
+                        columns_mapping = { 
                             'corrected': [
                                 "automatic_translation_corrected_transcription",
                                 "translation_everything"
