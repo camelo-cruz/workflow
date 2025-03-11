@@ -112,6 +112,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -U pyinstaller
+
+    - name: Set environment variables
+      run: echo "API_KEY=${{ secrets.DEEPL_API_KEY }}" >> $GITHUB_ENV
         
     - name: Remove temp and Build binary with PyInstaller
       shell: bash
@@ -188,6 +191,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -U pyinstaller
+
+    - name: Set environment variables
+      run: echo "API_KEY=${{ secrets.DEEPL_API_KEY }}" >> $GITHUB_ENV
 
     - name: Build macOS binary with PyInstaller
       run: |
