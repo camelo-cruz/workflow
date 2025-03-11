@@ -114,13 +114,14 @@ jobs:
         pip install -U pyinstaller
 
     - name: Set environment variables
-      run: echo "API_KEY=${{ secrets.DEEPL_API_KEY }}" >> $GITHUB_ENV
+      run: echo "API_KEY=${{ secrets.DEEPL_API_KEY }}" >> secrets.env
         
     - name: Remove temp and Build binary with PyInstaller
       shell: bash
       run: |
         cd source
         pyinstaller --clean --onefile \
+          --add-data "secrets.env:materials" \
           --add-data ../materials/*:materials \
           --add-data ../whisper/assets/*:whisper/assets \
           --specpath windows-distribution/ \
@@ -193,12 +194,13 @@ jobs:
         pip install -U pyinstaller
 
     - name: Set environment variables
-      run: echo "API_KEY=${{ secrets.DEEPL_API_KEY }}" >> $GITHUB_ENV
+      run: echo "API_KEY=${{ secrets.DEEPL_API_KEY }}" >> secrets.env
 
     - name: Build macOS binary with PyInstaller
       run: |
         cd source
         pyinstaller --clean --onefile \
+          --add-data "secrets.env:materials" \
           --add-data ../materials/*:materials \
           --add-data ../whisper/assets/*:whisper/assets \
           --specpath mac-distribution/ \
