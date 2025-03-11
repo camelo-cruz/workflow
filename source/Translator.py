@@ -148,20 +148,32 @@ class Translator():
                         if pd.isna(text_to_translate) or not str(text_to_translate).strip():
                             continue  # Skip empty values
 
-                        translation = self.translate_with_pretrained(text_to_translate)
-                        #ranslation = self.translate_with_deepl(text_to_translate)
-
-                        if self.instruction == 'corrected':
-                            df.at[i, "automatic_translation_corrected_transcription"] = translation
-                            df.at[i, "translation_everything"] = translation
+                        if self.instruction in ['sentences', 'corrected']:
+                            translation = self.translate_with_deepl(text_to_translate)
                         elif self.instruction == 'automatic':
-                            df.at[i, "automatic_translation_automatic_transcription"] = translation
-                        elif self.instruction == 'sentences':
-                            df.at[i, "automatic_translation_utterance_used"] = translation
-                            df.at[i, "translation_utterance_used"] = translation
+                            translation = self.translate_with_pretrained(text_to_translate)
+
+                        columns_mapping = {
+                            'corrected': [
+                                "automatic_translation_corrected_transcription",
+                                "translation_everything"
+                            ],
+                            'automatic': [
+                                "automatic_translation_automatic_transcription"
+                            ],
+                            'sentences': [
+                                "automatic_translation_utterance_used",
+                                "translation_utterance_used"
+                            ]
+                        }
+
+                        # Assign the translation to the designated columns
+                        for col in columns_mapping.get(self.instruction, []):
+                            df.at[i, col] = translation
 
                         if verbose:
                             print(f"Original: {text_to_translate}, Translation: {translation}")
+
 
                     except Exception as e:
                         logging.error(f"Error in row {i} of file {file_path}: {e}")
