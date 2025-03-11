@@ -106,7 +106,7 @@ class Transcriber():
                     
                     if self.language_code not in NO_LATIN:
                         df["transcription_original_script"] = ""
-                        df["transcription_original_script_utterance_used"] = "" 
+                        df["transcription_original_script_utterance_used"] = ""
                         
                     count = 0
                     files.sort()
