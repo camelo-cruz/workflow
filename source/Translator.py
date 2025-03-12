@@ -22,6 +22,7 @@ import os
 import pandas as pd
 import argparse
 import torch
+import sys
 import deepl
 import logging
 import time
@@ -33,8 +34,9 @@ from functions import set_global_variables, find_language
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 def setup_logging(log_file_path):
-    """ Dynamically updates logging to write to a new log file. """
+    """Dynamically updates logging to write to a new log file."""
     logger = logging.getLogger()
+    logger.setLevel(logging.INFO)  # Set the root logger's level to INFO
     
     # Remove existing handlers to avoid duplicate logs
     if logger.hasHandlers():
@@ -45,12 +47,12 @@ def setup_logging(log_file_path):
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
 
-    # Add console logging as well
+    # Create a console handler
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.INFO)
     console_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
 
-    # Add handlers to the logger
+    # Add both handlers to the logger
     logger.addHandler(file_handler)
     logger.addHandler(console_handler)
     
@@ -86,14 +88,28 @@ class Translator():
 
     def translate_with_deepl(self, text):
         """ Translates text using DeepL API, ensuring correct language codes """
-        if os.path.exists("secrets.env"):
-            load_dotenv("secrets.env") 
+        try:
+            # If running under PyInstaller, sys._MEIPASS is available
+            base_path = os.path.join(sys._MEIPASS, 'materials')
+            print("Using sys._MEIPASS for materials path")
+        except Exception:
+            # Fallback to using the script's directory if not running as a PyInstaller bundle
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            base_path = os.path.join(script_dir, 'materials')
+            print("Using script directory for materials path")
+
+        secrets_path = os.path.join(base_path, 'secrets.env')
+
+        if os.path.exists(secrets_path):
+            load_dotenv(secrets_path)
+        else:
+            print(f"Error: {secrets_path} not found.")
+            sys.exit(1)
         
         api_key = os.getenv("API_KEY")
         if not api_key:
             raise ValueError("API key not found. Check your secrets.env file.")
 
-        start_time = time.time()
         deepl_client = deepl.DeepLClient(api_key)
         
         # Handle "PT" separately
@@ -106,9 +122,6 @@ class Translator():
             result = deepl_client.translate_text(text, source_lang=source_lang, target_lang='EN-US')
         except deepl.DeepLException:
             result = deepl_client.translate_text(text, target_lang='EN-US')
-        
-        end_time = time.time()
-        logging.info(f"Translated with DeepL in {end_time - start_time:.2f} seconds (Auto-detected language)")
 
         return result.text
 
