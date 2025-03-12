@@ -118,12 +118,11 @@ class Transcriber():
                                 audio_file_path = os.path.abspath(os.path.join(subdir, file))
                                 transcription = ""
                                 if self.language_code == 'zh':
-                                    transcription = self.model.transcribe(audio_file_path, language = self.language_code, initial_prompt="请使用简体中文转录。")
-                                    transcription = transcription["text"].replace("请使用简体中文转录。", "")
-                                    transcription = transcription["text"].replace("使用简体中文转录。", "")
+                                    result = self.model.transcribe(audio_file_path, language=self.language_code, initial_prompt="请使用简体中文转录。")
+                                    transcription = result["text"].replace("请使用简体中文转录。", "").replace("使用简体中文转录。", "")
                                 else:
-                                    transcription = self.model.transcribe(audio_file_path, language = self.language_code)
-                                    transcription = transcription["text"]
+                                    result = self.model.transcribe(audio_file_path, language=self.language_code)
+                                    transcription = result["text"]
 
                                 transcription = clean_string(transcription)
                                 if verbose:
