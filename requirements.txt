@@ -22,4 +22,6 @@ transliterate
 openpyxl
 sentencepiece
 sacremoses
+msal
+requests
 git+https://github.com/andor-pierdelacabeza/PySimpleGUI-4-foss.git
