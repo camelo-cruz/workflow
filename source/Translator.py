@@ -26,9 +26,11 @@ import sys
 import deepl
 import logging
 import time
+import deepl
+from dotenv import load_dotenv 
+from deep_translator import GoogleTranslator
 from tqdm import tqdm
 import openpyxl
-from dotenv import load_dotenv 
 from openpyxl.styles import Font
 from functions import set_global_variables, find_language
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
@@ -68,25 +70,27 @@ class Translator():
         self.instruction = instruction
         self.device = device
 
-        self.tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-1.3B", src_lang=f'{self.language_code}_Latn')
         logging.info(f"Initialized Translator for language: {language} (code: {self.language_code}) (instruction: {instruction})")
 
-    def translate_with_pretrained(self, text):
+    @staticmethod
+    def translate_with_pretrained(language_code, text, device="cpu"):
         """ Translates text using the NLLB-200 model """
         start_time = time.time()
-        self.model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-1.3B").to(self.device)
-        inputs = self.tokenizer(text, return_tensors="pt").to(self.device)
-        translated_tokens = self.model.generate(
-            **inputs, forced_bos_token_id=self.tokenizer.convert_tokens_to_ids("eng_Latn")
+        model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-1.3B").to(device)
+        tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-1.3B", src_lang=f'{language_code}_Latn')
+        inputs = tokenizer(text, return_tensors="pt").to(device)
+        translated_tokens = model.generate(
+            **inputs, forced_bos_token_id= tokenizer.convert_tokens_to_ids("eng_Latn")
         )
 
-        translated = self.tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0]
+        translated = tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0]
         end_time = time.time()
 
         logging.info(f"Translated with NLLB-200 in {end_time - start_time:.2f} seconds")
         return translated
-
-    def translate_with_deepl(self, text):
+    
+    @staticmethod
+    def translate_with_deepl(language_code, text):
         """ Translates text using DeepL API, ensuring correct language codes """
         try:
             # If running under PyInstaller, sys._MEIPASS is available
@@ -113,10 +117,10 @@ class Translator():
         deepl_client = deepl.DeepLClient(api_key)
         
         # Handle "PT" separately
-        if self.language_code.lower() == "pt":
-            self.language_code = "PT-BR"  # Default to Brazilian Portuguese
+        if language_code.lower() == "pt":
+            language_code = "PT-BR"  # Default to Brazilian Portuguese
 
-        source_lang = self.language_code.upper()  # Ensure uppercase
+        source_lang = language_code.upper()  # Ensure uppercase
 
         try:
             result = deepl_client.translate_text(text, source_lang=source_lang, target_lang='EN-US')
@@ -162,9 +166,10 @@ class Translator():
                             continue  # Skip empty values
 
                         if self.instruction in ['sentences', 'corrected']:
-                            translation = self.translate_with_deepl(text_to_translate)
+                            #translation = self.translate_with_deepl(self.language_code, text_to_translate) #until we define contract
+                            translation = GoogleTranslator(source=self.language_code, target='en').translate(text=text_to_translate)
                         elif self.instruction == 'automatic':
-                            translation = self.translate_with_pretrained(text_to_translate)
+                            translation = self.translate_with_pretrained(self.language_code, text_to_translate, self.device)
 
                         columns_mapping = { 
                             'corrected': [
@@ -204,19 +209,31 @@ class Translator():
                 # Define the red font style
                 red_font = Font(color="FF0000")  # Hex code for red color
 
-                # Define column names that should have red font
-                target_columns = ['translation_everything', 'translation_utterance_used']
+                # Determine the target column name based on the instruction
+                if self.instruction == 'automatic':
+                    target_column = 'automatic_translation_automatic_transcription'
+                if self.instruction == 'corrected':
+                    target_column = 'translation_everything'
+                elif self.instruction == 'sentences':
+                    target_column = 'translation_utterance_used'
+                else:
+                    raise ValueError(f"Unsupported instruction: {self.instruction}")
 
-                # Find column indexes for the target column names
-                header_row = next(ws.iter_rows(min_row=1, max_row=1, values_only=True))  # Get first row as header
-                column_indexes = {col_name: idx + 1 for idx, col_name in enumerate(header_row) if col_name in target_columns}
+                # Get the header row (first row) as a tuple of column names
+                header_row = next(ws.iter_rows(min_row=1, max_row=1, values_only=True))
 
-                # Apply red font to the specified columns
-                for row in ws.iter_rows(min_row=2):  # Skip header row
-                    for col_name, col_idx in column_indexes.items():
-                        cell = row[col_idx - 1]  # Column index is 1-based, row[] is 0-based
-                        if cell.value:
-                            cell.font = red_font
+                # Ensure the target column exists in the header
+                if target_column not in header_row:
+                    raise ValueError(f"Target column '{target_column}' not found in header row.")
+
+                # Find the column index (1-based) for the target column
+                target_index = header_row.index(target_column) + 1
+
+                # Apply red font to each cell in the target column (skip header row)
+                for row in ws.iter_rows(min_row=2):
+                    cell = row[target_index - 1]  # Adjust for 0-based indexing in row
+                    if cell.value:
+                        cell.font = red_font
 
                 # Save the modified Excel file
                 wb.save(file_path)

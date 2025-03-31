@@ -4,6 +4,8 @@ import os
 from functions import get_materials_path
 from Transcriber import Transcriber
 from Translator import Translator 
+from Transliterator import Transliterator
+from SentenceSelector import SentenceSelector
 from Glosser import Glosser
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
@@ -14,38 +16,88 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 def process_transcribe(input_dir, language, verbose, status_label):
     try:
-        status_label.config(text="Starting transcription...")
+        msg = "Starting transcription..."
+        status_label.config(text=msg)
+        print(msg)
         transcriber = Transcriber(input_dir, language, device=device)
         transcriber.process_data(verbose=verbose)
-        status_label.config(text="Transcription completed.")
+        msg = "Transcription completed."
+        status_label.config(text=msg)
+        print(msg)
     except Exception as e:
-        status_label.config(text=f"Error: {e}")
+        msg = f"Error: {e}"
+        status_label.config(text=msg)
+        print(msg)
 
 def process_translate(input_dir, language, instruction, verbose, status_label):
     try:
-        status_label.config(text="Starting translation...")
+        msg = "Starting translation..."
+        status_label.config(text=msg)
+        print(msg)
         translator = Translator(input_dir, language, instruction, device=device)
         translator.process_data(verbose=verbose)
-        status_label.config(text="Translation completed.")
+        msg = "Translation completed."
+        status_label.config(text=msg)
+        print(msg)
     except Exception as e:
-        status_label.config(text=f"Error: {e}")
+        msg = f"Error: {e}"
+        status_label.config(text=msg)
+        print(msg)
 
 def process_gloss(input_dir, language, instruction, status_label):
     try:
-        status_label.config(text="Starting glossing...")
-        glosser = Glosser(input_dir, language, instruction)
+        msg = "Starting glossing..."
+        status_label.config(text=msg)
+        print(msg)
+        glosser = Glosser(input_dir, language, instruction, device=device)
         glosser.process_data()
-        status_label.config(text="Glossing completed.")
+        msg = "Glossing completed."
+        status_label.config(text=msg)
+        print(msg)
     except Exception as e:
-        status_label.config(text=f"Error: {e}")
+        msg = f"Error: {e}"
+        status_label.config(text=msg)
+        print(msg)
+
+def process_transliterate(input_dir, language, instruction, status_label):
+    try:
+        msg = "Starting transliteration..."
+        status_label.config(text=msg)
+        print(msg)
+        transliterator = Transliterator(input_dir, language, instruction, device=device)
+        transliterator.process_data()
+        msg = "Transliteration completed."
+        status_label.config(text=msg)
+        print(msg)
+    except Exception as e:
+        msg = f"Error: {e}"
+        status_label.config(text=msg)
+        print(msg)
+
+def process_sentence_selection(input_dir, language, study, verbose, status_label):
+    try:
+        msg = "Starting sentence selection..."
+        status_label.config(text=msg)
+        print(msg)
+        sentence_selector = SentenceSelector(input_dir, language, study, device=device)
+        sentence_selector.process_data(verbose=verbose)
+        msg = "Sentence selection completed."
+        status_label.config(text=msg)
+        print(msg)
+    except Exception as e:
+        msg = f"Error: {e}"
+        status_label.config(text=msg)
+        print(msg)
 
 def start_processing():
     input_dir = folder_var.get()
     language = language_var.get()
-    instruction = instruction_var.get()
+    # Depending on the action, use the instruction or study name from the same variable
+    instruction_or_study = instruction_var.get()
     verbose = verbose_var.get()
     status_label.config(text="Processing...")
-    
+    print("Processing...")
+
     if not input_dir:
         messagebox.showerror("Error", "Please select an input directory.")
         return
@@ -54,9 +106,13 @@ def start_processing():
     if action == "Transcribe":
         threading.Thread(target=process_transcribe, args=(input_dir, language, verbose, status_label), daemon=True).start()
     elif action == "Translate":
-        threading.Thread(target=process_translate, args=(input_dir, language, instruction, verbose, status_label), daemon=True).start()
+        threading.Thread(target=process_translate, args=(input_dir, language, instruction_or_study, verbose, status_label), daemon=True).start()
     elif action == "Gloss":
-        threading.Thread(target=process_gloss, args=(input_dir, language, instruction, status_label), daemon=True).start()
+        threading.Thread(target=process_gloss, args=(input_dir, language, instruction_or_study, status_label), daemon=True).start()
+    elif action == "Transliterate":
+        threading.Thread(target=process_transliterate, args=(input_dir, language, instruction_or_study, status_label), daemon=True).start()
+    elif action == "Select sentences":
+        threading.Thread(target=process_sentence_selection, args=(input_dir, language, instruction_or_study, verbose, status_label), daemon=True).start()
     else:
         messagebox.showerror("Error", "Please select a valid action.")
 
@@ -133,7 +189,9 @@ def main():
     action_label = tk.Label(window, text="Action:", bg=wine_red, fg="white", font=("Inter", 13))
     action_label.place(x=80, y=40)
     action_var = tk.StringVar()
-    action_combo = ttk.Combobox(window, textvariable=action_var, values=["Transcribe", "Translate", "Gloss"], state="readonly")
+    action_combo = ttk.Combobox(window, textvariable=action_var, 
+                                values=["Transcribe", "Translate", "Gloss"], #transliterate", "Select sentences"],
+                                state="readonly")
     action_combo.place(x=80, y=70, width=275, height=30)
 
     # 2) Folder: Browse for directory
@@ -151,12 +209,35 @@ def main():
     browse_button = ttk.Button(window, text="Browse...", style="White.TButton", command=browse_folder)
     browse_button.place(x=235, y=140, width=120, height=30)
 
-    # 3) Instruction
-    instruction_label = tk.Label(window, text="Instruction (Specify for translation and gloss):", bg=wine_red, fg="white", font=("Inter", 13))
+    # 3) Instruction / Study Name (Dynamically changes based on Action)
+    instruction_label = tk.Label(window, text="For Translation, Gloss, Transliteration:", bg=wine_red, fg="white", font=("Inter", 13))
     instruction_label.place(x=80, y=180)
     instruction_var = tk.StringVar()
     instruction_combo = ttk.Combobox(window, textvariable=instruction_var, values=["automatic", "corrected", "sentences"], state="readonly")
     instruction_combo.place(x=80, y=210, width=275, height=30)
+
+    def update_instruction_box(event):
+        selected_action = action_var.get()
+        if selected_action == "Select sentences":
+            # For sentence selection, change label to "Study:" and allow free text
+            instruction_label.config(text="Study:")
+            instruction_combo.config(values=[], state="normal")
+            instruction_combo.set("")
+        elif selected_action in ["Translate", "Gloss", "Transliterate"]:
+            # For these actions, use instruction values
+            instruction_label.config(text="Instruction:")
+            instruction_combo.config(values=["automatic", "corrected", "sentences"], state="readonly")
+            instruction_combo.set("automatic")
+        else:
+            # For Transcribe (or if nothing is selected), disable the instruction box
+            instruction_label.config(text="Instruction:")
+            instruction_combo.set("")
+            instruction_combo.config(state="disabled")
+    
+    action_combo.bind("<<ComboboxSelected>>", update_instruction_box)
+    
+    # Set default state for instruction box initially (disabled)
+    instruction_combo.config(state="disabled")
 
     # 4) Language
     language_label = tk.Label(window, text="Language:", bg=wine_red, fg="white", font=("Inter", 13))

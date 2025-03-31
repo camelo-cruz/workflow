@@ -25,6 +25,7 @@ import spacy
 import argparse
 import pandas as pd
 from tqdm import tqdm
+from Translator import Translator
 from spacy.cli import download
 from deep_translator import GoogleTranslator
 from functions import set_global_variables, find_language
@@ -167,7 +168,8 @@ class Glosser():
                 lemma = token.lemma_
                 morph = token.morph.to_dict()
 
-                translated_lemma =  GoogleTranslator(source=self.language_code, target='en').translate(lemma)
+                #translated_lemma =  Translator.translate_with_deepl(self.language_code, lemma)
+                translated_lemma = GoogleTranslator(source=self.language_code, target='en').translate(text=lemma)
                 if isinstance(translated_lemma, str) and not lemma.isdigit():
                     translated_lemma = translated_lemma.lower()
                     translated_lemma = translated_lemma.replace(' ', '-')

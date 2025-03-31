@@ -19,161 +19,237 @@ Leibniz Institute General Linguistics (ZAS)
 """
 
 import os
-# import romkan
 import pykakasi
 import argparse
 import spacy
+import openpyxl
+from openpyxl.styles import Font
 import pandas as pd
 from tqdm import tqdm
 from transliterate import translit
-from functions import set_global_variables
+from functions import find_language, set_global_variables
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
-def kanji_hiragana_katakana_to_romaji(sentence):
+
+class Transliterator:
     """
-    Convert a Japanese sentence (with Kanji, Hiragana, Katakana) to Romaji.
-    
-    Parameters:
-    -----------
-    sentence : str
-        Japanese sentence to convert to Romaji.
-    
-    Returns:
-    --------
-    romaji_sentence : str
-        The sentence converted into Romaji.
-    """
-    nlp = spacy.load('ja_core_news_trf')
-    doc = nlp(sentence)
-    kks = pykakasi.kakasi()
+    Class for transliterating sentences from one script to another.
 
-    # Convert Kanji to Kana (Hiragana/Katakana) and Kana to Romaji
-    romaji_sentence = ''
-    for word in doc:
-        morph = word.morph.to_dict()
-
-        # Check if the word contains Latin alphabet characters
-        if word.text.isascii():  # Latin alphabet check
-            romaji_word = word.text  # Leave the word unchanged if it's in Latin alphabet
-        elif word.text == "、":  # Japanese comma
-            romaji_word = ","  # Convert to a Latin comma
-        elif word.text == "。":  # Japanese period
-            romaji_word = "."  # Convert to a Latin period
-        else:
-            kana_form = morph['Reading'] if 'Reading' in morph else str(word)
-            # Convert the Kana form to Romaji using pykakasi
-            romaji_word_lst = kks.convert(kana_form)
-            # Extract 'hepburn' from each dictionary in the list
-            romaji_word = ' '.join([item['hepburn'] for item in romaji_word_lst])
-
-        # Append the Romaji word to the sentence
-        romaji_sentence += f"{romaji_word} "
-
-    return romaji_sentence.strip()
-
-    # romaji_sentence = ''
-    # kks = pykakasi.kakasi()
-    # result = kks.convert(sentence)
-    # for item in result:
-    #     element = item['hepburn']
-    #     romaji_sentence += f'{element} '
-    #
-    # result = romaji_sentence.strip()
-    # return result
-
-def transliterate(file, instruction, language_code):
-    """ 
-    Transliterate sentences based on the language_code and instruction.
-    
-    Parameters:
-    -----------
-    file : str
-        Path to the file to process.
-    instruction : str
-        Type of processing ("sentences", "corrected_transcription").
-    language_code : str
-        Source language code for transliteration.
-    
-    Returns:
-    --------
-    df : pandas.DataFrame
-        Dataframe with transliterated sentences.
-    """
-    df = pd.read_excel(file)
-    
-    # Choose source and target columns based on the instruction
-    if instruction == 'sentences':
-        source = 'transcription_original_script_utterance_used'
-        target = 'latin_transcription_utterance_used'
-    elif instruction == 'corrected_transcription':
-        source = 'transcription_original_script'
-        target = 'latin_transcription_everything'
-
-    # Ensure target column exists in the dataframe
-    df[target] = ""
-
-    df[target] = df[target].astype('object')
-
-    for sentence in df[source].dropna():  # Handle missing values in the source column
-        series = df[df.isin([sentence])].stack()
-        for idx, value in series.items():
-            if pd.isna(df.at[idx[0], target]):
-                df.at[idx[0], target] = ""
-
-            if language_code == "ru":
-                if translit(sentence, 'ru', reversed=True) not in df.at[idx[0], target]:
-                    df.at[idx[0], target] += f"{translit(sentence, 'ru', reversed=True)} "
-            elif language_code == "uk":
-                if translit(sentence, 'uk', reversed=True) not in df.at[idx[0], target]:
-                    df.at[idx[0], target] += f"{translit(sentence, 'uk', reversed=True)} "
-            elif language_code == "ja":
-                if kanji_hiragana_katakana_to_romaji(sentence) not in df.at[idx[0], target]:
-                    df.at[idx[0], target] += f"{kanji_hiragana_katakana_to_romaji(sentence)} "
-
-    return df
-
-def main():
-    """
-    Main function to transliterate a manually prepared transcription.
-    
-    Parameters:
+    Attributes:
     -----------
     input_dir : str
         Directory containing files to transliterate.
+    language : str
+        Source language name.
     instruction : str
-        Type of processing ("automatic_transcription", "corrected_transcription", "sentences").
+        Type of processing ("sentences" or "corrected_transcription").
+    device : str
+        Device for processing (e.g., "cpu" or "gpu").
+    language_code : str
+        Language code determined by the find_language function.
+    """
+
+    def __init__(self, input_dir, language, instruction, device):
+        """
+        Initialize the Transliterator with a directory, language, instruction, and device.
+
+        Parameters:
+        -----------
+        input_dir : str
+            Directory containing files to transliterate.
+        language : str
+            Source language name (will be looked up in LANGUAGES).
+        instruction : str
+            Type of processing ("sentences" or "corrected_transcription").
+        device : str
+            Device for processing.
+        """
+        self.input_dir = input_dir
+        self.instruction = instruction
+        self.device = device
+        self.language_code = find_language(language, LANGUAGES)
+
+    @staticmethod
+    def kanji_hiragana_katakana_to_romaji(sentence):
+        """
+        Convert a Japanese sentence (with Kanji, Hiragana, Katakana) to Romaji.
+
+        Parameters:
+        -----------
+        sentence : str
+            Japanese sentence to convert.
+
+        Returns:
+        --------
+        romaji_sentence : str
+            The sentence converted into Romaji.
+        """
+        nlp = spacy.load('ja_core_news_trf')
+        doc = nlp(sentence)
+        kks = pykakasi.kakasi()
+
+        romaji_sentence = ''
+        for word in doc:
+            morph = word.morph.to_dict()
+            if word.text.isascii():
+                romaji_word = word.text
+            elif word.text == "、":
+                romaji_word = ","
+            elif word.text == "。":
+                romaji_word = "."
+            else:
+                # Use .get() to safely obtain the reading
+                kana_form = morph.get('Reading', str(word))
+                romaji_word_lst = kks.convert(kana_form)
+                romaji_word = ' '.join([item['hepburn'] for item in romaji_word_lst])
+            romaji_sentence += f"{romaji_word} "
+        return romaji_sentence.strip()
+
+    def transliterate(self, df):
+        """
+        Transliterate sentences in the provided DataFrame based on the language code and instruction.
+
+        Parameters:
+        -----------
+        df : pandas.DataFrame
+            DataFrame read from an Excel file.
+
+        Returns:
+        --------
+        df : pandas.DataFrame
+            Updated DataFrame with transliterated sentences.
+        """
+        if self.instruction == 'sentences':
+            source = 'transcription_original_script_utterance_used'
+            target = 'latin_transcription_utterance_used'
+        elif self.instruction == 'corrected':
+            source = 'transcription_original_script'
+            target = 'latin_transcription_everything'
+        elif self.instruction == 'automatic':
+            raise NotImplementedError("Transliteration for automatic transcription is not supported.")
+        else:
+            raise ValueError(f"Unsupported instruction: {self.instruction}")
+
+        # Initialize target column as empty strings
+        df[target] = ""
+        df[target] = df[target].astype('object')
+
+        # Process each non-null sentence in the source column
+        for sentence in df[source].dropna():
+            # Identify all occurrences of the sentence in the DataFrame
+            series = df[df.isin([sentence])].stack()
+            for idx, _ in series.items():
+                # Initialize target cell if it is NaN
+                if pd.isna(df.at[idx[0], target]):
+                    df.at[idx[0], target] = ""
+                # Transliterate based on the language code
+                if self.language_code == "ru":
+                    transliterated = translit(sentence, 'ru', reversed=True)
+                    if transliterated not in df.at[idx[0], target]:
+                        df.at[idx[0], target] += f"{transliterated} "
+                elif self.language_code == "uk":
+                    transliterated = translit(sentence, 'uk', reversed=True)
+                    if transliterated not in df.at[idx[0], target]:
+                        df.at[idx[0], target] += f"{transliterated} "
+                elif self.language_code == "ja":
+                    transliterated = Transliterator.kanji_hiragana_katakana_to_romaji(sentence)
+                    if transliterated not in df.at[idx[0], target]:
+                        df.at[idx[0], target] += f"{transliterated} "
+        return df
+
+    def process_data(self):
+        """
+        Process all Excel files within the input directory and its subdirectories.
+
+        This function searches for files ending with 'annotated.xlsx', processes each file by
+        transliterating the content according to the specified instruction, and then saves the file.
+        """
+        files_to_process = []
+        for subdir, _, files in os.walk(self.input_dir):
+            for file in files:
+                if file.endswith('annotated.xlsx'):
+                    files_to_process.append(os.path.join(subdir, file))
+
+        # Process each file individually
+        for file_path in tqdm(files_to_process, desc="Processing Files", unit="file"):
+            print(f"Processing {file_path}...")
+            df = pd.read_excel(file_path)
+            df = self.transliterate(df)
+            df.to_excel(file_path, index=False)
+
+            # Open the Excel file and modify cell formatting
+            wb = openpyxl.load_workbook(file_path)
+            ws = wb.active  # Select the first sheet
+
+            # Define the red font style
+            red_font = Font(color="FF0000")  # Hex code for red color
+
+            # Define the target column name that should have red font
+            if self.instruction == 'corrected':
+                target_column = 'latin_transcription_everything'
+            elif self.instruction == 'sentences':
+                target_column = 'latin_transcription_utterance_used'
+            else:
+                raise ValueError(f"Unsupported instruction: {self.instruction}")
+
+            # Get the header row (first row) as a tuple of column names
+            header_row = next(ws.iter_rows(min_row=1, max_row=1, values_only=True))
+
+            # Ensure the target column exists
+            if target_column not in header_row:
+                raise ValueError(f"Target column '{target_column}' not found in header row.")
+
+            # Find the column index (1-based) for the target column
+            target_index = header_row.index(target_column) + 1
+
+            # Apply red font to each cell in the target column (skip header row)
+            for row in ws.iter_rows(min_row=2):
+                cell = row[target_index - 1]  # Adjust for 0-based index in row
+                if cell.value:
+                    cell.font = red_font
+
+            # Save the modified Excel file
+            wb.save(file_path)
+
+
+
+def main():
+    """
+    Main function to transliterate transcriptions in all subdirectories.
+
+    Command-line arguments:
+    -----------------------
+    input_dir : str
+        Directory containing files to transliterate.
+    instruction : str
+        Type of processing ("corrected_transcription" or "sentences").
     source_language : str
-        Source language to transliterate from.
+        Source language for transliteration.
     """
     parser = argparse.ArgumentParser(description="Automatic transcription")
     parser.add_argument("input_dir", help="Directory with files to transliterate.")
-    parser.add_argument("instruction", choices=[ "corrected_transcription", "sentences"], 
+    parser.add_argument("instruction", choices=["corrected_transcription", "sentences"],
                         help="Type of instruction for processing.")
     parser.add_argument("source_language", help="Source language for transliteration.")
     args = parser.parse_args()
 
-    # Find the language code based on the input language
-    language = None
+    # Verify that the source language is supported
+    language_code = None
     for code, name in LANGUAGES.items():
-        if name == args.source_language.lower():
-            language = code
-            print(f'transliterating for {language}')
-    
-    if not language:
+        if name.lower() == args.source_language.lower():
+            language_code = code
+            print(f"Transliterating for language code: {language_code}")
+            break
+
+    if not language_code:
         print(f"Error: Unsupported language '{args.source_language}'.")
         return
-    
-    # Process files in the input directory
-    to_process = []
-    for subdir, dirs, files in os.walk(args.input_dir):
-        for file in files:
-            if file.endswith('annotated.xlsx'):
-                to_process.append(os.path.join(subdir, file))
 
-    for file_path in tqdm(to_process, desc=f"Processing Files", unit="file"):
-        df = transliterate(file_path, args.instruction, language)
-        df.to_excel(file_path, index=False)
+    # Create an instance of Transliterator and process the data
+    transliterator = Transliterator(args.input_dir, language_code, args.instruction, device="cpu")
+    transliterator.process_data()
+
 
 if __name__ == "__main__":
     main()
