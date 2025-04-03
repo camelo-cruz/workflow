@@ -3,9 +3,9 @@ import torch
 import os
 from functions import get_materials_path
 from Transcriber import Transcriber
-from Translator import Translator 
-from Transliterator import Transliterator
-from SentenceSelector import SentenceSelector
+from Translator import Translator
+#from Transliterator import Transliterator
+#from SentenceSelector import SentenceSelector
 from Glosser import Glosser
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
@@ -59,6 +59,7 @@ def process_gloss(input_dir, language, instruction, status_label):
         status_label.config(text=msg)
         print(msg)
 
+'''
 def process_transliterate(input_dir, language, instruction, status_label):
     try:
         msg = "Starting transliteration..."
@@ -88,6 +89,7 @@ def process_sentence_selection(input_dir, language, study, verbose, status_label
         msg = f"Error: {e}"
         status_label.config(text=msg)
         print(msg)
+'''
 
 def start_processing():
     input_dir = folder_var.get()
@@ -109,10 +111,10 @@ def start_processing():
         threading.Thread(target=process_translate, args=(input_dir, language, instruction_or_study, verbose, status_label), daemon=True).start()
     elif action == "Gloss":
         threading.Thread(target=process_gloss, args=(input_dir, language, instruction_or_study, status_label), daemon=True).start()
-    elif action == "Transliterate":
-        threading.Thread(target=process_transliterate, args=(input_dir, language, instruction_or_study, status_label), daemon=True).start()
-    elif action == "Select sentences":
-        threading.Thread(target=process_sentence_selection, args=(input_dir, language, instruction_or_study, verbose, status_label), daemon=True).start()
+    #elif action == "Transliterate":
+    #    threading.Thread(target=process_transliterate, args=(input_dir, language, instruction_or_study, status_label), daemon=True).start()
+    #elif action == "Select sentences":
+    #    threading.Thread(target=process_sentence_selection, args=(input_dir, language, instruction_or_study, verbose, status_label), daemon=True).start()
     else:
         messagebox.showerror("Error", "Please select a valid action.")
 
