@@ -130,7 +130,6 @@ def find_ffmpeg():
 
     if not ffmpeg_path:
         print("FFmpeg not found. Attempting to install FFmpeg...")
-
         ffmpeg_path = install_ffmpeg()
     else:
         return ffmpeg_path

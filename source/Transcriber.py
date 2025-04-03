@@ -33,7 +33,6 @@ from functions import set_global_variables, find_language, clean_string, find_ff
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
-ffmpeg_path = find_ffmpeg()
 
 warnings.filterwarnings("ignore")
 
@@ -46,6 +45,8 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.WARNING)
 console_handler.setFormatter(logging.Formatter("%(message)s"))
 logger.addHandler(console_handler)
+
+ffmpeg_path = find_ffmpeg()
 
 
 class Transcriber():
@@ -89,6 +90,7 @@ class Transcriber():
                     file_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
                     logger.addHandler(file_handler)
                     logger.info(f"Logging to {log_file_path}")
+                    logger.info(f"Using ffmpeg from {ffmpeg_path}")
 
 
                     csv_file_path = os.path.join(subdir, '..', 'trials_and_sessions.csv')
