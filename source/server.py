@@ -6,7 +6,7 @@ import torch
 app = Flask(__name__)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-API_KEY = 'aYluDE2[V.IQM$ZVX:GCP"Ep8NF5R"'
+API_KEY = 'xxx'
 
 @app.before_request
 def check_api_key():

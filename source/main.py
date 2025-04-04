@@ -15,44 +15,20 @@ from PIL import Image, ImageTk
 cancel_flag = False
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-headers = {
-    "Authorization": 'aYluDE2[V.IQM$ZVX:GCP"Ep8NF5R"'
-}
 
 def process_transcribe(input_dir, language, verbose, status_label):
     try:
-        status_label.config(text="Sending transcription request to server...")
-        print("Sending transcription request...")
-
-        response = requests.post(
-            "http://172.20.49.10:5000/transcribe",
-            headers=headers,
-            json={
-                "input_dir": input_dir,
-                "language": language,
-                "verbose": verbose
-            },
-            timeout=300
-        )
-
-        if response.ok:
-            result = response.json()
-            status_label.config(text=result["message"])
-            print(result["message"])
-        else:
-            raise Exception(f"Server error: {response.text}")
-
-    except Exception as e:
-        print(f"Remote failed: {e}")
-        status_label.config(text="Server unreachable. Running locally...")
-        try:
-            transcriber = Transcriber(input_dir, language, device=device)
-            transcriber.process_data(verbose=verbose)
-            status_label.config(text="Local transcription completed")
-            print("Local transcription completed")
-        except Exception as local_e:
-            status_label.config(text=f"Local error: {local_e}")
-            print(f"Local error: {local_e}")
+        msg = "Starting transcription..."
+        status_label.config(text=msg)
+        print(msg)
+        transcriber = Transcriber(input_dir, language, device=device)
+        transcriber.process_data(verbose=verbose)
+        msg = "Transcription completed."
+        status_label.config(text=msg)
+        print("Transcription completed")
+    except Exception as local_e:
+        status_label.config(text=f"Local error: {local_e}")
+        print(f"Local error: {local_e}")
 
 def process_translate(input_dir, language, instruction, verbose, status_label):
     try:
