@@ -241,7 +241,7 @@ def main():
     instruction_combo.config(state="disabled")
 
     # 4) Language
-    language_label = tk.Label(window, text="Language:", bg=wine_red, fg="white", font=("Inter", 13))
+    language_label = tk.Label(window, text="Source language:", bg=wine_red, fg="white", font=("Inter", 13))
     language_label.place(x=80, y=250)
     language_var = tk.StringVar()
     language_entry = ttk.Entry(window, textvariable=language_var)
