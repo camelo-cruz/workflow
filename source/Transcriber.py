@@ -118,6 +118,7 @@ class Transcriber():
                                 count += 1
                                 logger.debug(f'processing file {count}/{len(files)} in {subdir}: {file}')
                                 audio_file_path = os.path.abspath(os.path.join(subdir, file))
+                                logger.debug(f"Path of file {audio_file_path}")
                                 transcription = ""
                                 if self.language_code == 'zh':
                                     result = self.model.transcribe(audio_file_path, language=self.language_code, initial_prompt="请使用简体中文转录。")
