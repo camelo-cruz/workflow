@@ -25,3 +25,4 @@ sacremoses
 msal
 requests
 pykakasi
+ttkthemes

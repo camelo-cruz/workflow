@@ -1,11 +1,14 @@
 import threading
 import torch
 import os
-import msal  # Make sure to install msal (pip install msal)
+import signal
+import msal  # pip install msal
 import requests
 import tkinter as tk
-from tkinter import ttk, messagebox
+from ttkthemes import ThemedTk
+from tkinter import ttk, messagebox, filedialog
 from PIL import Image, ImageTk
+import webbrowser
 
 from functions import get_materials_path
 from Transcriber import Transcriber
@@ -16,7 +19,14 @@ from Glosser import Glosser
 
 cancel_flag = False
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
+app_closing = False  # Global shutdown flag
 
+# Global variables for folder selection and OneDrive token
+local_folder_path = None        # Holds full local folder path if selected locally
+selected_folder_id = None       # Holds OneDrive folder ID if selected via OneDrive
+onedrive_token = None           # Cached OneDrive token (remains logged in)
+
+# --------------------- Processing Functions ---------------------
 
 def process_transcribe(input_dir, language, verbose, status_label):
     try:
@@ -31,7 +41,6 @@ def process_transcribe(input_dir, language, verbose, status_label):
     except Exception as local_e:
         status_label.config(text=f"Local error: {local_e}")
         print(f"Local error: {local_e}")
-
 
 def process_translate(input_dir, language, instruction, verbose, status_label):
     try:
@@ -48,7 +57,6 @@ def process_translate(input_dir, language, instruction, verbose, status_label):
         status_label.config(text=msg)
         print(msg)
 
-
 def process_gloss(input_dir, language, instruction, status_label):
     try:
         msg = "Starting glossing..."
@@ -63,7 +71,6 @@ def process_gloss(input_dir, language, instruction, status_label):
         msg = f"Error: {e}"
         status_label.config(text=msg)
         print(msg)
-
 
 def process_transliterate(input_dir, language, instruction, status_label):
     try:
@@ -80,7 +87,6 @@ def process_transliterate(input_dir, language, instruction, status_label):
         status_label.config(text=msg)
         print(msg)
 
-
 def process_sentence_selection(input_dir, language, study, verbose, status_label):
     try:
         msg = "Starting sentence selection..."
@@ -96,15 +102,165 @@ def process_sentence_selection(input_dir, language, study, verbose, status_label
         status_label.config(text=msg)
         print(msg)
 
+# --------------------- OneDrive Helper Functions ---------------------
+
+def list_shared_files(access_token):
+    """Retrieve shared items from OneDrive with a timeout."""
+    if app_closing:
+        return []
+    headers = {"Authorization": f"Bearer {access_token}"}
+    url = "https://graph.microsoft.com/v1.0/me/drive/sharedWithMe"
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+    except requests.RequestException as e:
+        print("Network error in list_shared_files:", e)
+        return []
+    if response.ok:
+        return response.json().get("value", [])
+    else:
+        print("Error retrieving shared files:", response.text)
+        return []
+
+def list_folder_contents(access_token, drive_id, folder_id):
+    """Retrieve the children of a given folder from OneDrive with a timeout."""
+    if app_closing:
+        return []
+    headers = {"Authorization": f"Bearer {access_token}"}
+    url = f"https://graph.microsoft.com/v1.0/drives/{drive_id}/items/{folder_id}/children"
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+    except requests.RequestException as e:
+        print("Network error in list_folder_contents:", e)
+        return []
+    if response.ok:
+        return response.json().get("value", [])
+    else:
+        print("Error retrieving folder contents:", response.text)
+        return []
+
+def open_shared_files_window(access_token, shared_files):
+    """Open an improved OneDrive shared files window with lazy loading, scrollability, and folder selection."""
+    shared_window = tk.Toplevel(window)
+    shared_window.title("Shared Files")
+    shared_window.geometry("600x400")
+    
+    # Create a frame for the Treeview and its scrollbar
+    frame = ttk.Frame(shared_window)
+    frame.pack(fill="both", expand=True, padx=10, pady=10)
+    
+    scrollbar = ttk.Scrollbar(frame, orient="vertical")
+    tree = ttk.Treeview(frame, columns=("id", "drive_id"), yscrollcommand=scrollbar.set)
+    scrollbar.config(command=tree.yview)
+    scrollbar.pack(side="right", fill="y")
+    tree.pack(side="left", fill="both", expand=True)
+    
+    # Configure tree headings and column widths
+    tree.heading("#0", text="Name")
+    tree.heading("id", text="ID")
+    tree.heading("drive_id", text="Drive ID")
+    tree.column("#0", width=250)
+    tree.column("id", width=150)
+    tree.column("drive_id", width=150)
+    
+    # Insert top-level shared items
+    for item in shared_files:
+        if "remoteItem" in item:
+            remote = item["remoteItem"]
+            drive_id = remote.get("parentReference", {}).get("driveId")
+            item_id = remote.get("id")
+            name = remote.get("name")
+            is_folder = remote.get("folder") is not None
+        else:
+            drive_id = item.get("parentReference", {}).get("driveId")
+            item_id = item.get("id")
+            name = item.get("name", "Unknown")
+            is_folder = item.get("folder") is not None
+        
+        node = tree.insert("", "end", text=name, values=(item_id, drive_id))
+        # For folders, add a dummy child for lazy loading.
+        if is_folder:
+            tree.insert(node, "end", text="dummy")
+    
+    def on_open_node(event):
+        """When a node is expanded, load its children if a dummy exists."""
+        node = tree.focus()
+        children = tree.get_children(node)
+        if children:
+            first_child = children[0]
+            if tree.item(first_child, "text") == "dummy":
+                tree.delete(first_child)
+                item_id, drive_id = tree.item(node, "values")
+                children_items = list_folder_contents(access_token, drive_id, item_id)
+                for child in children_items:
+                    if "remoteItem" in child:
+                        remote = child["remoteItem"]
+                        child_drive_id = remote.get("parentReference", {}).get("driveId")
+                        child_id = remote.get("id")
+                        child_name = remote.get("name")
+                        is_child_folder = remote.get("folder") is not None
+                    else:
+                        child_drive_id = child.get("parentReference", {}).get("driveId")
+                        child_id = child.get("id")
+                        child_name = child.get("name", "Unknown")
+                        is_child_folder = child.get("folder") is not None
+                    child_node = tree.insert(node, "end", text=child_name, values=(child_id, child_drive_id))
+                    if is_child_folder:
+                        tree.insert(child_node, "end", text="dummy")
+    
+    # Bind the event for expanding a node to load its children
+    tree.bind("<<TreeviewOpen>>", on_open_node)
+    
+    def on_double_click(event):
+        """Double-clicking an item selects the folder."""
+        selected_items = tree.selection()
+        if not selected_items:
+            messagebox.showerror("Error", "Please select a folder.")
+            return
+        node = selected_items[0]
+        folder_name = tree.item(node, "text")
+        values = tree.item(node, "values")
+        if not values:
+            messagebox.showerror("Error", "Invalid selection.")
+            return
+        folder_id = values[0]
+        # For OneDrive, update the global folder variable and show folder name
+        global selected_folder_id, local_folder_path
+        selected_folder_id = folder_id
+        local_folder_path = None
+        folder_var.set(folder_name)
+        messagebox.showinfo("Folder Selected", f"Folder '{folder_name}' selected.")
+        shared_window.destroy()
+    
+    # Bind double-click to folder selection
+    tree.bind("<Double-1>", on_double_click)
+    
+    # Also include a button to select the currently highlighted folder
+    select_button = ttk.Button(shared_window, text="Select Folder", command=lambda: on_double_click(None))
+    select_button.pack(pady=5)
+
+# --------------------- OneDrive Sign In ---------------------
 
 def sign_in_onedrive():
-    """
-    This function initiates a device code flow to authenticate the user with OneDrive,
-    then lists the folders in the OneDrive root and opens a window for the user to select one.
-    """
-    global window, folder_var
+    """Start OneDrive authentication in a separate thread."""
+    threading.Thread(target=sign_in_onedrive_thread, daemon=True).start()
 
-    # Replace these with your Azure app's details
+def sign_in_onedrive_thread():
+    """
+    Run the device code flow in a background thread.
+    Schedule UI updates via window.after() so they run in the main thread.
+    """
+    global onedrive_token
+    # If already logged in, try reusing the token
+    if onedrive_token is not None:
+        shared_files = list_shared_files(onedrive_token)
+        if shared_files:
+            window.after(0, lambda: open_shared_files_window(onedrive_token, shared_files))
+            return
+        else:
+            # Token may have expired; clear it so we can re-authenticate.
+            onedrive_token = None
+
+    # Replace with your Azure app's details
     client_id = '58c0d230-141d-4a30-905e-fd63e331e5ea'
     tenant_id = '7ef3035c-bf11-463a-ab3b-9a9a4ac82500'
     authority = f"https://login.microsoftonline.com/{tenant_id}"
@@ -113,58 +269,51 @@ def sign_in_onedrive():
     app = msal.PublicClientApplication(client_id, authority=authority)
     flow = app.initiate_device_flow(scopes=scope)
     if "user_code" not in flow:
-        messagebox.showerror("Error", "Failed to create device flow.")
+        window.after(0, lambda: messagebox.showerror("Error", "Failed to create device flow."))
         return
 
-    # Show the device code message to the user
-    messagebox.showinfo("Device Code", flow["message"])
+    # Inform the user and open the verification URL
+    window.after(0, lambda: messagebox.showinfo("Device Code", flow["message"]))
+    webbrowser.open(flow["verification_uri"])
 
     result = app.acquire_token_by_device_flow(flow)
     if "access_token" in result:
-        access_token = result["access_token"]
-        headers = {"Authorization": f"Bearer {access_token}"}
-        response = requests.get("https://graph.microsoft.com/v1.0/me/drive/root/children", headers=headers)
-        if response.ok:
-            files = response.json().get("value", [])
-            # Filter for folders (each folder will have a 'folder' key)
-            folders = [f for f in files if f.get('folder')]
-            if not folders:
-                messagebox.showerror("Error", "No folders found in your OneDrive root.")
-                return
-
-            # Create a new window for folder selection
-            select_window = tk.Toplevel(window)
-            select_window.title("Select OneDrive Folder")
-            listbox = tk.Listbox(select_window, width=50)
-            listbox.pack(padx=10, pady=10)
-
-            # Create a mapping from display name to folder ID
-            folder_map = {}
-            for folder in folders:
-                display_name = folder.get('name')
-                folder_map[display_name] = folder.get('id')
-                listbox.insert(tk.END, display_name)
-
-            def select_folder():
-                selection = listbox.curselection()
-                if selection:
-                    selected_name = listbox.get(selection[0])
-                    # Save the folder ID in folder_var (this is used by your processing functions)
-                    folder_var.set(folder_map[selected_name])
-                    select_window.destroy()
-                else:
-                    messagebox.showerror("Error", "Please select a folder.")
-
-            select_button = ttk.Button(select_window, text="Select", command=select_folder)
-            select_button.pack(pady=5)
+        onedrive_token = result["access_token"]
+        shared_files = list_shared_files(onedrive_token)
+        if shared_files:
+            window.after(0, lambda: open_shared_files_window(onedrive_token, shared_files))
         else:
-            messagebox.showerror("Error", "Failed to list OneDrive folders: " + response.text)
+            window.after(0, lambda: messagebox.showinfo("Shared Files", "No shared files found."))
     else:
-        messagebox.showerror("Error", "Authentication failed: " + result.get("error_description", ""))
+        window.after(0, lambda: messagebox.showerror("Error", "Authentication failed: " + result.get("error_description", "")))
 
+# --------------------- Local Search ---------------------
+
+def local_search():
+    """Allow the user to select a local folder."""
+    global local_folder_path, selected_folder_id
+    folder = filedialog.askdirectory(title="Select Local Folder")
+    if folder:
+        local_folder_path = folder
+        # Clear any OneDrive selection
+        selected_folder_id = None
+        # Display just the folder's basename in the text field
+        folder_var.set(os.path.basename(folder))
+        messagebox.showinfo("Local Folder Selected", f"Local folder '{os.path.basename(folder)}' selected.")
+
+# --------------------- Start Processing ---------------------
 
 def start_processing():
-    input_dir = folder_var.get()  # Now this contains the OneDrive folder ID
+    global local_folder_path, selected_folder_id
+    # Determine which folder was selected
+    if local_folder_path is not None:
+        input_dir = local_folder_path
+    elif selected_folder_id is not None:
+        input_dir = selected_folder_id
+    else:
+        messagebox.showerror("Error", "Please select a folder (OneDrive or Local).")
+        return
+
     language = language_var.get()
     instruction_or_study = instruction_var.get()
     verbose = verbose_var.get()
@@ -172,7 +321,7 @@ def start_processing():
     print("Processing...")
 
     if not input_dir:
-        messagebox.showerror("Error", "Please select a OneDrive folder.")
+        messagebox.showerror("Error", "Please select a folder.")
         return
 
     action = action_var.get()
@@ -189,11 +338,19 @@ def start_processing():
     else:
         messagebox.showerror("Error", "Please select a valid action.")
 
+# --------------------- Main GUI and Shutdown Handler ---------------------
+
+def on_closing():
+    global app_closing
+    app_closing = True
+    window.destroy()
+    os.kill(os.getpid(), signal.SIGKILL)
 
 def main():
     global folder_var, language_var, instruction_var, verbose_var, action_var, status_label, window
 
-    window = tk.Tk()
+    window = ThemedTk(theme="arc")
+    window.protocol("WM_DELETE_WINDOW", on_closing)
     window.geometry("862x519")
     window.resizable(False, False)
     window.title("Tkinter Designer Example")
@@ -204,10 +361,14 @@ def main():
     # Configure combobox and entry styles
     style.configure("TCombobox", foreground="black", fieldbackground="white", background="white", arrowcolor="black")
     style.configure("TEntry", foreground="black", fieldbackground="white", background="white")
-    style.configure("Blue.TButton", background="#9B0A0A", foreground="white", font=("Inter", 13), borderwidth=0, relief="flat", anchor="center")
-    style.map("Blue.TButton", background=[("active", "#7F0707"), ("disabled", "#A9A9A9")], foreground=[("active", "white"), ("disabled", "white")])
-    style.configure("White.TButton", background="white", foreground="#7F0707", font=("Inter", 11), borderwidth=0, relief="flat", anchor="center")
-    style.map("White.TButton", background=[("active", "white"), ("disabled", "#A9A9A9")], foreground=[("active", "#7F0707"), ("disabled", "#7F0707")])
+    style.configure("Blue.TButton", background="#9B0A0A", foreground="white", font=("Inter", 13),
+                    borderwidth=0, relief="flat", anchor="center")
+    style.map("Blue.TButton", background=[("active", "#7F0707"), ("disabled", "#A9A9A9")],
+              foreground=[("active", "white"), ("disabled", "white")])
+    style.configure("White.TButton", background="white", foreground="#7F0707", font=("Inter", 11),
+                    borderwidth=0, relief="flat", anchor="center")
+    style.map("White.TButton", background=[("active", "white"), ("disabled", "#A9A9A9")],
+              foreground=[("active", "#7F0707"), ("disabled", "#7F0707")])
 
     # BACKGROUND CANVAS for color panels
     canvas = tk.Canvas(window, width=862, height=519, bd=0, highlightthickness=0, relief="ridge")
@@ -217,7 +378,6 @@ def main():
     canvas.create_rectangle(431, 0, 862, 519, fill="#FCFCFC", outline="")
 
     # LEFT SIDE (wine-red background)
-    # 1) Action
     action_label = tk.Label(window, text="Action:", bg=wine_red, fg="white", font=("Inter", 13))
     action_label.place(x=80, y=40)
     action_var = tk.StringVar()
@@ -226,18 +386,19 @@ def main():
                                 state="readonly")
     action_combo.place(x=80, y=70, width=275, height=30)
 
-    # 2) OneDrive Folder (instead of local folder)
-    folder_label = tk.Label(window, text="OneDrive Folder ID:", bg=wine_red, fg="white", font=("Inter", 13))
+    folder_label = tk.Label(window, text="Folder:", bg=wine_red, fg="white", font=("Inter", 13))
     folder_label.place(x=80, y=110)
     folder_var = tk.StringVar()
     folder_entry = ttk.Entry(window, textvariable=folder_var)
     folder_entry.place(x=80, y=140, width=275, height=30)
 
-    # Button to sign in to OneDrive and select a folder
-    onedrive_button = ttk.Button(window, text="Sign in to OneDrive", style="White.TButton", command=sign_in_onedrive)
-    onedrive_button.place(x=80, y=180, width=275, height=30)
+    # OneDrive and Local Search buttons
+    onedrive_button = ttk.Button(window, text="OneDrive", style="White.TButton", command=sign_in_onedrive)
+    onedrive_button.place(x=80, y=180, width=130, height=30)
 
-    # 3) Instruction / Study Name
+    local_search_button = ttk.Button(window, text="Local Search", style="White.TButton", command=local_search)
+    local_search_button.place(x=220, y=180, width=130, height=30)
+
     instruction_label = tk.Label(window, text="For Translation, Gloss, Transliteration:", bg=wine_red, fg="white", font=("Inter", 13))
     instruction_label.place(x=80, y=220)
     instruction_var = tk.StringVar()
@@ -262,25 +423,21 @@ def main():
     action_combo.bind("<<ComboboxSelected>>", update_instruction_box)
     instruction_combo.config(state="disabled")
 
-    # 4) Language
     language_label = tk.Label(window, text="Language:", bg=wine_red, fg="white", font=("Inter", 13))
     language_label.place(x=80, y=290)
     language_var = tk.StringVar()
     language_entry = ttk.Entry(window, textvariable=language_var)
     language_entry.place(x=80, y=320, width=275, height=30)
 
-    # 5) Verbose
     verbose_label = tk.Label(window, text="Verbose output:", bg=wine_red, fg="white", font=("Inter", 13))
     verbose_label.place(x=80, y=360)
     verbose_var = tk.BooleanVar(value=False)
     verbose_radiobutton = tk.Radiobutton(window, variable=verbose_var, value=True, bg=wine_red)
     verbose_radiobutton.place(x=220, y=362)
 
-    # Status label for output messages
     status_label = tk.Label(window, text="", bg="#FCFCFC", fg="black", font=("Inter", 12))
     status_label.place(x=450, y=470)
 
-    # RIGHT SIDE (white background)
     offset_x = 431
     try:
         script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -311,12 +468,10 @@ def main():
     except Exception as e:
         print("Could not load image:", e)
 
-    # Process button
     process_button = ttk.Button(window, text="Process", style="Blue.TButton", command=start_processing)
     process_button.place(x=119 + offset_x, y=315, width=189, height=55)
 
     window.mainloop()
-
 
 if __name__ == "__main__":
     main()
