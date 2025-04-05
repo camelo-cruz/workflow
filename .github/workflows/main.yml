@@ -2,6 +2,8 @@ name: Automatic Workflow Distribution
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "source/**/*.py"
 
