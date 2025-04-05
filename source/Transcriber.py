@@ -168,6 +168,140 @@ class Transcriber:
         wb.save(excel_output_file)
         logger.info(f"Excel formatting applied and saved to '{excel_output_file}'.")
     
+    def process_locally(self, base_dir, verbose=False):
+        filename_regexp = re.compile(
+            r'blockNr_(?P<block>\d+)_taskNr_(?P<task>\d+)_trialNr_(?P<trial>\d+).*'
+        )
+        for subdir, _, files in os.walk(self.input_dir):
+            if 'binaries' not in subdir:
+                continue
+
+            logger.info(f"Using device {self.model.device}")
+            logger.info(f"Processing directory: {subdir}")
+            print(f"Processing {subdir}")
+            base_dir = os.path.abspath(os.path.join(subdir, '..'))
+            log_file_path = os.path.join(base_dir, "transcription.log")
+            file_handler = self.setup_logging(log_file_path)
+
+            try:
+                df, excel_output_file = self.load_trials_data(base_dir)
+            except FileNotFoundError as e:
+                logger.error(e)
+                logger.removeHandler(file_handler)
+                file_handler.close()
+                continue
+
+            count = 0
+            files.sort()
+            for file in tqdm(files, desc="Transcribing"):
+                if not file.lower().endswith(('.mp3', '.mp4', '.m4a')):
+                    continue
+                count += 1
+                audio_file_path = os.path.abspath(os.path.join(subdir, file))
+                logger.debug(f"Processing file {count}/{len(files)}: {audio_file_path}")
+                try:
+                    if self.language_code == 'zh':
+                        result = self.model.transcribe(
+                            audio_file_path,
+                            language=self.language_code,
+                            initial_prompt="请使用简体中文转录。"
+                        )
+                        transcription = result["text"].replace("请使用简体中文转录。", "").replace("使用简体中文转录。", "")
+                    else:
+                        result = self.model.transcribe(audio_file_path, language=self.language_code)
+                        transcription = result["text"]
+
+                    transcription = clean_string(transcription)
+                    if verbose:
+                        tqdm.write(transcription)
+                    self.add_transcription_to_df(df, file, transcription, count, filename_regexp)
+                except Exception as e:
+                    logger.error(f"Error processing file '{file}': {e}")
+                    continue
+
+            df.to_excel(excel_output_file, index=False)
+            self.format_excel_output(excel_output_file)
+            logger.info(f"Transcription and annotation completed for '{subdir}'.")
+            logger.removeHandler(file_handler)
+            file_handler.close()
+    
+    def process_online(self, verbose=False):
+        filename_regexp = re.compile(
+            r'blockNr_(?P<block>\d+)_taskNr_(?P<task>\d+)_trialNr_(?P<trial>\d+).*'
+        )
+        if self.onedrive_token is None or self.drive_id is None:
+                raise Exception("No OneDrive token or drive ID provided for online processing.")
+        online_files = list_online_files(self.onedrive_token, self.drive_id, self.input_dir)
+        print("Online files:", [f.get("name") for f in online_files])
+        # Identify the trials file (CSV or Excel)
+        trials_file = None
+        for f in online_files:
+            name = f.get("name", "").lower()
+            if "trials_and_sessions.csv" in name or "trials_and_sessions.xlsx" in name:
+                trials_file = f
+                break
+
+        if trials_file is None:
+            raise Exception("No trials_and_sessions file found online in the folder.")
+
+        trials_file_id = trials_file.get("id")
+        trials_drive_id = trials_file.get("parentReference", {}).get("driveId")
+        suffix = ".csv" if trials_file.get("name", "").lower().endswith(".csv") else ".xlsx"
+        temp_trials_path = download_file_to_temp(self.onedrive_token, trials_drive_id, trials_file_id, suffix=suffix)
+        if suffix == ".csv":
+            df = pd.read_csv(temp_trials_path)
+        else:
+            df = pd.read_excel(temp_trials_path)
+        for column in OBLIGATORY_COLUMNS:
+            if column not in df:
+                df[column] = ""
+        if self.language_code not in NO_LATIN:
+            df["transcription_original_script"] = ""
+            df["transcription_original_script_utterance_used"] = ""
+
+        temp_output_trials = os.path.join(tempfile.gettempdir(), "trials_and_sessions_annotated.xlsx")
+
+        # Find all audio files in the "binaries" folder.
+        audio_files = recursive_list_files(self.onedrive_token, self.drive_id, self.input_dir)
+        if not audio_files:
+            raise Exception("No audio files found in the 'binaries' folder.")
+
+        print("Audio files found:", [f.get("name") for f in audio_files])
+        count = 0  # Initialize count here!
+        for file in tqdm(audio_files, desc="Transcribing online"):
+            count += 1
+            file_id = file.get("id")
+            file_name = file.get("name")
+            file_drive_id = file.get("parentReference", {}).get("driveId")
+            try:
+                suffix_audio = os.path.splitext(file_name)[1]
+                temp_path = download_file_to_temp(self.onedrive_token, file_drive_id, file_id, suffix=suffix_audio)
+                if self.language_code == 'zh':
+                    result = self.model.transcribe(
+                        temp_path,
+                        language=self.language_code,
+                        initial_prompt="请使用简体中文转录。"
+                    )
+                    transcription = result["text"].replace("请使用简体中文转录。", "").replace("使用简体中文转录。", "")
+                else:
+                    result = self.model.transcribe(temp_path, language=self.language_code)
+                    transcription = result["text"]
+                transcription = clean_string(transcription)
+                if verbose:
+                    tqdm.write(transcription)
+                self.add_transcription_to_df(df, file_name, transcription, count, filename_regexp)
+            except Exception as e:
+                logger.error(f"Error processing online file '{file_name}': {e}")
+                continue
+            finally:
+                if os.path.exists(temp_path):
+                    os.remove(temp_path)
+
+        df.to_excel(temp_output_trials, index=False)
+        self.format_excel_output(temp_output_trials)
+        logger.info("Transcription and annotation completed for online processing.")
+        upload_file_to_onedrive(self.onedrive_token, self.drive_id, self.input_dir, temp_output_trials, "trials_and_sessions_annotated.xlsx")
+        os.remove(temp_trials_path)
 
     def process_data(self, verbose=False):
         """
@@ -175,138 +309,14 @@ class Transcriber:
         If self.input_dir exists locally, process using os.walk.
         Otherwise, treat self.input_dir as a OneDrive folder ID and process online.
         """
-        filename_regexp = re.compile(
-            r'blockNr_(?P<block>\d+)_taskNr_(?P<task>\d+)_trialNr_(?P<trial>\d+).*'
-        )
+        
         if os.path.exists(self.input_dir):
             # LOCAL PROCESSING (unchanged)
-            for subdir, _, files in os.walk(self.input_dir):
-                if 'binaries' not in subdir:
-                    continue
-
-                logger.info(f"Using device {self.model.device}")
-                logger.info(f"Processing directory: {subdir}")
-                print(f"Processing {subdir}")
-                base_dir = os.path.abspath(os.path.join(subdir, '..'))
-                log_file_path = os.path.join(base_dir, "transcription.log")
-                file_handler = self.setup_logging(log_file_path)
-
-                try:
-                    df, excel_output_file = self.load_trials_data(base_dir)
-                except FileNotFoundError as e:
-                    logger.error(e)
-                    logger.removeHandler(file_handler)
-                    file_handler.close()
-                    continue
-
-                count = 0
-                files.sort()
-                for file in tqdm(files, desc="Transcribing"):
-                    if not file.lower().endswith(('.mp3', '.mp4', '.m4a')):
-                        continue
-                    count += 1
-                    audio_file_path = os.path.abspath(os.path.join(subdir, file))
-                    logger.debug(f"Processing file {count}/{len(files)}: {audio_file_path}")
-                    try:
-                        if self.language_code == 'zh':
-                            result = self.model.transcribe(
-                                audio_file_path,
-                                language=self.language_code,
-                                initial_prompt="请使用简体中文转录。"
-                            )
-                            transcription = result["text"].replace("请使用简体中文转录。", "").replace("使用简体中文转录。", "")
-                        else:
-                            result = self.model.transcribe(audio_file_path, language=self.language_code)
-                            transcription = result["text"]
-
-                        transcription = clean_string(transcription)
-                        if verbose:
-                            tqdm.write(transcription)
-                        self.add_transcription_to_df(df, file, transcription, count, filename_regexp)
-                    except Exception as e:
-                        logger.error(f"Error processing file '{file}': {e}")
-                        continue
-
-                df.to_excel(excel_output_file, index=False)
-                self.format_excel_output(excel_output_file)
-                logger.info(f"Transcription and annotation completed for '{subdir}'.")
-                logger.removeHandler(file_handler)
-                file_handler.close()
+            self.process_locally(self.input_dir, verbose=verbose)
         else:
             # ONLINE PROCESSING: self.input_dir is a OneDrive folder ID.
-            if self.onedrive_token is None or self.drive_id is None:
-                raise Exception("No OneDrive token or drive ID provided for online processing.")
-            online_files = list_online_files(self.onedrive_token, self.drive_id, self.input_dir)
-            print("Online files:", [f.get("name") for f in online_files])
-            # Identify the trials file (CSV or Excel)
-            trials_file = None
-            for f in online_files:
-                name = f.get("name", "").lower()
-                if "trials_and_sessions.csv" in name or "trials_and_sessions.xlsx" in name:
-                    trials_file = f
-                    break
-
-            if trials_file is None:
-                raise Exception("No trials_and_sessions file found online in the folder.")
-
-            trials_file_id = trials_file.get("id")
-            trials_drive_id = trials_file.get("parentReference", {}).get("driveId")
-            suffix = ".csv" if trials_file.get("name", "").lower().endswith(".csv") else ".xlsx"
-            temp_trials_path = download_file_to_temp(self.onedrive_token, trials_drive_id, trials_file_id, suffix=suffix)
-            if suffix == ".csv":
-                df = pd.read_csv(temp_trials_path)
-            else:
-                df = pd.read_excel(temp_trials_path)
-            for column in OBLIGATORY_COLUMNS:
-                if column not in df:
-                    df[column] = ""
-            if self.language_code not in NO_LATIN:
-                df["transcription_original_script"] = ""
-                df["transcription_original_script_utterance_used"] = ""
-
-            temp_output_trials = os.path.join(tempfile.gettempdir(), "trials_and_sessions_annotated.xlsx")
-
-            # Find all audio files in the "binaries" folder.
-            audio_files = recursive_list_files(self.onedrive_token, self.drive_id, self.input_dir)
-            if not audio_files:
-                raise Exception("No audio files found in the 'binaries' folder.")
-
-            print("Audio files found:", [f.get("name") for f in audio_files])
-            count = 0  # Initialize count here!
-            for file in tqdm(audio_files, desc="Transcribing online"):
-                count += 1
-                file_id = file.get("id")
-                file_name = file.get("name")
-                file_drive_id = file.get("parentReference", {}).get("driveId")
-                try:
-                    suffix_audio = os.path.splitext(file_name)[1]
-                    temp_path = download_file_to_temp(self.onedrive_token, file_drive_id, file_id, suffix=suffix_audio)
-                    if self.language_code == 'zh':
-                        result = self.model.transcribe(
-                            temp_path,
-                            language=self.language_code,
-                            initial_prompt="请使用简体中文转录。"
-                        )
-                        transcription = result["text"].replace("请使用简体中文转录。", "").replace("使用简体中文转录。", "")
-                    else:
-                        result = self.model.transcribe(temp_path, language=self.language_code)
-                        transcription = result["text"]
-                    transcription = clean_string(transcription)
-                    if verbose:
-                        tqdm.write(transcription)
-                    self.add_transcription_to_df(df, file_name, transcription, count, filename_regexp)
-                except Exception as e:
-                    logger.error(f"Error processing online file '{file_name}': {e}")
-                    continue
-                finally:
-                    if os.path.exists(temp_path):
-                        os.remove(temp_path)
-
-            df.to_excel(temp_output_trials, index=False)
-            self.format_excel_output(temp_output_trials)
-            logger.info("Transcription and annotation completed for online processing.")
-            upload_file_to_onedrive(self.onedrive_token, self.drive_id, self.input_dir, temp_output_trials, "trials_and_sessions_annotated.xlsx")
-            os.remove(temp_trials_path)
+            self.process_online(verbose=verbose)
+            
 
 def main():
     parser = argparse.ArgumentParser(description="Automatic transcription")
