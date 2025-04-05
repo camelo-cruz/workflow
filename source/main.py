@@ -24,7 +24,7 @@ app_closing = False  # Global shutdown flag
 # Global variables for folder selection and OneDrive token
 local_folder_path = None        # Holds full local folder path if selected locally
 selected_folder_id = None       # Holds OneDrive folder ID if selected via OneDrive
-drive_id = None                # Holds OneDrive drive ID if selected via OneDrive
+drive_id = None                 # Holds OneDrive drive ID if selected via OneDrive
 onedrive_token = None           # Cached OneDrive token (remains logged in)
 
 # --------------------- Processing Functions ---------------------

@@ -81,5 +81,3 @@ def upload_file_to_onedrive(access_token, drive_id, parent_item_id, file_path, f
     else:
         print("Error uploading file: " + response.text)
 
-
-

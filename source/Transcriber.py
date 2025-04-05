@@ -143,11 +143,11 @@ class Transcriber:
             for idx, _ in series.items():
                 if pd.isna(df.at[idx[0], "automatic_transcription"]):
                     df.at[idx[0], "automatic_transcription"] = ""
-                df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription}/n"
+                df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription}\n"
                 col_name = 'transcription_original_script' if self.language_code in NO_LATIN else 'latin_transcription_everything'
                 if pd.isna(df.at[idx[0], col_name]):
                     df.at[idx[0], col_name] = ""
-                df.at[idx[0], col_name] += f"{count}: {transcription}/n"
+                df.at[idx[0], col_name] += f"{count}: {transcription}\n"
 
     def format_excel_output(self, excel_output_file):
         """Apply red font formatting to target columns in the Excel output."""
