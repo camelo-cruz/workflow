@@ -24,6 +24,7 @@ app_closing = False  # Global shutdown flag
 # Global variables for folder selection and OneDrive token
 local_folder_path = None        # Holds full local folder path if selected locally
 selected_folder_id = None       # Holds OneDrive folder ID if selected via OneDrive
+drive_id = None                # Holds OneDrive drive ID if selected via OneDrive
 onedrive_token = None           # Cached OneDrive token (remains logged in)
 
 # --------------------- Processing Functions ---------------------
@@ -33,7 +34,8 @@ def process_transcribe(input_dir, language, verbose, status_label):
         msg = "Starting transcription..."
         status_label.config(text=msg)
         print(msg)
-        transcriber = Transcriber(input_dir, language, device=device)
+        # Transcriber will use the global onedrive_token if needed.
+        transcriber = Transcriber(input_dir, language, device=device, drive_id=drive_id, onedrive_token=onedrive_token)
         transcriber.process_data(verbose=verbose)
         msg = "Transcription completed."
         status_label.config(text=msg)
@@ -167,16 +169,16 @@ def open_shared_files_window(access_token, shared_files):
         if "remoteItem" in item:
             remote = item["remoteItem"]
             drive_id = remote.get("parentReference", {}).get("driveId")
-            item_id = remote.get("id")
+            folder_id = remote.get("id")
             name = remote.get("name")
             is_folder = remote.get("folder") is not None
         else:
             drive_id = item.get("parentReference", {}).get("driveId")
-            item_id = item.get("id")
+            folder_id = item.get("id")
             name = item.get("name", "Unknown")
             is_folder = item.get("folder") is not None
         
-        node = tree.insert("", "end", text=name, values=(item_id, drive_id))
+        node = tree.insert("", "end", text=name, values=(folder_id, drive_id))
         # For folders, add a dummy child for lazy loading.
         if is_folder:
             tree.insert(node, "end", text="dummy")
@@ -189,8 +191,16 @@ def open_shared_files_window(access_token, shared_files):
             first_child = children[0]
             if tree.item(first_child, "text") == "dummy":
                 tree.delete(first_child)
-                item_id, drive_id = tree.item(node, "values")
-                children_items = list_folder_contents(access_token, drive_id, item_id)
+                values = tree.item(node, "values")
+                if not values or len(values) < 2:
+                    return
+                global drive_id
+                folder_id = values[0]  # The folder's ID
+                drive_id = values[1]   # The drive ID
+                print(f"Expanding folder {folder_id} in drive {drive_id}")  # Debug logging
+                children_items = list_folder_contents(access_token, drive_id, folder_id)
+                if not children_items:
+                    print("No children found or error listing children.")
                 for child in children_items:
                     if "remoteItem" in child:
                         remote = child["remoteItem"]
@@ -210,8 +220,7 @@ def open_shared_files_window(access_token, shared_files):
     # Bind the event for expanding a node to load its children
     tree.bind("<<TreeviewOpen>>", on_open_node)
     
-    def on_double_click(event):
-        """Double-clicking an item selects the folder."""
+    def select_folder():
         selected_items = tree.selection()
         if not selected_items:
             messagebox.showerror("Error", "Please select a folder.")
@@ -219,26 +228,23 @@ def open_shared_files_window(access_token, shared_files):
         node = selected_items[0]
         folder_name = tree.item(node, "text")
         values = tree.item(node, "values")
-        if not values:
+        if not values or len(values) < 2:
             messagebox.showerror("Error", "Invalid selection.")
             return
         folder_id = values[0]
+        drive_id = values[1]  # You may store this globally if needed.
         # For OneDrive, update the global folder variable and show folder name
         global selected_folder_id, local_folder_path
+        print(f"Selected folder ID: {folder_id}, Drive ID: {drive_id}")  # Debug logging
         selected_folder_id = folder_id
         local_folder_path = None
         folder_var.set(folder_name)
         messagebox.showinfo("Folder Selected", f"Folder '{folder_name}' selected.")
         shared_window.destroy()
     
-    # Bind double-click to folder selection
-    tree.bind("<Double-1>", on_double_click)
-    
-    # Also include a button to select the currently highlighted folder
-    select_button = ttk.Button(shared_window, text="Select Folder", command=lambda: on_double_click(None))
+    # Only the button triggers folder selection now.
+    select_button = ttk.Button(shared_window, text="Select Folder", command=select_folder)
     select_button.pack(pady=5)
-
-# --------------------- OneDrive Sign In ---------------------
 
 def sign_in_onedrive():
     """Start OneDrive authentication in a separate thread."""
@@ -257,7 +263,6 @@ def sign_in_onedrive_thread():
             window.after(0, lambda: open_shared_files_window(onedrive_token, shared_files))
             return
         else:
-            # Token may have expired; clear it so we can re-authenticate.
             onedrive_token = None
 
     # Replace with your Azure app's details
@@ -272,7 +277,6 @@ def sign_in_onedrive_thread():
         window.after(0, lambda: messagebox.showerror("Error", "Failed to create device flow."))
         return
 
-    # Inform the user and open the verification URL
     window.after(0, lambda: messagebox.showinfo("Device Code", flow["message"]))
     webbrowser.open(flow["verification_uri"])
 
@@ -287,25 +291,18 @@ def sign_in_onedrive_thread():
     else:
         window.after(0, lambda: messagebox.showerror("Error", "Authentication failed: " + result.get("error_description", "")))
 
-# --------------------- Local Search ---------------------
-
 def local_search():
     """Allow the user to select a local folder."""
     global local_folder_path, selected_folder_id
     folder = filedialog.askdirectory(title="Select Local Folder")
     if folder:
         local_folder_path = folder
-        # Clear any OneDrive selection
         selected_folder_id = None
-        # Display just the folder's basename in the text field
         folder_var.set(os.path.basename(folder))
         messagebox.showinfo("Local Folder Selected", f"Local folder '{os.path.basename(folder)}' selected.")
 
-# --------------------- Start Processing ---------------------
-
 def start_processing():
     global local_folder_path, selected_folder_id
-    # Determine which folder was selected
     if local_folder_path is not None:
         input_dir = local_folder_path
     elif selected_folder_id is not None:
@@ -313,7 +310,8 @@ def start_processing():
     else:
         messagebox.showerror("Error", "Please select a folder (OneDrive or Local).")
         return
-
+    
+    print("Input directory:", input_dir)
     language = language_var.get()
     instruction_or_study = instruction_var.get()
     verbose = verbose_var.get()
@@ -338,8 +336,6 @@ def start_processing():
     else:
         messagebox.showerror("Error", "Please select a valid action.")
 
-# --------------------- Main GUI and Shutdown Handler ---------------------
-
 def on_closing():
     global app_closing
     app_closing = True
@@ -358,7 +354,6 @@ def main():
     style = ttk.Style()
     style.theme_use("clam")
 
-    # Configure combobox and entry styles
     style.configure("TCombobox", foreground="black", fieldbackground="white", background="white", arrowcolor="black")
     style.configure("TEntry", foreground="black", fieldbackground="white", background="white")
     style.configure("Blue.TButton", background="#9B0A0A", foreground="white", font=("Inter", 13),
@@ -370,14 +365,12 @@ def main():
     style.map("White.TButton", background=[("active", "white"), ("disabled", "#A9A9A9")],
               foreground=[("active", "#7F0707"), ("disabled", "#7F0707")])
 
-    # BACKGROUND CANVAS for color panels
     canvas = tk.Canvas(window, width=862, height=519, bd=0, highlightthickness=0, relief="ridge")
     canvas.place(x=0, y=0)
     wine_red = "#7F0707"
     canvas.create_rectangle(0, 0, 431, 519, fill=wine_red, outline="")
     canvas.create_rectangle(431, 0, 862, 519, fill="#FCFCFC", outline="")
 
-    # LEFT SIDE (wine-red background)
     action_label = tk.Label(window, text="Action:", bg=wine_red, fg="white", font=("Inter", 13))
     action_label.place(x=80, y=40)
     action_var = tk.StringVar()
@@ -392,7 +385,6 @@ def main():
     folder_entry = ttk.Entry(window, textvariable=folder_var)
     folder_entry.place(x=80, y=140, width=275, height=30)
 
-    # OneDrive and Local Search buttons
     onedrive_button = ttk.Button(window, text="OneDrive", style="White.TButton", command=sign_in_onedrive)
     onedrive_button.place(x=80, y=180, width=130, height=30)
 
