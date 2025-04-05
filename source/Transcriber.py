@@ -148,7 +148,7 @@ class Transcriber:
         for row in ws.iter_rows(min_row=2):
             for col_name, col_idx in column_indexes.items():
                 cell = row[col_idx - 1]
-                if cell.value:
+                if cell.value: 
                     cell.font = red_font
 
         wb.save(excel_output_file)
