@@ -169,6 +169,7 @@ class Translator():
                         if self.instruction in ['sentences', 'corrected']:
                             #translation = self.translate_with_deepl(self.language_code, text_to_translate) #until we define contract
                             translation = GoogleTranslator(source=self.language_code, target='en').translate(text=text_to_translate)
+                            logging.debug(f"Translated with Google Translator")
 
                         elif self.instruction == 'automatic':
                             translation = self.translate_with_pretrained(self.language_code, text_to_translate, self.device)
