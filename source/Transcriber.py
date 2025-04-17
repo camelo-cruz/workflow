@@ -51,7 +51,9 @@ class Transcriber:
         """Set up file logging for a given directory."""
         file_handler = logging.FileHandler(log_file_path)
         file_handler.setLevel(logging.DEBUG)
-        file_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+        file_handler.setFormatter(
+            logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+        )
         logger.addHandler(file_handler)
         logger.info(f"Logging to {log_file_path}")
         logger.info(f"Using ffmpeg from {ffmpeg_path}")
@@ -62,120 +64,133 @@ class Transcriber:
         Load the trials and sessions data from CSV or Excel.
         Returns the dataframe and the path for the annotated Excel output.
         """
-        csv_file_path = os.path.join(base_dir, 'trials_and_sessions.csv')
-        excel_file_path = os.path.join(base_dir, 'trials_and_sessions.xlsx')
-        excel_output_file = os.path.join(base_dir, 'trials_and_sessions_annotated.xlsx')
+        csv_file = os.path.join(base_dir, 'trials_and_sessions.csv')
+        excel_file = os.path.join(base_dir, 'trials_and_sessions.xlsx')
+        excel_out = os.path.join(base_dir, 'trials_and_sessions_annotated.xlsx')
 
-        if os.path.exists(csv_file_path):
-            df = pd.read_csv(csv_file_path)
-        elif os.path.exists(excel_file_path):
-            df = pd.read_excel(excel_file_path)
+        if os.path.exists(csv_file):
+            df = pd.read_csv(csv_file)
+        elif os.path.exists(excel_file):
+            df = pd.read_excel(excel_file)
         else:
             raise FileNotFoundError("No trials_and_sessions file found in the directory.")
 
         # Ensure obligatory columns exist
-        for column in OBLIGATORY_COLUMNS:
-            if column not in df:
-                df[column] = ""
+        for col in OBLIGATORY_COLUMNS:
+            if col not in df:
+                df[col] = ""
         if self.language_code not in NO_LATIN:
             df["transcription_original_script"] = ""
             df["transcription_original_script_utterance_used"] = ""
-        return df, excel_output_file
+
+        return df, excel_out
+
+    def _append_to_cell(self, df, idx, column, text):
+        """Helper to append text to a DataFrame cell, initializing if empty."""
+        old_val = df.at[idx, column]
+        df.at[idx, column] = ("" if pd.isna(old_val) else old_val) + text
 
     def add_transcription_to_df(self, df, file, transcription, count, filename_regexp):
         """
         Add the transcription text to the dataframe.
-        If the file is not found in the dataframe, use the block/task/trial
-        pattern to locate the row.
+        If the file is not found, use block/task/trial pattern to locate the row.
         """
+        # locate any direct match
         series = df[df.isin([file])].stack()
+        is_nonlatin = self.language_code in NO_LATIN
+        text_auto = f"{count}: {transcription}"
+        text_suffix = " - " if series.empty else " "
+        col_name = (
+            'transcription_original_script' if is_nonlatin
+            else 'latin_transcription_everything'
+        )
+
         if series.empty:
-            filename_match = filename_regexp.search(file)
-            if filename_match is None:
-                logger.warning(f"File '{file}' does not match the block_task_trial pattern. Transcription not added.")
-                return
-            block_nr = int(filename_match.group('block'))
-            task_nr = int(filename_match.group('task'))
-            trial_nr = int(filename_match.group('trial'))
-            selection_condition = (
-                (df['Block_Nr'] == block_nr) &
-                (df['Task_Nr'] == task_nr) &
-                (df['Trial_Nr'] == trial_nr)
-            )
-            if df.loc[selection_condition].empty:
-                logger.warning(f"No row for block {block_nr}, task {task_nr}, trial {trial_nr}. Transcription not added for '{file}'.")
+            match = filename_regexp.search(file)
+            if not match:
+                logger.warning(
+                    f"File '{file}' does not match block/task/trial pattern. Skipping."
+                )
                 return
 
-            # Find the first available missing_filename column
-            column_counter = 1
-            missing_filename_column = f'missing_filename_{column_counter}'
-            while missing_filename_column in df.columns and not df.loc[selection_condition, missing_filename_column].isna().all():
-                column_counter += 1
-                missing_filename_column = f'missing_filename_{column_counter}'
-            df.loc[selection_condition, missing_filename_column] = file
+            blk = int(match.group('block'))
+            tsk = int(match.group('task'))
+            trl = int(match.group('trial'))
+            cond = (
+                (df['Block_Nr'] == blk) &
+                (df['Task_Nr'] == tsk) &
+                (df['Trial_Nr'] == trl)
+            )
+            if df.loc[cond].empty:
+                logger.warning(
+                    f"No row for block {blk}, task {tsk}, trial {trl}. Skipping '{file}'."
+                )
+                return
 
-            # Append transcription with a separator
-            df.loc[selection_condition, 'automatic_transcription'] = (
-                (df.loc[selection_condition, 'automatic_transcription'] or "") + f"{count}: {transcription} - "
-            )
-            col_name = 'transcription_original_script' if self.language_code in NO_LATIN else 'latin_transcription_everything'
-            df.loc[selection_condition, col_name] = (
-                (df.loc[selection_condition, col_name] or "") + f"{count}: {transcription} - "
-            )
-            logger.info(f"File '{file}' added to row for block {block_nr}, task {task_nr}, trial {trial_nr}.")
+            # assign missing_filename to the first available slot
+            col_ctr = 1
+            miss_col = f'missing_filename_{col_ctr}'
+            while (
+                miss_col in df.columns and
+                not df.loc[cond, miss_col].isna().all()
+            ):
+                col_ctr += 1
+                miss_col = f'missing_filename_{col_ctr}'
+            df.loc[cond, miss_col] = file
+
+            # append transcription to each matched index
+            for idx in df.loc[cond].index:
+                self._append_to_cell(df, idx, 'automatic_transcription', text_auto + text_suffix)
+                self._append_to_cell(df, idx, col_name, text_auto + text_suffix)
+
         else:
-            for idx, _ in series.items():
-                if pd.isna(df.at[idx[0], "automatic_transcription"]):
-                    df.at[idx[0], "automatic_transcription"] = ""
-                df.at[idx[0], "automatic_transcription"] += f"{count}: {transcription} "
-                col_name = 'transcription_original_script' if self.language_code in NO_LATIN else 'latin_transcription_everything'
-                if pd.isna(df.at[idx[0], col_name]):
-                    df.at[idx[0], col_name] = ""
-                df.at[idx[0], col_name] += f"{count}: {transcription} "
+            # direct match: stack() yields (row_index, col_index) tuples
+            for (row_idx, _col), _ in series.items():
+                self._append_to_cell(df, row_idx, 'automatic_transcription', text_auto + text_suffix)
+                self._append_to_cell(df, row_idx, col_name, text_auto + text_suffix)
 
     def format_excel_output(self, excel_output_file):
-        """Apply red font formatting to target columns in the Excel output."""
+        """Apply red font to target columns in the Excel output."""
         wb = openpyxl.load_workbook(excel_output_file)
         ws = wb.active
-        red_font = Font(color="FF0000")
-        target_columns = ['transcription_original_script', 'latin_transcription_everything']
+        red = Font(color="FF0000")
+        targets = ['transcription_original_script', 'latin_transcription_everything']
 
-        # Map target columns to their column index from header row
-        header_row = next(ws.iter_rows(min_row=1, max_row=1, values_only=True))
-        column_indexes = {col_name: idx + 1 for idx, col_name in enumerate(header_row) if col_name in target_columns}
+        headers = next(ws.iter_rows(min_row=1, max_row=1, values_only=True))
+        idx_map = {h: i+1 for i, h in enumerate(headers) if h in targets}
 
-        # Apply red font for each cell in the target columns
         for row in ws.iter_rows(min_row=2):
-            for col_name, col_idx in column_indexes.items():
-                cell = row[col_idx - 1]
-                if cell.value: 
-                    cell.font = red_font
+            for col, col_i in idx_map.items():
+                cell = row[col_i-1]
+                if cell.value:
+                    cell.font = red
 
         wb.save(excel_output_file)
-        logger.info(f"Excel formatting applied and saved to '{excel_output_file}'.")
+        logger.info(f"Excel saved and formatted: '{excel_output_file}'")
 
     def process_data(self, verbose=False):
-        """Walk through the input directory, process audio files, and update the trials file."""
+        """Walk input directory, process audio, and update trials file."""
         filename_regexp = re.compile(
             r'blockNr_(?P<block>\d+)_taskNr_(?P<task>\d+)_trialNr_(?P<trial>\d+).*'
         )
+
         for subdir, _, files in os.walk(self.input_dir):
             if 'binaries' not in subdir:
                 continue
 
-            logger.info(f"Using device {self.model.device}")
-            logger.info(f"Processing directory: {subdir}")
+            logger.info(f"Device: {self.model.device}")
+            logger.info(f"Processing {subdir}")
             print(f"Processing {subdir}")
-            base_dir = os.path.abspath(os.path.join(subdir, '..'))
-            log_file_path = os.path.join(base_dir, "transcription.log")
-            file_handler = self.setup_logging(log_file_path)
+            base = os.path.abspath(os.path.join(subdir, '..'))
+            log_path = os.path.join(base, "transcription.log")
+            fh = self.setup_logging(log_path)
 
             try:
-                df, excel_output_file = self.load_trials_data(base_dir)
+                df, out_file = self.load_trials_data(base)
             except FileNotFoundError as e:
                 logger.error(e)
-                logger.removeHandler(file_handler)
-                file_handler.close()
+                logger.removeHandler(fh)
+                fh.close()
                 continue
 
             count = 0
@@ -184,41 +199,44 @@ class Transcriber:
                 if not file.lower().endswith(('.mp3', '.mp4', '.m4a')):
                     continue
                 count += 1
-                audio_file_path = os.path.abspath(os.path.join(subdir, file))
-                logger.debug(f"Processing file {count}/{len(files)}: {audio_file_path}")
+                path = os.path.abspath(os.path.join(subdir, file))
+                logger.debug(f"File {count}/{len(files)}: {path}")
                 try:
-                    # Handle Chinese differently with an initial prompt
                     if self.language_code == 'zh':
-                        result = self.model.transcribe(
-                            audio_file_path,
-                            language=self.language_code,
+                        res = self.model.transcribe(
+                            path, language=self.language_code,
                             initial_prompt="请使用简体中文转录。"
                         )
-                        transcription = result["text"].replace("请使用简体中文转录。", "").replace("使用简体中文转录。", "")
+                        text = res["text"].replace(
+                            "请使用简体中文转录。", ""
+                        ).replace("使用简体中文转录。", "")
                     else:
-                        result = self.model.transcribe(audio_file_path, language=self.language_code)
-                        transcription = result["text"]
+                        res = self.model.transcribe(path, language=self.language_code)
+                        text = res["text"]
 
-                    transcription = clean_string(transcription)
+                    text = clean_string(text)
                     if verbose:
-                        tqdm.write(transcription)
-                    self.add_transcription_to_df(df, file, transcription, count, filename_regexp)
+                        tqdm.write(text)
+                    self.add_transcription_to_df(df, file, text, count, filename_regexp)
                 except Exception as e:
-                    logger.error(f"Error processing file '{file}': {e}")
+                    logger.error(f"Error on '{file}': {e}")
                     continue
 
-            df.to_excel(excel_output_file, index=False)
-            self.format_excel_output(excel_output_file)
-            logger.info(f"Transcription and annotation completed for '{subdir}'.")
-            logger.removeHandler(file_handler)
-            file_handler.close()
+            df.to_excel(out_file, index=False)
+            self.format_excel_output(out_file)
+            logger.info(f"Completed '{subdir}'")
+            logger.removeHandler(fh)
+            fh.close()
 
 
 def main():
     parser = argparse.ArgumentParser(description="Automatic transcription")
     parser.add_argument("input_dir", help="Directory containing audio files")
     parser.add_argument("language", help="Language of the audio content")
-    parser.add_argument("--verbose", action="store_true", help="Print detailed output")
+    parser.add_argument(
+        "--verbose", action="store_true",
+        help="Print detailed transcription output"
+    )
     args = parser.parse_args()
 
     transcriber = Transcriber(args.input_dir, args.language)
