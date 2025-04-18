@@ -133,7 +133,7 @@ jobs:
           --distpath windows-distribution/dist \
           --workpath windows-distribution/build \
           --collect-submodules=numba \
-          --name tgt_windows main.py
+          --name tgt_windows web_app.py
 
     - name: Upload binary as artifact
       uses: actions/upload-artifact@v4
@@ -215,7 +215,7 @@ jobs:
           --distpath mac-distribution/dist \
           --workpath mac-distribution/build \
           --collect-submodules=numba \
-          --name tgt_mac main.py
+          --name tgt_mac web_app.py
 
     - name: Upload binary as artifact
       uses: actions/upload-artifact@v4
