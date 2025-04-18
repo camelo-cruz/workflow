@@ -124,7 +124,7 @@ class Glosser():
 
         return glossed_sentence
 
-    def gloss_with_spacy(self, sentence, verbose = False):
+    def gloss_with_spacy(self, sentence, verbose = False): 
         """
         This function performs the morphological analysis of a sentence given 
         a spacy model, a tokenizer and a translation model. It takes a sentence 
