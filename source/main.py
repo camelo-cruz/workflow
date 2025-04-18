@@ -12,7 +12,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 
-cancel_flag = False
+cancel_flag = False 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
