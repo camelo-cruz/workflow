@@ -117,6 +117,9 @@ jobs:
 
     - name: Set environment variables
       run: echo "API_KEY=${{ secrets.DEEPL_API_KEY }}" > secrets.env
+
+    - name: Append Hugging key
+      run: echo "HUGGING_KEY=${{ secrets.HUGGING_KEY }}" >> secrets.env
         
     - name: Remove temp and Build binary with PyInstaller
       shell: bash
@@ -197,6 +200,9 @@ jobs:
 
     - name: Set environment variables
       run: echo "API_KEY=${{ secrets.DEEPL_API_KEY }}" > secrets.env
+
+    - name: Append Hugging key
+      run: echo "HUGGING_KEY=${{ secrets.HUGGING_KEY }}" >> secrets.env
 
     - name: Build macOS binary with PyInstaller
       run: |
