@@ -29,3 +29,6 @@ sacremoses
 msal
 requests
 pykakasi
+fastapi
+uvicorn
+python-multipart

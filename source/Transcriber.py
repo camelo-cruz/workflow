@@ -53,6 +53,30 @@ class Transcriber:
             self.model = whisperx.load_model("large-v2", device, compute_type="float16" )
         except:
             self.model = whisperx.load_model("large-v2", device, compute_type="int8")
+        
+        ## Load Hugging
+        try:
+            # If running under PyInstaller, sys._MEIPASS is available
+            base_path = os.path.join(sys._MEIPASS, 'materials')
+            print("Using sys._MEIPASS for materials path")
+        except Exception:
+            # Fallback to using the script's directory if not running as a PyInstaller bundle
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            base_path = os.path.join(script_dir, 'materials')
+            print("Using script directory for materials path")
+
+        secrets_path = os.path.join(base_path, 'secrets.env')
+
+        if os.path.exists(secrets_path):
+            load_dotenv(secrets_path, override=True)
+        else:
+            print(f"Error: {secrets_path} not found.")
+            sys.exit(1)
+        
+        self.hugging_key = os.getenv("HUGGING_KEY")
+        if not self.hugging_key:
+            raise ValueError("Hugging face key not found. Check your secrets.env file.")
+        
 
     def setup_logging(self, log_file_path):
         """Set up file logging for a given directory."""
@@ -157,28 +181,6 @@ class Transcriber:
                 self._append_to_cell(df, row_idx, col_name, text_auto + text_suffix)
     
     def transcribe_and_diarize(self, path_to_audio, prompt=''):
-        try:
-            # If running under PyInstaller, sys._MEIPASS is available
-            base_path = os.path.join(sys._MEIPASS, 'materials')
-            print("Using sys._MEIPASS for materials path")
-        except Exception:
-            # Fallback to using the script's directory if not running as a PyInstaller bundle
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            base_path = os.path.join(script_dir, 'materials')
-            print("Using script directory for materials path")
-
-        secrets_path = os.path.join(base_path, 'secrets.env')
-
-        if os.path.exists(secrets_path):
-            load_dotenv(secrets_path)
-        else:
-            print(f"Error: {secrets_path} not found.")
-            sys.exit(1)
-        
-        hugging_key = os.getenv("HUGGING_KEY")
-        if not hugging_key:
-            raise ValueError("Hugging face key not found. Check your secrets.env file.")
-        
         # --- Chinese-only path: just transcribe and return raw text ---
         if self.language_code == 'zh':
             res = self.model.transcribe(
@@ -214,40 +216,43 @@ class Transcriber:
 
         # run diarization
         diarize_model = whisperx.DiarizationPipeline(
-            use_auth_token=hugging_key,
+            use_auth_token=self.hugging_key,
             device=self.device)
-        diarize_segments = diarize_model(audio, 
-                                         min_speakers=1, 
-                                         max_speakers=2)
-        result = whisperx.assign_word_speakers(diarize_segments, result)
+        diarize_segments = diarize_model(audio)
 
-        if not result["segments"] or "speaker" not in result["segments"][0]:
-            return " ".join(seg["text"].strip() for seg in result["segments"])
+        result = whisperx.assign_word_speakers(diarize_segments, result)
 
         full_sentences = []
         buffer_speaker = None
         buffer_text = ""
 
         for seg in result["segments"]:
-            spk = seg["speaker"]
+            # 1) pick up the speaker if present, else reuse the last one
+            spk = seg.get("speaker", buffer_speaker)
+            
+            # 2) if we still have no speaker (i.e. first segment was unlabeled), skip
+            if spk is None:
+                continue
+            
             txt = seg["text"].strip()
-
+            
+            # 3) start the first buffer
             if buffer_speaker is None:
-                # start first buffer
                 buffer_speaker, buffer_text = spk, txt
+            
+            # 4) same speaker → just append
             elif spk == buffer_speaker:
-                # same speaker, keep appending (with a space)
                 buffer_text += " " + txt
+            
+            # 5) speaker changed → flush old and start new
             else:
-                # speaker changed: flush old buffer, start new one
-                full_sentences.append(f"{buffer_speaker}: {buffer_text} ")
+                full_sentences.append(f"{buffer_speaker}: {buffer_text}")
                 buffer_speaker, buffer_text = spk, txt
 
-        # flush the very last buffer, if any
+        # 6) flush whatever’s left
         if buffer_speaker is not None:
             full_sentences.append(f"{buffer_speaker}: {buffer_text}")
 
-        # join all speaker‐tagged sentences into one big string
         return "  ".join(full_sentences)
 
                         
