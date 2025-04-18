@@ -61,7 +61,7 @@ class SentenceSelector():
         
         # Initialize target column as empty strings
         df[target] = ""
-        df[target] = df[target].astype('object')
+        df[target] = df[target].astype('object') 
 
         # Process each non-null sentence in the source column
         for text in df[source].dropna():
