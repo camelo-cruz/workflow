@@ -1,3 +1,4 @@
+<!-- templates/index.html -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,9 +9,9 @@
 <body>
   <div class="container">
 
-    <!-- Sidebar (wine‑red) -->
+    <!-- Sidebar -->
     <div class="sidebar">
-      <h1 class="title">Auomatic workflow</h1>
+      <h1 class="title">LeibnizDream TGT</h1>
 
       <form id="theForm" enctype="multipart/form-data">
         <label>Action</label>
@@ -25,15 +26,12 @@
         <label>Language</label>
         <input type="text" name="language" required>
 
-        <!-- Wrap Instruction in its own div -->
-        <div id="instruction-group">
-          <label>Instruction / Study</label>
-          <select name="instruction">
-            <option value="automatic">Automatic</option>
-            <option value="corrected">Corrected</option>
-            <option value="sentences">Sentences</option>
-          </select>
-        </div>
+        <label>Instruction / Study</label>
+        <select name="instruction">
+          <option value="automatic">Automatic</option>
+          <option value="corrected">Corrected</option>
+          <option value="sentences">Sentences</option>
+        </select>
 
         <label>Verbose</label>
         <input type="checkbox" name="verbose">
@@ -54,54 +52,38 @@
       <div id="status" class="status"></div>
     </div>
 
-    <!-- Main panel (white) -->
+    <!-- Main panel -->
     <div class="main">
       <img src="{{ url_for('static', filename='zas_logo.jpg') }}"
            class="logo"
            alt="ZAS Logo">
       <div class="logo-text">LeibnizDream</div>
 
-      <!-- Terminal output pane -->
+      <!-- Live terminal output -->
       <div id="logs" class="logs"><pre></pre></div>
     </div>
+
   </div>
 
   <script>
   (function() {
-    const form      = document.getElementById('theForm'),
-          actionEl  = form.querySelector('select[name="action"]'),
-          instrDiv  = document.getElementById('instruction-group'),
-          status    = document.getElementById('status'),
-          logs      = document.getElementById('logs').querySelector('pre');
-
-    // 1) Show/hide instruction on action change
-    function updateInstructionVisibility() {
-      const a = actionEl.value;
-      if (a === 'Translate' || a === 'Gloss') {
-        instrDiv.style.display = 'block';
-      } else {
-        instrDiv.style.display = 'none';
-      }
-    }
-    actionEl.addEventListener('change', updateInstructionVisibility);
-    updateInstructionVisibility();  // initial
+    const form   = document.getElementById('theForm'),
+          status = document.getElementById('status'),
+          logs   = document.getElementById('logs').querySelector('pre');
 
     form.onsubmit = async e => {
       e.preventDefault();
       status.textContent = 'Starting…';
       logs.textContent   = '';
 
-      // build form data
+      // Build FormData
       const data = new FormData();
       data.append('action',      form.action.value);
       data.append('language',    form.language.value);
-      // only append instruction if visible
-      if (instrDiv.style.display !== 'none') {
-        data.append('instruction', form.instruction.value);
-      }
+      data.append('instruction', form.instruction.value);
       if (form.verbose.checked) data.append('verbose','on');
 
-      // append files…
+      // Append files with full relative paths
       const input = form.querySelector('input[name="folder"]');
       for (const file of input.files) {
         const rel = file.webkitRelativePath || file.name;
@@ -109,26 +91,28 @@
       }
 
       try {
-        // kick off job
+        // Kick off job
         const resStart = await fetch('/process', { method: 'POST', body: data });
         const { job_id, error } = await resStart.json();
         if (error) {
           status.textContent = 'Error starting job';
-          logs.textContent   = error;
+          logs.textContent = error;
           return;
         }
         status.textContent = 'Job ID: ' + job_id;
 
-        // stream logs
+        // Stream logs via SSE
         const evt = new EventSource(`/logs/${job_id}`);
         evt.onmessage = e => {
           logs.textContent += e.data + '\n';
+          // scroll
           logs.parentElement.scrollTop = logs.parentElement.scrollHeight;
         };
         evt.onerror = () => {
           evt.close();
           status.textContent = 'Completed.';
         };
+
       } catch (err) {
         status.textContent = 'Network error';
         logs.textContent   = err.toString();

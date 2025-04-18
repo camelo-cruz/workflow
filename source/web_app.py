@@ -1,44 +1,59 @@
-from contextlib import redirect_stderr, redirect_stdout
-import os, shutil, tempfile, threading, uuid, logging, torch
+# app.py
+import os
+import shutil
+import tempfile
+import threading
+import uuid
+import logging
+import torch
 import tqdm
-import io, sys
+import io
+import sys
+from queue import Queue, Empty
+from contextlib import redirect_stdout, redirect_stderr
+
 from flask import (
     Flask, request, render_template,
     jsonify, Response, stream_with_context
 )
 from dotenv import load_dotenv
-from queue import Queue, Empty
 
 from Transcriber import Transcriber
-# … other imports …
+from Translator import Translator
+from Transliterator import Transliterator
+from SentenceSelector import SentenceSelector
+from Glosser import Glosser
 
+# Load your Hugging/Ffmpeg keys, etc.
 load_dotenv("materials/secrets.env", override=True)
+
 device = "cuda" if torch.cuda.is_available() else "cpu"
 app = Flask(__name__,
             static_folder="static",
             template_folder="templates")
 
-# In‑memory map of job_id → log‑Queue
+# job_id -> log Queue
 job_queues = {}
 
 def background_work(job_id, tmpdir, action, language, instruction, verbose):
     q: Queue = job_queues[job_id]
-    # writer that puts each write() call into the queue
+
     class QueueWriter:
         def write(self, s):
+            # only push non‑empty lines
             if s.strip():
                 q.put(s)
         def flush(self): pass
 
     writer = QueueWriter()
 
-    # Monkey‑patch tqdm to write into our writer
+    # patch tqdm
     orig_tqdm = tqdm.tqdm
     tqdm.tqdm = lambda *args, **kwargs: orig_tqdm(
-        *args, file=writer, **{**kwargs, "leave": True}
+        *args, file=writer, leave=True, ascii=True, **{**kwargs}
     )
 
-    # Also patch stdout / stderr
+    # capture stdout/stderr and logging
     with redirect_stdout(writer), redirect_stderr(writer):
         logger = logging.getLogger()
         h = logging.StreamHandler(writer)
@@ -47,40 +62,52 @@ def background_work(job_id, tmpdir, action, language, instruction, verbose):
             if action == "Transcribe":
                 tr = Transcriber(tmpdir, language, device=device)
                 tr.process_data(verbose=verbose)
-            # … other actions …
+            elif action == "Translate":
+                tx = Translator(tmpdir, language, instruction, device=device)
+                tx.process_data(verbose=verbose)
+            elif action == "Gloss":
+                gl = Glosser(tmpdir, language, instruction, device=device)
+                gl.process_data()
+            elif action == "Transliterate":
+                tl = Transliterator(tmpdir, language, instruction, device=device)
+                tl.process_data()
+            elif action == "Select sentences":
+                ss = SentenceSelector(tmpdir, language, instruction, device=device)
+                ss.process_data(verbose=verbose)
             else:
                 print(f"Unknown action: {action}", file=sys.stderr)
         except Exception:
             import traceback
             traceback.print_exc(file=writer)
         finally:
-            # signal completion
+            # mark completion, restore, cleanup handler
             q.put(None)
-            # restore
             tqdm.tqdm = orig_tqdm
             logger.removeHandler(h)
 
 @app.route("/process", methods=["POST"])
 def process():
     action      = request.form["action"]
-    language    = request.form["language"]
+    language    = request.form["language"] or None
     instruction = request.form.get("instruction","")
-    verbose     = request.form.get("verbose")=="on"
+    verbose     = request.form.get("verbose") == "on"
 
-    # save upload to tmpdir…
+    # Save uploads to a temp folder
     uploaded = request.files.getlist("folder")
+    if not uploaded:
+        return jsonify(error="No folder uploaded"), 400
+
     tmpdir = tempfile.mkdtemp(prefix="upload_")
     for f in uploaded:
         dest = os.path.join(tmpdir, f.filename)
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         f.save(dest)
 
-    # create job
+    # start the background job
     job_id = str(uuid.uuid4())
     q = Queue()
     job_queues[job_id] = q
 
-    # start background thread
     t = threading.Thread(
         target=background_work,
         args=(job_id, tmpdir, action, language, instruction, verbose),
@@ -104,11 +131,10 @@ def stream_logs(job_id):
                 continue
             if line is None:
                 break
-            # SSE protocol: “data: …\n\n”
             yield f"data: {line}\n\n"
         # cleanup
         del job_queues[job_id]
-        # remove tmpdir: you could store tmpdir per job if needed
+        shutil.rmtree(job_queues.get(job_id, ""), ignore_errors=True)
 
     return Response(stream_with_context(event_stream()),
                     mimetype="text/event-stream")
