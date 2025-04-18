@@ -1,112 +1,127 @@
 /* Layout */
 body, html {
-    margin: 0;
-    padding: 0;
-    font-family: Inter, sans-serif;
-    height: 100vh;
-  }
-  .container {
-    display: flex;
-    height: 100%;
-  }
-  
-  /* Sidebar (Wine-red) */
-  .sidebar {
-    flex: 0 0 40%;
-    background-color: #7F0707;
-    color: white;
-    padding: 2rem;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-  }
-  .sidebar .title {
-    margin-top: 0;
-    font-size: 1.8rem;
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Center form elements */
-  .sidebar form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  /* Form fields */
-  .sidebar label {
-    display: block;
-    margin-top: 1rem;
-    font-size: 1rem;
-    width: 100%;
-  }
-  .sidebar input[type="text"],
-  .sidebar select,
-  .sidebar input[type="file"] {
-    width: 100%;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 4px;
-    margin-top: 0.3rem;
-    box-sizing: border-box;
-  }
-  .sidebar input[type="checkbox"] {
-    margin-left: 0;
-    transform: scale(1.2);
-    margin-top: 0.5rem;
-  }
-  
-  /* Primary button */
-  .sidebar .btn-primary {
-    margin-top: 1.5rem;
-    padding: 0.7rem;
-    background-color: #9B0A0A;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    width: 60%;
-  }
-  .sidebar .btn-primary:hover {
-    background-color: #7F0707;
-  }
-  
-  /* Status box */
-  .sidebar .status {
-    margin-top: auto;
-    font-size: 0.95rem;
-    background: rgba(255,255,255,0.1);
-    padding: 0.5rem;
-    border-radius: 4px;
-    min-height: 2rem;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  /* Logo in sidebar */
-  .sidebar-logo {
-    width: 120px;
-    display: block;
-    margin: 1rem auto;
-  }
-  
-  /* Main panel (White) */
-  .main {
-    flex: 1;
-    background-color: #FCFCFC;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .main .logo {
-    max-width: 200px;
-    height: auto;
-    margin-bottom: 1rem;
-  }
-  .main .logo-text {
-    font-size: 1.5rem;
-    color: #333;
-  }  
+  margin: 0;
+  padding: 0;
+  font-family: Inter, sans-serif;
+  height: 100vh;
+}
+.container {
+  display: flex;
+  height: 100%;
+}
+
+/* Sidebar (wine‑red) */
+.sidebar {
+  flex: 0 0 40%;
+  background-color: #7F0707;
+  color: white;
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar .title {
+  margin-top: 0;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.sidebar form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.sidebar label {
+  display: block;
+  margin-top: 1rem;
+  font-size: 1rem;
+  width: 100%;
+}
+.sidebar input[type="text"],
+.sidebar select,
+.sidebar input[type="file"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  margin-top: 0.3rem;
+  box-sizing: border-box;
+}
+.sidebar input[type="checkbox"] {
+  margin-left: 0;
+  transform: scale(1.2);
+  margin-top: 0.5rem;
+}
+.sidebar .btn-primary {
+  margin-top: 1.5rem;
+  padding: 0.7rem;
+  background-color: #9B0A0A;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  width: 60%;
+}
+.sidebar .btn-primary:hover {
+  background-color: #7F0707;
+}
+.sidebar .status {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  background: rgba(255,255,255,0.1);
+  padding: 0.5rem;
+  border-radius: 4px;
+  min-height: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.sidebar-logo {
+  width: 120px;
+  display: block;
+  margin: 1rem auto;
+}
+
+/* Main panel (white) */
+.main {
+  flex: 1;
+  background-color: #FCFCFC;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Lift the small logo up */
+.main .logo {
+  max-width: 150px;
+  height: auto;
+  margin-top: 0;      /* bring right‑panel logo to top */
+  margin-bottom: 1rem;
+}
+
+/* Logo text */
+.main .logo-text {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+/* Terminal window */
+#logs {
+  background: #1e1e1e;
+  color: #ddd;
+  font-family: Menlo, Monaco, monospace;
+  width: 100%;
+  flex: 1;                 /* take all remaining vertical space */
+  overflow-y: auto;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+#logs pre {
+  margin: 0;
+  white-space: pre-wrap;
+}

@@ -7,6 +7,8 @@
 </head>
 <body>
   <div class="container">
+
+    <!-- Sidebar (wine‑red) -->
     <div class="sidebar">
       <h1 class="title">LeibnizDream TGT</h1>
 
@@ -24,10 +26,10 @@
         <input type="text" name="language" value="en" required>
 
         <label>Instruction / Study</label>
-        <select name="action" required>
-          <option>Automatic</option>
-          <option>Corrected</option>
-          <option>Sentences</option>
+        <select name="instruction">
+          <option value="automatic">Automatic</option>
+          <option value="corrected">Corrected</option>
+          <option value="sentences">Sentences</option>
         </select>
 
         <label>Verbose</label>
@@ -49,49 +51,72 @@
       <div id="status" class="status"></div>
     </div>
 
+    <!-- Main panel (white) -->
     <div class="main">
-      <img src="{{ url_for('static', filename='zas_logo.jpg') }}" alt="ZAS Logo" class="logo">
+      <img src="{{ url_for('static', filename='zas_logo.jpg') }}"
+           class="logo"
+           alt="ZAS Logo">
       <div class="logo-text">LeibnizDream</div>
+
+      <!-- Terminal output pane -->
+      <div id="logs" class="logs"><pre></pre></div>
     </div>
+
   </div>
 
   <script>
+  (function() {
     const form   = document.getElementById('theForm'),
-          status = document.getElementById('status');
+          status = document.getElementById('status'),
+          logs   = document.getElementById('logs').querySelector('pre');
 
     form.onsubmit = async e => {
       e.preventDefault();
-      status.textContent = 'Processing…';
+      status.textContent = 'Starting…';
+      logs.textContent   = '';
 
-      // Build our own FormData so we can supply each file's relative path
+      // 1) Build FormData
       const data = new FormData();
-      // 1) append all non-file inputs
-      Array.from(form.elements).forEach(el => {
-        if (!el.name || el.name === 'folder') return;
-        if (el.type === 'checkbox') {
-          if (el.checked) data.append(el.name, 'on');
-        } else {
-          data.append(el.name, el.value);
-        }
-      });
+      data.append('action',      form.action.value);
+      data.append('language',    form.language.value);
+      data.append('instruction', form.instruction.value);
+      if (form.verbose.checked) data.append('verbose','on');
 
-      // 2) append each file with its webkitRelativePath
       const input = form.querySelector('input[name="folder"]');
-      Array.from(input.files).forEach(file => {
-        // file.webkitRelativePath is like "session_123/binaries/foo.mp3"
+      for (const file of input.files) {
         const rel = file.webkitRelativePath || file.name;
         data.append('folder', file, rel);
-      });
+      }
 
-      // 3) send to /process
       try {
-        const res = await fetch('/process', { method: 'POST', body: data });
-        const j   = await res.json();
-        status.textContent = j.error ? `Error: ${j.error}` : j.result;
+        // 2) Kick off the job, get job_id
+        const resStart = await fetch('/process', { method: 'POST', body: data });
+        const { job_id, error } = await resStart.json();
+        if (error) {
+          status.textContent = 'Error starting job';
+          logs.textContent = error;
+          return;
+        }
+        status.textContent = 'Job ID: ' + job_id;
+
+        // 3) Stream logs via SSE
+        const evt = new EventSource(`/logs/${job_id}`);
+        evt.onmessage = e => {
+          logs.textContent += e.data + '\n';
+          // auto‑scroll
+          logs.parentElement.scrollTop = logs.parentElement.scrollHeight;
+        };
+        evt.onerror = () => {
+          evt.close();
+          status.textContent = 'Completed.';
+        };
+
       } catch (err) {
-        status.textContent = `Network error: ${err}`;
+        status.textContent = 'Network error';
+        logs.textContent   = err.toString();
       }
     };
+  })();
   </script>
 </body>
 </html>
