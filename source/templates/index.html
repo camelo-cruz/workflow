@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>LeibnizDream WhisperX</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <h1 class="title">LeibnizDream TGT</h1>
+
+      <form id="theForm" enctype="multipart/form-data">
+        <label>Action</label>
+        <select name="action" required>
+          <option>Transcribe</option>
+          <option>Translate</option>
+          <option>Gloss</option>
+          <option>Transliterate</option>
+          <option>Select sentences</option>
+        </select>
+
+        <label>Language</label>
+        <input type="text" name="language" value="en" required>
+
+        <label>Instruction / Study</label>
+        <select name="action" required>
+          <option>Automatic</option>
+          <option>Corrected</option>
+          <option>Sentences</option>
+        </select>
+
+        <label>Verbose</label>
+        <input type="checkbox" name="verbose">
+
+        <label>Upload Session Folder</label>
+        <input
+          type="file"
+          name="folder"
+          webkitdirectory
+          directory
+          multiple
+          required
+        >
+
+        <button class="btn-primary" type="submit">Process</button>
+      </form>
+
+      <div id="status" class="status"></div>
+    </div>
+
+    <div class="main">
+      <img src="{{ url_for('static', filename='zas_logo.jpg') }}" alt="ZAS Logo" class="logo">
+      <div class="logo-text">LeibnizDream</div>
+    </div>
+  </div>
+
+  <script>
+    const form   = document.getElementById('theForm'),
+          status = document.getElementById('status');
+
+    form.onsubmit = async e => {
+      e.preventDefault();
+      status.textContent = 'Processing…';
+
+      // Build our own FormData so we can supply each file's relative path
+      const data = new FormData();
+      // 1) append all non-file inputs
+      Array.from(form.elements).forEach(el => {
+        if (!el.name || el.name === 'folder') return;
+        if (el.type === 'checkbox') {
+          if (el.checked) data.append(el.name, 'on');
+        } else {
+          data.append(el.name, el.value);
+        }
+      });
+
+      // 2) append each file with its webkitRelativePath
+      const input = form.querySelector('input[name="folder"]');
+      Array.from(input.files).forEach(file => {
+        // file.webkitRelativePath is like "session_123/binaries/foo.mp3"
+        const rel = file.webkitRelativePath || file.name;
+        data.append('folder', file, rel);
+      });
+
+      // 3) send to /process
+      try {
+        const res = await fetch('/process', { method: 'POST', body: data });
+        const j   = await res.json();
+        status.textContent = j.error ? `Error: ${j.error}` : j.result;
+      } catch (err) {
+        status.textContent = `Network error: ${err}`;
+      }
+    };
+  </script>
+</body>
+</html>

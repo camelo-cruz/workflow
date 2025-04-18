@@ -32,3 +32,4 @@ pykakasi
 fastapi
 uvicorn
 python-multipart
+Flask>=2.0
