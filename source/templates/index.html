@@ -1,4 +1,3 @@
-<!-- templates/index.html -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,23 +7,20 @@
 </head>
 <body>
   <div class="container">
-
-    <!-- Sidebar -->
     <div class="sidebar">
       <h1 class="title">LeibnizDream TGT</h1>
-
       <form id="theForm" enctype="multipart/form-data">
         <label>Action</label>
         <select name="action" required>
-          <option>Transcribe</option>
-          <option>Translate</option>
-          <option>Gloss</option>
-          <option>Transliterate</option>
-          <option>Select sentences</option>
+          <option value="transcribe">Transcribe</option>
+          <option value="translate">Translate</option>
+          <option value="gloss">Gloss</option>
+          <option value="transliterate">Transliterate</option>
+          <option value="select_sentences">Select sentences</option>
         </select>
 
         <label>Language</label>
-        <input type="text" name="language" required>
+        <input type="text" name="language" value="German" required>
 
         <label>Instruction / Study</label>
         <select name="instruction">
@@ -52,17 +48,14 @@
       <div id="status" class="status"></div>
     </div>
 
-    <!-- Main panel -->
     <div class="main">
       <img src="{{ url_for('static', filename='zas_logo.jpg') }}"
-           class="logo"
-           alt="ZAS Logo">
+           class="logo" alt="ZAS Logo">
       <div class="logo-text">LeibnizDream</div>
 
       <!-- Live terminal output -->
       <div id="logs" class="logs"><pre></pre></div>
     </div>
-
   </div>
 
   <script>
@@ -76,47 +69,50 @@
       status.textContent = 'Starting…';
       logs.textContent   = '';
 
-      // Build FormData
+      // build the FormData
       const data = new FormData();
-      data.append('action',      form.action.value);
-      data.append('language',    form.language.value);
-      data.append('instruction', form.instruction.value);
-      if (form.verbose.checked) data.append('verbose','on');
+      data.append('action',      form.querySelector('select[name="action"]').value);
+      data.append('language',    form.querySelector('input[name="language"]').value.trim() || 'en');
+      data.append('instruction', form.querySelector('select[name="instruction"]').value);
+      if (form.querySelector('input[name="verbose"]').checked)
+        data.append('verbose','on');
 
-      // Append files with full relative paths
+      // append every file preserving its relative path
       const input = form.querySelector('input[name="folder"]');
       for (const file of input.files) {
         const rel = file.webkitRelativePath || file.name;
         data.append('folder', file, rel);
       }
 
-      try {
-        // Kick off job
-        const resStart = await fetch('/process', { method: 'POST', body: data });
-        const { job_id, error } = await resStart.json();
-        if (error) {
-          status.textContent = 'Error starting job';
-          logs.textContent = error;
-          return;
-        }
-        status.textContent = 'Job ID: ' + job_id;
-
-        // Stream logs via SSE
-        const evt = new EventSource(`/logs/${job_id}`);
-        evt.onmessage = e => {
-          logs.textContent += e.data + '\n';
-          // scroll
-          logs.parentElement.scrollTop = logs.parentElement.scrollHeight;
-        };
-        evt.onerror = () => {
-          evt.close();
-          status.textContent = 'Completed.';
-        };
-
-      } catch (err) {
-        status.textContent = 'Network error';
-        logs.textContent   = err.toString();
+      // start the job
+      const res = await fetch('/process', { method: 'POST', body: data });
+      const { job_id, error } = await res.json();
+      if (error) {
+        status.textContent = 'Error';
+        logs.textContent   = error;
+        return;
       }
+
+      status.textContent = 'Job ID: ' + job_id;
+
+      // stream logs
+      const evt = new EventSource(`/logs/${job_id}`);
+      evt.onmessage = e => {
+        logs.textContent += e.data + '\n';
+        logs.parentElement.scrollTop = logs.parentElement.scrollHeight;
+
+        // when we see "[DONE]", trigger the download
+        if (e.data === '[DONE]') {
+          evt.close();
+          status.textContent = 'Completed. Downloading…';
+          // redirect to the download endpoint
+          window.location.href = `/download/${job_id}`;
+        }
+      };
+      evt.onerror = () => {
+        evt.close();
+        status.textContent = 'Completed (or network error).';
+      };
     };
   })();
   </script>
