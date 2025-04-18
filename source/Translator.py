@@ -106,7 +106,7 @@ class Translator():
         secrets_path = os.path.join(base_path, 'secrets.env')
 
         if os.path.exists(secrets_path):
-            load_dotenv(secrets_path)
+            load_dotenv(secrets_path, override=True)
         else:
             print(f"Error: {secrets_path} not found.")
             sys.exit(1)

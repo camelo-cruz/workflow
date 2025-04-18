@@ -15,12 +15,15 @@ import os
 import re
 import warnings
 import logging
+import sys
 import argparse
 import pandas as pd
 import openpyxl
+from dotenv import load_dotenv 
 from openpyxl.styles import Font
 from tqdm import tqdm
 import whisper
+import whisperx
 import torch
 
 from functions import set_global_variables, find_language, clean_string, find_ffmpeg
@@ -45,7 +48,35 @@ class Transcriber:
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
         self.device = device if device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = whisper.load_model("large-v3", device=self.device)
+        self.batch_size = 16 # reduce if low on GPU mem
+        try:
+            self.model = whisperx.load_model("large-v2", device, compute_type="float16" )
+        except:
+            self.model = whisperx.load_model("large-v2", device, compute_type="int8")
+        
+        ## Load Hugging
+        try:
+            # If running under PyInstaller, sys._MEIPASS is available
+            base_path = os.path.join(sys._MEIPASS, 'materials')
+            print("Using sys._MEIPASS for materials path")
+        except Exception:
+            # Fallback to using the script's directory if not running as a PyInstaller bundle
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            base_path = os.path.join(script_dir, 'materials')
+            print("Using script directory for materials path")
+
+        secrets_path = os.path.join(base_path, 'secrets.env')
+
+        if os.path.exists(secrets_path):
+            load_dotenv(secrets_path, override=True)
+        else:
+            print(f"Error: {secrets_path} not found.")
+            sys.exit(1)
+        
+        self.hugging_key = os.getenv("HUGGING_KEY")
+        if not self.hugging_key:
+            raise ValueError("Hugging face key not found. Check your secrets.env file.")
+        
 
     def setup_logging(self, log_file_path):
         """Set up file logging for a given directory."""
@@ -148,7 +179,83 @@ class Transcriber:
             for (row_idx, _col), _ in series.items():
                 self._append_to_cell(df, row_idx, 'automatic_transcription', text_auto + text_suffix)
                 self._append_to_cell(df, row_idx, col_name, text_auto + text_suffix)
+    
+    def transcribe_and_diarize(self, path_to_audio, prompt=''):
+        # --- Chinese-only path: just transcribe and return raw text ---
+        if self.language_code == 'zh':
+            res = self.model.transcribe(
+                path_to_audio,
+                language='zh',
+                initial_prompt="请使用简体中文转录。"
+            )
+            # strip out our prompt prefix, then return the result immediately
+            clean = res["text"].replace("请使用简体中文转录。", "").strip()
+            return clean
 
+        # --- multilingual path: load, transcribe, align, diarize, then stitch back together ---
+        audio = whisperx.load_audio(path_to_audio)
+        result = self.model.transcribe(
+            audio,
+            batch_size=self.batch_size,
+            language=self.language_code
+        )
+
+        # align word‐level timestamps
+        model_a, metadata = whisperx.load_align_model(
+            language_code=result["language"],
+            device=self.device
+        )
+        result = whisperx.align(
+            result["segments"],
+            model_a,
+            metadata,
+            audio,
+            self.device,
+            return_char_alignments=False
+        )
+
+        # run diarization
+        diarize_model = whisperx.DiarizationPipeline(
+            use_auth_token=self.hugging_key,
+            device=self.device)
+        diarize_segments = diarize_model(audio)
+
+        result = whisperx.assign_word_speakers(diarize_segments, result)
+
+        full_sentences = []
+        buffer_speaker = None
+        buffer_text = ""
+
+        for seg in result["segments"]:
+            # 1) pick up the speaker if present, else reuse the last one
+            spk = seg.get("speaker", buffer_speaker)
+            
+            # 2) if we still have no speaker (i.e. first segment was unlabeled), skip
+            if spk is None:
+                continue
+            
+            txt = seg["text"].strip()
+            
+            # 3) start the first buffer
+            if buffer_speaker is None:
+                buffer_speaker, buffer_text = spk, txt
+            
+            # 4) same speaker → just append
+            elif spk == buffer_speaker:
+                buffer_text += " " + txt
+            
+            # 5) speaker changed → flush old and start new
+            else:
+                full_sentences.append(f"{buffer_speaker}: {buffer_text}")
+                buffer_speaker, buffer_text = spk, txt
+
+        # 6) flush whatever’s left
+        if buffer_speaker is not None:
+            full_sentences.append(f"{buffer_speaker}: {buffer_text}")
+
+        return "  ".join(full_sentences)
+
+                        
     def format_excel_output(self, excel_output_file):
         """Apply red font to target columns in the Excel output."""
         wb = openpyxl.load_workbook(excel_output_file)
@@ -202,19 +309,8 @@ class Transcriber:
                 path = os.path.abspath(os.path.join(subdir, file))
                 logger.debug(f"File {count}/{len(files)}: {path}")
                 try:
-                    if self.language_code == 'zh':
-                        res = self.model.transcribe(
-                            path, language=self.language_code,
-                            initial_prompt="请使用简体中文转录。"
-                        )
-                        text = res["text"].replace(
-                            "请使用简体中文转录。", ""
-                        ).replace("使用简体中文转录。", "")
-                    else:
-                        res = self.model.transcribe(path, language=self.language_code)
-                        text = res["text"]
-
-                    text = clean_string(text) 
+                    text = self.transcribe_and_diarize(path)
+                    text = clean_string(text)
                     if verbose:
                         tqdm.write(text)
                     self.add_transcription_to_df(df, file, text, count, filename_regexp)

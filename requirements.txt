@@ -1,13 +1,17 @@
-# MacOS dependencies (no CUDA, default PyTorch install)
+# MacOS dependencies (CPU only, torch 1.10.x to satisfy pyannote.audio<1.0)
 torch; sys_platform == "darwin"
 torchvision; sys_platform == "darwin"
 torchaudio; sys_platform == "darwin"
+pytorch-lightning; sys_platform == "darwin"
+pyannote.audio; sys_platform == "darwin"
 
-# Windows dependencies (CUDA 12.4)
+# Windows dependencies (CUDA 10.2 build under CUDA 12.4 index)
 --extra-index-url https://download.pytorch.org/whl/cu124
-torch==2.5.1+cu124; sys_platform == "win32"
-torchvision==0.20.1+cu124; sys_platform == "win32"
-torchaudio==2.5.1+cu124; sys_platform == "win32"
+torch==1.10.0+cu102;      sys_platform == "win32"
+torchvision==0.11.1+cu102; sys_platform == "win32"
+torchaudio==0.10.0+cu102;  sys_platform == "win32"
+pytorch-lightning==1.5.4; sys_platform == "win32"
+pyannote.audio==0.0.1 ; sys_platform == "win32"
 
 Pillow
 python-dotenv
@@ -25,3 +29,6 @@ sacremoses
 msal
 requests
 pykakasi
+fastapi
+uvicorn
+python-multipart
