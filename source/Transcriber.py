@@ -321,7 +321,7 @@ class Transcriber:
             df.to_excel(out_file, index=False)
             self.format_excel_output(out_file)
             logger.info(f"Completed '{subdir}'")
-            logger.removeHandler(fh)
+            logger.removeHandler(fh) 
             fh.close()
 
 
