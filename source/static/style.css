@@ -1,0 +1,135 @@
+/* Global Layout */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Inter, sans-serif;
+  height: 100vh;
+  overflow: hidden; /* prevent unwanted scroll */
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar (wine-red) */
+.sidebar {
+  flex: 0 0 30%;
+  background-color: #7F0707;
+  color: white;
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Scroll internally, don't expand horizontally */
+}
+
+.sidebar .title {
+  margin-top: 0;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.sidebar label {
+  display: block;
+  margin-top: 1rem;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.sidebar input[type="text"],
+.sidebar select,
+.sidebar input[type="file"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  margin-top: 0.3rem;
+  box-sizing: border-box;
+}
+
+.sidebar input[type="checkbox"] {
+  margin-left: 0;
+  transform: scale(1.2);
+  margin-top: 0.5rem;
+}
+
+.sidebar .btn-primary {
+  margin-top: 1.5rem;
+  padding: 0.7rem;
+  background-color: #9B0A0A;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  width: 60%;
+}
+
+.sidebar .btn-primary:hover {
+  background-color: #7F0707;
+}
+
+.sidebar .status {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  background: rgba(255,255,255,0.1);
+  padding: 0.5rem;
+  border-radius: 4px;
+  min-height: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sidebar-logo {
+  width: 120px;
+  display: block;
+  margin: 1rem auto;
+}
+
+/* Main panel (white) */
+.main {
+  flex: 1;
+  background-color: #FCFCFC;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* 🔼 Push content to top */
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.main .logo {
+  max-width: 150px;
+  height: auto;
+  margin-bottom: 0.5rem; /* 🔽 smaller gap to text */
+}
+
+.main .logo-text {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1.5rem; /* 🔽 more space before logs */
+}
+
+#logs {
+  background: #111;
+  color: #0f0;
+  padding: 1rem;
+  height: 300px;
+  width: 150%;
+  max-width: 600px; /* optional: limit width */
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
