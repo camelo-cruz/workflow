@@ -1,73 +1,120 @@
-<!-- templates/index.html -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <title>LeibnizDream WhisperX</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <h1>LeibnizDream TGT</h1>
-  <form id="theForm">
-    <label>Language:
-      <input type="text" name="language" value="German" required>
-    </label>
-    <label>Verbose:
-      <input type="checkbox" name="verbose">
-    </label>
-    <br><br>
-    <label>Upload Session Folder:</label><br>
-    <input
-      type="file"
-      name="folder"
-      webkitdirectory
-      directory
-      multiple
-      required
-    ><br><br>
-    <button type="submit">Process &amp; Download</button>
-  </form>
+  <div class="container">
+    <div class="sidebar">
+      <h1 class="title">LeibnizDream TGT</h1>
+      <form id="theForm" enctype="multipart/form-data">
+        <label>Action</label>
+        <select name="action" required>
+          <option value="transcribe">Transcribe</option>
+          <option value="translate">Translate</option>
+          <option value="gloss">Gloss</option>
+          <option value="transliterate">Transliterate</option>
+          <option value="select_sentences">Select sentences</option>
+        </select>
 
-  <div id="status"></div>
+        <label>Language</label>
+        <input type="text" name="language" value="German" required>
+
+        <label>Instruction / Study</label>
+        <select name="instruction">
+          <option value="automatic">Automatic</option>
+          <option value="corrected">Corrected</option>
+          <option value="sentences">Sentences</option>
+        </select>
+
+        <label>Verbose</label>
+        <input type="checkbox" name="verbose">
+
+        <label>Upload Session Folder</label>
+        <input
+          type="file"
+          name="folder"
+          webkitdirectory
+          directory
+          multiple
+          required
+        >
+
+        <button class="btn-primary" type="submit">Process</button>
+      </form>
+
+      <div id="status" class="status"></div>
+    </div>
+
+    <div class="main">
+      <img src="{{ url_for('static', filename='zas_logo.jpg') }}"
+           class="logo" alt="ZAS Logo">
+      <div class="logo-text">LeibnizDream</div>
+
+      <!-- Live terminal output -->
+      <div id="logs" class="logs"><pre></pre></div>
+    </div>
+  </div>
 
   <script>
-  document.getElementById('theForm').onsubmit = async e => {
-    e.preventDefault();
-    const status = document.getElementById('status');
-    status.textContent = 'Processing… This may take a while.';
+  (function() {
+    const form   = document.getElementById('theForm'),
+          status = document.getElementById('status'),
+          logs   = document.getElementById('logs').querySelector('pre');
 
-    const data = new FormData(e.target);
-    try {
-      const res = await fetch('/process', {
-        method: 'POST',
-        body: data
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        status.textContent = 'Error: ' + err.error;
+    form.onsubmit = async e => {
+      e.preventDefault();
+      status.textContent = 'Starting…';
+      logs.textContent   = '';
+
+      // build the FormData
+      const data = new FormData();
+      data.append('action',      form.querySelector('select[name="action"]').value);
+      data.append('language',    form.querySelector('input[name="language"]').value.trim() || 'en');
+      data.append('instruction', form.querySelector('select[name="instruction"]').value);
+      if (form.querySelector('input[name="verbose"]').checked)
+        data.append('verbose','on');
+
+      // append every file preserving its relative path
+      const input = form.querySelector('input[name="folder"]');
+      for (const file of input.files) {
+        const rel = file.webkitRelativePath || file.name;
+        data.append('folder', file, rel);
+      }
+
+      // start the job
+      const res = await fetch('/process', { method: 'POST', body: data });
+      const { job_id, error } = await res.json();
+      if (error) {
+        status.textContent = 'Error';
+        logs.textContent   = error;
         return;
       }
 
-      // grab filename from Content-Disposition header
-      const cd = res.headers.get('Content-Disposition') || '';
-      const match = /filename="?(.+)"?/.exec(cd);
-      const filename = match ? match[1] : 'output';
+      status.textContent = 'Job ID: ' + job_id;
 
-      // download the blob
-      const blob = await res.blob();
-      const url  = URL.createObjectURL(blob);
-      const a    = document.createElement('a');
-      a.href     = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      // stream logs
+      const evt = new EventSource(`/logs/${job_id}`);
+      evt.onmessage = e => {
+        logs.textContent += e.data + '\n';
+        logs.parentElement.scrollTop = logs.parentElement.scrollHeight;
 
-      status.textContent = 'Done! Download should begin shortly.';
-    } catch (err) {
-      status.textContent = 'Network error: ' + err;
-    }
-  };
+        // when we see "[DONE]", trigger the download
+        if (e.data === '[DONE]') {
+          evt.close();
+          status.textContent = 'Completed. Downloading…';
+          // redirect to the download endpoint
+          window.location.href = `/download/${job_id}`;
+        }
+      };
+      evt.onerror = () => {
+        evt.close();
+        status.textContent = 'Completed (or network error).';
+      };
+    };
+  })();
   </script>
 </body>
 </html>

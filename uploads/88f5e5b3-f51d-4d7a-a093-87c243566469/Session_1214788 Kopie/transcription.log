@@ -1,5 +1,0 @@
-2025-04-18 18:17:01,121 - INFO - Logging to /Users/alejandra/Documents/GitHub/workflow/uploads/88f5e5b3-f51d-4d7a-a093-87c243566469/Session_1214788 Kopie/transcription.log
-2025-04-18 18:17:01,121 - INFO - Using ffmpeg from /opt/homebrew/bin/ffmpeg
-2025-04-18 18:17:01,124 - DEBUG - File 1/1: /Users/alejandra/Documents/GitHub/workflow/uploads/88f5e5b3-f51d-4d7a-a093-87c243566469/Session_1214788 Kopie/binaries/blockNr_1_taskNr_3_trialNr_1_record_training.mp3
-2025-04-18 18:19:32,633 - INFO - Excel saved and formatted: '/Users/alejandra/Documents/GitHub/workflow/uploads/88f5e5b3-f51d-4d7a-a093-87c243566469/Session_1214788 Kopie/trials_and_sessions_annotated.xlsx'
-2025-04-18 18:19:32,633 - INFO - Completed '/Users/alejandra/Documents/GitHub/workflow/uploads/88f5e5b3-f51d-4d7a-a093-87c243566469/Session_1214788 Kopie/binaries'
