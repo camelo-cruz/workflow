@@ -29,7 +29,7 @@ def process_transcribe(input_dir, language, verbose, status_label):
     except Exception as local_e:
         status_label.config(text=f"Local error: {local_e}")
         print(f"Local error: {local_e}")
-
+ 
 def process_translate(input_dir, language, instruction, verbose, status_label):
     try:
         msg = "Starting translation..."
