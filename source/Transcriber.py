@@ -15,12 +15,15 @@ import os
 import re
 import warnings
 import logging
+import sys
 import argparse
 import pandas as pd
 import openpyxl
+from dotenv import load_dotenv 
 from openpyxl.styles import Font
 from tqdm import tqdm
 import whisper
+import whisperx
 import torch
 
 from functions import set_global_variables, find_language, clean_string, find_ffmpeg
@@ -45,7 +48,11 @@ class Transcriber:
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
         self.device = device if device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = whisper.load_model("large-v3", device=self.device)
+        self.batch_size = 16 # reduce if low on GPU mem
+        try:
+            self.model = whisperx.load_model("large-v2", device, compute_type="float16" )
+        except:
+            self.model = whisperx.load_model("large-v2", device, compute_type="int8")
 
     def setup_logging(self, log_file_path):
         """Set up file logging for a given directory."""
@@ -148,7 +155,102 @@ class Transcriber:
             for (row_idx, _col), _ in series.items():
                 self._append_to_cell(df, row_idx, 'automatic_transcription', text_auto + text_suffix)
                 self._append_to_cell(df, row_idx, col_name, text_auto + text_suffix)
+    
+    def transcribe_and_diarize(self, path_to_audio, prompt=''):
+        try:
+            # If running under PyInstaller, sys._MEIPASS is available
+            base_path = os.path.join(sys._MEIPASS, 'materials')
+            print("Using sys._MEIPASS for materials path")
+        except Exception:
+            # Fallback to using the script's directory if not running as a PyInstaller bundle
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            base_path = os.path.join(script_dir, 'materials')
+            print("Using script directory for materials path")
 
+        secrets_path = os.path.join(base_path, 'secrets.env')
+
+        if os.path.exists(secrets_path):
+            load_dotenv(secrets_path)
+        else:
+            print(f"Error: {secrets_path} not found.")
+            sys.exit(1)
+        
+        hugging_key = os.getenv("HUGGING_KEY")
+        if not hugging_key:
+            raise ValueError("Hugging face key not found. Check your secrets.env file.")
+        
+        # --- Chinese-only path: just transcribe and return raw text ---
+        if self.language_code == 'zh':
+            res = self.model.transcribe(
+                path_to_audio,
+                language='zh',
+                initial_prompt="请使用简体中文转录。"
+            )
+            # strip out our prompt prefix, then return the result immediately
+            clean = res["text"].replace("请使用简体中文转录。", "").strip()
+            return clean
+
+        # --- multilingual path: load, transcribe, align, diarize, then stitch back together ---
+        audio = whisperx.load_audio(path_to_audio)
+        result = self.model.transcribe(
+            audio,
+            batch_size=self.batch_size,
+            language=self.language_code
+        )
+
+        # align word‐level timestamps
+        model_a, metadata = whisperx.load_align_model(
+            language_code=result["language"],
+            device=self.device
+        )
+        result = whisperx.align(
+            result["segments"],
+            model_a,
+            metadata,
+            audio,
+            self.device,
+            return_char_alignments=False
+        )
+
+        # run diarization
+        diarize_model = whisperx.DiarizationPipeline(
+            use_auth_token=hugging_key,
+            device=self.device)
+        diarize_segments = diarize_model(audio, 
+                                         min_speakers=1, 
+                                         max_speakers=2)
+        result = whisperx.assign_word_speakers(diarize_segments, result)
+
+        if not result["segments"] or "speaker" not in result["segments"][0]:
+            return " ".join(seg["text"].strip() for seg in result["segments"])
+
+        full_sentences = []
+        buffer_speaker = None
+        buffer_text = ""
+
+        for seg in result["segments"]:
+            spk = seg["speaker"]
+            txt = seg["text"].strip()
+
+            if buffer_speaker is None:
+                # start first buffer
+                buffer_speaker, buffer_text = spk, txt
+            elif spk == buffer_speaker:
+                # same speaker, keep appending (with a space)
+                buffer_text += " " + txt
+            else:
+                # speaker changed: flush old buffer, start new one
+                full_sentences.append(f"{buffer_speaker}: {buffer_text} ")
+                buffer_speaker, buffer_text = spk, txt
+
+        # flush the very last buffer, if any
+        if buffer_speaker is not None:
+            full_sentences.append(f"{buffer_speaker}: {buffer_text}")
+
+        # join all speaker‐tagged sentences into one big string
+        return "  ".join(full_sentences)
+
+                        
     def format_excel_output(self, excel_output_file):
         """Apply red font to target columns in the Excel output."""
         wb = openpyxl.load_workbook(excel_output_file)
@@ -202,18 +304,7 @@ class Transcriber:
                 path = os.path.abspath(os.path.join(subdir, file))
                 logger.debug(f"File {count}/{len(files)}: {path}")
                 try:
-                    if self.language_code == 'zh':
-                        res = self.model.transcribe(
-                            path, language=self.language_code,
-                            initial_prompt="请使用简体中文转录。"
-                        )
-                        text = res["text"].replace(
-                            "请使用简体中文转录。", ""
-                        ).replace("使用简体中文转录。", "")
-                    else:
-                        res = self.model.transcribe(path, language=self.language_code)
-                        text = res["text"]
-
+                    text = self.transcribe_and_diarize(path)
                     text = clean_string(text)
                     if verbose:
                         tqdm.write(text)
