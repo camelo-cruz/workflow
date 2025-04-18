@@ -50,9 +50,9 @@ class Transcriber:
         self.device = device if device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
         self.batch_size = 16 # reduce if low on GPU mem
         try:
-            self.model = whisperx.load_model("large-v2", device, compute_type="float16" )
+            self.model = whisperx.load_model("large-v2", device, compute_type="float16", language=self.language_code)
         except:
-            self.model = whisperx.load_model("large-v2", device, compute_type="int8")
+            self.model = whisperx.load_model("large-v2", device, compute_type="int8", language=self.language_code)
         
         ## Load Hugging
         try:
@@ -193,69 +193,69 @@ class Transcriber:
             return clean
 
         # --- multilingual path: load, transcribe, align, diarize, then stitch back together ---
-        audio = whisperx.load_audio(path_to_audio)
+        else:
+            audio = whisperx.load_audio(path_to_audio)
 
-        print(f"Language code in transcriber: {self.language_code}")
-        result = self.model.transcribe(
-            audio,
-            batch_size=self.batch_size,
-            language=self.language_code
-        )
+            result = self.model.transcribe(
+                audio,
+                batch_size=self.batch_size,
+                language=self.language_code
+            )
 
-        # align word‐level timestamps
-        model_a, metadata = whisperx.load_align_model(
-            language_code=result["language"],
-            device=self.device
-        )
-        result = whisperx.align(
-            result["segments"],
-            model_a,
-            metadata,
-            audio,
-            self.device,
-            return_char_alignments=False
-        )
+            # align word‐level timestamps
+            model_a, metadata = whisperx.load_align_model(
+                language_code=result["language"],
+                device=self.device
+            )
+            result = whisperx.align(
+                result["segments"],
+                model_a,
+                metadata,
+                audio,
+                self.device,
+                return_char_alignments=False
+            )
 
-        # run diarization
-        diarize_model = whisperx.DiarizationPipeline(
-            use_auth_token=self.hugging_key,
-            device=self.device)
-        diarize_segments = diarize_model(audio)
+            # run diarization
+            diarize_model = whisperx.DiarizationPipeline(
+                use_auth_token=self.hugging_key,
+                device=self.device)
+            diarize_segments = diarize_model(audio)
 
-        result = whisperx.assign_word_speakers(diarize_segments, result)
+            result = whisperx.assign_word_speakers(diarize_segments, result)
 
-        full_sentences = []
-        buffer_speaker = None
-        buffer_text = ""
+            full_sentences = []
+            buffer_speaker = None
+            buffer_text = ""
 
-        for seg in result["segments"]:
-            # 1) pick up the speaker if present, else reuse the last one
-            spk = seg.get("speaker", buffer_speaker)
-            
-            # 2) if we still have no speaker (i.e. first segment was unlabeled), skip
-            if spk is None:
-                continue
-            
-            txt = seg["text"].strip()
-            
-            # 3) start the first buffer
-            if buffer_speaker is None:
-                buffer_speaker, buffer_text = spk, txt
-            
-            # 4) same speaker → just append
-            elif spk == buffer_speaker:
-                buffer_text += " " + txt
-            
-            # 5) speaker changed → flush old and start new
-            else:
+            for seg in result["segments"]:
+                # 1) pick up the speaker if present, else reuse the last one
+                spk = seg.get("speaker", buffer_speaker)
+                
+                # 2) if we still have no speaker (i.e. first segment was unlabeled), skip
+                if spk is None:
+                    continue
+                
+                txt = seg["text"].strip()
+                
+                # 3) start the first buffer
+                if buffer_speaker is None:
+                    buffer_speaker, buffer_text = spk, txt
+                
+                # 4) same speaker → just append
+                elif spk == buffer_speaker:
+                    buffer_text += " " + txt
+                
+                # 5) speaker changed → flush old and start new
+                else:
+                    full_sentences.append(f"{buffer_speaker}: {buffer_text}")
+                    buffer_speaker, buffer_text = spk, txt
+
+            # 6) flush whatever’s left
+            if buffer_speaker is not None:
                 full_sentences.append(f"{buffer_speaker}: {buffer_text}")
-                buffer_speaker, buffer_text = spk, txt
 
-        # 6) flush whatever’s left
-        if buffer_speaker is not None:
-            full_sentences.append(f"{buffer_speaker}: {buffer_text}")
-
-        return "  ".join(full_sentences)
+            return "  ".join(full_sentences)
 
                         
     def format_excel_output(self, excel_output_file):
@@ -277,7 +277,7 @@ class Transcriber:
         wb.save(excel_output_file)
         logger.info(f"Excel saved and formatted: '{excel_output_file}'")
 
-    def process_data(self, verbose=False):
+    def process_data(self, verbose=True):
         """Walk input directory, process audio, and update trials file."""
         filename_regexp = re.compile(
             r'blockNr_(?P<block>\d+)_taskNr_(?P<task>\d+)_trialNr_(?P<trial>\d+).*'
@@ -319,7 +319,7 @@ class Transcriber:
                 except Exception as e:
                     logger.error(f"Error on '{file}': {e}")
                     continue
-
+            print('*************output inside transcriber:', out_file)
             df.to_excel(out_file, index=False)
             self.format_excel_output(out_file)
             logger.info(f"Completed '{subdir}'")

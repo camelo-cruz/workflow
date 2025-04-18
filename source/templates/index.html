@@ -1,120 +1,86 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>LeibnizDream WhisperX</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <title>Transcription App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="container">
-    <div class="sidebar">
-      <h1 class="title">LeibnizDream TGT</h1>
-      <form id="theForm" enctype="multipart/form-data">
-        <label>Action</label>
-        <select name="action" required>
-          <option value="transcribe">Transcribe</option>
-          <option value="translate">Translate</option>
-          <option value="gloss">Gloss</option>
-          <option value="transliterate">Transliterate</option>
-          <option value="select_sentences">Select sentences</option>
-        </select>
+<div class="container">
+    <div class="sidebar"> 
+        <h2 class="title">Automatic workflow LeibnizDream</h2>
+        <form id="form-transcribe">
 
-        <label>Language</label>
-        <input type="text" name="language" value="German" required>
+            <label for="action">Action</label>
+            <select id="action" name="action" required>
+              <option value="transcribe">Transcribe</option>
+              <option value="translate">Translate</option>
+              <option value="gloss">Gloss</option>
+            </select>
 
-        <label>Instruction / Study</label>
-        <select name="instruction">
-          <option value="automatic">Automatic</option>
-          <option value="corrected">Corrected</option>
-          <option value="sentences">Sentences</option>
-        </select>
+            <label>Directory Path</label>
+            <input type="text" id="base-dir" name="base_dir" placeholder="/path/to/dir" required>
 
-        <label>Verbose</label>
-        <input type="checkbox" name="verbose">
+            <label for="instruction">Instruction</label>
+            <select id="instruction" name="instruction" required>
+              <option value="automatic">automatic</option>
+              <option value="corrected">corrected</option>
+              <option value="sentences">sentences</option>
+            </select>
 
-        <label>Upload Session Folder</label>
-        <input
-          type="file"
-          name="folder"
-          webkitdirectory
-          directory
-          multiple
-          required
-        >
+            <label>Language</label>
+            <input type="text" id="language" name="language" value="German" required>
 
-        <button class="btn-primary" type="submit">Process</button>
-      </form>
+            <button id="btn-process" class="btn-primary" type="button">Process</button>
 
-      <div id="status" class="status"></div>
+            <div id="status" class="status"></div>
+        </form>
     </div>
 
     <div class="main">
-      <img src="{{ url_for('static', filename='zas_logo.jpg') }}"
-           class="logo" alt="ZAS Logo">
-      <div class="logo-text">LeibnizDream</div>
+        <img src="{{ url_for('static', filename='zas_logo.jpg') }}" alt="Logo" class="logo">
+        <p class="logo-text">LeibnizDream</p>
 
-      <!-- Live terminal output -->
-      <div id="logs" class="logs"><pre></pre></div>
+        <pre id="logs"></pre>
     </div>
-  </div>
+</div>
 
-  <script>
-  (function() {
-    const form   = document.getElementById('theForm'),
-          status = document.getElementById('status'),
-          logs   = document.getElementById('logs').querySelector('pre');
+<script>
+document.getElementById("btn-process").onclick = async () => {
+    const base = document.getElementById("base-dir").value.trim();
+    const language = document.getElementById("language").value.trim();
+    const action = document.getElementById("action").value.trim();
+    const instruction = document.getElementById("instruction").value.trim();
 
-    form.onsubmit = async e => {
-      e.preventDefault();
-      status.textContent = 'Starting…';
-      logs.textContent   = '';
 
-      // build the FormData
-      const data = new FormData();
-      data.append('action',      form.querySelector('select[name="action"]').value);
-      data.append('language',    form.querySelector('input[name="language"]').value.trim() || 'en');
-      data.append('instruction', form.querySelector('select[name="instruction"]').value);
-      if (form.querySelector('input[name="verbose"]').checked)
-        data.append('verbose','on');
+    const payload = new FormData();
+    payload.append("base_dir", base);
+    payload.append("language", language);
+    payload.append("action", action);
+    payload.append("instruction", instruction);  // if needed later
 
-      // append every file preserving its relative path
-      const input = form.querySelector('input[name="folder"]');
-      for (const file of input.files) {
-        const rel = file.webkitRelativePath || file.name;
-        data.append('folder', file, rel);
-      }
+    const res = await fetch("/process", { method: "POST", body: payload });
+    const { job_id, error } = await res.json();
+    const statusEl = document.getElementById("status");
+    const logEl = document.getElementById("logs");
+    logEl.textContent = "";
 
-      // start the job
-      const res = await fetch('/process', { method: 'POST', body: data });
-      const { job_id, error } = await res.json();
-      if (error) {
-        status.textContent = 'Error';
-        logs.textContent   = error;
+    if (error) {
+        statusEl.textContent = error;
         return;
-      }
+    }
+    statusEl.textContent = "Job " + job_id + " started";
 
-      status.textContent = 'Job ID: ' + job_id;
-
-      // stream logs
-      const evt = new EventSource(`/logs/${job_id}`);
-      evt.onmessage = e => {
-        logs.textContent += e.data + '\n';
-        logs.parentElement.scrollTop = logs.parentElement.scrollHeight;
-
-        // when we see "[DONE]", trigger the download
-        if (e.data === '[DONE]') {
-          evt.close();
-          status.textContent = 'Completed. Downloading…';
-          // redirect to the download endpoint
-          window.location.href = `/download/${job_id}`;
+    const evt = new EventSource(`/logs/${job_id}`);
+    evt.onmessage = e => {
+        logEl.textContent += e.data + "\n";
+        logEl.scrollTop = logEl.scrollHeight;
+        if (e.data === "[DONE]" || e.data.startsWith("[ERROR]")) {
+            evt.close();
+            statusEl.textContent = "Finished";
         }
-      };
-      evt.onerror = () => {
-        evt.close();
-        status.textContent = 'Completed (or network error).';
-      };
     };
-  })();
-  </script>
+};
+</script>
 </body>
 </html>
