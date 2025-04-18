@@ -47,7 +47,6 @@ class Transcriber:
     def __init__(self, input_dir, language, device=None):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
-        print(f"Language code in transcriber: {self.language_code}")
         self.device = device if device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
         self.batch_size = 16 # reduce if low on GPU mem
         try:
@@ -196,6 +195,7 @@ class Transcriber:
         # --- multilingual path: load, transcribe, align, diarize, then stitch back together ---
         audio = whisperx.load_audio(path_to_audio)
 
+        print(f"Language code in transcriber: {self.language_code}")
         result = self.model.transcribe(
             audio,
             batch_size=self.batch_size,
