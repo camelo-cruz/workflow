@@ -94,7 +94,7 @@ def process():
     language = request.form.get("language","").strip()
     instruction = request.form.get("instruction","").strip()
     if not base_dir or not os.path.isdir(base_dir):
-        return jsonify({"error":"Invalid base directory"}),400
+        return jsonify({"error":"Invalid base directory"}),400 
 
     # start a background job
     job_id = str(uuid.uuid4())
