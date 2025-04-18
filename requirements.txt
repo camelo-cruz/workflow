@@ -2,7 +2,6 @@
 torch; sys_platform == "darwin"
 torchvision; sys_platform == "darwin"
 torchaudio; sys_platform == "darwin"
-pytorch-lightning; sys_platform == "darwin"
 
 # Windows dependencies (CUDA 10.2 build under CUDA 12.4 index)
 --extra-index-url https://download.pytorch.org/whl/cu124
