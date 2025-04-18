@@ -214,7 +214,7 @@ class Transcriber:
                         res = self.model.transcribe(path, language=self.language_code)
                         text = res["text"]
 
-                    text = clean_string(text)
+                    text = clean_string(text) 
                     if verbose:
                         tqdm.write(text)
                     self.add_transcription_to_df(df, file, text, count, filename_regexp)
