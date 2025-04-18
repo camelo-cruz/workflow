@@ -30,7 +30,7 @@ from functions import set_global_variables, find_language, clean_string, find_ff
 
 # Set global variables and suppress warnings
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
-warnings.filterwarnings("ignore") 
+warnings.filterwarnings("ignore")
 
 # Configure global logger
 logger = logging.getLogger(__name__)
