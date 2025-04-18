@@ -7,6 +7,7 @@ from flask import (
     send_file, jsonify
 )
 from dotenv import load_dotenv
+import webbrowser
 
 from Transcriber import Transcriber
 from Translator import Translator
@@ -21,6 +22,9 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 app = Flask(__name__,
             static_folder="static",
             template_folder="templates")
+
+def open_browser():
+    webbrowser.open_new("http://127.0.0.1:5000")
 
 @app.route("/")
 def index():
@@ -141,4 +145,6 @@ def logs(job_id):
     )
 
 if __name__ == "__main__":
+    # Start the Flask app in a separate thread
+    threading.Timer(1, open_browser).start()
     app.run(debug=True)
