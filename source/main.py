@@ -166,7 +166,7 @@ def main():
         foreground="#7F0707",
         font=("Inter", 11),
         borderwidth=0,
-        relief="flat",
+        relief="flat", 
         anchor="center"
     )
     style.map(
