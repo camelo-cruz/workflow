@@ -7,6 +7,8 @@ from Translator import Translator
 from Transliterator import Transliterator
 from SentenceSelector import SentenceSelector
 import requests
+import sys
+import tempfile
 from Glosser import Glosser
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
@@ -14,6 +16,21 @@ from PIL import Image, ImageTk
 
 cancel_flag = False 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+# ----- Prevent multiple instances -----
+lock_file_path = os.path.join(tempfile.gettempdir(), "leibnizdream.lock")
+
+try:
+    if os.path.exists(lock_file_path):
+        print("Another instance is already running.")
+        sys.exit()
+    else:
+        with open(lock_file_path, "w") as lock_file:
+            lock_file.write(str(os.getpid()))
+except Exception as e:
+    print("Error while checking lock:", e)
+    sys.exit()
+# --------------------------------------
 
 
 def process_transcribe(input_dir, language, verbose, status_label):
@@ -300,5 +317,12 @@ def main():
 
     window.mainloop()
 
+
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    finally:
+        try:
+            os.remove(lock_file_path)
+        except Exception:
+            pass

@@ -319,7 +319,6 @@ class Transcriber:
                 except Exception as e:
                     logger.error(f"Error on '{file}': {e}")
                     continue
-            print('*************output inside transcriber:', out_file)
             df.to_excel(out_file, index=False)
             self.format_excel_output(out_file)
             logger.info(f"Completed '{subdir}'")
