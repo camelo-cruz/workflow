@@ -123,7 +123,7 @@ def main():
     window = tk.Tk()
     window.geometry("862x519")
     window.resizable(False, False)
-    window.title("Tkinter Designer Example")
+    window.title("LeibnizDream TGT")
 
     style = ttk.Style()
     style.theme_use("clam")
