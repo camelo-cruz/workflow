@@ -134,6 +134,8 @@ jobs:
           --workpath windows-distribution/build \
           --collect-submodules=numba \
           --collect-data speechbrain \
+          --collect-submodules speechbrain \
+          --collect-submodules speechbrain.utils \
           --collect-data lightning_fabric \
           --name tgt_windows main.py
 
@@ -217,6 +219,8 @@ jobs:
           --distpath mac-distribution/dist \
           --workpath mac-distribution/build \
           --collect-data speechbrain \
+          --collect-submodules speechbrain \
+          --collect-submodules speechbrain.utils \
           --collect-data lightning_fabric \
           --collect-submodules=numba \
           --name tgt_mac main.py
