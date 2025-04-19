@@ -136,6 +136,7 @@ jobs:
           --collect-data speechbrain \
           --collect-submodules speechbrain \
           --collect-submodules speechbrain.utils \
+          --add-data "$(python -c 'import speechbrain, os; print(os.path.join(os.path.dirname(speechbrain.__file__), "utils"))'):speechbrain/utils" \
           --collect-data lightning_fabric \
           --name tgt_windows main.py
 
@@ -221,6 +222,7 @@ jobs:
           --collect-data speechbrain \
           --collect-submodules speechbrain \
           --collect-submodules speechbrain.utils \
+          --add-data "$(python -c 'import speechbrain, os; print(os.path.join(os.path.dirname(speechbrain.__file__), "utils"))'):speechbrain/utils" \
           --collect-data lightning_fabric \
           --collect-submodules=numba \
           --name tgt_mac main.py
