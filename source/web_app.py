@@ -23,6 +23,14 @@ app = Flask(__name__,
             static_folder="static",
             template_folder="templates")
 
+API_KEY = 'xxx'
+
+@app.before_request
+def check_api_key():
+    auth = request.headers.get("Authorization")
+    if auth != f"Bearer {API_KEY}":
+        return jsonify({"error": "Unauthorized"}), 401
+
 def open_browser():
     webbrowser.open_new("http://127.0.0.1:5000")
 
@@ -147,4 +155,4 @@ def logs(job_id):
 if __name__ == "__main__":
     # Start the Flask app in a separate thread
     threading.Timer(1, open_browser).start()
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
