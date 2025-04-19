@@ -224,7 +224,7 @@ class Transcriber:
 
             result = whisperx.assign_word_speakers(diarize_segments, result)
 
-            full_sentences = []
+            full_sentences = [] 
             buffer_speaker = None
             buffer_text = ""
 
