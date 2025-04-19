@@ -129,7 +129,7 @@ jobs:
         pyinstaller --clean --onefile \
           --add-data "$GITHUB_WORKSPACE/secrets.env:materials" \
           --add-data ../materials/*:materials \
-          --add-data ../whisper/assets/*:whisper/assets \
+          --add-data ../whisperx/assets/*:whisperx/assets \
           --specpath windows-distribution/ \
           --distpath windows-distribution/dist \
           --workpath windows-distribution/build \
@@ -215,7 +215,7 @@ jobs:
         pyinstaller --clean --onefile \
           --add-data "$GITHUB_WORKSPACE/secrets.env:materials" \
           --add-data ../materials/*:materials \
-          --add-data ../whisper/assets/*:whisper/assets \
+          --add-data ../whisperx/assets/*:whisperx/assets \
           --specpath mac-distribution/ \
           --distpath mac-distribution/dist \
           --workpath mac-distribution/build \
