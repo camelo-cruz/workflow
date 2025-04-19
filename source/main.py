@@ -97,7 +97,7 @@ def start_processing():
     instruction_or_study = instruction_var.get()
     verbose = verbose_var.get()
     status_label.config(text="Processing...")
-    print("Processing...")
+    print("Processing...") 
 
     if not input_dir:
         messagebox.showerror("Error", "Please select an input directory.")
