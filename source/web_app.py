@@ -155,4 +155,4 @@ def logs(job_id):
 if __name__ == "__main__":
     # Start the Flask app in a separate thread
     threading.Timer(1, open_browser).start()
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="127.0.0.1", port=5000)
