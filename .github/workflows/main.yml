@@ -133,6 +133,7 @@ jobs:
           --distpath windows-distribution/dist \
           --workpath windows-distribution/build \
           --collect-submodules=numba \
+          --collect-data lightning_fabric \
           --name tgt_windows main.py
 
     - name: Upload binary as artifact
@@ -214,6 +215,7 @@ jobs:
           --specpath mac-distribution/ \
           --distpath mac-distribution/dist \
           --workpath mac-distribution/build \
+          --collect-data lightning_fabric \
           --collect-submodules=numba \
           --name tgt_mac main.py
 
