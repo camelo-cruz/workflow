@@ -22,6 +22,7 @@ import re
 import os
 import sys
 import spacy
+import spacy_stanza
 import argparse
 import pandas as pd
 from tqdm import tqdm
@@ -60,6 +61,12 @@ class Glosser():
             model for translating sentences.
 
         """
+        if self.language_code == 'vi':
+            try:
+                self.nlp = spacy_stanza.load_pipeline('vi')
+            except Exception as e:
+                print(f"Could not load Vietnamese model: {e}")
+            return
 
         models = {'de':'de_dep_news_trf',
           'uk': 'uk_core_news_trf',
@@ -175,16 +182,19 @@ class Glosser():
                     translated_lemma = translated_lemma.lower()
                     translated_lemma = translated_lemma.replace(' ', '-')
 
-                arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
-                definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
-                person = LEIPZIG_GLOSSARY.get(morph.get('Person'), morph.get('Person'))
-                number = LEIPZIG_GLOSSARY.get(morph.get('Number'), morph.get('Number'))
-                gender = LEIPZIG_GLOSSARY.get(morph.get('Gender'), morph.get('Gender'))
-                case = LEIPZIG_GLOSSARY.get(morph.get('Case'), morph.get('Case'))
-                tense = LEIPZIG_GLOSSARY.get(morph.get('Tense'), morph.get('Tense'))
-                mood = LEIPZIG_GLOSSARY.get(morph.get('Mood'), morph.get('Mood'))
+                if not morph: # dictionary is empty for vietnamese
+                    glossed_word = f"{translated_lemma}.{token.pos_}.{token.dep_}"
+                else:
+                    arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
+                    definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
+                    person = LEIPZIG_GLOSSARY.get(morph.get('Person'), morph.get('Person'))
+                    number = LEIPZIG_GLOSSARY.get(morph.get('Number'), morph.get('Number'))
+                    gender = LEIPZIG_GLOSSARY.get(morph.get('Gender'), morph.get('Gender'))
+                    case = LEIPZIG_GLOSSARY.get(morph.get('Case'), morph.get('Case'))
+                    tense = LEIPZIG_GLOSSARY.get(morph.get('Tense'), morph.get('Tense'))
+                    mood = LEIPZIG_GLOSSARY.get(morph.get('Mood'), morph.get('Mood'))
 
-                glossed_word = f"{translated_lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
+                    glossed_word = f"{translated_lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
                 #further cleaning
                 glossed_word = re.sub(r'(?:\.|-|\b)None', '', glossed_word)
                 glossed_word = re.sub(r'\b(the|a)\.', '', glossed_word)
