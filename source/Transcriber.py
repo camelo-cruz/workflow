@@ -49,11 +49,6 @@ class Transcriber:
         self.language_code = find_language(language, LANGUAGES)
         self.device = device if device is not None else ("cuda" if torch.cuda.is_available() else "cpu")
         self.batch_size = 16 # reduce if low on GPU mem
-        try:
-            self.model = whisperx.load_model("large-v2", device, compute_type="float16", language=self.language_code)
-        except:
-            self.model = whisperx.load_model("large-v2", device, compute_type="int8", language=self.language_code)
-        
         ## Load Hugging
         try:
             # If running under PyInstaller, sys._MEIPASS is available
@@ -180,10 +175,11 @@ class Transcriber:
                 self._append_to_cell(df, row_idx, 'automatic_transcription', text_auto + text_suffix)
                 self._append_to_cell(df, row_idx, col_name, text_auto + text_suffix)
     
-    def transcribe_and_diarize(self, path_to_audio, prompt=''):
+    def transcribe_and_diarize(self, path_to_audio):
         # --- Chinese-only path: just transcribe and return raw text ---
         if self.language_code == 'zh':
-            res = self.model.transcribe(
+            model = whisper.load_model("large-v2", self.device)
+            res = model.transcribe(
                 path_to_audio,
                 language='zh',
                 initial_prompt="请使用简体中文转录。"
@@ -191,12 +187,26 @@ class Transcriber:
             # strip out our prompt prefix, then return the result immediately
             clean = res["text"].replace("请使用简体中文转录。", "").strip()
             return clean
+        
+        elif self.language_code in ['bn']:
+            model = whisper.load_model("large-v2", self.device)
+            res = model.transcribe(
+                path_to_audio,
+                language=self.language_code,
+            )
+            # strip out our prompt prefix, then return the result immediately
+            clean = res["text"]
+            return clean
 
         # --- multilingual path: load, transcribe, align, diarize, then stitch back together ---
         else:
+            try:
+                model = whisperx.load_model("large-v2", self.device, compute_type="float16", language=self.language_code)
+            except:
+                model = whisperx.load_model("large-v2", self.device, compute_type="int8", language=self.language_code)
             audio = whisperx.load_audio(path_to_audio)
 
-            result = self.model.transcribe(
+            result = model.transcribe(
                 audio,
                 batch_size=self.batch_size,
                 language=self.language_code
@@ -287,7 +297,7 @@ class Transcriber:
             if 'binaries' not in subdir:
                 continue
 
-            logger.info(f"Device: {self.model.device}")
+            logger.info(f"Device: {self.device}")
             logger.info(f"Processing {subdir}")
             print(f"Processing {subdir}")
             base = os.path.abspath(os.path.join(subdir, '..'))

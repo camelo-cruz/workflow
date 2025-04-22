@@ -13,6 +13,7 @@ from Glosser import Glosser
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
+import psutil
 
 cancel_flag = False 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -20,15 +21,24 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 # ----- Prevent multiple instances -----
 lock_file_path = os.path.join(tempfile.gettempdir(), "leibnizdream.lock")
 
+def is_process_running(pid):
+    return psutil.pid_exists(pid)
+
 try:
     if os.path.exists(lock_file_path):
-        print("Another instance is already running.")
-        sys.exit()
-    else:
-        with open(lock_file_path, "w") as lock_file:
-            lock_file.write(str(os.getpid()))
+        with open(lock_file_path, "r") as f:
+            old_pid = int(f.read().strip())
+        if is_process_running(old_pid):
+            print("Another instance is already running (PID:", old_pid, ")")
+            sys.exit()
+        else:
+            print("Found stale lock file. Removing...")
+            os.remove(lock_file_path)
+
+    with open(lock_file_path, "w") as lock_file:
+        lock_file.write(str(os.getpid()))
 except Exception as e:
-    print("Error while checking lock:", e)
+    print("Error while checking or creating lock:", e)
     sys.exit()
 # --------------------------------------
 
