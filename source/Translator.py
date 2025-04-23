@@ -157,7 +157,7 @@ class Translator():
                 df = pd.read_excel(file_path)
 
                 for i in range(len(df)):
-                    print("translating row: ", i)
+                    print("translating row: ", i, flush=True)
                     try:
                         text_to_translate = df.at[i, corrected_column if self.instruction == 'corrected' else
                                                         automatic_column if self.instruction == 'automatic' else
