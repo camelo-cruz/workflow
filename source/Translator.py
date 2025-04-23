@@ -142,7 +142,6 @@ class Translator():
         if self.language_code in NO_LATIN:
             corrected_column = "transcription_original_script"
             sentences_column = "transcription_original_script_utterance_used"
-
         files_to_process = []
         for subdir, dirs, files in os.walk(self.input_dir):
             for file in files:
@@ -156,8 +155,14 @@ class Translator():
                 logging.info(f"Processing file: {file_path}")
                 df = pd.read_excel(file_path)
 
+                max_iterations = 100
+                iteration_count = 0
+
                 for i in range(len(df)):
-                    print("translating row: ", i, flush=True)
+                    if i >= max_iterations:
+                        logging.info(f"Reached max iteration limit ({max_iterations}), exiting early.")
+                        break
+
                     try:
                         text_to_translate = df.at[i, corrected_column if self.instruction == 'corrected' else
                                                         automatic_column if self.instruction == 'automatic' else
@@ -167,14 +172,11 @@ class Translator():
                             continue  # Skip empty values
 
                         if self.instruction in ['sentences', 'corrected']:
-                            #translation = self.translate_with_deepl(self.language_code, text_to_translate) #until we define contract
                             translation = GoogleTranslator(source=self.language_code, target='en').translate(text=text_to_translate)
-                            logging.debug(f"Translated with Google Translator")
-
                         elif self.instruction == 'automatic':
                             translation = self.translate_with_pretrained(self.language_code, text_to_translate, self.device)
 
-                        columns_mapping = { 
+                        columns_mapping = {
                             'corrected': [
                                 "automatic_translation_corrected_transcription",
                                 "translation_everything"
@@ -188,16 +190,14 @@ class Translator():
                             ]
                         }
 
-                        # Assign the translation to the designated columns
                         for col in columns_mapping.get(self.instruction, []):
                             df.at[i, col] = translation
 
-                        if verbose:
-                            print(f"Original: {text_to_translate}, Translation: {translation}")
-
+                        iteration_count += 1
 
                     except Exception as e:
-                        logging.error(f"Error in row {i} of file {file_path}: {e}")
+                        logging.exception(f"Translation failed at row {i}: {e}")
+                        continue
 
                 # Reorder columns to ensure obligatory columns are at the end
                 extra_columns = [col for col in df.columns if col not in OBLIGATORY_COLUMNS]
