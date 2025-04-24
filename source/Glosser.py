@@ -37,7 +37,7 @@ class Glosser():
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
         self.instruction = instruction
-        self.load_models()
+        self.load_models() 
 
     def load_models(self):
         """
