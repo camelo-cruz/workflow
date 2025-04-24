@@ -281,7 +281,7 @@ def main():
     parser.add_argument("input_dir", help="Main directory with files to gloss")
     parser.add_argument("language", help="Language to gloss")
     parser.add_argument("--instruction", "-i",
-                        choices=["automatic_transcription"],
+                        choices=["automatic", "sentences", "corrected"],
                         help="input column for glossing", required=False)
     args = parser.parse_args()
     
