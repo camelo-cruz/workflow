@@ -61,6 +61,15 @@ jobs:
       run: |
         rclone --version
 
+    - name: Download spaCy models
+      shell: powershell
+      run: |
+        $models = 'de_dep_news_trf','uk_core_news_trf','pt_core_news_lg','ja_core_news_trf','ru_core_news_lg','en_core_web_trf','it_core_news_lg'
+        foreach ($m in $models) {
+          Write-Host "⏬ Downloading $m"
+          python -m spacy download $m
+        }
+
     - name: Test rclone Configuration (Upload Timestamp File)
       shell: powershell
       run: |
@@ -122,11 +131,39 @@ jobs:
     - name: Append Hugging key
       run: echo "HUGGING_KEY=${{ secrets.HUGGING_KEY }}" >> secrets.env
         
-    - name: Remove temp and Build binary with PyInstaller
+    - name: Build binary with PyInstaller
       shell: bash
       run: |
         cd source
+
+        # redeclare MODELS here so it's available in this shell
+            # redeclare MODELS here so it's available in this shell
+            MODELS=(
+              de_dep_news_trf
+              uk_core_news_trf
+              pt_core_news_lg
+              ja_core_news_trf
+              ru_core_news_lg
+              en_core_web_trf
+              it_core_news_lg
+            )
+        
+            # build up --add-data flags
+            ADD_DATA_ARGS=()
+            for m in "${MODELS[@]}"; do
+              MODEL_PATH=$(python - <<PYCODE
+        import importlib, os
+        mod = importlib.import_module("$m")
+        print(os.path.dirname(mod.__file__))
+        PYCODE
+        )
+              ADD_DATA_ARGS+=("--add-data" "$MODEL_PATH:$m")
+            done
+
+
+        # now invoke pyinstaller with all your existing flags + these:
         pyinstaller --clean --onefile \
+          "${ADD_DATA_ARGS[@]}" \
           --add-data "$GITHUB_WORKSPACE/secrets.env:materials" \
           --add-data ../materials/*:materials \
           --add-data ../whisperx/assets/*:whisperx/assets \
@@ -204,6 +241,23 @@ jobs:
         pip install -U pyinstaller
         pip install speechbrain
 
+    - name: Download spaCy models
+      shell: bash
+      run: |
+        MODELS=(
+          de_dep_news_trf
+          uk_core_news_trf
+          pt_core_news_lg
+          ja_core_news_trf
+          ru_core_news_lg
+          en_core_web_trf
+          it_core_news_lg
+        )
+        for m in "${MODELS[@]}"; do
+          echo "⏬ Downloading $m"
+          python -m spacy download "$m"
+        done
+
     - name: Set environment variables
       run: echo "API_KEY=${{ secrets.DEEPL_API_KEY }}" > secrets.env
 
@@ -213,7 +267,34 @@ jobs:
     - name: Build macOS binary with PyInstaller
       run: |
         cd source
+
+        # redeclare MODELS here so it's available in this shell
+            # redeclare MODELS here so it's available in this shell
+            MODELS=(
+              de_dep_news_trf
+              uk_core_news_trf
+              pt_core_news_lg
+              ja_core_news_trf
+              ru_core_news_lg
+              en_core_web_trf
+              it_core_news_lg
+            )
+        
+            # build up --add-data flags
+            ADD_DATA_ARGS=()
+            for m in "${MODELS[@]}"; do
+              MODEL_PATH=$(python - <<PYCODE
+        import importlib, os
+        mod = importlib.import_module("$m")
+        print(os.path.dirname(mod.__file__))
+        PYCODE
+        )
+              ADD_DATA_ARGS+=("--add-data" "$MODEL_PATH:$m")
+            done
+
+        
         pyinstaller --clean --onefile \
+          "${ADD_DATA_ARGS[@]}" \
           --add-data "$GITHUB_WORKSPACE/secrets.env:materials" \
           --add-data ../materials/*:materials \
           --add-data ../whisperx/assets/*:whisperx/assets \
