@@ -66,7 +66,8 @@ class Glosser():
           'pt': 'pt_core_news_lg',
           'ja': 'ja_core_news_trf',
           'ru': 'ru_core_news_lg',
-          'en': 'en_core_web_trf'
+          'en': 'en_core_web_trf',
+          'it': 'it_core_news_lg'
           }
         
         model_name = models[self.language_code]
