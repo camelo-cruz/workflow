@@ -77,7 +77,7 @@ def process_gloss(input_dir, language, instruction, status_label):
         msg = "Starting glossing..."
         status_label.config(text=msg)
         print(msg)
-        glosser = Glosser(input_dir, language, instruction, device=device)
+        glosser = Glosser(input_dir, language, instruction)
         glosser.process_data()
         msg = "Glossing completed."
         status_label.config(text=msg)
