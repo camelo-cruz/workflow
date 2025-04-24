@@ -29,6 +29,9 @@ from Translator import Translator
 from spacy.cli import download
 from deep_translator import GoogleTranslator
 from functions import set_global_variables, find_language
+from spacy.util import is_package
+from spacy.cli import download
+
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, LEIPZIG_GLOSSARY = set_global_variables()
 
@@ -71,12 +74,11 @@ class Glosser():
           }
         
         model_name = models[self.language_code]
-        try:
-            self.nlp = spacy.load(model_name)
-        except OSError:
-            print(f"Model {model_name} not found. Downloading...")
+        if not is_package(model_name):
+            print(f"{model_name} isn’t installed—pulling it down now…")
             download(model_name)
-            self.nlp = spacy.load(model_name)
+        # Now it lives in spaCy’s data cache, so this will succeed:
+        self.nlp = spacy.load(model_name)
 
     def gloss_japanese_with_spacy(self, sentence):     
         glossed_sentence = ''
