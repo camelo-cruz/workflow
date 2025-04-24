@@ -20,6 +20,7 @@ openai_whisper
 whisperx
 pandas
 spacy
+spacy-stanza
 tqdm
 transformers
 transliterate
