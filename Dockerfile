@@ -23,9 +23,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg cmake libsndfile1 git curl build-essential libsndfile1-dev \
     && rm -rf /var/lib/apt/lists/*
 
-
-RUN mkdir -p $HOME/app/staticfiles
-
 # Copy requirements and install Python packages as user
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir --user -r requirements.txt
