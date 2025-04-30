@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transcription App</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+<body>
+<div class="container">
+    <div class="sidebar"> 
+        <h2 class="title">Automatic workflow LeibnizDream</h2>
+        <form id="form-transcribe">
+            <label for="action">Action</label>
+            <select id="action" name="action" required>
+                <option value="transcribe">Transcribe</option>
+                <option value="translate">Translate</option>
+                <option value="gloss">Gloss</option>
+            </select>
+        
+            <label>Directory Path</label>
+            <input type="text" id="base-dir" name="base_dir" placeholder="/path/to/dir" required>
+        
+            <label for="instruction">Instruction</label>
+            <select id="instruction" name="instruction" required>
+                <option value="corrected">corrected</option>
+                <option value="automatic">automatic</option>
+                <option value="sentences">sentences</option>
+            </select>
+        
+            <label>Language</label>
+            <input type="text" id="language" name="language" value="German" required>
+        
+            <!-- 💥 Just buttons stacked -->
+            <button id="btn-process" class="btn-primary" type="button">Start</button>
+            <button id="btn-cancel" class="btn-secondary" type="button" style="display:none;">Cancel</button>
+        
+            <div id="status" class="status"></div>
+        </form>
+    </div>
+
+    <div class="main">
+        <img src="{% static 'zas_logo.jpg' %}" alt="Logo" class="logo">
+        <p class="logo-text">LeibnizDream</p>
+        <pre id="logs"></pre>
+    </div>
+</div>
+
+<script>
+    let currentJobId = null;
+    let evt = null;
+    
+    function startLogStream(jobId) {
+        const statusEl = document.getElementById("status");
+        const logEl = document.getElementById("logs");
+    
+        evt = new EventSource(`/logs/${jobId}`);
+        evt.onmessage = e => {
+            logEl.textContent += e.data + "\n";
+            logEl.scrollTop = logEl.scrollHeight;
+            if (e.data === "[DONE ALL]" || e.data === "[CANCELLED]" || e.data.startsWith("[ERROR]")) {
+                evt.close();
+                localStorage.removeItem("job_id");
+                document.getElementById("btn-cancel").style.display = "none";
+                statusEl.textContent = "Finished.";
+            }
+        };
+
+        evt.onerror = e => { 
+            console.error("EventSource error:", e);
+            evt.close();
+            localStorage.removeItem("job_id");
+            document.getElementById("btn-cancel").style.display = "none";
+            document.getElementById("btn-process").style.display = "block";
+            logEl.textContent += "[ERROR] Error occurred. Job not finished";
+            statusEl.textContent = "Error occurred. Job not finished";
+        };
+
+    }
+    
+    document.getElementById("btn-process").onclick = async () => {
+        const base = document.getElementById("base-dir").value.trim();
+        const language = document.getElementById("language").value.trim();
+        const action = document.getElementById("action").value.trim();
+        const instruction = document.getElementById("instruction").value.trim();
+    
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+        const payload = new FormData();
+        payload.append("base_dir", base);
+        payload.append("language", language);
+        payload.append("action", action);
+        payload.append("instruction", instruction);
+    
+        let res;
+        try {
+            res = await fetch("/process/", {
+                method: "POST",
+                body: payload,
+                headers: {
+                    "X-CSRFToken": csrfToken
+                },
+                credentials: "same-origin"
+            });
+        } catch (error) {
+            console.error("Fetch error:", error);
+            document.getElementById("status").textContent = "Failed to start job.";
+            return;
+        }
+    
+        if (!res.ok) {
+            document.getElementById("status").textContent = "Failed to start job.";
+            return;
+        }
+    
+        let data;
+        try {
+            data = await res.json();
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+            document.getElementById("status").textContent = "Invalid server response.";
+            return;
+        }
+        
+        const { job_id, error } = data;
+        const statusEl = document.getElementById("status");
+        const logEl = document.getElementById("logs");
+        logEl.textContent = "";
+    
+        if (error) {
+            statusEl.textContent = error;
+            return;
+        }
+    
+        if (!job_id) {
+            statusEl.textContent = "Job ID missing.";
+            return;
+        }
+    
+        currentJobId = job_id;
+        document.getElementById("btn-process").style.display = "none";
+        localStorage.setItem("job_id", currentJobId); // ✅ Save to localStorage
+        statusEl.textContent = "Job " + currentJobId + " started";
+        document.getElementById("btn-cancel").style.display = "block";
+    
+        startLogStream(currentJobId);
+    };
+    
+    document.getElementById("btn-cancel").onclick = async () => {
+        if (!currentJobId) return;
+    
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+        try {
+            await fetch(`/cancel/${currentJobId}`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken
+                },
+                credentials: "same-origin"
+            });
+    
+            document.getElementById("status").textContent = "Cancelling...";
+        } catch (error) {
+            console.error("Error cancelling job:", error);
+            document.getElementById("status").textContent = "Failed to cancel.";
+        }
+    };
+    
+    // ✅ When page loads, check if a job is still running
+    window.addEventListener("load", () => {
+        const savedJobId = localStorage.getItem("job_id");
+        if (savedJobId) {
+            currentJobId = savedJobId;
+            document.getElementById("status").textContent = "Reconnected to job " + currentJobId;
+            document.getElementById("btn-cancel").style.display = "block";
+            startLogStream(currentJobId);
+        }
+    });
+</script>
+</body>
+</html>
