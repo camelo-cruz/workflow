@@ -33,7 +33,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 #––– Collect static files
 RUN python manage.py collectstatic --noinput || true
 
-#––– Expose & run
-EXPOSE 7860
-CMD ["python", "manage.py", "runserver", "0.0.0.0:7860"]
-
+# (Optional) tell Docker the app listens on 80
+EXPOSE 80
+# Run Django dev server on port 80
+CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]
