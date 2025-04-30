@@ -33,7 +33,8 @@ RUN pip install --no-cache-dir --upgrade pip \
 #––– Collect static files
 RUN python manage.py collectstatic --noinput || true
 
-# (Optional) tell Docker the app listens on 80
+# Expose the port Hugging Face expects (optional but good practice)
 EXPOSE 7860
-# Run Django dev server on port 80 
+
+# Start Django on port 7860
 CMD ["python", "manage.py", "runserver", "0.0.0.0:7860"]
