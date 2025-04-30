@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-X_FRAME_OPTIONS = "SAMEORIGIN"
+X_FRAME_OPTIONS = 'ALLOW-FROM https://huggingface.co/'
 
 ROOT_URLCONF = 'workflow.urls'
 
