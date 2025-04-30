@@ -27,8 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-CSRF_COOKIE_SECURE = True       # already default in HF (HTTPS)
-CSRF_COOKIE_SAMESITE = None     # allows the cookie in iframes
+CORS_ALLOW_CREDENTIALS = True
+
 CSRF_TRUSTED_ORIGINS = [
     "https://huggingface.co",
     "https://camelo-cruz-leibnizdream.hf.space",
