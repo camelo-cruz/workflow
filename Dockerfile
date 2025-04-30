@@ -34,4 +34,4 @@ RUN pip install --no-cache-dir --upgrade pip \
 RUN python manage.py collectstatic --noinput || true
 
 # Start Gunicorn on port 7860 (required by Hugging Face)
-CMD ["gunicorn", "workflow.wsgi:application", "--bind", "0.0.0.0:7860", "--timeout", "3600", "--workers", "1"]
+CMD ["gunicorn", "--log-level", "debug", "--bind", "0.0.0.0:7860", "workflow.wsgi:application"]
