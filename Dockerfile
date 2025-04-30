@@ -14,22 +14,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg cmake libsndfile1 git curl build-essential libsndfile1-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory and switch user
+# Set working directory
 WORKDIR /app
+
+# Copy project files as root first
+COPY . .
+
+# Create staticfiles dir and fix permissions before switching user
+RUN mkdir -p /app/staticfiles && chown -R 1000:1000 /app
+
+# Switch to non-root user
 USER user
 
-# Copy and install requirements
-COPY --chown=user requirements.txt .
+# Copy requirements and install Python packages as user
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir --user -r requirements.txt
 
-# Copy the rest of the project
-COPY --chown=user . .
-
-RUN mkdir -p /app/staticfiles && chown -R user:user /app/staticfiles
-
-# Collect static files (optional)
+# Collect static files
 RUN python manage.py collectstatic --noinput || true
 
-# Start Gunicorn server on port 7860 (required by Hugging Face Spaces)
+# Start Gunicorn on port 7860 (required by Hugging Face)
 CMD ["gunicorn", "workflow.wsgi:application", "--bind", "0.0.0.0:7860", "--timeout", "3600", "--workers", "1"]
