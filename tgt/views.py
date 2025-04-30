@@ -11,13 +11,15 @@ from django.shortcuts import render
 from .classes.Transcriber import Transcriber
 from .classes.Translator import Translator
 from .classes.Glosser import Glosser
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
 
 # Simple in-memory job store
 jobs = {}  # job_id -> {"queue": Queue(), "finished": bool, "cancelled": bool}
 
-def home(request):
+@ensure_csrf_cookie
+def index(request):
     return render(request, 'index.html')
 
 def process(request):
