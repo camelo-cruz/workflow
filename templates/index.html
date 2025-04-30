@@ -12,6 +12,7 @@
     <div class="sidebar"> 
         <h2 class="title">Automatic workflow LeibnizDream</h2>
         <form id="form-transcribe">
+            {% csrf_token %}
             <label for="action">Action</label>
             <select id="action" name="action" required>
                 <option value="transcribe">Transcribe</option>
