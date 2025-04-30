@@ -190,7 +190,7 @@ class Transcriber:
         whisper_model_path = os.path.join(parent_dir, 'whisper_models', 'large-v2.pt')
         whisperx_model_path = os.path.join(parent_dir, 'whisper_models', 'whisperx')
         if self.language_code == 'zh':
-            model = whisper.load_model(whisper_model_path, self.device)
+            model =  whisper.load_model("large-v2", self.device)
             res = model.transcribe(
                 path_to_audio,
                 language='zh',
@@ -201,7 +201,7 @@ class Transcriber:
             return clean
         
         elif self.language_code in ['bn']:
-            model = whisper.load_model(whisper_model_path, self.device)
+            model = whisper.load_model("large-v2", self.device)
             res = model.transcribe(
                 path_to_audio,
                 language=self.language_code,
@@ -213,9 +213,9 @@ class Transcriber:
         # --- multilingual path: load, transcribe, align, diarize, then stitch back together ---
         else:
             try:
-                model = whisperx.load_model(whisperx_model_path, self.device, compute_type="float16", language=self.language_code)
+                model = whisperx.load_model("large-v2", self.device, compute_type="float16", language=self.language_code)
             except:
-                model = whisperx.load_model(whisperx_model_path, self.device, compute_type="int8", language=self.language_code)
+                model = whisperx.load_model("large-v2", self.device, compute_type="int8", language=self.language_code)
             audio = whisperx.load_audio(path_to_audio)
 
             result = model.transcribe(
