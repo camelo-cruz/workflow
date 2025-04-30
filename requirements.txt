@@ -38,6 +38,7 @@ python-multipart
 Flask>=2.0
 psutil
 gunicorn
+uvicorn
 django
 whitenoise
 spacy-curated-transformers
