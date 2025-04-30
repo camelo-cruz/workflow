@@ -35,4 +35,5 @@ RUN python manage.py collectstatic --noinput || true
 
 #––– Expose & run
 EXPOSE 7860
-CMD ["gunicorn", "--log-level", "debug", "--bind", "0.0.0.0:7860", "workflow.wsgi:application"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:7860"]
+
