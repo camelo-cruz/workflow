@@ -5,3 +5,4 @@ __pycache__.env
 secrets.env
 tgt/spacy_models/*
 tgt/whisper_models/*
+db.sqlite3
