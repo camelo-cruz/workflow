@@ -26,6 +26,8 @@ RUN pip install --no-cache-dir --upgrade pip \
 # Copy the rest of the project
 COPY --chown=user . .
 
+RUN mkdir -p /app/staticfiles && chown -R user:user /app/staticfiles
+
 # Collect static files (optional)
 RUN python manage.py collectstatic --noinput || true
 
