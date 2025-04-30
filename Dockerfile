@@ -4,27 +4,27 @@ FROM python:3.12-slim
 # Create non-root user
 RUN useradd -m -u 1000 user
 
-# Environment variables
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PATH="/home/user/.local/bin:$PATH"
+USER user
+
+# Set home to the user's home directory
+ENV HOME=/home/user \
+	PATH=/home/user/.local/bin:$PATH
+
+WORKDIR $HOME/app
+
+# Try and run pip command after setting the user with `USER user` to avoid permission issues with Python
+RUN pip install --no-cache-dir --upgrade pip
+
+# Copy the current directory contents into the container at $HOME/app setting the owner to the user
+COPY --chown=user . $HOME/app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg cmake libsndfile1 git curl build-essential libsndfile1-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
-WORKDIR /app
 
-# Copy project files as root first
-COPY . .
-
-# Create staticfiles dir and fix permissions before switching user
-RUN mkdir -p /app/staticfiles && chown -R 1000:1000 /app
-
-# Switch to non-root user
-USER user
+RUN mkdir -p $HOME/app/staticfiles
 
 # Copy requirements and install Python packages as user
 RUN pip install --no-cache-dir --upgrade pip \
