@@ -67,17 +67,21 @@ class Transcriber:
             base_path = os.path.join(parent_dir, 'materials')
             print("Using script directory for materials path")
 
-        secrets_path = os.path.join(base_path, 'secrets.env')
-
-        if os.path.exists(secrets_path):
-            load_dotenv(secrets_path, override=True)
-        else:
-            print(f"Error: {secrets_path} not found.")
-            sys.exit(1)
-        
+        # Try loading from environment first (used in Hugging Face Spaces)
         self.hugging_key = os.getenv("HUGGING_KEY")
+
+        # If not found, try loading from local .env file for local development
         if not self.hugging_key:
-            raise ValueError("Hugging face key not found. Check your secrets.env file.")
+            base_path = os.path.dirname(os.path.abspath(__file__))
+            secrets_path = os.path.join(base_path, '..', 'materials', 'secrets.env')
+            
+            if os.path.exists(secrets_path):
+                load_dotenv(secrets_path, override=True)
+                self.hugging_key = os.getenv("HUGGING_KEY")
+
+        # Final check
+        if not self.hugging_key:
+            raise ValueError("Hugging Face key not found. Set it in Hugging Face Secrets or in materials/secrets.env")
         
         print(f"Using Hugging Face token: {self.hugging_key[:10]}...")  # optional
 
