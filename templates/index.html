@@ -6,13 +6,13 @@
     <title>Transcription App</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <meta name="csrf-token" content="{{ csrf_token }}">
+    {% csrf_token %}
 </head>
 <body>
 <div class="container">
     <div class="sidebar"> 
         <h2 class="title">Automatic workflow LeibnizDream</h2>
         <form id="form-transcribe">
-            {% csrf_token %}
             <label for="action">Action</label>
             <select id="action" name="action" required>
                 <option value="transcribe">Transcribe</option>
@@ -81,6 +81,11 @@
     }
     
     document.getElementById("btn-process").onclick = async () => {
+
+        console.log("document.cookie:", document.cookie);
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        console.log("meta CSRF token:", meta && meta.getAttribute("content"));
+        
         const base = document.getElementById("base-dir").value.trim();
         const language = document.getElementById("language").value.trim();
         const action = document.getElementById("action").value.trim();
@@ -179,6 +184,8 @@
             startLogStream(currentJobId);
         }
     });
+
+
 </script>
 </body>
 </html>
