@@ -1,3 +1,4 @@
 *.exe filter=lfs diff=lfs merge=lfs -text
 windows-distribution/** filter=lfs diff=lfs merge=lfs -text
 source/windows-distribution/dist/** filter=lfs diff=lfs merge=lfs -text
+db.sqlite3 filter=lfs diff=lfs merge=lfs -text
