@@ -11,7 +11,7 @@ from django.shortcuts import render
 from .classes.Transcriber import Transcriber
 from .classes.Translator import Translator
 from .classes.Glosser import Glosser
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.middleware.csrf import get_token
 
 from .utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
@@ -25,6 +25,8 @@ def index(request):
     print(f"CSRF token on render: {token}")
     return render(request, 'index.html')
 
+
+@csrf_exempt
 def process(request):
     if request.method == 'POST':
         onedrive_link = request.POST.get('base_dir')
