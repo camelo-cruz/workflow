@@ -41,11 +41,13 @@ def get_graph_token(force_reauth=False):
             return result["access_token"]
 
     flow = app.initiate_device_flow(scopes=SCOPES)
+    uri = flow.get("verification_uri")
+    code = flow.get("user_code")
     if "user_code" not in flow:
         raise Exception("Failed to create device flow")
 
     print(
-    f"[DEVICE_FLOW]{flow['verification_uri']}|{flow['user_code']}",
+    f'go to {uri} and insert code: {code}',
     flush=True
     )
 

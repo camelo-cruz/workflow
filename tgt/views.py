@@ -11,18 +11,15 @@ from django.shortcuts import render
 from .classes.Transcriber import Transcriber
 from .classes.Translator import Translator
 from .classes.Glosser import Glosser
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
-from django.middleware.csrf import get_token
 
 from .utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
 
 # Simple in-memory job store
 jobs = {}  # job_id -> {"queue": Queue(), "finished": bool, "cancelled": bool}
 
-def index(request):
+def home(request):
     return render(request, 'index.html')
 
-@csrf_exempt
 def process(request):
     if request.method == 'POST':
         onedrive_link = request.POST.get('base_dir')
@@ -50,7 +47,7 @@ def process(request):
                with redirect_stdout(writer), redirect_stderr(writer):
                     temp_dir = tempfile.mkdtemp()
 
-                    input_dir, drive_id, parent_id, session_folder_id_map = download_sharepoint_folder(onedrive_link, temp_dir, force_reauth=True)
+                    input_dir, drive_id, parent_id, session_folder_id_map = download_sharepoint_folder(onedrive_link, temp_dir)
 
                     # Determine real session folders
                     session_folders = []
