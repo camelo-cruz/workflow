@@ -36,8 +36,9 @@ CSRF_TRUSTED_ORIGINS = [
 
 CONTENT_SECURITY_POLICY = {
     "default-src": ["'self'"],
-
     "frame-ancestors": ["'self'", "https://huggingface.co"],
+    "script-src": ["'self'", "'unsafe-inline'"],
+    "style-src":  ["'self'", "'unsafe-inline'"],
 }
 
 
