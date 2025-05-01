@@ -159,26 +159,18 @@ def logs(request, job_id):
         q = jobs[job_id]['queue']
         while True:
             try:
-                line = q.get(timeout=0.5)
-            except Empty:
-                if jobs[job_id]['finished']:
+                line = q.get(timeout=5)  # wait max 5s for a line
+                yield f"data: {line}\n\n"
+                if line in ("[DONE ALL]", "[CANCELLED]") or line.startswith("[ERROR]"):
                     break
-                continue
-            # each yield will be flushed immediately as its own chunk
-            yield f"data: {line}\n\n"
-            if line in ("[DONE ALL]", "[CANCELLED]") or line.startswith("[ERROR]"):
-                break
+            except Empty:
+                # No log line in 5s — send a heartbeat to keep connection alive
+                yield "data: [PING]\n\n"
 
-    resp = StreamingHttpResponse(
-        event_stream(),
-        content_type='text/event-stream',
-    )
-    # SSE recommendations:
-    resp['Cache-Control']     = 'no-cache'       # prevent downstream caches
-    resp['X-Accel-Buffering'] = 'no'             # tell Nginx not to buffer
-    # If you have GZipMiddleware enabled, either disable it globally or:
-    #   resp['Content-Encoding'] = 'identity'
-    return resp
+    response = StreamingHttpResponse(event_stream(), content_type='text/event-stream')
+    response['Cache-Control'] = 'no-cache'            # prevent caching
+    response['X-Accel-Buffering'] = 'no'               # tell proxy (e.g. on Spaces) not to buffer
+    return response
 
 @xframe_options_exempt
 @csrf_exempt
