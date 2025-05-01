@@ -19,12 +19,8 @@ from .utils.onedrive import download_sharepoint_folder, upload_file_replace_in_o
 # Simple in-memory job store
 jobs = {}  # job_id -> {"queue": Queue(), "finished": bool, "cancelled": bool}
 
-@ensure_csrf_cookie
 def index(request):
-    token = get_token(request)
-    print(f"CSRF token on render: {token}")
     return render(request, 'index.html')
-
 
 def process(request):
     if request.method == 'POST':

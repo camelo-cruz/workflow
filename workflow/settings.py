@@ -27,20 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-CORS_ALLOW_CREDENTIALS = True
-
 CSRF_TRUSTED_ORIGINS = [
     "https://huggingface.co",
     "https://camelo-cruz-leibnizdream.hf.space",
 ]
 
-CONTENT_SECURITY_POLICY = {
-    "default-src": ["'self'"],
-    "frame-ancestors": ["'self'", "https://huggingface.co"],
-    "script-src": ["'self'", "'unsafe-inline'"],
-    "style-src":  ["'self'", "'unsafe-inline'"],
-}
-
+X_FRAME_OPTIONS = 'ALLOW-FROM https://huggingface.co/'
 
 # Application definition
 
@@ -52,12 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tgt',
-    "csp",
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    "csp.middleware.CSPMiddleware",
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

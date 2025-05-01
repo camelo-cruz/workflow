@@ -1,5 +1,4 @@
 {% load static %}
-{% csrf_token %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,118 +49,154 @@
 
 <script>
     let currentJobId = null;
-    let pollInterval = null;
-  
-    async function fetchLogs(jobId) {
-      try {
-        const res = await fetch(`/logs/${jobId}/`);
-        if (!res.ok) throw new Error("Log fetch failed");
-        return await res.text();
-      } catch (err) {
-        console.error(err);
-        return null;
-      }
-    }
-  
-    function startPolling(jobId) {
-      const statusEl = document.getElementById("status");
-      const logEl = document.getElementById("logs");
-      logEl.textContent = "Waiting for logs…";
-  
-      // poll every 1.5s (1500ms)
-      pollInterval = setInterval(async () => {
-        const text = await fetchLogs(jobId);
-        if (text === null) return;
-        if (text === "" && firstLog) return;
+    let evt = null;
 
-        firstLog = false;
-        logEl.textContent = text;
-        logEl.scrollTop   = logEl.scrollHeight;
-  
-        // stop when we see a terminal marker
-        if (
-          text.includes("[DONE ALL]") ||
-          text.includes("[CANCELLED]") ||
-          text.includes("[ERROR]")
-        ) {
-          clearInterval(pollInterval);
-          document.getElementById("btn-cancel").style.display = "none";
-          statusEl.textContent = "Finished.";
+    function startLogStream(jobId) {
+        const statusEl = document.getElementById("status");
+        const logEl    = document.getElementById("logs");
+        let deviceFlowOpened = false;    // ← declare it!
+
+        // If your URL pattern is “logs/<job_id>/” be sure to include the slash here:
+        evt = new EventSource(`/logs/${jobId}/`);
+
+        evt.onmessage = e => {
+        const line = e.data;
+
+        // 1) Device-flow pop-up
+        if (!deviceFlowOpened) {
+            const m = line.match(/^\[DEVICE_FLOW\](\S+)\|(\S+)/);
+            if (m) {
+            const [, url, code] = m;
+            window.open(url, "_blank");
+            alert("📲 Microsoft Device Code:\n\n" + code);
+            deviceFlowOpened = true;
+            }
         }
-      }, 1500);
+
+        // 2) Append all logs
+        logEl.textContent += line + "\n";
+        logEl.scrollTop = logEl.scrollHeight;
+
+        // 3) Stop on terminal markers
+        if (line === "[DONE ALL]" || line === "[CANCELLED]" || line.startsWith("[ERROR]")) {
+            evt.close();
+            localStorage.removeItem("job_id");
+            document.getElementById("btn-cancel").style.display = "none";
+            statusEl.textContent = "Finished.";
+        }
+        };
+
+        evt.onerror = e => {
+        console.error("EventSource error:", e);
+        evt.close();
+        localStorage.removeItem("job_id");
+        document.getElementById("btn-cancel").style.display = "none";
+        document.getElementById("btn-process").style.display = "block";
+        logEl.textContent += "[ERROR] Error occurred. Job not finished\n";
+        statusEl.textContent = "Error occurred. Job not finished";
+        };
     }
-  
+    
     document.getElementById("btn-process").onclick = async () => {
-      const base        = document.getElementById("base-dir").value.trim();
-      const language    = document.getElementById("language").value.trim();
-      const action      = document.getElementById("action").value;
-      const instruction = document.getElementById("instruction").value;
-      const csrfToken   = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-      const statusEl    = document.getElementById("status");
-  
-      const payload = new FormData();
-      payload.append("base_dir", base);
-      payload.append("language", language);
-      payload.append("action", action);
-      payload.append("instruction", instruction);
-  
-      let data;
-      try {
-        const res = await fetch("/process/", {
-          method: "POST",
-          body: payload,
-          headers: { "X-CSRFToken": csrfToken },
-          credentials: "same-origin",
-        });
-        if (!res.ok) throw new Error("Start failed");
-        data = await res.json();
-      } catch (err) {
-        console.error(err);
-        statusEl.textContent = "Failed to start job.";
-        return;
-      }
-  
-      if (data.error || !data.job_id) {
-        statusEl.textContent = data.error || "Job ID missing.";
-        return;
-      }
-  
-      currentJobId = data.job_id;
-      localStorage.setItem("job_id", currentJobId);
-      document.getElementById("btn-process").style.display = "none";
-      document.getElementById("btn-cancel").style.display  = "block";
-      statusEl.textContent = "Job " + currentJobId + " started";
-  
-      startPolling(currentJobId);
-    };
-  
-    document.getElementById("btn-cancel").onclick = async () => {
-      if (!currentJobId) return;
-      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-      try {
-        await fetch(`/cancel/${currentJobId}`, {
-          method: "POST",
-          headers: { "X-CSRFToken": csrfToken },
-          credentials: "same-origin",
-        });
-        document.getElementById("status").textContent = "Cancelling...";
-      } catch (err) {
-        console.error(err);
-        document.getElementById("status").textContent = "Failed to cancel.";
-      }
-    };
-  
-    // on load, resume polling if a job was in progress
-    window.addEventListener("load", () => {
-      const saved = localStorage.getItem("job_id");
-      if (saved) {
-        currentJobId = saved;
+        const base = document.getElementById("base-dir").value.trim();
+        const language = document.getElementById("language").value.trim();
+        const action = document.getElementById("action").value.trim();
+        const instruction = document.getElementById("instruction").value.trim();
+    
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+        const payload = new FormData();
+        payload.append("base_dir", base);
+        payload.append("language", language);
+        payload.append("action", action);
+        payload.append("instruction", instruction);
+    
+        let res;
+        try {
+            res = await fetch("/process/", {
+                method: "POST",
+                body: payload,
+                headers: {
+                    "X-CSRFToken": csrfToken
+                },
+                credentials: "same-origin"
+            });
+        } catch (error) {
+            console.error("Fetch error:", error);
+            document.getElementById("status").textContent = "Failed to start job.";
+            return;
+        }
+    
+        if (!res.ok) {
+            document.getElementById("status").textContent = "Failed to start job.";
+            return;
+        }
+    
+        let data;
+        try {
+            data = await res.json();
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+            document.getElementById("status").textContent = "Invalid server response.";
+            return;
+        }
+        
+        const { job_id, error } = data;
+        const statusEl = document.getElementById("status");
+        const logEl = document.getElementById("logs");
+        logEl.textContent = "";
+    
+        if (error) {
+            statusEl.textContent = error;
+            return;
+        }
+    
+        if (!job_id) {
+            statusEl.textContent = "Job ID missing.";
+            return;
+        }
+    
+        currentJobId = job_id;
         document.getElementById("btn-process").style.display = "none";
-        document.getElementById("btn-cancel").style.display  = "block";
-        document.getElementById("status").textContent     = "Reconnected to job " + saved;
-        startPolling(saved);
-      }
+        localStorage.setItem("job_id", currentJobId);
+        statusEl.textContent = "Job " + currentJobId + " started";
+        document.getElementById("btn-cancel").style.display = "block";
+    
+        startLogStream(currentJobId);
+        statusEl.textContent = "Processing... Logging started";
+    };
+    
+    document.getElementById("btn-cancel").onclick = async () => {
+        if (!currentJobId) return;
+    
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+        try {
+            await fetch(`/cancel/${currentJobId}`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken
+                },
+                credentials: "same-origin"
+            });
+    
+            document.getElementById("status").textContent = "Cancelling...";
+        } catch (error) {
+            console.error("Error cancelling job:", error);
+            document.getElementById("status").textContent = "Failed to cancel.";
+        }
+    };
+    
+    // ✅ When page loads, check if a job is still running
+    window.addEventListener("load", () => {
+        const savedJobId = localStorage.getItem("job_id");
+        if (savedJobId) {
+            currentJobId = savedJobId;
+            document.getElementById("status").textContent = "Reconnected to job " + currentJobId;
+            document.getElementById("btn-cancel").style.display = "block";
+            startLogStream(currentJobId);
+        }
     });
-  </script>
+</script>
 </body>
 </html>
