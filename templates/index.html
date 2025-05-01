@@ -16,6 +16,7 @@
         <button id="btn-connect" class="btn-secondary" type="button">Connect OneDrive</button>
         <label for="access-token">Or paste token manually</label>
         <input type="text" id="access-token" placeholder="Paste Microsoft access token">
+        <button id="btn-set-token" type="button">Use Token</button>
 
         <form id="form-transcribe">
             <label for="action">Action</label>
@@ -168,9 +169,21 @@
       });
       statusEl.textContent = 'Cancelling...';
     });
+
+    const tokenInput = document.getElementById('manual-token');
+    const setTokenBtn = document.getElementById('btn-set-token');
+
+    setTokenBtn.addEventListener('click', () => {
+    const token = tokenInput.value.trim();
+    if (!token) {
+        alert("Please paste a token.");
+        return;
+    }
+    accessToken = token;
+    connectBtn.style.display = 'none';
+    processBtn.disabled = false;
+    statusEl.textContent = 'Manual token set.';
+    });
   </script>
-  
-  
-  
 </body>
 </html>
