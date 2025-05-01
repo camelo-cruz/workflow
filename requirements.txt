@@ -43,3 +43,4 @@ django
 whitenoise
 spacy-curated-transformers
 hf_xet
+gevent
