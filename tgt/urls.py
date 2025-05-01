@@ -8,6 +8,6 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('process/', views.process, name='process'),
-    path('logs/<str:job_id>', views.logs, name='logs'),
-    path('cancel/<str:job_id>', views.cancel, name='cancel'),
+    path('logs/<str:job_id>/', views.logs, name='logs'),
+    path('cancel/<str:job_id>/', views.cancel, name='cancel'),
 ]

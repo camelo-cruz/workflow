@@ -54,7 +54,7 @@
   
     async function fetchLogs(jobId) {
       try {
-        const res = await fetch(`/logs/${jobId}`);
+        const res = await fetch(`/logs/${jobId}/`);
         if (!res.ok) throw new Error("Log fetch failed");
         return await res.text();
       } catch (err) {
