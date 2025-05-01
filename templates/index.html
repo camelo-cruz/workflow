@@ -57,6 +57,7 @@
     
         evt = new EventSource(`/logs/${jobId}`);
         evt.onmessage = e => {
+            if (e.data === "[PING]") return;
             logEl.textContent += e.data + "\n";
             logEl.scrollTop = logEl.scrollHeight;
             if (e.data === "[DONE ALL]" || e.data === "[CANCELLED]" || e.data.startsWith("[ERROR]")) {
