@@ -86,7 +86,8 @@ def onedrive_auth_redirect(request):
         return JsonResponse({"error": "Failed to get token", "details": token_data}, status=400)
 
     request.session['access_token'] = token_data['access_token']
-    return render(request, 'auth_success.html')
+    return render(request, 'auth_success.html', {"token": token_data["access_token"]})
+
 
 @csrf_exempt
 def process(request):
