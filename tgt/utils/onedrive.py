@@ -16,6 +16,10 @@ SCOPES = ["Files.ReadWrite.All", "User.Read"]
 TOKEN_CACHE_DIR = os.environ.get("TOKEN_CACHE_DIR", os.path.expanduser("~"))
 TOKEN_CACHE_FILE = os.path.join(TOKEN_CACHE_DIR, ".onedrive_token_cache.json")
 
+def clear_token_cache():
+    if os.path.exists(TOKEN_CACHE_FILE):
+        os.remove(TOKEN_CACHE_FILE)
+
 def get_graph_token():
     cache = msal.SerializableTokenCache()
     if os.path.exists(TOKEN_CACHE_FILE):
@@ -126,5 +130,6 @@ def upload_file_replace_in_onedrive(local_file_path, target_drive_id, parent_fol
 
     if response.status_code not in (200, 201):
         raise Exception(f"Failed to upload/replace file: {response.text}")
-
+    
+    clear_token_cache()
     return response.json()
