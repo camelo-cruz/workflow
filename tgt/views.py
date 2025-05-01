@@ -22,6 +22,7 @@ jobs = {}  # job_id -> {"queue": Queue(), "finished": bool, "cancelled": bool}
 def index(request):
     return render(request, 'index.html')
 
+@csrf_exempt
 def process(request):
     if request.method == 'POST':
         onedrive_link = request.POST.get('base_dir')
