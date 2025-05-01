@@ -19,11 +19,9 @@ from .utils.onedrive import download_sharepoint_folder, upload_file_replace_in_o
 # Simple in-memory job store
 jobs = {}  # job_id -> {"queue": Queue(), "finished": bool, "cancelled": bool}
 
-@xframe_options_exempt
 def home(request):
     return render(request, 'index.html')
 
-@xframe_options_exempt
 @csrf_exempt
 def process(request):
     if request.method == 'POST':
@@ -150,7 +148,6 @@ def process(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-@xframe_options_exempt
 def logs(request, job_id):
     if job_id not in jobs:
         return HttpResponse("Unknown job ID", status=404)
@@ -172,7 +169,6 @@ def logs(request, job_id):
     response['X-Accel-Buffering'] = 'no'               # tell proxy (e.g. on Spaces) not to buffer
     return response
 
-@xframe_options_exempt
 @csrf_exempt
 def cancel(request, job_id):
     if request.method == 'POST':
