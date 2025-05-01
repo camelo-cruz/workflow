@@ -102,7 +102,7 @@ def process(request):
     if not onedrive_link:
         return JsonResponse({'error': 'Missing base_dir or OneDrive link'}, status=400)
 
-    access_token = request.session.get("access_token")
+    access_token = request.session.get("access_token") or request.POST.get("access_token")
     if not access_token:
         return JsonResponse({'error': 'Missing access token'}, status=403)
 
