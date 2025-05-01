@@ -20,7 +20,9 @@ def clear_token_cache():
     if os.path.exists(TOKEN_CACHE_FILE):
         os.remove(TOKEN_CACHE_FILE)
 
-def get_graph_token():
+def get_graph_token(force_reauth=False):
+    if force_reauth:
+        clear_token_cache()
     cache = msal.SerializableTokenCache()
     if os.path.exists(TOKEN_CACHE_FILE):
         with open(TOKEN_CACHE_FILE, "r") as f:
@@ -60,8 +62,8 @@ def encode_share_link(link):
     encoded_url = base64.urlsafe_b64encode(link.encode()).decode().rstrip("=")
     return f"u!{encoded_url}"
 
-def download_sharepoint_folder(share_link, temp_dir):
-    access_token = get_graph_token()
+def download_sharepoint_folder(share_link, temp_dir, force_reauth=False):
+    access_token = get_graph_token(force_reauth)
     headers = {"Authorization": f"Bearer {access_token}"}
 
     share_id = encode_share_link(share_link)
@@ -131,5 +133,4 @@ def upload_file_replace_in_onedrive(local_file_path, target_drive_id, parent_fol
     if response.status_code not in (200, 201):
         raise Exception(f"Failed to upload/replace file: {response.text}")
     
-    clear_token_cache()
     return response.json()

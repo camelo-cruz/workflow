@@ -68,7 +68,7 @@
             if (m) {
             const [, url, code] = m;
             window.open(url, "_blank");
-            alert("📲 Microsoft Device Code:\n\n" + code);
+            alert("Microsoft Device Code:\n\n" + code);
             deviceFlowOpened = true;
             }
         }
@@ -163,7 +163,7 @@
         document.getElementById("btn-cancel").style.display = "block";
     
         startLogStream(currentJobId);
-        statusEl.textContent = "Processing... Logging started";
+
     };
     
     document.getElementById("btn-cancel").onclick = async () => {

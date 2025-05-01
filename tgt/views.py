@@ -50,7 +50,7 @@ def process(request):
                with redirect_stdout(writer), redirect_stderr(writer):
                     temp_dir = tempfile.mkdtemp()
 
-                    input_dir, drive_id, parent_id, session_folder_id_map = download_sharepoint_folder(onedrive_link, temp_dir)
+                    input_dir, drive_id, parent_id, session_folder_id_map = download_sharepoint_folder(onedrive_link, temp_dir, force_reauth=True)
 
                     # Determine real session folders
                     session_folders = []
