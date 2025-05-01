@@ -34,10 +34,12 @@ CSRF_TRUSTED_ORIGINS = [
     "https://camelo-cruz-leibnizdream.hf.space",
 ]
 
-CSP_FRAME_ANCESTORS = (
-    "'self'",
-    "https://huggingface.co",
-)
+CONTENT_SECURITY_POLICY = {
+    "default-src": ["'self'"],
+
+    "frame-ancestors": ["'self'", "https://huggingface.co"],
+}
+
 
 # Application definition
 
