@@ -22,6 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-pe+h2u84_du^&8(i5ed@a%033!e71#q^_o74yxfy+mdob_!z85'
 
+
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 APPEND_SLASH = True
