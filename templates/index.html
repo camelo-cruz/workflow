@@ -14,6 +14,8 @@
 
         <!-- OneDrive Connect -->
         <button id="btn-connect" class="btn-secondary" type="button">Connect OneDrive</button>
+        <label for="access-token">Or paste token manually</label>
+        <input type="text" id="access-token" placeholder="Paste Microsoft access token">
 
         <form id="form-transcribe">
             <label for="action">Action</label>
@@ -61,29 +63,36 @@
   
     // 1️⃣ Connect OneDrive → open popup
     connectBtn.addEventListener('click', () => {
-      const popup = window.open('/auth/start', 'authPopup', 'width=600,height=700');
-  
-      const checkPopupClosed = setInterval(() => {
+    const popup = window.open('/auth/start', 'authPopup', 'width=600,height=700');
+
+    if (!popup) {
+        alert("Popup blocked. Please open this link manually:\n\n" + window.location.origin + "/auth/start");
+        return;
+    }
+
+    const checkPopupClosed = setInterval(() => {
         if (popup.closed) {
-          clearInterval(checkPopupClosed);
-          // 2️⃣ Try to fetch access token from server session
-          fetch('/auth/token')
+        clearInterval(checkPopupClosed);
+        fetch('/auth/token')
             .then(res => res.json())
             .then(data => {
-              if (data.access_token) {
+            if (data.access_token) {
                 accessToken = data.access_token;
                 connectBtn.style.display = 'none';
                 processBtn.disabled = false;
                 statusEl.textContent = 'OneDrive connected.';
-              } else {
+            } else {
                 alert("Could not retrieve access token.");
-              }
+            }
             });
         }
-      }, 500);
+    }, 500);
     });
+
   
     // 3️⃣ Start processing
+    const manualToken = document.getElementById('access-token').value.trim();
+    if (manualToken) accessToken = manualToken;
     processBtn.addEventListener('click', async () => {
       if (!accessToken) {
         alert('Please connect OneDrive first');

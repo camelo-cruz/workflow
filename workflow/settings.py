@@ -38,6 +38,9 @@ CSRF_TRUSTED_ORIGINS = [
 
 X_FRAME_OPTIONS = 'ALLOWALL'
 
+SESSION_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SECURE = False  # True only for HTTPS (e.g. Hugging Face)
+
 # Application definition
 
 INSTALLED_APPS = [

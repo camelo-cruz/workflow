@@ -6,12 +6,16 @@
   <style>
     body { font-family: Arial, sans-serif; padding: 2em; text-align: center; }
     .card { background: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: inline-block; }
+    code { word-break: break-all; display: block; margin-top: 1em; padding: 1em; background: #f5f5f5; border-radius: 6px; text-align: left; }
   </style>
 </head>
 <body>
   <div class="card">
     <h1>✅ Signed in successfully</h1>
     <p>You may now close this window and return to the application.</p>
+
+    <p><strong>Access Token:</strong></p>
+    <code>{{ token }}</code>
   </div>
 </body>
 </html>
