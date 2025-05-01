@@ -33,7 +33,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://camelo-cruz-leibnizdream.hf.space",
 ]
 
-X_FRAME_OPTIONS = 'ALLOW-FROM https://huggingface.co/'
+X_FRAME_OPTIONS = 'ALLOWALL'
 
 # Application definition
 

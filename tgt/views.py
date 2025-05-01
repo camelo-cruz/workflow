@@ -11,15 +11,20 @@ from django.shortcuts import render
 from .classes.Transcriber import Transcriber
 from .classes.Translator import Translator
 from .classes.Glosser import Glosser
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 from .utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
 
 # Simple in-memory job store
 jobs = {}  # job_id -> {"queue": Queue(), "finished": bool, "cancelled": bool}
 
+@xframe_options_exempt
 def home(request):
     return render(request, 'index.html')
 
+@xframe_options_exempt
+@csrf_exempt
 def process(request):
     if request.method == 'POST':
         onedrive_link = request.POST.get('base_dir')
@@ -47,7 +52,7 @@ def process(request):
                with redirect_stdout(writer), redirect_stderr(writer):
                     temp_dir = tempfile.mkdtemp()
 
-                    input_dir, drive_id, parent_id, session_folder_id_map = download_sharepoint_folder(onedrive_link, temp_dir)
+                    input_dir, drive_id, parent_id, session_folder_id_map = download_sharepoint_folder(onedrive_link, temp_dir, force_reauth=True)
 
                     # Determine real session folders
                     session_folders = []
@@ -145,6 +150,7 @@ def process(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+@xframe_options_exempt
 def logs(request, job_id):
     if job_id not in jobs:
         return HttpResponse("Unknown job ID", status=404)
@@ -158,12 +164,24 @@ def logs(request, job_id):
                 if jobs[job_id]['finished']:
                     break
                 continue
+            # each yield will be flushed immediately as its own chunk
             yield f"data: {line}\n\n"
             if line in ("[DONE ALL]", "[CANCELLED]") or line.startswith("[ERROR]"):
                 break
 
-    return StreamingHttpResponse(event_stream(), content_type='text/event-stream')
+    resp = StreamingHttpResponse(
+        event_stream(),
+        content_type='text/event-stream',
+    )
+    # SSE recommendations:
+    resp['Cache-Control']     = 'no-cache'       # prevent downstream caches
+    resp['X-Accel-Buffering'] = 'no'             # tell Nginx not to buffer
+    # If you have GZipMiddleware enabled, either disable it globally or:
+    #   resp['Content-Encoding'] = 'identity'
+    return resp
 
+@xframe_options_exempt
+@csrf_exempt
 def cancel(request, job_id):
     if request.method == 'POST':
         if job_id in jobs:

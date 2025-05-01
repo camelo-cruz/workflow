@@ -51,62 +51,33 @@
     let currentJobId = null;
     let evt = null;
     
-    async function startLogStream(jobId) {
-    const statusEl = document.getElementById("status");
-    const logEl = document.getElementById("logs");
-    const btnCancel = document.getElementById("btn-cancel");
-    const btnProcess = document.getElementById("btn-process");
+    function startLogStream(jobId) {
+        const statusEl = document.getElementById("status");
+        const logEl = document.getElementById("logs");
+    
+        evt = new EventSource(`/logs/${jobId}`);
+        evt.onmessage = e => {
+            logEl.textContent += e.data + "\n";
+            logEl.scrollTop = logEl.scrollHeight;
+            if (e.data === "[DONE ALL]" || e.data === "[CANCELLED]" || e.data.startsWith("[ERROR]")) {
+                evt.close();
+                localStorage.removeItem("job_id");
+                document.getElementById("btn-cancel").style.display = "none";
+                statusEl.textContent = "Finished.";
+            }
+        };
 
-    // Use an AbortController so you can cancel the fetch if needed
-    const controller = new AbortController();
-    btnCancel.onclick = () => {
-        controller.abort();
-    };
+        evt.onerror = e => { 
+            console.error("EventSource error:", e);
+            evt.close();
+            localStorage.removeItem("job_id");
+            document.getElementById("btn-cancel").style.display = "none";
+            document.getElementById("btn-process").style.display = "block";
+            logEl.textContent += "[ERROR] Error occurred. Job not finished";
+            statusEl.textContent = "Error occurred. Job not finished";
+        };
 
-    try {
-        const response = await fetch(`/logs/${jobId}`, {
-        signal: controller.signal,
-        });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder("utf-8");
-        let finished = false;
-
-        while (!finished) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        // Decode the chunk and append to the log element
-        const chunk = decoder.decode(value, { stream: true });
-        logEl.textContent += chunk;
-        logEl.scrollTop = logEl.scrollHeight;
-
-        // Check for terminal messages
-        if (
-            chunk.includes("[DONE ALL]") ||
-            chunk.includes("[CANCELLED]") ||
-            chunk.includes("[ERROR]")
-        ) {
-            finished = true;
-        }
-        }
-
-        reader.releaseLock();
-        localStorage.removeItem("job_id");
-        btnCancel.style.display = "none";
-        statusEl.textContent = "Finished.";
-    } catch (err) {
-        // Handles both network errors and abort()
-        console.error("Fetch error:", err);
-        localStorage.removeItem("job_id");
-        btnCancel.style.display = "none";
-        btnProcess.style.display = "block";
-        logEl.textContent += "\n[ERROR] Error occurred. Job not finished\n";
-        statusEl.textContent = "Error occurred. Job not finished";
     }
-    }
-
     
     document.getElementById("btn-process").onclick = async () => {
         const base = document.getElementById("base-dir").value.trim();
