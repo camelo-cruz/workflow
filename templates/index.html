@@ -65,14 +65,16 @@
   
     function startPolling(jobId) {
       const statusEl = document.getElementById("status");
-      const logEl    = document.getElementById("logs");
-      logEl.textContent = "";
+      const logEl = document.getElementById("logs");
+      logEl.textContent = "Waiting for logs…";
   
       // poll every 1.5s (1500ms)
       pollInterval = setInterval(async () => {
         const text = await fetchLogs(jobId);
         if (text === null) return;
-  
+        if (text === "" && firstLog) return;
+
+        firstLog = false;
         logEl.textContent = text;
         logEl.scrollTop   = logEl.scrollHeight;
   
