@@ -26,7 +26,6 @@ def index(request):
     return render(request, 'index.html')
 
 
-@csrf_exempt
 def process(request):
     if request.method == 'POST':
         onedrive_link = request.POST.get('base_dir')

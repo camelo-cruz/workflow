@@ -34,6 +34,11 @@ CSRF_TRUSTED_ORIGINS = [
     "https://camelo-cruz-leibnizdream.hf.space",
 ]
 
+CSP_FRAME_ANCESTORS = (
+    "'self'",
+    "https://huggingface.co",
+)
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,10 +49,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tgt',
+    "csp",
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "csp.middleware.CSPMiddleware",
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,8 +63,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-X_FRAME_OPTIONS = 'ALLOW-FROM https://huggingface.co/'
 
 ROOT_URLCONF = 'workflow.urls'
 

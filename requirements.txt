@@ -44,3 +44,4 @@ whitenoise
 spacy-curated-transformers
 hf_xet
 gevent
+django-csp
