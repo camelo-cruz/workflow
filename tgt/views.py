@@ -28,7 +28,7 @@ SCOPES = ["Files.ReadWrite.All", "User.Read"]
 jobs = {}  # job_id -> {"queue": Queue(), "finished": bool, "cancelled": bool}
 
 def get_redirect_uri(request):
-    scheme = "https" if request.is_secure() else "http"
+    scheme = "https"
     return f"{scheme}://{request.get_host()}/auth/redirect"
 
 @csrf_exempt
@@ -40,6 +40,7 @@ def get_access_token(request):
 
 def home(request):
     return render(request, 'index.html')
+
 
 @csrf_exempt
 def start_onedrive_auth(request):
