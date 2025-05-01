@@ -38,7 +38,7 @@ def get_graph_token():
     if "user_code" not in flow:
         raise Exception("Failed to create device flow")
 
-    print(f"Please go to {flow['verification_uri']} and enter the code: {flow['user_code']}")
+    print(f"Please go to {flow['verification_uri']} and enter the code: {flow['user_code']}", flush=True)
 
     result = app.acquire_token_by_device_flow(flow)
 

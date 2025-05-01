@@ -37,4 +37,4 @@ RUN python manage.py collectstatic --noinput || true
 EXPOSE 7860
 
 # Start Django on port 7860
-CMD [ "gunicorn", "workflow.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--workers", "1", "--bind", "0.0.0.0:7860",  "--timeout", "0"]
+CMD [ "gunicorn", "workflow.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--workers", "1", "--bind", "0.0.0.0:7860", "--timeout", "0", "--capture-output", "--enable-stdio-inheritance"]
