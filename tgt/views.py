@@ -27,9 +27,6 @@ SCOPES = ["Files.ReadWrite.All", "User.Read"]
 
 jobs = {}  # job_id -> {"queue": Queue(), "finished": bool, "cancelled": bool}
 
-def get_redirect_uri(request):
-    scheme = "https"
-    return f"{scheme}://{request.get_host()}/auth/redirect"
 
 @csrf_exempt
 def get_access_token(request):
@@ -44,12 +41,11 @@ def home(request):
 
 @csrf_exempt
 def start_onedrive_auth(request):
-    redirect_uri = get_redirect_uri(request)
     auth_url = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
     params = {
         "client_id": CLIENT_ID,
         "response_type": "code",
-        "redirect_uri": redirect_uri,
+        "redirect_uri": 'https://camelo-cruz-leibnizdream.hf.space/auth/redirect',
         "scope": " ".join(SCOPES),
         "response_mode": "query",
     }
@@ -60,15 +56,14 @@ def onedrive_auth_redirect(request):
     code = request.GET.get("code")
     if not code:
         return JsonResponse({"error": "No code in callback"}, status=400)
-
-    redirect_uri = get_redirect_uri(request)
+    
     token_url = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
     data = {
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET,
         "scope": " ".join(SCOPES),
         "code": code,
-        "redirect_uri": redirect_uri,
+        "redirect_uri": 'https://camelo-cruz-leibnizdream.hf.space/auth/redirect',
         "grant_type": "authorization_code",
     }
 
