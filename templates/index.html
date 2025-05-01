@@ -3,14 +3,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Transcription App</title>
+    <title>LeibnizDream Transcription App</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
 <body>
 <div class="container">
-    <div class="sidebar"> 
-        <h2 class="title">Automatic workflow LeibnizDream</h2>
+    <div class="sidebar">
+        <h2 class="title">Automatic Workflow – LeibnizDream</h2>
+
+        <!-- OneDrive Connect -->
+        <button id="btn-connect" class="btn-secondary" type="button">Connect OneDrive</button>
+
         <form id="form-transcribe">
             <label for="action">Action</label>
             <select id="action" name="action" required>
@@ -18,24 +22,23 @@
                 <option value="translate">Translate</option>
                 <option value="gloss">Gloss</option>
             </select>
-        
-            <label>Directory Path</label>
-            <input type="text" id="base-dir" name="base_dir" placeholder="/path/to/dir" required>
-        
+
+            <label for="base-dir">Directory Path</label>
+            <input type="text" id="base-dir" name="base_dir" placeholder="OneDrive share link" required>
+
             <label for="instruction">Instruction</label>
             <select id="instruction" name="instruction" required>
                 <option value="corrected">corrected</option>
                 <option value="automatic">automatic</option>
                 <option value="sentences">sentences</option>
             </select>
-        
-            <label>Language</label>
+
+            <label for="language">Language</label>
             <input type="text" id="language" name="language" value="German" required>
-        
-            <!-- 💥 Just buttons stacked -->
-            <button id="btn-process" class="btn-primary" type="button">Start</button>
+
+            <button id="btn-process" class="btn-primary" type="button" disabled>Start</button>
             <button id="btn-cancel" class="btn-secondary" type="button" style="display:none;">Cancel</button>
-        
+
             <div id="status" class="status"></div>
         </form>
     </div>
@@ -48,16 +51,81 @@
 </div>
 
 <script>
+    const connectBtn = document.getElementById('btn-connect');
+    const processBtn = document.getElementById('btn-process');
+    const cancelBtn  = document.getElementById('btn-cancel');
+    const statusEl   = document.getElementById('status');
+    const logEl      = document.getElementById('logs');
+    let accessToken  = null;
     let currentJobId = null;
+  
+    // 1️⃣ Connect OneDrive → open popup
+    connectBtn.addEventListener('click', () => {
+      const popup = window.open('/auth/start', 'authPopup', 'width=600,height=700');
+  
+      const checkPopupClosed = setInterval(() => {
+        if (popup.closed) {
+          clearInterval(checkPopupClosed);
+          // 2️⃣ Try to fetch access token from server session
+          fetch('/auth/token')
+            .then(res => res.json())
+            .then(data => {
+              if (data.access_token) {
+                accessToken = data.access_token;
+                connectBtn.style.display = 'none';
+                processBtn.disabled = false;
+                statusEl.textContent = 'OneDrive connected.';
+              } else {
+                alert("Could not retrieve access token.");
+              }
+            });
+        }
+      }, 500);
+    });
+  
+    // 3️⃣ Start processing
+    processBtn.addEventListener('click', async () => {
+      if (!accessToken) {
+        alert('Please connect OneDrive first');
+        return;
+      }
+  
+      const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+      const formData = new FormData(document.getElementById('form-transcribe'));
+      formData.append('access_token', accessToken);
+  
+      processBtn.style.display = 'none';
+      cancelBtn.style.display  = 'inline-block';
+      logEl.textContent        = '';
+      statusEl.textContent     = 'Job starting...';
+  
+      const res = await fetch('/process/', {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-CSRFToken': csrfToken },
+        credentials: 'same-origin'
+      });
+  
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        statusEl.textContent = data.error || 'Failed to start job.';
+        processBtn.style.display = 'inline-block';
+        cancelBtn.style.display  = 'none';
+        return;
+      }
+  
+      currentJobId = data.job_id;
+      statusEl.textContent = 'Job ' + currentJobId + ' started.';
+      startLogStream(currentJobId);
+    });
+
+    // 4️⃣ Poll logs
     let evt = null;
     
     function startLogStream(jobId) {
-        const statusEl = document.getElementById("status");
-        const logEl = document.getElementById("logs");
-    
         evt = new EventSource(`/logs/${jobId}`);
         evt.onmessage = e => {
-            if (e.data === "[PING]") return;
+            if (e.data == '[PING]') return;
             logEl.textContent += e.data + "\n";
             logEl.scrollTop = logEl.scrollHeight;
             if (e.data === "[DONE ALL]" || e.data === "[CANCELLED]" || e.data.startsWith("[ERROR]")) {
@@ -79,106 +147,21 @@
         };
 
     }
-    
-    document.getElementById("btn-process").onclick = async () => {
-        const base = document.getElementById("base-dir").value.trim();
-        const language = document.getElementById("language").value.trim();
-        const action = document.getElementById("action").value.trim();
-        const instruction = document.getElementById("instruction").value.trim();
-    
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    
-        const payload = new FormData();
-        payload.append("base_dir", base);
-        payload.append("language", language);
-        payload.append("action", action);
-        payload.append("instruction", instruction);
-    
-        let res;
-        try {
-            res = await fetch("/process/", {
-                method: "POST",
-                body: payload,
-                headers: {
-                    "X-CSRFToken": csrfToken
-                },
-                credentials: "same-origin"
-            });
-        } catch (error) {
-            console.error("Fetch error:", error);
-            document.getElementById("status").textContent = "Failed to start job.";
-            return;
-        }
-    
-        if (!res.ok) {
-            document.getElementById("status").textContent = "Failed to start job.";
-            return;
-        }
-    
-        let data;
-        try {
-            data = await res.json();
-        } catch (error) {
-            console.error("Error parsing JSON:", error);
-            document.getElementById("status").textContent = "Invalid server response.";
-            return;
-        }
-        
-        const { job_id, error } = data;
-        const statusEl = document.getElementById("status");
-        const logEl = document.getElementById("logs");
-        logEl.textContent = "";
-    
-        if (error) {
-            statusEl.textContent = error;
-            return;
-        }
-    
-        if (!job_id) {
-            statusEl.textContent = "Job ID missing.";
-            return;
-        }
-    
-        currentJobId = job_id;
-        document.getElementById("btn-process").style.display = "none";
-        localStorage.setItem("job_id", currentJobId); // ✅ Save to localStorage
-        statusEl.textContent = "Job " + currentJobId + " started";
-        document.getElementById("btn-cancel").style.display = "block";
-    
-        startLogStream(currentJobId);
-    };
-    
-    document.getElementById("btn-cancel").onclick = async () => {
-        if (!currentJobId) return;
-    
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    
-        try {
-            await fetch(`/cancel/${currentJobId}`, {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": csrfToken
-                },
-                credentials: "same-origin"
-            });
-    
-            document.getElementById("status").textContent = "Cancelling...";
-        } catch (error) {
-            console.error("Error cancelling job:", error);
-            document.getElementById("status").textContent = "Failed to cancel.";
-        }
-    };
-    
-    // ✅ When page loads, check if a job is still running
-    window.addEventListener("load", () => {
-        const savedJobId = localStorage.getItem("job_id");
-        if (savedJobId) {
-            currentJobId = savedJobId;
-            document.getElementById("status").textContent = "Reconnected to job " + currentJobId;
-            document.getElementById("btn-cancel").style.display = "block";
-            startLogStream(currentJobId);
-        }
+  
+    // 5️⃣ Cancel job
+    cancelBtn.addEventListener('click', async () => {
+      if (!currentJobId) return;
+      const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+      await fetch(`/cancel/${currentJobId}`, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': csrfToken },
+        credentials: 'same-origin'
+      });
+      statusEl.textContent = 'Cancelling...';
     });
-</script>
+  </script>
+  
+  
+  
 </body>
 </html>

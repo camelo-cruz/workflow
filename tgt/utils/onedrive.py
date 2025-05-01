@@ -1,83 +1,23 @@
-# utils/onedrive.py
-
 import os
 import tempfile
 import requests
-import msal
 import base64
-import json
-
-TENANT_ID = '7ef3035c-bf11-463a-ab3b-9a9a4ac82500'
-CLIENT_ID = '58c0d230-141d-4a30-905e-fd63e331e5ea'
-
-AUTHORITY = f"https://login.microsoftonline.com/{TENANT_ID}"
-SCOPES = ["Files.ReadWrite.All", "User.Read"]
-
-TOKEN_CACHE_DIR = os.environ.get("TOKEN_CACHE_DIR", os.path.expanduser("~"))
-TOKEN_CACHE_FILE = os.path.join(TOKEN_CACHE_DIR, ".onedrive_token_cache.json")
-
-def clear_token_cache():
-    if os.path.exists(TOKEN_CACHE_FILE):
-        os.remove(TOKEN_CACHE_FILE)
-
-def get_graph_token(force_reauth=False):
-    if force_reauth:
-        clear_token_cache()
-    cache = msal.SerializableTokenCache()
-    if os.path.exists(TOKEN_CACHE_FILE):
-        with open(TOKEN_CACHE_FILE, "r") as f:
-            cache.deserialize(f.read())
-
-    app = msal.PublicClientApplication(
-        CLIENT_ID,
-        authority=AUTHORITY,
-        token_cache=cache
-    )
-
-    accounts = app.get_accounts()
-    if accounts:
-        result = app.acquire_token_silent(SCOPES, account=accounts[0])
-        if result and "access_token" in result:
-            return result["access_token"]
-
-    flow = app.initiate_device_flow(scopes=SCOPES)
-    uri = flow.get("verification_uri")
-    code = flow.get("user_code")
-    if "user_code" not in flow:
-        raise Exception("Failed to create device flow")
-
-    print(
-    f'go to {uri} and insert code: {code}',
-    flush=True
-    )
-
-    result = app.acquire_token_by_device_flow(flow)
-
-    if "access_token" in result:
-        with open(TOKEN_CACHE_FILE, "w") as f:
-            f.write(cache.serialize())
-        return result["access_token"]
-    else:
-        raise Exception(f"Could not obtain access token: {result}")
 
 def encode_share_link(link):
     encoded_url = base64.urlsafe_b64encode(link.encode()).decode().rstrip("=")
     return f"u!{encoded_url}"
 
-def download_sharepoint_folder(share_link, temp_dir, force_reauth=False):
-    access_token = get_graph_token(force_reauth)
+def download_sharepoint_folder(share_link, temp_dir, access_token):
     headers = {"Authorization": f"Bearer {access_token}"}
-
     share_id = encode_share_link(share_link)
-
     root_url = f"https://graph.microsoft.com/v1.0/shares/{share_id}/driveItem"
+
     root_response = requests.get(root_url, headers=headers)
     root_response.raise_for_status()
     root_item = root_response.json()
 
     drive_id = root_item['parentReference']['driveId']
     parent_folder_id = root_item['id']
-
     session_folder_id_map = {}
 
     def recursive_collect_files(item, relative_path):
@@ -93,7 +33,6 @@ def download_sharepoint_folder(share_link, temp_dir, force_reauth=False):
             children_response.raise_for_status()
             children = children_response.json().get('value', [])
 
-            # If it's a session folder (e.g., Session_1237316), remember its ID
             if item['name'].startswith("Session_"):
                 session_folder_id_map[item['name']] = item['id']
 
@@ -111,17 +50,15 @@ def download_sharepoint_folder(share_link, temp_dir, force_reauth=False):
             if download_url:
                 r = requests.get(download_url, stream=True)
                 r.raise_for_status()
-
                 with open(file_path, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=8192):
                         f.write(chunk)
 
     recursive_collect_files(root_item, relative_path="")
-
     return temp_dir, drive_id, parent_folder_id, session_folder_id_map
 
-def upload_file_replace_in_onedrive(local_file_path, target_drive_id, parent_folder_id, file_name_in_folder):
-    access_token = get_graph_token()
+
+def upload_file_replace_in_onedrive(local_file_path, target_drive_id, parent_folder_id, file_name_in_folder, access_token):
     headers = {
         "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/octet-stream"
@@ -134,5 +71,5 @@ def upload_file_replace_in_onedrive(local_file_path, target_drive_id, parent_fol
 
     if response.status_code not in (200, 201):
         raise Exception(f"Failed to upload/replace file: {response.text}")
-    
+
     return response.json()
