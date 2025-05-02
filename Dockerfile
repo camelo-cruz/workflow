@@ -38,4 +38,4 @@ RUN python manage.py collectstatic --noinput || true
 EXPOSE 7860
 
 # Start Django on port 7860 with unbuffered output
-CMD ["uvicorn","workflow.asgi:application","--host","0.0.0.0","--port","7860","--workers","1"]
+CMD ["uvicorn","workflow.asgi:application","--host","0.0.0.0","--port","7860","--workers","1",'--lifespan','off']

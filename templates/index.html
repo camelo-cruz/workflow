@@ -133,7 +133,9 @@
     // open SSE
     const evt = new EventSource(`/stream/?${params.toString()}`);
     evt.onmessage = e => {
+
       if (e.data === '[PING]') return;
+      console.log('SSE:', e.data);
       logEl.textContent += e.data + '\n';
       logEl.scrollTop = logEl.scrollHeight;
       if (e.data.startsWith('[DONE') || e.data.startsWith('[ERROR]')) {
@@ -142,6 +144,7 @@
       }
     };
     evt.onerror = () => {
+      console.error('SSE error:', e);
       statusEl.textContent = 'Stream error.';
       evt.close();
     };
