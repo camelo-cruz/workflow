@@ -161,6 +161,7 @@
       evt.onerror = e => {
         console.error("SSE error", e);
         statusEl.textContent     = "Stream error.";
+        logEl.textContent        += "[ERROR] " + e.data + "\n";
         evt.close();
         processBtn.style.display = "block";
         cancelBtn.style.display  = "none";
