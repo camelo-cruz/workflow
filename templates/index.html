@@ -23,6 +23,7 @@
           <option value="transcribe">Transcribe</option>
           <option value="translate">Translate</option>
           <option value="gloss">Gloss</option>
+          <option value="create columns">Create columns</option>
         </select>
     
         <label for="base-dir">Directory Path</label>
@@ -62,7 +63,7 @@
     const logEl        = document.getElementById('logs');
     const form         = document.getElementById('form-transcribe');
 
-    let accessToken = null;
+    let accessToken = null, jobId = null, evt = null;
 
     // Show manual‐paste UI
     function showManualFallback() {
@@ -74,6 +75,7 @@
     // Set the token and enable Start
     function setToken(token) {
       accessToken = token;
+      localStorage.setItem('access_token', token);
       connectBtn.style.display   = 'none';
       manualInput.style.display  = 'none';
       setTokenBtn.style.display  = 'none';
@@ -81,103 +83,102 @@
       statusEl.textContent       = 'OneDrive connected.';
     }
 
-    // 1️⃣ Connect flow
+    // Reconnect if we have a job_id on load
+    window.addEventListener("load", () => {
+      jobId       = localStorage.getItem("job_id");
+      accessToken = localStorage.getItem("access_token");
+      if (jobId) {
+        openStream();
+      }
+    });
+
+    // OneDrive OAuth flow
     connectBtn.addEventListener('click', () => {
       manualInput.style.display = 'none';
       setTokenBtn.style.display = 'none';
-
       const popup = window.open('/auth/start', 'authPopup', 'width=600,height=700');
-      if (!popup) {
-        showManualFallback();
-        return;
-      }
-
+      if (!popup) return showManualFallback();
       const timer = setInterval(() => {
         if (!popup || popup.closed) {
           clearInterval(timer);
           fetch('/auth/token', { credentials: 'same-origin' })
-            .then(r => r.json().then(body => ({ status: r.status, body })))
-            .then(({ status, body }) => {
-              if (status === 200 && body.access_token) {
-                setToken(body.access_token);
-              } else {
-                showManualFallback();
-              }
+            .then(r => r.json())
+            .then(body => {
+              if (body.access_token) setToken(body.access_token);
+              else showManualFallback();
             })
-            .catch(() => showManualFallback());
+            .catch(showManualFallback);
         }
       }, 500);
     });
 
-    // 1b️⃣ Manual token entry
     setTokenBtn.addEventListener('click', () => {
       const t = manualInput.value.trim();
-      if (!t) {
-        alert('Please paste a valid token.');
-        return;
-      }
+      if (!t) return alert('Please paste a valid token.');
       setToken(t);
     });
 
-    // 2️⃣ Start processing
-  processBtn.addEventListener('click', () => {
-    // now `form` is defined!
-    const params = new URLSearchParams(new FormData(form));
-    params.append('access_token', accessToken);
+    // Start processing
+    processBtn.addEventListener("click", async () => {
+      const data = new FormData(form);
+      data.append("access_token", accessToken);
+      const res = await fetch("/process/", {
+        method: "POST",
+        body: data,
+        credentials: "same-origin"
+      });
+      const js  = await res.json();
+      jobId     = js.job_id;
+      localStorage.setItem("job_id", jobId);
+      openStream();
+    });
 
-    // reset UI
-    logEl.textContent    = '';
-    statusEl.textContent = 'Processing…';
+    function openStream() {
+      processBtn.style.display = "none";
+      cancelBtn.style.display  = "inline-block";
+      logEl.textContent        = "";
+      statusEl.textContent     = jobId
+        ? `Reconnected to job ${jobId}`
+        : "Starting…";
 
-    // open SSE
-    const evt = new EventSource(`/stream/?${params.toString()}`);
-    evt.onmessage = e => {
-      document.getElementById('btn-process').style.display = 'none';
-      document.getElementById('btn-cancel').style.display = 'block';
-      if (e.data === '[PING]') return;
-      console.log('SSE:', e.data);
-      logEl.textContent += e.data + '\n';
-      logEl.scrollTop = logEl.scrollHeight;
-      if (e.data.startsWith('[DONE') || e.data.startsWith('[ERROR]')) {
-        document.getElementById('btn-process').style.display = 'block';
-        document.getElementById('btn-cancel').style.display = 'none';
-        statusEl.textContent = e.data === '[DONE ALL]' ? 'Finished.' : e.data;
+      evt = new EventSource(`/stream/${jobId}/`);
+      evt.onmessage = e => {
+        if (e.data === "[PING]") return;
+        logEl.textContent += e.data + "\n";
+        logEl.scrollTop    = logEl.scrollHeight;
+        if (e.data.startsWith("[DONE") || e.data.startsWith("[ERROR]") || e.data === "[CANCELLED]") {
+          statusEl.textContent = 
+            e.data === "[DONE ALL]"      ? "Finished."  :
+            e.data === "[CANCELLED]"     ? "Cancelled." :
+            e.data.startsWith("[ERROR]") ? e.data       :
+            statusEl.textContent;
+          evt.close();
+          processBtn.style.display = "block";
+          cancelBtn.style.display  = "none";
+        }
+      };
+      evt.onerror = e => {
+        console.error("SSE error", e);
+        statusEl.textContent     = "Stream error.";
         evt.close();
-      }
-    };
-    evt.onerror = e => {
-      document.getElementById('btn-process').style.display = 'block';
-      document.getElementById('btn-cancel').style.display = 'none';
-      console.error('SSE error:', e);
-      statusEl.textContent = 'Stream error.';
-      evt.close();
-    };
-  });
+        processBtn.style.display = "block";
+        cancelBtn.style.display  = "none";
+      };
+    }
 
-  cancelBtn.addEventListener('click', async () => {
-  const csrf = document.querySelector('meta[name="csrf-token"]').content;
-
-  // 1) Ask the server to stop ASAP
-  await fetch('cancel/', {
-    method: 'POST',
-    headers: {
-      'X-CSRFToken': csrf,
-      'Content-Type': 'application/json'
-    },
-    credentials: 'same-origin',
-    // no body needed if your view just does cancel_event.set()
-  });
-
-  // 2) Close the SSE connection on the client
-  if (evt) {
-    evt.close();
-  }
-
-  // 3) Reset your UI
-  statusEl.textContent       = 'Cancelled.';
-  cancelBtn.style.display    = 'none';
-  processBtn.style.display   = 'block';
-  });
+    // Cancel job
+    cancelBtn.addEventListener("click", async () => {
+      await fetch("/cancel/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content
+        },
+        credentials: "same-origin",
+        body: JSON.stringify({ job_id: jobId })
+      });
+      // keep SSE open to receive the "[CANCELLED]" event
+    });
   </script>
 </body>
 </html>

@@ -23,6 +23,8 @@ import os
 import sys
 import spacy
 import argparse
+import tempfile
+import shutil
 import pandas as pd
 from tqdm import tqdm
 from spacy.cli import download
@@ -38,10 +40,16 @@ class Glosser():
     def __init__(self, input_dir, language, instruction):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
-        if self.language_code not in ['de', 'pt', 'it']:
-            Exception('Language not supported')
         self.instruction = instruction
-        self.load_models() 
+        self._spacy_data_dir = tempfile.mkdtemp(prefix="spacy_data_")
+        os.environ["SPACY_DATA"] = self._spacy_data_dir
+
+        self.load_models()
+
+        try:
+            shutil.rmtree(self._spacy_data_dir)
+        except Exception as err:
+            print(f"Warning: failed to delete spaCy cache: {err}", flush=True)
 
     def load_models(self):
         """

@@ -24,10 +24,10 @@ import pandas as pd
 import argparse
 import json
 
-current_dir = os.getcwd()
-columns_path = os.path.abspath(os.path.join(current_dir, 'materials', 'OBLIGATORY_COLUMNS'))
-nolatin_path = os.path.abspath(os.path.join(current_dir, 'materials', 'NO_LATIN'))
-languages_path = os.path.abspath(os.path.join(current_dir, 'materials', 'LANGUAGES'))
+file_dir = os.path.dirname(os.path.abspath(__file__))
+columns_path = os.path.abspath(os.path.join(file_dir, '..', 'materials', 'OBLIGATORY_COLUMNS'))
+nolatin_path = os.path.abspath(os.path.join(file_dir, '..', 'materials', 'NO_LATIN'))
+languages_path = os.path.abspath(os.path.join(file_dir,'..', 'materials', 'LANGUAGES'))
 
 MAPPING = {
     "latin_transcription_everything": "transcription",
@@ -79,7 +79,7 @@ def reorder_columns(df, language):
     return df[new_column_order]
 
 
-def process_data(directory, language):
+def process_columns(directory, language):
     for subdir, dirs, files in os.walk(directory):
         excel_file_path = os.path.join(subdir, 'trials_and_sessions_annotated.xlsx')
         csv_file_path = os.path.join(subdir, 'trials_and_sessions.csv')
