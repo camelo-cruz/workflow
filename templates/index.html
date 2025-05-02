@@ -60,7 +60,7 @@
     const cancelBtn    = document.getElementById('btn-cancel');
     const statusEl     = document.getElementById('status');
     const logEl        = document.getElementById('logs');
-    const form         = document.getElementById('form-transcribe');  // ← add this
+    const form         = document.getElementById('form-transcribe');
 
     let accessToken = null;
 
@@ -119,7 +119,6 @@
       setToken(t);
     });
 
-    // 2️⃣ Start processing
     // 2️⃣ Start processing
   processBtn.addEventListener('click', () => {
     // now `form` is defined!
