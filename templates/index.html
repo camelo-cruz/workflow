@@ -140,6 +140,8 @@
       logEl.textContent += e.data + '\n';
       logEl.scrollTop = logEl.scrollHeight;
       if (e.data.startsWith('[DONE') || e.data.startsWith('[ERROR]')) {
+        document.getElementById('btn-process').style.display = 'block';
+        document.getElementById('btn-cancel').style.display = 'none';
         statusEl.textContent = e.data === '[DONE ALL]' ? 'Finished.' : e.data;
         evt.close();
       }
