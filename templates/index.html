@@ -60,9 +60,9 @@
     const cancelBtn    = document.getElementById('btn-cancel');
     const statusEl     = document.getElementById('status');
     const logEl        = document.getElementById('logs');
+    const form         = document.getElementById('form-transcribe');  // ← add this
 
     let accessToken = null;
-    let currentJobId;
 
     // Show manual‐paste UI
     function showManualFallback() {
@@ -120,73 +120,32 @@
     });
 
     // 2️⃣ Start processing
-    processBtn.addEventListener('click', async () => {
-      if (!accessToken) {
-        alert('Connect OneDrive or paste a token first.');
-        return;
-      }
-      const csrf = document.querySelector('meta[name="csrf-token"]').content;
-      const form = document.getElementById('form-transcribe');
-      const data = new FormData(form);
-      data.append('access_token', accessToken);
+    // 2️⃣ Start processing
+  processBtn.addEventListener('click', () => {
+    // now `form` is defined!
+    const params = new URLSearchParams(new FormData(form));
+    params.append('access_token', accessToken);
 
-      processBtn.style.display  = 'none';
-      cancelBtn.style.display   = 'inline-block';
-      logEl.textContent         = '';
-      statusEl.textContent      = 'Job starting…';
+    // reset UI
+    logEl.textContent    = '';
+    statusEl.textContent = 'Job starting…';
 
-      let res, payload;
-      try {
-        res = await fetch('/process/', {
-          method: 'POST',
-          body: data,
-          headers: { 'X-CSRFToken': csrf },
-          credentials: 'same-origin'
-        });
-        payload = await res.json();
-      } catch (err) {
-        console.error(err);
-        statusEl.textContent = 'Failed to start job.';
-        processBtn.style.display = 'block';
-        cancelBtn.style.display = 'none';
-        return;
-      }
-
-      if (!res.ok || payload.error) {
-        statusEl.textContent = payload.error || 'Error starting job.';
-        processBtn.style.display = 'block';
-        cancelBtn.style.display = 'none';
-        return;
-      }
-
-      currentJobId = payload.job_id;
-      statusEl.textContent = 'Job ' + currentJobId + ' started.';
-      cancelBtn.style.display = 'inline-block';
-      startLogStream(currentJobId);
-    });
-
-    // 3️⃣ SSE log streaming
-    function startLogStream(jobId) {
-      if (!window.EventSource) {
-        statusEl.textContent = 'Streaming not supported.';
-        return;
-      }
-      const evt = new EventSource(`/logs/${jobId}`);
-      evt.onmessage = e => {
-        if (e.data === '[PING]') return;
-        logEl.textContent += e.data + '\n';
-        logEl.scrollTop = logEl.scrollHeight;
-        if (['[DONE ALL]','[CANCELLED]'].includes(e.data) || e.data.startsWith('[ERROR]')) {
-          evt.close();
-          cancelBtn.style.display = 'none';
-          statusEl.textContent = e.data === '[DONE ALL]' ? 'Finished.' : e.data;
-        }
-      };
-      evt.onerror = () => {
+    // open SSE
+    const evt = new EventSource(`/stream/?${params.toString()}`);
+    evt.onmessage = e => {
+      if (e.data === '[PING]') return;
+      logEl.textContent += e.data + '\n';
+      logEl.scrollTop = logEl.scrollHeight;
+      if (e.data.startsWith('[DONE') || e.data.startsWith('[ERROR]')) {
+        statusEl.textContent = e.data === '[DONE ALL]' ? 'Finished.' : e.data;
         evt.close();
-        statusEl.textContent = 'Stream error.';
-      };
-    }
+      }
+    };
+    evt.onerror = () => {
+      statusEl.textContent = 'Stream error.';
+      evt.close();
+    };
+  });
 
     // 4️⃣ Cancel job
     cancelBtn.addEventListener('click', async () => {
@@ -212,7 +171,6 @@
         currentJobId = saved;
         statusEl.textContent = 'Reconnected to job ' + currentJobId;
         cancelBtn.style.display = 'inline-block';
-        startLogStream(currentJobId);
       }
     });
   </script>

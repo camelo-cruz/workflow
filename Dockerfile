@@ -15,7 +15,8 @@ USER user
 
 #––– Set home & PATH
 ENV HOME=/home/user \
-    PATH=/home/user/.local/bin:$PATH
+    PATH=/home/user/.local/bin:$PATH \
+    PYTHONUNBUFFERED=1
 
 #––– Work directory
 WORKDIR $HOME/app
@@ -33,8 +34,8 @@ RUN pip install --no-cache-dir --upgrade pip \
 #––– Collect static files
 RUN python manage.py collectstatic --noinput || true
 
-# Expose the port Hugging Face expects (optional but good practice)
+# Expose the port Hugging Face expects
 EXPOSE 7860
 
-# Start Django on port 7860
-CMD [ "gunicorn", "workflow.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--workers", "1", "--bind", "0.0.0.0:7860", "--timeout", "0", "--capture-output", "--enable-stdio-inheritance"]
+# Start Django on port 7860 with unbuffered output
+CMD ["uvicorn","workflow.asgi:application","--host","0.0.0.0","--port","7860","--workers","1"]
