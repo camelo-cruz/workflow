@@ -6,6 +6,7 @@ import torch
 import threading
 from contextlib import redirect_stdout, redirect_stderr
 from urllib.parse import urlencode
+from dotenv import load_dotenv 
 
 import requests
 from django.http import JsonResponse, StreamingHttpResponse, HttpResponse
@@ -17,10 +18,31 @@ from .classes.Translator  import Translator
 from .classes.Glosser      import Glosser
 from .utils.onedrive       import download_sharepoint_folder, upload_file_replace_in_onedrive
 
+# Try loading from environment first (used in Hugging Face Spaces)
+TENANT_ID = os.getenv("TENANT_ID")
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 
-TENANT_ID     = '7ef3035c-bf11-463a-ab3b-9a9a4ac82500'
-CLIENT_ID     = '58c0d230-141d-4a30-905e-fd63e331e5ea'
-CLIENT_SECRET = 'sY38Q~CknTafzzQQ37TS9QTKD256Z3aovopynbWZ'
+# If not found, try loading from local .env file for local development
+if not TENANT_ID or not CLIENT_ID or not CLIENT_SECRET:
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    secrets_path = os.path.join(base_path, 'materials', 'secrets.env')
+    
+    if not TENANT_ID:
+        if os.path.exists(secrets_path):
+            load_dotenv(secrets_path, override=True)
+            TENANT_ID = os.getenv("TENANT_ID")
+    if not CLIENT_ID:
+        if os.path.exists(secrets_path):
+            load_dotenv(secrets_path, override=True)
+            CLIENT_ID = os.getenv("CLIENT_ID")
+    if not CLIENT_SECRET:
+        if os.path.exists(secrets_path):
+            load_dotenv(secrets_path, override=True)
+            CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+
+if not TENANT_ID or not CLIENT_ID or not CLIENT_SECRET:
+    raise ValueError("Missing TENANT_ID, CLIENT_ID, or CLIENT_SECRET. Please set them in the environment or in a .env file.")
 
 SCOPES    = ["Files.ReadWrite.All", "User.Read"]
 AUTH_URL  = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"

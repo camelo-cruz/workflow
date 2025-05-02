@@ -66,17 +66,20 @@ class Glosser():
         """
 
         models = {'de':'de_dep_news_trf',
+          'uk': 'uk_core_news_trf',
           'pt': 'pt_core_news_lg',
+          'ja': 'ja_core_news_trf',
+          'ru': 'ru_core_news_lg',
+          'en': 'en_core_web_trf',
           'it': 'it_core_news_lg'
           }
         
         model_name = models[self.language_code]
-
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        parent_dir = os.path.dirname(current_dir)
-        model_path = os.path.join(parent_dir, 'spacy_models', model_name)
-
-        self.nlp = spacy.load(model_path)
+        if not is_package(model_name):
+            print(f"{model_name} isn’t installed—pulling it down now…")
+            download(model_name)
+        # Now it lives in spaCy’s data cache, so this will succeed:
+        self.nlp = spacy.load(model_name)
 
     def gloss_japanese_with_spacy(self, sentence):     
         glossed_sentence = ''
