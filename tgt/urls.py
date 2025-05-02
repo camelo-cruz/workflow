@@ -14,4 +14,7 @@ urlpatterns = [
     path("auth/start",    views.start_onedrive_auth,   name="start_onedrive_auth"),
     path("auth/redirect", views.onedrive_auth_redirect, name="onedrive_auth_redirect"),
     path("auth/token",    views.get_access_token,       name="get_access_token"),
+
+    #cancel job
+    path('cancel/', views.cancel, name='cancel'),
 ]

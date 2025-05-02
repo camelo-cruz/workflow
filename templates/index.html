@@ -133,7 +133,8 @@
     // open SSE
     const evt = new EventSource(`/stream/?${params.toString()}`);
     evt.onmessage = e => {
-
+      document.getElementById('btn-process').style.display = 'none';
+      document.getElementById('btn-cancel').style.display = 'block';
       if (e.data === '[PING]') return;
       console.log('SSE:', e.data);
       logEl.textContent += e.data + '\n';
@@ -144,6 +145,8 @@
       }
     };
     evt.onerror = () => {
+      document.getElementById('btn-process').style.display = 'block';
+      document.getElementById('btn-cancel').style.display = 'none';
       console.error('SSE error:', e);
       statusEl.textContent = 'Stream error.';
       evt.close();
@@ -152,10 +155,12 @@
 
     // 4️⃣ Cancel job
     cancelBtn.addEventListener('click', async () => {
+      document.getElementById('btn-process').style.display = 'block';
+      document.getElementById('btn-cancel').style.display = 'none';
       if (!currentJobId) return;
       const csrf = document.querySelector('meta[name="csrf-token"]').content;
       try {
-        await fetch(`/cancel/${currentJobId}`, {
+        await fetch(`/cancel`, {
           method: 'POST',
           headers: { 'X-CSRFToken': csrf },
           credentials: 'same-origin'
@@ -164,16 +169,6 @@
       } catch (err) {
         console.error(err);
         statusEl.textContent = 'Cancel failed.';
-      }
-    });
-
-    // 5️⃣ Reconnect on reload
-    window.addEventListener('load', () => {
-      const saved = localStorage.getItem('job_id');
-      if (saved) {
-        currentJobId = saved;
-        statusEl.textContent = 'Reconnected to job ' + currentJobId;
-        cancelBtn.style.display = 'inline-block';
       }
     });
   </script>

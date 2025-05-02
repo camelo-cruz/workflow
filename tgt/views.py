@@ -1,4 +1,5 @@
 import io
+import sys
 import os
 import tempfile
 import torch
@@ -198,3 +199,12 @@ def stream(request):
     response["Cache-Control"]     = "no-cache"
     response["X-Accel-Buffering"] = "no"
     return response
+
+
+@csrf_exempt
+def cancel(request):
+    """
+    Cancel the current workflow.
+    """
+    sys.exit(0)
+    return JsonResponse({"status": "cancelled"})
