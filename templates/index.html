@@ -138,7 +138,7 @@
       cancelBtn.style.display  = "inline-block";
       logEl.textContent        = "";
       statusEl.textContent     = jobId
-        ? `Reconnected to job ${jobId}`
+        ? `Connected to job ${jobId}`
         : "Starting…";
 
       evt = new EventSource(`/stream/${jobId}/`);
@@ -155,6 +155,7 @@
           evt.close();
           processBtn.style.display = "block";
           cancelBtn.style.display  = "none";
+          localStorage.removeItem("job_id");
         }
       };
       evt.onerror = e => {

@@ -119,7 +119,7 @@ def _worker(job_id, base_dir, token, action, language, instruction):
                 g = Glosser(sess, language, instruction)
                 g.process_data()
                 ups = []
-            else:
+            elif action=="create columns":
                 process_columns(sess, language)
                 ups = []
 
