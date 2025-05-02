@@ -128,7 +128,7 @@
 
     // reset UI
     logEl.textContent    = '';
-    statusEl.textContent = 'Job starting…';
+    statusEl.textContent = 'Processing…';
 
     // open SSE
     const evt = new EventSource(`/stream/?${params.toString()}`);
@@ -144,7 +144,7 @@
         evt.close();
       }
     };
-    evt.onerror = () => {
+    evt.onerror = e => {
       document.getElementById('btn-process').style.display = 'block';
       document.getElementById('btn-cancel').style.display = 'none';
       console.error('SSE error:', e);
@@ -153,24 +153,30 @@
     };
   });
 
-    // 4️⃣ Cancel job
-    cancelBtn.addEventListener('click', async () => {
-      document.getElementById('btn-process').style.display = 'block';
-      document.getElementById('btn-cancel').style.display = 'none';
-      if (!currentJobId) return;
-      const csrf = document.querySelector('meta[name="csrf-token"]').content;
-      try {
-        await fetch(`/cancel`, {
-          method: 'POST',
-          headers: { 'X-CSRFToken': csrf },
-          credentials: 'same-origin'
-        });
-        statusEl.textContent = 'Cancelling…';
-      } catch (err) {
-        console.error(err);
-        statusEl.textContent = 'Cancel failed.';
-      }
-    });
+  cancelBtn.addEventListener('click', async () => {
+  const csrf = document.querySelector('meta[name="csrf-token"]').content;
+
+  // 1) Ask the server to stop ASAP
+  await fetch('cancel/', {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': csrf,
+      'Content-Type': 'application/json'
+    },
+    credentials: 'same-origin',
+    // no body needed if your view just does cancel_event.set()
+  });
+
+  // 2) Close the SSE connection on the client
+  if (evt) {
+    evt.close();
+  }
+
+  // 3) Reset your UI
+  statusEl.textContent       = 'Cancelled.';
+  cancelBtn.style.display    = 'none';
+  processBtn.style.display   = 'block';
+  });
   </script>
 </body>
 </html>

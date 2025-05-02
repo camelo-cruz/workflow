@@ -3,6 +3,7 @@ import sys
 import os
 import tempfile
 import torch
+import threading
 from contextlib import redirect_stdout, redirect_stderr
 from urllib.parse import urlencode
 
@@ -12,9 +13,10 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 from .classes.Transcriber import Transcriber
-from .classes.Translator import Translator
-from .classes.Glosser import Glosser
-from .utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
+from .classes.Translator  import Translator
+from .classes.Glosser      import Glosser
+from .utils.onedrive       import download_sharepoint_folder, upload_file_replace_in_onedrive
+
 
 TENANT_ID     = '7ef3035c-bf11-463a-ab3b-9a9a4ac82500'
 CLIENT_ID     = '58c0d230-141d-4a30-905e-fd63e331e5ea'
@@ -80,131 +82,143 @@ def onedrive_auth_redirect(request):
     return render(request, 'auth_success.html', {"token": token_data["access_token"]})
 
 
-def generate_logs(onedrive_link, access_token, action, language, instruction):
-    """
-    Download from OneDrive, run transcribe/translate/gloss,
-    upload results, and yield each log‐line as SSE frames.
-    """
-    class StreamWriter(io.TextIOBase):
-        def write(self, txt):
-            # split lines and yield SSE‐formatted chunks
-            for line in txt.rstrip().splitlines():
-                yield f"data: {line}\n\n"
-        def flush(self): pass
 
-    writer = StreamWriter()
+# A single Event that, when set, tells any running stream() to stop ASAP.
+cancel_event = threading.Event()
+
+
+
+def generate_logs(base_dir, token, action, language, instruction):
+    """
+    Inline worker: prints to console AND yields each line as SSE.
+    """
+    # 1) Download
+    msg = "Downloading from OneDrive…"
+    print(msg, flush=True)
+    yield f"data: {msg}\n\n"
+
     try:
-        with redirect_stdout(writer), redirect_stderr(writer):
-            temp_dir = tempfile.mkdtemp()
-            input_dir, drive_id, _, session_map = download_sharepoint_folder(
-                share_link=onedrive_link,
-                temp_dir=temp_dir,
-                access_token=access_token
-            )
-
-            # find all “Session_*” subfolders
-            sessions = []
-            for root, dirs, _ in os.walk(input_dir):
-                for d in dirs:
-                    if d.startswith("Session_"):
-                        sessions.append(os.path.join(root, d))
-
-            for session_path in sessions:
-                # log processing start
-                yield from writer.write(f"Processing session: {os.path.basename(session_path)}")
-
-                # run the requested action
-                if action == "transcribe":
-                    proc = Transcriber(
-                        session_path,
-                        language,
-                        "cuda" if torch.cuda.is_available() else "cpu"
-                    )
-                    proc.process_data(verbose=True)
-                    uploads = ["transcription.log"]
-                elif action == "translate":
-                    proc = Translator(
-                        session_path, language, instruction,
-                        "cuda" if torch.cuda.is_available() else "cpu"
-                    )
-                    proc.process_data(verbose=True)
-                    uploads = ["translation.log"]
-                else:  # gloss
-                    g = Glosser(session_path, language, instruction)
-                    g.process_data()
-                    uploads = []
-
-                # always include the annotated spreadsheet
-                uploads.append("trials_and_sessions_annotated.xlsx")
-
-                # upload any generated files
-                for fn in uploads:
-                    local = os.path.join(session_path, fn)
-                    if not os.path.exists(local):
-                        yield from writer.write(f"Skipping missing file: {fn}")
-                        continue
-
-                    yield from writer.write(f"Uploading file: {fn}")
-                    folder_id = session_map.get(os.path.basename(session_path))
-                    if folder_id:
-                        upload_file_replace_in_onedrive(
-                            local_file_path=local,
-                            target_drive_id=drive_id,
-                            parent_folder_id=folder_id,
-                            file_name_in_folder=fn,
-                            access_token=access_token
-                        )
-                    else:
-                        yield from writer.write(f"⚠️ No OneDrive folder ID for session, skipping upload")
-
-                yield from writer.write(f"[DONE UPLOADED] {os.path.basename(session_path)}")
-
-            # all sessions done
-            yield "data: [DONE ALL]\n\n"
-
+        tmp = tempfile.mkdtemp()
+        input_dir, drive_id, _, session_map = download_sharepoint_folder(
+            share_link=base_dir,
+            temp_dir=tmp,
+            access_token=token
+        )
     except Exception as e:
-        yield f"data: [ERROR] {e}\n\n"
+        err = f"[ERROR] Download failed: {e}"
+        print(err, flush=True)
+        yield f"data: {err}\n\n"
+        return
+
+    # 2) Find sessions
+    sessions = []
+    for root, dirs, _ in os.walk(input_dir):
+        for d in dirs:
+            if d.startswith("Session_"):
+                sessions.append(os.path.join(root, d))
+
+    # 3) Process each session
+    for sess in sessions:
+        if cancel_event.is_set():
+            cancel_msg = "[CANCELLED]"
+            print(cancel_msg, flush=True)
+            yield f"data: {cancel_msg}\n\n"
+            return
+
+        name = os.path.basename(sess)
+        msg = f"Processing session: {name}"
+        print(msg, flush=True)
+        yield f"data: {msg}\n\n"
+
+        # run action
+        if action == "transcribe":
+            runner = Transcriber(sess, language, "cuda" if torch.cuda.is_available() else "cpu")
+            runner.process_data(verbose=True)
+            uploads = ["transcription.log"]
+        elif action == "translate":
+            runner = Translator(sess, language, instruction, "cuda" if torch.cuda.is_available() else "cpu")
+            runner.process_data(verbose=True)
+            uploads = ["translation.log"]
+        else:
+            gl = Glosser(sess, language, instruction)
+            gl.process_data()
+            uploads = []
+
+        # always include the annotated spreadsheet
+        uploads.append("trials_and_sessions_annotated.xlsx")
+
+        for fn in uploads:
+            if cancel_event.is_set():
+                cancel_msg = "[CANCELLED]"
+                print(cancel_msg, flush=True)
+                yield f"data: {cancel_msg}\n\n"
+                return
+
+            path = os.path.join(sess, fn)
+            if not os.path.exists(path):
+                skip = f"Skipping missing file: {fn}"
+                print(skip, flush=True)
+                yield f"data: {skip}\n\n"
+                continue
+
+            up_msg = f"Uploading file: {fn}"
+            print(up_msg, flush=True)
+            yield f"data: {up_msg}\n\n"
+
+            try:
+                upload_file_replace_in_onedrive(
+                    local_file_path=path,
+                    target_drive_id=drive_id,
+                    parent_folder_id=session_map.get(name, ""),
+                    file_name_in_folder=fn,
+                    access_token=token
+                )
+            except Exception as e:
+                err = f"[ERROR] Upload failed ({fn}): {e}"
+                print(err, flush=True)
+                yield f"data: {err}\n\n"
+
+        done = f"[DONE UPLOADED] {name}"
+        print(done, flush=True)
+        yield f"data: {done}\n\n"
+
+    # Final done
+    final = "[DONE ALL]"
+    print(final, flush=True)
+    yield f"data: {final}\n\n"
 
 
 @csrf_exempt
 def stream(request):
-    """
-    SSE endpoint that both kicks off and streams your workflow.
-    Frontend can open:
-       new EventSource(`/stream/?${params}`)
-    where params include base_dir, action, language, instruction, access_token.
-    """
-    # gather params from GET or POST
     rd = request.GET if request.method == "GET" else request.POST
-    onedrive_link = rd.get("base_dir")
-    action        = rd.get("action")
-    language      = rd.get("language")
-    instruction   = rd.get("instruction")
-    access_token  = (
-        request.session.get("access_token")
-        or rd.get("access_token")
-    )
+    base_dir    = rd.get("base_dir")
+    action      = rd.get("action")
+    language    = rd.get("language")
+    instruction = rd.get("instruction")
+    token       = rd.get("access_token") or request.session.get("access_token")
 
-    if not onedrive_link or not access_token:
+    if not base_dir or not token:
         return JsonResponse({"error": "Missing base_dir or access_token"}, status=400)
 
-    def event_stream():
-        try:
-            yield from generate_logs(onedrive_link, access_token, action, language, instruction)
-            yield "data: [DONE ALL]\n\n"
-        except Exception as e:
-            yield f"data: [ERROR] {e}\n\n"
+    # clear any prior cancel
+    cancel_event.clear()
 
-    response = StreamingHttpResponse(event_stream(), content_type="text/event-stream")
-    response["Cache-Control"]     = "no-cache"
-    response["X-Accel-Buffering"] = "no"
-    return response
+    def event_stream():
+        yield from generate_logs(base_dir, token, action, language, instruction)
+
+        # if cancellation never happened, we already yielded "[DONE ALL]"
+        # no extra frames needed
+
+    resp = StreamingHttpResponse(event_stream(), content_type="text/event-stream")
+    resp["Cache-Control"]     = "no-cache"
+    resp["X-Accel-Buffering"] = "no"
+    return resp
 
 
 @csrf_exempt
 def cancel(request):
     """
-    Cancel the current workflow.
+    Immediately signal any running SSE stream to stop.
     """
-    sys.exit(0)
+    cancel_event.set()
     return JsonResponse({"status": "cancelled"})
