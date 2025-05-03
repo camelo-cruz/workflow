@@ -5,6 +5,7 @@ import torch
 import uuid
 import json
 import requests
+import time
 from pathlib import Path
 from dotenv import load_dotenv
 from queue import Queue, Empty
@@ -149,6 +150,7 @@ def _worker(job_id, base_dir, token, action, language, instruction):
 
         if not cancel.is_set():
             put("[DONE ALL]")
+            print("All done, cleaning up…")
 
     except Exception as e:
         put(f"[ERROR] {e}")
@@ -188,16 +190,38 @@ def stream(request, job_id):
     if job_id not in jobs:
         return JsonResponse({"error":"Unknown job_id"},status=404)
     job = jobs[job_id]
+
     def event_stream():
-        for line in job["logs"]:
+        q    = job["queue"]
+        logs = job["logs"]
+
+        # 2) Drain & dedupe any backlog
+        for line in logs:
             yield f"data: {line}\n\n"
-        q = job["queue"]
-        while not (job["finished"] and q.empty()):
             try:
-                line = q.get(timeout=1)
-                yield f"data: {line}\n\n"
+                q.get_nowait()
             except Empty:
-                continue
+                pass
+        logs.clear()
+
+        try:
+            # 3) Stream until DONE, then hand off to client
+            while True:
+                line = q.get()  # blocks until worker .put()
+                if line == "[DONE ALL]":
+                    # send a custom “done” event
+                    yield "event: done\n"
+                    yield "data: ok\n\n"
+                    # now *don’t* break—just stall until the client closes
+                    while True:
+                        time.sleep(1)
+                else:
+                    yield f"data: {line}\n\n"
+
+        except GeneratorExit:
+            # 4) Client closed the connection → clean up
+            jobs.pop(job_id, None)
+            raise
 
     resp = StreamingHttpResponse(event_stream(), content_type="text/event-stream")
     resp["Cache-Control"]     = "no-cache"

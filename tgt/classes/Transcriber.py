@@ -349,7 +349,7 @@ class Transcriber:
             self.format_excel_output(out_file)
             logger.info(f"Completed '{subdir}'")
             logger.removeHandler(fh)
-            fh.close()
+            fh.close()   
     
     def process_data(self, verbose=False):
         """
@@ -360,6 +360,7 @@ class Transcriber:
         
         if os.path.exists(self.input_dir):
             self.process_locally(verbose=verbose)
+        
 
 
 def main():
