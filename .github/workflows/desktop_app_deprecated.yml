@@ -1,11 +1,7 @@
 name: Automatic Workflow Distribution
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "source/**/*.py"
+  workflow_dispatch:
 
 jobs:
   cleanup:

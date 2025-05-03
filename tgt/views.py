@@ -1,22 +1,31 @@
-import os, sys, threading, tempfile, torch, uuid
-from queue      import Queue, Empty
-from django.http      import JsonResponse, StreamingHttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from .classes.Transcriber                import Transcriber
-from .classes.Translator                 import Translator
-from .classes.Glosser                    import Glosser
-from .utils.onedrive                     import download_sharepoint_folder, upload_file_replace_in_onedrive
-from .utils.reorder_columns              import process_columns
-from urllib.parse                        import urlencode
+import os
+import threading
+import tempfile
+import torch
+import uuid
+import json
 import requests
+from pathlib import Path
+from dotenv import load_dotenv
+from queue import Queue, Empty
+from django.http import JsonResponse, StreamingHttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect, render
+from .classes.Transcriber import Transcriber
+from .classes.Translator import Translator
+from .classes.Glosser import Glosser
+from .utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
+from .utils.reorder_columns import process_columns
+from urllib.parse import urlencode
+
+
+print("Running version:", os.getenv("APP_VERSION", "dev"))
 
 # Try loading secrets from env or .env…
 TENANT_ID    = os.getenv("TENANT_ID")
 CLIENT_ID    = os.getenv("CLIENT_ID")
 CLIENT_SECRET= os.getenv("CLIENT_SECRET")
 if not (TENANT_ID and CLIENT_ID and CLIENT_SECRET):
-    from pathlib import Path
-    from dotenv import load_dotenv
     envf = Path(__file__).parent / "materials" / "secrets.env"
     if envf.exists():
         load_dotenv(envf)
@@ -55,7 +64,6 @@ def start_onedrive_auth(request):
         "scope": " ".join(SCOPES),
         "response_mode": "query",
     }
-    from django.shortcuts import redirect
     return redirect(f"{AUTH_URL}?{urlencode(params)}")
 
 @csrf_exempt
@@ -78,7 +86,6 @@ def onedrive_auth_redirect(request):
     if "access_token" not in data:
         return JsonResponse({"error":"Failed to get token","details":data},status=400)
     request.session['access_token'] = data["access_token"]
-    from django.shortcuts import render
     return render(request,"auth_success.html",{"token":data["access_token"]})
 
 def _worker(job_id, base_dir, token, action, language, instruction):
@@ -199,7 +206,6 @@ def stream(request, job_id):
 
 @csrf_exempt
 def cancel(request):
-    import json
     body = json.loads(request.body.decode())
     jid  = body.get("job_id")
     job  = jobs.get(jid)
