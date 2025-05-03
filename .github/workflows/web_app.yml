@@ -19,7 +19,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Git
+      - name: Set up Git 
         run: |
           git config user.email "camelo.cruz@leibniz-zas.de"
           git config user.name "GitHub Actions"
@@ -56,4 +56,4 @@ jobs:
           HF_TOKEN: ${{ secrets.HUGGING_KEY }}
         run: |
           git remote add hf https://camelo-cruz:${HF_TOKEN}@huggingface.co/spaces/camelo-cruz/LeibnizDream
-          git push hf main
+          git push hf main --force
