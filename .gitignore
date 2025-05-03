@@ -1,6 +1,7 @@
 .venv
 .DS_Store
 .idea
+.pyc
 __pycache__.env
 secrets.env
 tgt/spacy_models/*
