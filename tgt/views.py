@@ -212,7 +212,7 @@ def stream(request, job_id):
                     # send a custom “done” event
                     yield "event: done\n"
                     yield "data: ok\n\n"
-                    break
+                    break 
                 else:
                     yield f"data: {line}\n\n"
 
