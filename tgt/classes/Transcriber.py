@@ -18,14 +18,16 @@ import warnings
 import logging
 import sys
 import argparse
+import torch
 import pandas as pd
 import openpyxl
-from dotenv import load_dotenv 
-from openpyxl.styles import Font
-from tqdm import tqdm
 import whisper
 import whisperx
-import torch
+from tqdm import tqdm
+from whisperx.diarize import DiarizationPipeline
+from dotenv import load_dotenv 
+from openpyxl.styles import Font
+
 
 from ..utils.functions import set_global_variables, find_language, clean_string, find_ffmpeg
 
@@ -243,7 +245,8 @@ class Transcriber:
             )
 
             # run diarization
-            diarize_model = whisperx.DiarizationPipeline(
+            diarize_model = DiarizationPipeline(
+                model_name="pyannote/speaker-diarization-3.1",
                 use_auth_token=self.hugging_key,
                 device=self.device)
             diarize_segments = diarize_model(audio)
