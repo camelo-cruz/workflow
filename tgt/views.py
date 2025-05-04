@@ -212,9 +212,7 @@ def stream(request, job_id):
                     # send a custom “done” event
                     yield "event: done\n"
                     yield "data: ok\n\n"
-                    # now *don’t* break—just stall until the client closes
-                    while True:
-                        time.sleep(1)
+                    break
                 else:
                     yield f"data: {line}\n\n"
 
