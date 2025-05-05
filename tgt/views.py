@@ -154,11 +154,13 @@ def _worker(job_id, base_dir, token, action, language, instruction, q, cancel):
                 )
             put(f"[DONE UPLOADED] {name}")
 
-        if not cancel.is_set():
-            put("[DONE ALL]")
-
     except Exception as e:
         put(f"[ERROR] {e}")
+        print(f"Error in worker: {e}")
+
+    finally:
+        # Always signal completion exactly once
+        put("[DONE ALL]")
 
 
 @csrf_exempt
@@ -212,8 +214,9 @@ def stream(request, job_id):
             if line == "[DONE ALL]":
                 yield "event: done\n"
                 yield "data: ok\n\n"
+                # Clean up the job entry so future calls see it's done
+                jobs.pop(job_id, None)
                 break
-                jobs.pop(jid, None)
             else:
                 yield f"data: {line}\n\n"
 
