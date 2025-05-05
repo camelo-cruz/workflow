@@ -249,3 +249,10 @@ def cancel(request):
     jobs.pop(jid, None)
 
     return JsonResponse({"status": "cancelled"})
+
+
+def terms_view(request):
+    return render(request, "terms.html")
+
+def privacy_view(request):
+    return render(request, "privacy.html")

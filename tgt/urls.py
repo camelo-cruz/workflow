@@ -11,4 +11,6 @@ urlpatterns = [
     path("auth/start",            views.start_onedrive_auth,   name="start_onedrive_auth"),
     path("auth/redirect",         views.onedrive_auth_redirect, name="onedrive_auth_redirect"),
     path("auth/token",            views.get_access_token,       name="get_access_token"),
+    path("terms/", views.terms_view, name="terms"),
+    path("privacy/", views.privacy_view, name="privacy"),
 ]
