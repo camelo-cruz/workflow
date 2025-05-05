@@ -175,19 +175,38 @@
     };
   }
 
-    // Cancel job
-    cancelBtn.addEventListener("click", async () => {
-      await fetch("/cancel/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content
-        },
-        credentials: "same-origin",
-        body: JSON.stringify({ job_id: jobId })
-      });
-      // keep SSE open to receive the "[CANCELLED]" event
+  cancelBtn.addEventListener("click", async () => {
+  try {
+    await fetch("/cancel/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content
+      },
+      credentials: "same-origin",
+      body: JSON.stringify({ job_id: jobId })
     });
+
+    // Close the SSE connection
+    if (evt) {
+      evt.close();
+      evt = null;
+    }
+
+    // Update UI
+    statusEl.textContent     = "Cancelled.";
+    logEl.textContent       += "[CANCELLED] Stream closed by user\n";
+    processBtn.style.display = "block";
+    cancelBtn.style.display  = "none";
+
+    // Clear job ID from localStorage
+    localStorage.removeItem("job_id");
+    jobId = null;
+  } catch (err) {
+    console.error("Cancel failed:", err);
+    statusEl.textContent = "Failed to cancel.";
+  }
+});
   </script>
 </body>
 </html>
