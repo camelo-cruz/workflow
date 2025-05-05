@@ -135,6 +135,7 @@ def _worker(job_id, base_dir, token, action, language, instruction, q, cancel):
                 ups = []
 
             ups.append("trials_and_sessions_annotated.xlsx")
+            print(f"Files to upload: {ups}")
             for fn in ups:
                 if cancel.is_set():
                     put("[CANCELLED]")
