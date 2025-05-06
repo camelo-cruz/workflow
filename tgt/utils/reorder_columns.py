@@ -79,7 +79,7 @@ def reorder_columns(df, language):
     return df[new_column_order]
 
 
-def process_columns(directory, language):
+def reorder_columns(directory, language):
     for subdir, dirs, files in os.walk(directory):
         excel_file_path = os.path.join(subdir, 'trials_and_sessions_annotated.xlsx')
         csv_file_path = os.path.join(subdir, 'trials_and_sessions.csv')
@@ -99,6 +99,24 @@ def process_columns(directory, language):
         
         except Exception as e:
             print(f"Error processing the file {excel_file_path}: {e}")
+
+def create_columns(directory, language):
+    print(f'Processing dir {directory}')
+    for subdir, dirs, files in os.walk(directory):
+        for filename in files:
+            if filename.endswith('.csv'):
+                csv_file_path = os.path.join(subdir, filename)
+                print(f'Processing {csv_file_path}')
+                excel_file_name = filename.replace('.csv', '_annotated.xlsx')
+                excel_file_path = os.path.join(subdir, excel_file_name)
+                try:
+                    df = pd.read_csv(csv_file_path)
+                    print(f'Processing {csv_file_path}')
+                    df = update_columns(df)
+                    df = reorder_columns(df, language)
+                    df.to_excel(excel_file_path, index=False)
+                except Exception as e:
+                    print(f"Error processing the file {csv_file_path}: {e}")
 
 
 

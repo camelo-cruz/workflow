@@ -21,7 +21,7 @@ from .classes.Transcriber import Transcriber
 from .classes.Translator import Translator
 from .classes.Glosser import Glosser
 from .utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
-from .utils.reorder_columns import process_columns
+from .utils.reorder_columns import create_columns
 from urllib.parse import urlencode
 import queue
 
@@ -164,7 +164,7 @@ def _offline_worker(job_id, base_dir, action, language, instruction, q, cancel):
             elif action == "gloss":
                 Glosser(sess, language, instruction).process_data()
             elif action == "create columns":
-                process_columns(sess, language)
+                create_columns(sess, language)
 
             ups.append("trials_and_sessions_annotated.xlsx")
             for fn in ups:
@@ -196,9 +196,14 @@ def _online_worker(job_id, base_dir, token, action, language, instruction, q, ca
     try:
         put("Downloading from OneDrive…")
         tmp_dir = tempfile.mkdtemp()
-        inp, drive_id, _, sess_map = download_sharepoint_folder(
-            share_link=base_dir, temp_dir=tmp_dir, access_token=token
-        )
+        try:
+            inp, drive_id, _, sess_map = download_sharepoint_folder(
+                share_link=base_dir, temp_dir=tmp_dir, access_token=token
+            )
+        except Exception as e:
+            put(f"[ERROR] Failed to download: {str(e)}")
+            put(traceback.format_exc())
+            return
 
         sessions = [
             os.path.join(r, d)
@@ -223,7 +228,7 @@ def _online_worker(job_id, base_dir, token, action, language, instruction, q, ca
             elif action == "gloss":
                 Glosser(sess, language, instruction).process_data()
             elif action == "create columns":
-                process_columns(sess, language)
+                create_columns(sess, language)
 
             ups.append("trials_and_sessions_annotated.xlsx")
             for fn in ups:
