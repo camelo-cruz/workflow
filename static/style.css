@@ -161,3 +161,20 @@ body, html {
   margin-top: 1rem;
   font-size: 1rem;
 }
+
+progress {
+  height: 20px;
+  border-radius: 5px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #eee;
+  border-radius: 5px;
+}
+
+progress::-webkit-progress-value {
+  background-color: #f44336; /* red bar */
+  border-radius: 5px;
+}

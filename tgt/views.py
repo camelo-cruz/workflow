@@ -4,13 +4,19 @@ import tempfile
 import torch
 import uuid
 import json
+import threading
+import traceback
 import requests
 import time
+import zipfile
+import shutil    
+from zipfile import ZipFile
 from pathlib import Path
 from dotenv import load_dotenv
 from django.http import JsonResponse, StreamingHttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect, render
+from django.http import FileResponse
 from .classes.Transcriber import Transcriber
 from .classes.Translator import Translator
 from .classes.Glosser import Glosser
@@ -87,169 +93,260 @@ def onedrive_auth_redirect(request):
     return render(request, "auth_success.html", {"token": data["access_token"]})
 
 
-def _worker(job_id, base_dir, token, action, language, instruction, q, cancel):
-    """
-    Worker process: downloads data, processes sessions, uploads results, and respects cancel event.
-    """
-    def put(line):
-        q.put(line)
+# ————————————————————————————————————————————————————————————————
+# Download endpoint: serves ZIP, then cleans up
+# ————————————————————————————————————————————————————————————————
+@csrf_exempt
+def download_zip(request, job_id):
+    print('jobs', jobs)
+    job = jobs.get(job_id)
+    print(f"job: {job}")
+    if not job :
+        print(f"job not found: {job_id}")
+        return JsonResponse({"error": "No job"}, status=404)
+    if not job.get("zip_path"):
+        print(f"zip path not found: {job_id}")
+        return JsonResponse({"error": "No zip path"}, status=404)
 
+    zip_path = job["zip_path"]
+    base_dir = job.get("base_dir")
+
+    # Stream the file
+    response = FileResponse(
+        open(zip_path, "rb"),
+        as_attachment=True,
+        filename=f"{job_id}_results.zip"
+    )
+
+    def cleanup():
+        # remove the zip file
+        try:
+            os.remove(zip_path)
+        except OSError:
+            pass
+        # remove extracted folder
+        if base_dir and os.path.isdir(base_dir):
+            shutil.rmtree(base_dir, ignore_errors=True)
+        # finally remove job entry
+
+    # Delay cleanup slightly so the response gets sent
+    threading.Thread(target=lambda: (time.sleep(2), cleanup())).start()
+    return response
+
+# ————————————————————————————————————————————————————————————————
+# Worker: offline (unzipped folder already on disk)
+# ————————————————————————————————————————————————————————————————
+def _offline_worker(job_id, base_dir, action, language, instruction, q, cancel):
+    def put(msg): q.put(msg)
     try:
-        put("Downloading from OneDrive…")
-        tmp = tempfile.mkdtemp()
-        inp, drive_id, _, sess_map = download_sharepoint_folder(
-            share_link=base_dir, temp_dir=tmp, access_token=token
-        )
-        # gather session directories
-        sessions = []
-        for root, dirs, _ in os.walk(inp):
-            for d in dirs:
-                if d.startswith("Session_"):
-                    sessions.append(os.path.join(root, d))
+        put("Processing uploaded files…")
+        # find all Session_* directories
+        sessions = [
+            os.path.join(r, d)
+            for r, dirs, _ in os.walk(base_dir)
+            for d in dirs if d.startswith("Session_")
+        ]
 
         for sess in sessions:
             if cancel.is_set():
                 put("[CANCELLED]")
                 break
-
             name = os.path.basename(sess)
             put(f"Processing session: {name}")
 
-            # Choose runner based on action
+            ups = []
             if action == "transcribe":
-                runner = Transcriber(sess, language, "cuda" if torch.cuda.is_available() else "cpu")
-                runner.process_data(verbose=True)
+                Transcriber(sess, language, "cpu").process_data(verbose=True)
                 ups = ["transcription.log"]
             elif action == "translate":
-                runner = Translator(sess, language, instruction, "cuda" if torch.cuda.is_available() else "cpu")
-                runner.process_data(verbose=True)
+                Translator(sess, language, instruction, "cpu").process_data(verbose=True)
                 ups = ["translation.log"]
             elif action == "gloss":
-                g = Glosser(sess, language, instruction)
-                g.process_data()
-                ups = []
+                Glosser(sess, language, instruction).process_data()
             elif action == "create columns":
                 process_columns(sess, language)
-                ups = []
-            else:
-                ups = []
 
             ups.append("trials_and_sessions_annotated.xlsx")
-            print(f"Files to upload: {ups}")
+            for fn in ups:
+                if os.path.exists(os.path.join(sess, fn)):
+                    put(f"Created: {fn}")
+
+        # create ZIP of entire folder
+        zip_path = Path(tempfile.gettempdir()) / f"{job_id}_output.zip"
+        with ZipFile(zip_path, "w") as z:
+            for root, _, files in os.walk(base_dir):
+                for f in files:
+                    full = os.path.join(root, f)
+                    rel  = os.path.relpath(full, base_dir)
+                    z.write(full, arcname=rel)
+
+        put(f"[ZIP PATH] {zip_path}")
+    except Exception as e:
+        put(f"[ERROR] {e}")
+        put(traceback.format_exc())
+    finally:
+        put("[DONE ALL]")
+        jobs.pop(job_id, None)
+
+# ————————————————————————————————————————————————————————————————
+# Worker: online (OneDrive)
+# ————————————————————————————————————————————————————————————————
+def _online_worker(job_id, base_dir, token, action, language, instruction, q, cancel):
+    def put(msg): q.put(msg)
+    try:
+        put("Downloading from OneDrive…")
+        tmp_dir = tempfile.mkdtemp()
+        inp, drive_id, _, sess_map = download_sharepoint_folder(
+            share_link=base_dir, temp_dir=tmp_dir, access_token=token
+        )
+
+        sessions = [
+            os.path.join(r, d)
+            for r, dirs, _ in os.walk(inp)
+            for d in dirs if d.startswith("Session_")
+        ]
+
+        for sess in sessions:
+            if cancel.is_set():
+                put("[CANCELLED]")
+                break
+            name = os.path.basename(sess)
+            put(f"Processing session: {name}")
+
+            ups = []
+            if action == "transcribe":
+                Transcriber(sess, language, "cpu").process_data(verbose=True)
+                ups = ["transcription.log"]
+            elif action == "translate":
+                Translator(sess, language, instruction, "cpu").process_data(verbose=True)
+                ups = ["translation.log"]
+            elif action == "gloss":
+                Glosser(sess, language, instruction).process_data()
+            elif action == "create columns":
+                process_columns(sess, language)
+
+            ups.append("trials_and_sessions_annotated.xlsx")
             for fn in ups:
                 if cancel.is_set():
                     put("[CANCELLED]")
                     break
-                path = os.path.join(sess, fn)
-                if not os.path.exists(path):
-                    put(f"Skipping missing file: {fn}")
+                fp = os.path.join(sess, fn)
+                if not os.path.exists(fp):
+                    put(f"Skipping missing: {fn}")
                     continue
                 put(f"Uploading file: {fn}")
                 upload_file_replace_in_onedrive(
-                    local_file_path=path,
+                    local_file_path=fp,
                     target_drive_id=drive_id,
                     parent_folder_id=sess_map.get(name, ""),
                     file_name_in_folder=fn,
                     access_token=token
                 )
             put(f"[DONE UPLOADED] {name}")
-
     except Exception as e:
         put(f"[ERROR] {e}")
-        print(f"Error in worker: {e}")
-
+        put(traceback.format_exc())
     finally:
-        # Always signal completion exactly once
         put("[DONE ALL]")
+        jobs.pop(job_id, None)
 
-
+# ————————————————————————————————————————————————————————————————
+# Kick off the appropriate worker
+# ————————————————————————————————————————————————————————————————
 @csrf_exempt
 def process(request):
     if request.method != "POST":
         return JsonResponse({"error": "Use POST"}, status=400)
-    base_dir    = request.POST.get("base_dir")
-    token       = request.session.get("access_token") or request.POST.get("access_token")
+
     action      = request.POST.get("action")
     language    = request.POST.get("language")
     instruction = request.POST.get("instruction")
-    if not (base_dir and token):
-        return JsonResponse({"error": "Missing params"}, status=400)
+    token       = request.session.get("access_token") or request.POST.get("access_token")
 
+    # new job
     job_id = str(uuid.uuid4())
-    # Create inter-process queue and cancel event
     q      = multiprocessing.Queue()
     cancel = multiprocessing.Event()
-    jobs[job_id] = {"queue": q, "cancel": cancel, "finished": False}
+    jobs[job_id] = {"queue": q, "cancel": cancel, "zip_path": None}
 
-    # Start worker in separate process
-    p = multiprocessing.Process(
-        target=_worker,
-        args=(job_id, base_dir, token, action, language, instruction, q, cancel),
-        daemon=True
-    )
+    # offline via client ZIP
+    if 'zipfile' in request.FILES:
+        z       = request.FILES['zipfile']
+        tmp_dir = tempfile.mkdtemp()
+        zip_path= Path(tmp_dir) / "upload.zip"
+        with open(zip_path, "wb") as f:
+            for chunk in z.chunks():
+                f.write(chunk)
+        with zipfile.ZipFile(zip_path, 'r') as archive:
+            archive.extractall(tmp_dir)
+        os.remove(zip_path)
+
+        worker = _offline_worker
+        args   = (job_id, tmp_dir, action, language, instruction, q, cancel)
+
+    else:
+        # online via OneDrive
+        base_dir = request.POST.get("base_dir")
+        if not (base_dir and token):
+            return JsonResponse({"error": "Missing base_dir or token"}, status=400)
+        worker = _online_worker
+        args   = (job_id, base_dir, token, action, language, instruction, q, cancel)
+
+    p = multiprocessing.Process(target=worker, args=args, daemon=True)
     p.start()
     jobs[job_id]["process"] = p
 
     return JsonResponse({"job_id": job_id})
 
-
+# ————————————————————————————————————————————————————————————————
+# Server‐Sent Events stream
+# ————————————————————————————————————————————————————————————————
 @csrf_exempt
 def stream(request, job_id):
-    if job_id not in jobs:
+    job = jobs.get(job_id)
+    if not job:
         return JsonResponse({"error": "Unknown job_id"}, status=404)
-    job = jobs[job_id]
-    q = job["queue"]
 
+    q = job["queue"]
     def event_stream():
-        # 1) Drain any backlog
+        # flush backlog
         while True:
             try:
-                line = q.get_nowait()
-                yield f"data: {line}\n\n"
+                yield f"data: {q.get_nowait()}\n\n"
             except queue.Empty:
                 break
-        # 2) Stream until DONE ALL
+        # stream until done
         while True:
-            line = q.get()  # blocks
+            line = q.get()
             if line == "[DONE ALL]":
-                yield "event: done\n"
-                yield "data: ok\n\n"
-                # Clean up the job entry so future calls see it's done
-                jobs.pop(job_id, None)
+                yield f"data: [DONE ALL]\n\n"
                 break
+
+            elif line.startswith("[ZIP PATH] "):
+                zip_path = line[len("[ZIP PATH] "):].strip()
+                job["zip_path"] = zip_path
+
             else:
                 yield f"data: {line}\n\n"
 
-    resp = StreamingHttpResponse(event_stream(), content_type="text/event-stream")
-    resp["Cache-Control"]     = "no-cache"
-    resp["X-Accel-Buffering"] = "no"
-    return resp
+    return StreamingHttpResponse(event_stream(), content_type="text/event-stream")
 
-
+# ————————————————————————————————————————————————————————————————
 @csrf_exempt
 def cancel(request):
-    body = json.loads(request.body.decode())
+    body = json.loads(request.body)
     jid  = body.get("job_id")
     job  = jobs.get(jid)
     if not job:
         return JsonResponse({"error": "Unknown job_id"}, status=404)
-
-    q    = job["queue"]
-    proc = job.get("process")
-
-    # Notify client, then terminate
+    q = job["queue"]
     q.put("[CANCELLED]")
     q.put("[DONE ALL]")
-
+    proc = job.get("process")
     if proc and proc.is_alive():
         proc.terminate()
-        proc.join(timeout=1)
-
-    # Clean up
     jobs.pop(jid, None)
-
-    return JsonResponse({"status": "cancelled"})
-
+    return JsonResponse({"status": "cancelled"})    
 
 def terms_view(request):
     return render(request, "terms.html")
