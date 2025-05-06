@@ -79,7 +79,7 @@ def reorder_columns(df, language):
     return df[new_column_order]
 
 
-def reorder_columns(directory, language):
+def process_columns(directory, language):
     for subdir, dirs, files in os.walk(directory):
         excel_file_path = os.path.join(subdir, 'trials_and_sessions_annotated.xlsx')
         csv_file_path = os.path.join(subdir, 'trials_and_sessions.csv')
@@ -111,7 +111,6 @@ def create_columns(directory, language):
                 excel_file_path = os.path.join(subdir, excel_file_name)
                 try:
                     df = pd.read_csv(csv_file_path)
-                    print(f'Processing {csv_file_path}')
                     df = update_columns(df)
                     df = reorder_columns(df, language)
                     df.to_excel(excel_file_path, index=False)
