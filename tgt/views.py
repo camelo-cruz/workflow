@@ -49,7 +49,10 @@ TOKEN_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
 jobs = {}
 
 def index(request):
-    return render(request, "index.html")
+    version = os.getenv("APP_VERSION", "dev")
+    return render(request, "index.html", {
+        "app_version": version,   # ← changed from "version"
+    })
 
 # ————————————————————————————————————————————————————————————————
 
