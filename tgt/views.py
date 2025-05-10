@@ -9,7 +9,8 @@ import traceback
 import requests
 import time
 import shutil
-import queue 
+import queue
+import msal
 from zipfile import ZipFile
 from pathlib import Path
 from dotenv import load_dotenv
@@ -52,6 +53,14 @@ def index(request):
 
 # ————————————————————————————————————————————————————————————————
 
+def _build_msal_app(cache=None):
+    return msal.ConfidentialClientApplication(
+        CLIENT_ID,
+        authority=f"https://login.microsoftonline.com/{TENANT_ID}",
+        client_credential=CLIENT_SECRET,
+        token_cache=cache
+    )
+
 @csrf_exempt
 def get_access_token(request):
     token = request.session.get("access_token")
@@ -63,38 +72,39 @@ def get_access_token(request):
 @csrf_exempt
 def start_onedrive_auth(request):
     host = request.get_host()
-    scheme = "http" if host.startswith(("localhost","127.0.0.1")) else "https"
+    scheme = "http" if host.startswith(("localhost", "127.0.0.1")) else "https"
     redirect_uri = f"{scheme}://{host}/auth/redirect"
-    params = {
-        "client_id": CLIENT_ID,
-        "response_type": "code",
-        "redirect_uri": redirect_uri,
-        "scope": " ".join(SCOPES),
-        "response_mode": "query",
-    }
-    return redirect(f"{AUTH_URL}?{urlencode(params)}")
+
+    msal_app = _build_msal_app()
+    auth_url = msal_app.get_authorization_request_url(
+        scopes=SCOPES,
+        redirect_uri=redirect_uri,
+        response_mode="query",
+    )
+    return redirect(auth_url)
 
 @csrf_exempt
 def onedrive_auth_redirect(request):
     code = request.GET.get("code")
     if not code:
-        return JsonResponse({"error":"No code in callback"}, status=400)
+        return JsonResponse({"error": "No code in callback"}, status=400)
+
     host = request.get_host()
-    scheme = "http" if host.startswith(("localhost","127.0.0.1")) else "https"
+    scheme = "http" if host.startswith(("localhost", "127.0.0.1")) else "https"
     redirect_uri = f"{scheme}://{host}/auth/redirect"
-    resp = requests.post(TOKEN_URL, data={
-        "client_id": CLIENT_ID,
-        "client_secret": CLIENT_SECRET,
-        "scope": " ".join(SCOPES),
-        "code": code,
-        "redirect_uri": redirect_uri,
-        "grant_type": "authorization_code",
-    })
-    data = resp.json()
-    if "access_token" not in data:
-        return JsonResponse({"error":"Failed to get token","details":data}, status=400)
-    request.session['access_token'] = data["access_token"]
-    return render(request, "auth_success.html", {"token": data["access_token"]})
+
+    msal_app = _build_msal_app()
+    result = msal_app.acquire_token_by_authorization_code(
+        code,
+        scopes=SCOPES,
+        redirect_uri=redirect_uri
+    )
+
+    if "access_token" not in result:
+        return JsonResponse({"error": "Token error", "details": result}, status=400)
+
+    request.session["access_token"] = result["access_token"]
+    return render(request, "auth_success.html", {"token": result["access_token"]})
 
 
 # ————————————————————————————————————————————————————————————————
@@ -212,7 +222,7 @@ def _online_worker(job_id, base_dir, token, action, language, instruction, q, ca
             if cancel.is_set():
                 put("[CANCELLED]")
                 break
-            name = os.path.basename(sesion)
+            name = os.path.basename(session)
             put(f"Processing session: {name}")
 
             uploads = []
@@ -240,7 +250,7 @@ def _online_worker(job_id, base_dir, token, action, language, instruction, q, ca
                 upload_file_replace_in_onedrive(
                     local_file_path=file_path,
                     target_drive_id=drive_id,
-                    parent_folder_id=session_map.get(name, ""),
+                    parent_folder_id=sess_map.get(name, ""),
                     file_name_in_folder=file_name,
                     access_token=token
                 )
@@ -260,16 +270,20 @@ def process(request):
     if request.method != "POST":
         return JsonResponse({"error": "Use POST"}, status=400)
 
-    action = request.POST.get("action")
-    language = request.POST.get("language")
-    instruction = request.POST.get("instruction")
-    token = request.session.get("access_token") or request.POST.get("access_token")
-
     # new job
     job_id = str(uuid.uuid4())
     q      = multiprocessing.Queue()
     cancel = multiprocessing.Event()
     jobs[job_id] = {"queue": q, "cancel": cancel, "zip_path": None}
+
+    action = request.POST.get("action")
+    language = request.POST.get("language")
+    instruction = request.POST.get("instruction")
+    token = request.session.get("access_token") or request.POST.get("access_token")
+
+    if not language:
+        q.put("[ERROR] Missing language")
+        return JsonResponse({"job_id": job_id})
 
     # offline via client ZIP
     if 'zipfile' in request.FILES:

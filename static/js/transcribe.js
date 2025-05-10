@@ -39,7 +39,6 @@ function onModeChange() {
     isOffline = (mode === 'upload');
     onlineUI.style.display = isOffline ? 'none' : 'block';
     uploadUI.style.display = isOffline ? 'block' : 'none';
-    btnProcess.disabled = isOffline ? uploadFiles.length === 0 : !accessToken || !remoteBaseDir.value;
 }
 modeRadios.forEach(r => r.addEventListener('change', onModeChange));
 
