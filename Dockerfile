@@ -1,8 +1,8 @@
 # Base image
 FROM python:3.12-slim
 
-LABEL version="0.0.0"
-ENV APP_VERSION=0.0.0
+LABEL version="1.0.0"
+ENV APP_VERSION=1.0.0
 
 #––– Install system dependencies as root
 RUN apt-get update && \

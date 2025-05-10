@@ -8,8 +8,9 @@ import threading
 import traceback
 import requests
 import time
-import zipfile
-import shutil    
+import shutil
+import queue
+import msal
 from zipfile import ZipFile
 from pathlib import Path
 from dotenv import load_dotenv
@@ -23,20 +24,19 @@ from .classes.Glosser import Glosser
 from .utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
 from .utils.reorder_columns import create_columns
 from urllib.parse import urlencode
-import queue
 
 print("Running version:", os.getenv("APP_VERSION", "dev"))
 
 # Load OneDrive OAuth credentials
-TENANT_ID     = os.getenv("TENANT_ID")
-CLIENT_ID     = os.getenv("CLIENT_ID")
+TENANT_ID = os.getenv("TENANT_ID")
+CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 if not (TENANT_ID and CLIENT_ID and CLIENT_SECRET):
     envf = Path(__file__).parent / "materials" / "secrets.env"
     if envf.exists():
         load_dotenv(envf)
-        TENANT_ID     = os.getenv("TENANT_ID")
-        CLIENT_ID     = os.getenv("CLIENT_ID")
+        TENANT_ID = os.getenv("TENANT_ID")
+        CLIENT_ID = os.getenv("CLIENT_ID")
         CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 if not (TENANT_ID and CLIENT_ID and CLIENT_SECRET):
     raise ValueError("Missing OneDrive OAuth credentials")
@@ -47,6 +47,22 @@ TOKEN_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
 
 # In-memory store for jobs
 jobs = {}
+
+def index(request):
+    version = os.getenv("APP_VERSION", "dev")
+    return render(request, "index.html", {
+        "app_version": version,   # ← changed from "version"
+    })
+
+# ————————————————————————————————————————————————————————————————
+
+def _build_msal_app(cache=None):
+    return msal.ConfidentialClientApplication(
+        CLIENT_ID,
+        authority=f"https://login.microsoftonline.com/{TENANT_ID}",
+        client_credential=CLIENT_SECRET,
+        token_cache=cache
+    )
 
 @csrf_exempt
 def get_access_token(request):
@@ -59,38 +75,39 @@ def get_access_token(request):
 @csrf_exempt
 def start_onedrive_auth(request):
     host = request.get_host()
-    scheme = "http" if host.startswith(("localhost","127.0.0.1")) else "https"
+    scheme = "http" if host.startswith(("localhost", "127.0.0.1")) else "https"
     redirect_uri = f"{scheme}://{host}/auth/redirect"
-    params = {
-        "client_id": CLIENT_ID,
-        "response_type": "code",
-        "redirect_uri": redirect_uri,
-        "scope": " ".join(SCOPES),
-        "response_mode": "query",
-    }
-    return redirect(f"{AUTH_URL}?{urlencode(params)}")
+
+    msal_app = _build_msal_app()
+    auth_url = msal_app.get_authorization_request_url(
+        scopes=SCOPES,
+        redirect_uri=redirect_uri,
+        response_mode="query",
+    )
+    return redirect(auth_url)
 
 @csrf_exempt
 def onedrive_auth_redirect(request):
     code = request.GET.get("code")
     if not code:
-        return JsonResponse({"error":"No code in callback"}, status=400)
+        return JsonResponse({"error": "No code in callback"}, status=400)
+
     host = request.get_host()
-    scheme = "http" if host.startswith(("localhost","127.0.0.1")) else "https"
+    scheme = "http" if host.startswith(("localhost", "127.0.0.1")) else "https"
     redirect_uri = f"{scheme}://{host}/auth/redirect"
-    resp = requests.post(TOKEN_URL, data={
-        "client_id":     CLIENT_ID,
-        "client_secret": CLIENT_SECRET,
-        "scope":         " ".join(SCOPES),
-        "code":          code,
-        "redirect_uri":  redirect_uri,
-        "grant_type":    "authorization_code",
-    })
-    data = resp.json()
-    if "access_token" not in data:
-        return JsonResponse({"error":"Failed to get token","details":data}, status=400)
-    request.session['access_token'] = data["access_token"]
-    return render(request, "auth_success.html", {"token": data["access_token"]})
+
+    msal_app = _build_msal_app()
+    result = msal_app.acquire_token_by_authorization_code(
+        code,
+        scopes=SCOPES,
+        redirect_uri=redirect_uri
+    )
+
+    if "access_token" not in result:
+        return JsonResponse({"error": "Token error", "details": result}, status=400)
+
+    request.session["access_token"] = result["access_token"]
+    return render(request, "auth_success.html", {"token": result["access_token"]})
 
 
 # ————————————————————————————————————————————————————————————————
@@ -142,43 +159,36 @@ def _offline_worker(job_id, base_dir, action, language, instruction, q, cancel):
         put("Processing uploaded files…")
         # find all Session_* directories
         sessions = [
-            os.path.join(r, d)
-            for r, dirs, _ in os.walk(base_dir)
-            for d in dirs if d.startswith("Session_")
+            os.path.join(root, subdir)
+            for root, dirs, _ in os.walk(base_dir)
+            for subdir in dirs if subdir.startswith("Session_")
         ]
 
-        for sess in sessions:
+        for session in sessions:
             if cancel.is_set():
                 put("[CANCELLED]")
                 break
-            name = os.path.basename(sess)
+            name = os.path.basename(session)
             put(f"Processing session: {name}")
 
-            ups = []
             if action == "transcribe":
-                Transcriber(sess, language, "cpu").process_data(verbose=True)
-                ups = ["transcription.log"]
+                Transcriber(session, language, "cpu").process_data(verbose=True)
             elif action == "translate":
-                Translator(sess, language, instruction, "cpu").process_data(verbose=True)
-                ups = ["translation.log"]
+                Translator(session, language, instruction, "cpu").process_data(verbose=True)
             elif action == "gloss":
-                Glosser(sess, language, instruction).process_data()
+                Glosser(session, language, instruction).process_data()
             elif action == "create columns":
-                create_columns(sess, language)
-
-            ups.append("trials_and_sessions_annotated.xlsx")
-            for fn in ups:
-                if os.path.exists(os.path.join(sess, fn)):
-                    put(f"Created: {fn}")
+                create_columns(session, language)
 
         # create ZIP of entire folder
         zip_path = Path(tempfile.gettempdir()) / f"{job_id}_output.zip"
         with ZipFile(zip_path, "w") as z:
             for root, _, files in os.walk(base_dir):
-                for f in files:
-                    full = os.path.join(root, f)
-                    rel  = os.path.relpath(full, base_dir)
-                    z.write(full, arcname=rel)
+                for file in files:
+                    if file in ("trials_and_sessions_annotated.xlsx", "transcription.log", "translation.log"):
+                        full = os.path.join(root, file)
+                        rel = os.path.relpath(full, base_dir)
+                        z.write(full, arcname=rel)
 
         put(f"[ZIP PATH] {zip_path}")
     except Exception as e:
@@ -206,45 +216,45 @@ def _online_worker(job_id, base_dir, token, action, language, instruction, q, ca
             return
 
         sessions = [
-            os.path.join(r, d)
-            for r, dirs, _ in os.walk(inp)
-            for d in dirs if d.startswith("Session_")
+            os.path.join(root, subdir)
+            for root, dirs, _ in os.walk(inp)
+            for subdir in dirs if subdir.startswith("Session_")
         ]
 
-        for sess in sessions:
+        for session in sessions:
             if cancel.is_set():
                 put("[CANCELLED]")
                 break
-            name = os.path.basename(sess)
+            name = os.path.basename(session)
             put(f"Processing session: {name}")
 
-            ups = []
+            uploads = []
             if action == "transcribe":
-                Transcriber(sess, language, "cpu").process_data(verbose=True)
-                ups = ["transcription.log"]
+                Transcriber(session, language, "cpu").process_data(verbose=True)
+                uploads = ["transcription.log"]
             elif action == "translate":
-                Translator(sess, language, instruction, "cpu").process_data(verbose=True)
-                ups = ["translation.log"]
+                Translator(session, language, instruction, "cpu").process_data(verbose=True)
+                uploads = ["translation.log"]
             elif action == "gloss":
-                Glosser(sess, language, instruction).process_data()
+                Glosser(session, language, instruction).process_data()
             elif action == "create columns":
-                create_columns(sess, language)
+                create_columns(session, language)
 
-            ups.append("trials_and_sessions_annotated.xlsx")
-            for fn in ups:
+            uploads.append("trials_and_sessions_annotated.xlsx")
+            for file_name in uploads:
                 if cancel.is_set():
                     put("[CANCELLED]")
                     break
-                fp = os.path.join(sess, fn)
-                if not os.path.exists(fp):
-                    put(f"Skipping missing: {fn}")
+                file_path = os.path.join(session, file_name)
+                if not os.path.exists(file_path):
+                    put(f"Skipping missing: {file_name}")
                     continue
-                put(f"Uploading file: {fn}")
+                put(f"Uploading file: {file_name}")
                 upload_file_replace_in_onedrive(
-                    local_file_path=fp,
+                    local_file_path=file_path,
                     target_drive_id=drive_id,
                     parent_folder_id=sess_map.get(name, ""),
-                    file_name_in_folder=fn,
+                    file_name_in_folder=file_name,
                     access_token=token
                 )
             put(f"[DONE UPLOADED] {name}")
@@ -263,31 +273,35 @@ def process(request):
     if request.method != "POST":
         return JsonResponse({"error": "Use POST"}, status=400)
 
-    action      = request.POST.get("action")
-    language    = request.POST.get("language")
-    instruction = request.POST.get("instruction")
-    token       = request.session.get("access_token") or request.POST.get("access_token")
-
     # new job
     job_id = str(uuid.uuid4())
     q      = multiprocessing.Queue()
     cancel = multiprocessing.Event()
     jobs[job_id] = {"queue": q, "cancel": cancel, "zip_path": None}
 
+    action = request.POST.get("action")
+    language = request.POST.get("language")
+    instruction = request.POST.get("instruction")
+    token = request.session.get("access_token") or request.POST.get("access_token")
+
+    if not language:
+        q.put("[ERROR] Missing language")
+        return JsonResponse({"job_id": job_id})
+
     # offline via client ZIP
     if 'zipfile' in request.FILES:
-        z       = request.FILES['zipfile']
+        z = request.FILES['zipfile']
         tmp_dir = tempfile.mkdtemp()
-        zip_path= Path(tmp_dir) / "upload.zip"
+        zip_path = Path(tmp_dir) / "upload.zip"
         with open(zip_path, "wb") as f:
             for chunk in z.chunks():
                 f.write(chunk)
-        with zipfile.ZipFile(zip_path, 'r') as archive:
+        with ZipFile(zip_path, 'r') as archive:
             archive.extractall(tmp_dir)
         os.remove(zip_path)
 
         worker = _offline_worker
-        args   = (job_id, tmp_dir, action, language, instruction, q, cancel)
+        args = (job_id, tmp_dir, action, language, instruction, q, cancel)
 
     else:
         # online via OneDrive
