@@ -25,13 +25,12 @@ import spacy
 import argparse
 import tempfile
 import shutil
+import spacy_stanza
 import pandas as pd
 from tqdm import tqdm
-from spacy.cli import download
 from deep_translator import GoogleTranslator
 from ..utils.functions import set_global_variables, find_language
-from spacy.util import is_package
-from spacy.cli import download
+from spacy.util import is_package, download
 
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, LEIPZIG_GLOSSARY = set_global_variables()
@@ -80,14 +79,22 @@ class Glosser():
           'ru': 'ru_core_news_lg',
           'en': 'en_core_web_trf',
           'it': 'it_core_news_lg'
+          'vi': None,
           }
-        
-        model_name = models[self.language_code]
-        if not is_package(model_name):
-            print(f"{model_name} isn’t installed—pulling it down now…")
-            download(model_name)
-        # Now it lives in spaCy’s data cache, so this will succeed:
-        self.nlp = spacy.load(model_name)
+
+        if self.language_code not in models:
+            raise ValueError(f"Unsupported language code: {self.language_code}")
+
+        if self.language_code == 'vi':
+            # Load the Stanza model for Vietnamese
+            self.nlp = spacy_stanza.load_pipeline(self.language_code)
+        else:
+            model_name = models[self.language_code]
+            if not is_package(model_name):
+                print(f"{model_name} isn’t installed—pulling it down now…")
+                download(model_name)
+            # Now it lives in spaCy’s data cache, so this will succeed:
+            self.nlp = spacy.load(model_name)
 
     def gloss_japanese_with_spacy(self, sentence):     
         glossed_sentence = ''
@@ -185,17 +192,20 @@ class Glosser():
                 if isinstance(translated_lemma, str) and not lemma.isdigit():
                     translated_lemma = translated_lemma.lower()
                     translated_lemma = translated_lemma.replace(' ', '-')
+                
+                if not morph: # dictionary is empty for vietnamese
+                    glossed_word = f"{translated_lemma}.{token.pos_}.{token.dep_}"
+                else:
+                    arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
+                    definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
+                    person = LEIPZIG_GLOSSARY.get(morph.get('Person'), morph.get('Person'))
+                    number = LEIPZIG_GLOSSARY.get(morph.get('Number'), morph.get('Number'))
+                    gender = LEIPZIG_GLOSSARY.get(morph.get('Gender'), morph.get('Gender'))
+                    case = LEIPZIG_GLOSSARY.get(morph.get('Case'), morph.get('Case'))
+                    tense = LEIPZIG_GLOSSARY.get(morph.get('Tense'), morph.get('Tense'))
+                    mood = LEIPZIG_GLOSSARY.get(morph.get('Mood'), morph.get('Mood'))
 
-                arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
-                definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
-                person = LEIPZIG_GLOSSARY.get(morph.get('Person'), morph.get('Person'))
-                number = LEIPZIG_GLOSSARY.get(morph.get('Number'), morph.get('Number'))
-                gender = LEIPZIG_GLOSSARY.get(morph.get('Gender'), morph.get('Gender'))
-                case = LEIPZIG_GLOSSARY.get(morph.get('Case'), morph.get('Case'))
-                tense = LEIPZIG_GLOSSARY.get(morph.get('Tense'), morph.get('Tense'))
-                mood = LEIPZIG_GLOSSARY.get(morph.get('Mood'), morph.get('Mood'))
-
-                glossed_word = f"{translated_lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
+                    glossed_word = f"{translated_lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
                 #further cleaning
                 glossed_word = re.sub(r'(?:\.|-|\b)None', '', glossed_word)
                 glossed_word = re.sub(r'\b(the|a)\.', '', glossed_word)
