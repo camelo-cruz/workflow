@@ -1,7 +1,7 @@
 # MacOS dependencies (CPU only, torch 1.10.x to satisfy pyannote.audio<1.0)
-torch; sys_platform == "darwin"
-torchvision; sys_platform == "darwin"
-torchaudio; sys_platform == "darwin"
+torch==2.5.1; sys_platform == "darwin"
+torchvision==0.20.1; sys_platform == "darwin"
+torchaudio==2.5.1; sys_platform == "darwin"
 
 # Windows dependencies (CUDA 10.2 build under CUDA 12.4 index)
 --extra-index-url https://download.pytorch.org/whl/cu124
@@ -45,3 +45,6 @@ spacy-curated-transformers
 hf_xet
 gevent
 django-csp
+spacy_stanza
+stanza
+numpy

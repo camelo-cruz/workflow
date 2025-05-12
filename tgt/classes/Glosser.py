@@ -21,16 +21,21 @@ Leibniz Institute General Linguistics (ZAS)
 import re
 import os
 import sys
+import torch
 import spacy
 import argparse
 import tempfile
 import shutil
+import stanza
+import numpy as np
 import spacy_stanza
 import pandas as pd
 from tqdm import tqdm
+from torch.serialization import safe_globals
+from spacy.cli import download
 from deep_translator import GoogleTranslator
 from ..utils.functions import set_global_variables, find_language
-from spacy.util import is_package, download
+from spacy.util import is_package
 
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, LEIPZIG_GLOSSARY = set_global_variables()
@@ -78,16 +83,22 @@ class Glosser():
           'ja': 'ja_core_news_trf',
           'ru': 'ru_core_news_lg',
           'en': 'en_core_web_trf',
-          'it': 'it_core_news_lg'
-          'vi': None,
+          'it': 'it_core_news_lg',
+          'vi': None
           }
 
         if self.language_code not in models:
             raise ValueError(f"Unsupported language code: {self.language_code}")
 
         if self.language_code == 'vi':
-            # Load the Stanza model for Vietnamese
-            self.nlp = spacy_stanza.load_pipeline(self.language_code)
+            try:
+                with safe_globals([np.core.multiarray._reconstruct]):
+                    stanza.download(self.language_code)
+                    self.nlp = spacy_stanza.load_pipeline(self.language_code)
+            except Exception as e:
+                print(f"Could not download Vietnamese stanza model: {e}")
+                raise
+            
         else:
             model_name = models[self.language_code]
             if not is_package(model_name):
@@ -106,6 +117,50 @@ class Glosser():
                 glossed_sentence += f"{token.text}.{token.pos_}.{token.dep_} "
 
         return glossed_sentence
+    
+    def clean_vietnamese_lemma(self, lemma):
+        VI_OVERRIDES = {
+            # Classifiers
+            "con":     ("CLF",     None),
+            "cái":     ("CLF",     None),
+            "chiếc":   ("CLF",     None),
+            "đứa":     ("CLF",     None),
+            "tấm":     ("CLF",     None),
+
+            # Negation / Polarity
+            "không":   ("NEG",     "ADV"),
+            "chẳng":   ("NEG",     "ADV"),
+            "chưa":    ("NEG",     "ADV"),
+
+            # Existential verbs (treated as verbal gloss)
+            "có":      ("EXIST",   "VERB"),
+
+            # Indefinite/interrogative/quantifiers
+            "chi":     ("any",     "PRON"),
+            "cả":      ("all",     "PART"),
+            "mô":      ("any",     "PRON"),  # Central dialect; often like "where/what"
+            "nào":     ("any",     "PRON"),
+            "hết":     ("all",     "PART"),
+            "ai":      ("who",     "PRON"),
+            "gì":      ("what",    "PRON"),
+            "đâu":     ("where",   "ADV"),
+            "bao":     ("how.many","ADV"),
+            "bao nhiêu": ("how.many", "ADV"),
+
+            # Coordinators / Discourse markers
+            "và":      ("and",     "CONJ"),
+            "nhưng":   ("but",     "CONJ"),
+            "thì":     ("TOP",     "PART"),
+
+            # Others found in children's speech or glossing context
+            "đó":      ("DEM",     "PART"),
+            "này":     ("DEM",     "PART"),
+            "đây":     ("DEM",     "ADV"),
+            "kia":     ("DEM",     "PART"),
+            "ấy":      ("DEM",     "PART"),
+        }
+        
+        return VI_OVERRIDES.get(lemma, None)
     
     @staticmethod
     def clean_portuguese_sentence(glossed_sentence, lemmatized_sentence):
@@ -180,21 +235,26 @@ class Glosser():
         doc = self.nlp(sentence)
         for token in doc:
             # Skip tokens containing digits or square brackets
-            if re.search(r'\[|\d|\]', token.text):
+            if re.search(r'\(|\[|\d|\]|\)', token.text):
                 glossed_sentence += token.text
             else:
                 # Get the lemma, POS, and morphological features
                 lemma = token.lemma_
                 morph = token.morph.to_dict()
 
-                #translated_lemma =  Translator.translate_with_deepl(self.language_code, lemma)
                 translated_lemma = GoogleTranslator(source=self.language_code, target='en').translate(text=lemma)
                 if isinstance(translated_lemma, str) and not lemma.isdigit():
                     translated_lemma = translated_lemma.lower()
                     translated_lemma = translated_lemma.replace(' ', '-')
                 
-                if not morph: # dictionary is empty for vietnamese
-                    glossed_word = f"{translated_lemma}.{token.pos_}.{token.dep_}"
+                override = None
+                if self.language_code == 'vi':
+                    override = self.clean_vietnamese_lemma(lemma.lower())
+                    if override:
+                        lemma, pos = override
+                        glossed_word = f"{lemma}.{pos}"
+                    else:
+                        glossed_word = f"{translated_lemma}.{token.pos_.upper()}.{token.dep_.upper()}"
                 else:
                     arttype = LEIPZIG_GLOSSARY.get(morph.get('PronType'), morph.get('PronType'))
                     definite = LEIPZIG_GLOSSARY.get(morph.get('Definite'), morph.get('Definite'))
@@ -204,8 +264,8 @@ class Glosser():
                     case = LEIPZIG_GLOSSARY.get(morph.get('Case'), morph.get('Case'))
                     tense = LEIPZIG_GLOSSARY.get(morph.get('Tense'), morph.get('Tense'))
                     mood = LEIPZIG_GLOSSARY.get(morph.get('Mood'), morph.get('Mood'))
-
                     glossed_word = f"{translated_lemma}.{arttype}.{definite}.{gender}.{person}.{number}.{case}.{tense}.{mood}"
+
                 #further cleaning
                 glossed_word = re.sub(r'(?:\.|-|\b)None', '', glossed_word)
                 glossed_word = re.sub(r'\b(the|a)\.', '', glossed_word)
@@ -257,6 +317,8 @@ class Glosser():
                                 column_to_gloss = 'transcription_original_script'
                         elif self.instruction == 'automatic':
                             column_to_gloss = "automatic_transcription"
+                        
+                        print('column to gloss:', column_to_gloss)
                         if column_to_gloss in df.columns:
                             print('Glossing:', subdir)
                             sentences_groups = df[column_to_gloss]
