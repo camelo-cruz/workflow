@@ -158,7 +158,7 @@ class Translator():
                 max_iterations = 100
                 iteration_count = 0
 
-                for i in range(len(df)+1):
+                for i in range(len(df)):
                     if i >= max_iterations:
                         logging.info(f"Reached max iteration limit ({max_iterations}), exiting early.")
                         break
@@ -169,12 +169,18 @@ class Translator():
                                                         sentences_column]
 
                         if pd.isna(text_to_translate) or not str(text_to_translate).strip():
-                            continue  # Skip empty values
+                            logging.info(f"Skipping row {i}: empty or whitespace value, raw value: {repr(text_to_translate)}")
+                            continue
 
+                        translation = None
                         if self.instruction in ['sentences', 'corrected']:
                             translation = GoogleTranslator(source=self.language_code, target='en').translate(text=text_to_translate)
                         elif self.instruction == 'automatic':
                             translation = self.translate_with_pretrained(self.language_code, text_to_translate, self.device)
+                        
+                        if not translation:
+                            logging.info(f"Skipping row {i}: translation failed or empty")
+                            continue
 
                         columns_mapping = {
                             'corrected': [
