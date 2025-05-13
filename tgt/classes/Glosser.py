@@ -128,9 +128,9 @@ class Glosser():
             "tấm":     ("CLF",     None),
 
             # Negation / Polarity
-            "không":   ("NEG",     "ADV"),
-            "chẳng":   ("NEG",     "ADV"),
-            "chưa":    ("NEG",     "ADV"),
+            "không":   ("NEG",     None),
+            "chẳng":   ("NEG",     None),
+            "chưa":    ("NEG",     None),
 
             # Existential verbs (treated as verbal gloss)
             "có":      ("EXIST",   "VERB"),

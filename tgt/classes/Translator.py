@@ -158,7 +158,7 @@ class Translator():
                 max_iterations = 100
                 iteration_count = 0
 
-                for i in range(len(df)):
+                for i in range(len(df)+1):
                     if i >= max_iterations:
                         logging.info(f"Reached max iteration limit ({max_iterations}), exiting early.")
                         break
