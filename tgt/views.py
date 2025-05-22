@@ -11,6 +11,8 @@ import time
 import shutil
 import queue
 import msal
+import base64
+import requests
 from zipfile import ZipFile
 from pathlib import Path
 from dotenv import load_dotenv
@@ -150,6 +152,31 @@ def download_zip(request, job_id):
     threading.Thread(target=lambda: (time.sleep(2), cleanup())).start()
     return response
 
+
+def upload_file_replace_in_onedrive(local_file_path, target_drive_id,
+                                    parent_folder_id, file_name_in_folder,
+                                    access_token):
+    """
+    Simple (small-file) replace-upload via Graph:
+      PUT /drives/{drive-id}/items/{parent-id}:/{filename}:/content
+    """
+    url = (
+      f"https://graph.microsoft.com/v1.0/drives/{target_drive_id}"
+      f"/items/{parent_folder_id}:/{file_name_in_folder}:/content"
+    )
+
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        # must be octet-stream for binary
+        "Content-Type": "application/octet-stream"
+    }
+
+    with open(local_file_path, "rb") as f:
+        data = f.read()
+
+    resp = requests.put(url, headers=headers, data=data)
+    resp.raise_for_status()   # will surface any 4xx/5xx as exception
+
 # ————————————————————————————————————————————————————————————————
 # Worker: offline (unzipped folder already on disk)
 # ————————————————————————————————————————————————————————————————
@@ -192,6 +219,7 @@ def _offline_worker(job_id, base_dir, action, language, instruction, q, cancel):
 
         put(f"[ZIP PATH] {zip_path}")
     except Exception as e:
+        print(f"Error in offline worker: {e}")
         put(f"[ERROR] {e}")
         put(traceback.format_exc())
     finally:
@@ -201,69 +229,112 @@ def _offline_worker(job_id, base_dir, action, language, instruction, q, cancel):
 # ————————————————————————————————————————————————————————————————
 # Worker: online (OneDrive)
 # ————————————————————————————————————————————————————————————————
+def _list_session_children(share_link: str, token: str):
+    """
+    Uses Microsoft Graph to list the children of a shared folder,
+    returning only those named 'Session_*'.
+    """
+    # Encode the share_link into a Graph-shareable ID (u! format)
+    share_id = base64.urlsafe_b64encode(share_link.encode()).decode().rstrip("=")
+    url = f"https://graph.microsoft.com/v1.0/shares/u!{share_id}/driveItem/children"
+    resp = requests.get(url, headers={"Authorization": f"Bearer {token}"})
+    resp.raise_for_status()
+    entries = resp.json().get("value", [])
+    return [
+        entry for entry in entries
+        if entry.get("folder") and entry["name"].startswith("Session_")
+    ]
+
 def _online_worker(job_id, base_dir, token, action, language, instruction, q, cancel):
     def put(msg): q.put(msg)
     try:
-        put("Downloading from OneDrive…")
-        tmp_dir = tempfile.mkdtemp()
-        try:
-            inp, drive_id, _, sess_map = download_sharepoint_folder(
-                share_link=base_dir, temp_dir=tmp_dir, access_token=token
-            )
-        except Exception as e:
-            put(f"[ERROR] Failed to download: {str(e)}")
-            put(traceback.format_exc())
-            return
+        # 1) list session children
+        put("Checking for multiple sessions in OneDrive…")
+        sessions_meta = _list_session_children(base_dir, token)
 
-        sessions = [
-            os.path.join(root, subdir)
-            for root, dirs, _ in os.walk(inp)
-            for subdir in dirs if subdir.startswith("Session_")
-        ]
-
-        for session in sessions:
+        # 2) if no children, treat the link itself as one session
+        if not sessions_meta:
+            sessions_meta = [{"webUrl": base_dir}]
+        
+        print(f"Found {len(sessions_meta)} sessions")
+        put(f"Found {len(sessions_meta)} sessions")
+        for entry in sessions_meta:
             if cancel.is_set():
                 put("[CANCELLED]")
                 break
-            name = os.path.basename(session)
-            put(f"Processing session: {name}")
 
+            session_link = entry.get("webUrl")
+            # download the folder and get sess_map
+            put(f"Downloading from onedrive")
+            tmp_dir = tempfile.mkdtemp()
+            try:
+                inp, drive_id, _, sess_map = download_sharepoint_folder(
+                    share_link=session_link,
+                    temp_dir=tmp_dir,
+                    access_token=token
+                )
+            except Exception as e:
+                put(f"[ERROR] Failed to download session: {e}")
+                shutil.rmtree(tmp_dir, ignore_errors=True)
+                continue
+
+            # determine real name: first from Graph metadata, else from sess_map keys
+            session_name = entry.get("name") or next(iter(sess_map.keys()), Path(inp).name)
+            put(f"Processing session: {session_name}")
+
+            # locate the actual session folder on disk
+            # download_sharepoint_folder unpacks to a folder named by the real folder
+            session_path = os.path.join(inp, session_name)
+            if not os.path.isdir(session_path):
+                # fallback if download flattened it into inp itself
+                session_path = inp
+
+            # do the work
             uploads = []
             if action == "transcribe":
-                Transcriber(session, language, "cpu").process_data(verbose=True)
+                Transcriber(session_path, language, "cpu").process_data(verbose=True)
                 uploads = ["transcription.log"]
             elif action == "translate":
-                Translator(session, language, instruction, "cpu").process_data(verbose=True)
+                Translator(session_path, language, instruction, "cpu").process_data(verbose=True)
                 uploads = ["translation.log"]
             elif action == "gloss":
-                Glosser(session, language, instruction).process_data()
+                Glosser(session_path, language, instruction).process_data()
             elif action == "create columns":
-                create_columns(session, language)
+                create_columns(session_path, language)
 
             uploads.append("trials_and_sessions_annotated.xlsx")
-            for file_name in uploads:
+
+            # upload each result
+            for fname in uploads:
                 if cancel.is_set():
                     put("[CANCELLED]")
                     break
-                file_path = os.path.join(session, file_name)
-                if not os.path.exists(file_path):
-                    put(f"Skipping missing: {file_name}")
+                local_fp = os.path.join(session_path, fname)
+                if not os.path.exists(local_fp):
+                    put(f"Skipping missing: {fname}")
                     continue
-                put(f"Uploading file: {file_name}")
+                put(f"Uploading {fname} for {session_name}")
+                # use our fixed helper
                 upload_file_replace_in_onedrive(
-                    local_file_path=file_path,
+                    local_file_path=local_fp,
                     target_drive_id=drive_id,
-                    parent_folder_id=sess_map.get(name, ""),
-                    file_name_in_folder=file_name,
+                    parent_folder_id=sess_map.get(session_name, ""),
+                    file_name_in_folder=fname,
                     access_token=token
                 )
-            put(f"[DONE UPLOADED] {name}")
+
+            shutil.rmtree(tmp_dir, ignore_errors=True)
+            put(f"[DONE UPLOADED] {session_name}")
+
     except Exception as e:
+        print(f"Error in online worker: {e}")
         put(f"[ERROR] {e}")
         put(traceback.format_exc())
     finally:
         put("[DONE ALL]")
         jobs.pop(job_id, None)
+
+
 
 # ————————————————————————————————————————————————————————————————
 # Kick off the appropriate worker
