@@ -265,7 +265,8 @@ def _online_worker(job_id, base_dir, token, action, language, instruction, q, ca
 
             session_link = entry.get("webUrl")
             # download the folder and get sess_map
-            put(f"Downloading from onedrive")
+            session_name = entry.get("name") or next(iter(sess_map.keys()), Path(inp).name)
+            put(f"Downloading from onedrive: {session_name}")
             tmp_dir = tempfile.mkdtemp()
             try:
                 inp, drive_id, _, sess_map = download_sharepoint_folder(
@@ -279,7 +280,6 @@ def _online_worker(job_id, base_dir, token, action, language, instruction, q, ca
                 continue
 
             # determine real name: first from Graph metadata, else from sess_map keys
-            session_name = entry.get("name") or next(iter(sess_map.keys()), Path(inp).name)
             put(f"Processing session: {session_name}")
 
             # locate the actual session folder on disk
@@ -324,6 +324,7 @@ def _online_worker(job_id, base_dir, token, action, language, instruction, q, ca
                 )
 
             shutil.rmtree(tmp_dir, ignore_errors=True)
+            print(f"Uploaded {fname} for {session_name}")
             put(f"[DONE UPLOADED] {session_name}")
 
     except Exception as e:
