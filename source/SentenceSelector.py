@@ -25,70 +25,63 @@ import openpyxl
 from openpyxl.styles import Font
 import pandas as pd
 from tqdm import tqdm
-import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM
 from functions import set_global_variables, find_language
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_ollama.llms import OllamaLLM
+
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
 
 class SentenceSelector():
-    def __init__(self, input_dir, language, study, device):
+    def __init__(self, input_dir, language, study):
         self.input_dir = input_dir
         self.language = language
         self.language_code = find_language(language, LANGUAGES)
         self.study = study
-        self.device = device
-        self.model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3.2-1B")
-        self.tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-1B")
+        self.llm_model = OllamaLLM(model="mistral")
 
     def choose_sentences(self, df, verbose=False):
-        # Handle the case where the language is non-Latin:
         if self.language_code in NO_LATIN:
-            raise NotImplementedError("Function for no latin languages not implemented yet.")
+            raise NotImplementedError("Function for no Latin languages not implemented yet.")
         else:
             source = "latin_transcription_everything"
             target = "latin_transcription_utterance_used"
 
-        # Ensure instruction is defined
-        if 'H' in self.study:
-            instruction = "relative sentences"
-        else:
-            instruction = "default instruction"
+        instruction = "relative clauses" if 'H' in self.study else "default instruction"
 
-        prompt = (f"This is a study about {instruction} in {self.language}. Select the sentences that are most relevant to the topic of {instruction} "
-                f"and write them in the same order as they appear in the text. Important sentences are not only {instruction} "
-                f"but also noun phrases, for example. This is the text: \n")
-        
-        # Initialize target column as empty strings
+        # Define LangChain prompt template
+        template = (
+            f"This is a study about {instruction} in {self.language}. "
+            f"In the following text, extract only the phrases or sentences that contain {instruction}. "
+            f"Only select and list the phrases or sentences that contain such {instruction}. "
+            "Keep the original order in which these appear in the text. "
+            "Don't add anything else like e.g. commentary or translations to your response. "
+            "Your response should only consist of the extracted sentences."
+            "Here is the text: {text}"
+        )
+        prompt = ChatPromptTemplate.from_template(template)
+        chain = prompt | self.llm_model
+
         df[target] = ""
-        df[target] = df[target].astype('object') 
+        df[target] = df[target].astype('object')
 
-        # Process each non-null sentence in the source column
         for text in df[source].dropna():
-            # Identify all occurrences of the sentence in the DataFrame
             series = df[df.isin([text])].stack()
             for idx, _ in series.items():
-                # Initialize target cell if it is NaN
                 if pd.isna(df.at[idx[0], target]):
                     df.at[idx[0], target] = ""
-                
-                # Append text to the prompt for this sentence
-                order = f"{prompt} {text} Write your response: \n"
-                # Use the complete prompt (order) when tokenizing
-                inputs = self.tokenizer(order, return_tensors="pt")
-                generate_ids = self.model.generate(inputs.input_ids, max_length=30)
-                response = self.tokenizer.batch_decode(generate_ids, skip_special_tokens=True)[0]
-                # Clean up the response by removing the prompt parts
-                response = response.replace(prompt, "").replace("Write your response:", "").strip()
+
+                response = chain.invoke({"text": text})
+                response_text = str(response).strip()
+
                 if verbose:
-                    print(f"Response: {response}")
-                if response == "":
-                    continue
-                df.at[idx[0], target] += response + "\n"
-        
+                    print(f"Response: {response_text}")
+
+                if response_text:
+                    df.at[idx[0], target] += response_text + "\n"
+
         return df
 
-        
     def process_data(self, verbose=False):
         files_to_process = []
         for subdir, _, files in os.walk(self.input_dir):
@@ -147,7 +140,7 @@ def main():
     language = args.source_language.lower()
 
     # Create an instance of Transliterator and process the data
-    sentenceSelector = SentenceSelector(args.input_dir, language, args.study, verbose=True, device="cpu")
+    sentenceSelector = SentenceSelector(args.input_dir, language, args.study)
     sentenceSelector.process_data()
 
 
