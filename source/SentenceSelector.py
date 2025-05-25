@@ -38,7 +38,7 @@ class SentenceSelector():
         self.language = language
         self.language_code = find_language(language, LANGUAGES)
         self.study = study
-        self.llm_model = OllamaLLM(model="mistral")
+        self.llm_model = OllamaLLM(model="llama3.3")
 
     def choose_sentences(self, df, verbose=False):
         if self.language_code in NO_LATIN:
