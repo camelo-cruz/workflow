@@ -78,7 +78,6 @@ def reorder_columns(df, language):
         new_column_order.remove('transcription_original_script_utterance_used')
     return df[new_column_order]
 
-
 def process_columns(directory, language):
     for subdir, dirs, files in os.walk(directory):
         excel_file_path = os.path.join(subdir, 'trials_and_sessions_annotated.xlsx')
