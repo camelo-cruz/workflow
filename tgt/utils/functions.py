@@ -4,10 +4,12 @@ import json
 import string
 import os
 import shutil
+import logging
 import subprocess
 import urllib.request
 import zipfile
-
+import openpyxl
+from openpyxl.styles import Font
 
 def load_json_file(file_path):
     """Utility function to load JSON files with error handling."""
@@ -135,4 +137,31 @@ def find_ffmpeg():
         ffmpeg_path = install_ffmpeg()
     else:
         return ffmpeg_path
+
+
+def format_excel_output(self, excel_output_file, columns_to_highlight: list):
+    wb = openpyxl.load_workbook(excel_output_file)
+    ws = wb.active
+    red = Font(color="FF0000")
+    headers = [cell.value for cell in ws[1]]
+    idx_map = {h: i+1 for i,h in enumerate(headers) if h in columns_to_highlight}
+    for row in ws.iter_rows(min_row=2):
+        for col, col_i in idx_map.items():
+            cell = row[col_i-1]
+            if cell.value:
+                cell.font = red
+    wb.save(excel_output_file)
+
+
+def setup_logging(self, log_file_path):
+    """Set up file logging for a given directory."""
+    file_handler = logging.FileHandler(log_file_path)
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(
+        logging.Formatter(f"%(asctime)s - %(levelname)s - %(message)s", datefmt=timestamp)
+    )
+    logger.addHandler(file_handler)
+    logger.info("Logging to %s", log_file_path)
+    logger.info("Using ffmpeg from %s", ffmpeg_path)
+    return file_handler
 
