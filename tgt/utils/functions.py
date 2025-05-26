@@ -9,6 +9,7 @@ import subprocess
 import urllib.request
 import zipfile
 import openpyxl
+
 from openpyxl.styles import Font
 
 def load_json_file(file_path):
@@ -139,7 +140,7 @@ def find_ffmpeg():
         return ffmpeg_path
 
 
-def format_excel_output(self, excel_output_file, columns_to_highlight: list):
+def format_excel_output(excel_output_file, columns_to_highlight: list):
     wb = openpyxl.load_workbook(excel_output_file)
     ws = wb.active
     red = Font(color="FF0000")
@@ -153,15 +154,28 @@ def format_excel_output(self, excel_output_file, columns_to_highlight: list):
     wb.save(excel_output_file)
 
 
-def setup_logging(self, log_file_path):
-    """Set up file logging for a given directory."""
-    file_handler = logging.FileHandler(log_file_path)
+def setup_logging(logger, log_path):
+    logger.setLevel(logging.DEBUG)
+
+    # Clear existing handlers (avoid duplicates if run multiple times)
+    if logger.hasHandlers():
+        logger.handlers.clear()
+
+    # Console handler
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(logging.DEBUG)
+    console_formatter = logging.Formatter("%(message)s")
+    console_handler.setFormatter(console_formatter)
+
+    # File handler
+    file_handler = logging.FileHandler(log_path, mode='w', encoding='utf-8')
     file_handler.setLevel(logging.DEBUG)
-    file_handler.setFormatter(
-        logging.Formatter(f"%(asctime)s - %(levelname)s - %(message)s", datefmt=timestamp)
-    )
+    file_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    file_handler.setFormatter(file_formatter)
+
+    # Add both handlers
+    logger.addHandler(console_handler)
     logger.addHandler(file_handler)
-    logger.info("Logging to %s", log_file_path)
-    logger.info("Using ffmpeg from %s", ffmpeg_path)
-    return file_handler
+
+    return file_handler  # so you can later remove it if needed
 
