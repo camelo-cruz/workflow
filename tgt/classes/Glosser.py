@@ -34,7 +34,7 @@ from tqdm import tqdm
 from torch.serialization import safe_globals
 from spacy.cli import download
 from deep_translator import GoogleTranslator
-from ..utils.functions import set_global_variables, find_language
+from ..utils.functions import set_global_variables, find_language, format_excel_output
 from spacy.util import is_package
 
 
@@ -341,7 +341,9 @@ class Glosser():
                                     glossed_utterances.append('')
                             
                             df['automatic_glossing'] = glossed_utterances
+                            df['glossing_utterance_used'] = glossed_utterances
                             df.to_excel(excel_file, index=False, engine='openpyxl')
+                            format_excel_output(excel_file, ['glossing_utterance_used'])
                         else:
                             print('No column to transcribe in file:', file)
         except Exception as e:

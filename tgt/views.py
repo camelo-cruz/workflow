@@ -274,7 +274,7 @@ def _online_worker(job_id, base_dir, token, action, language, instruction, q, ca
                     access_token=token
                 )
             except Exception as e:
-                put(f"[ERROR] Failed to download session: {e}")
+                put(f"Failed to download session: {e}. Will skip.")
                 shutil.rmtree(tmp_dir, ignore_errors=True)
                 continue
 
