@@ -1,37 +1,19 @@
 const modeRadios = document.querySelectorAll('input[name="mode"]');
 const onlineUI = document.getElementById('online-ui');
-const connectBtn = document.getElementById('btn-connect');
-const manualInput = document.getElementById('manual-token');
-const setTokenBtn = document.getElementById('btn-set-token');
-const remoteBaseDir = document.getElementById('remote-base-dir');
 const uploadUI = document.getElementById('upload-ui');
+
 const fileInput = document.getElementById('file-input');
 const btnUpload = document.getElementById('btn-upload-folder');
 const btnProcess = document.getElementById('btn-process');
 const btnCancel = document.getElementById('btn-cancel');
 const statusEl = document.getElementById('status');
 const progressEl = document.getElementById('upload-progress');
-const form = document.getElementById('form-transcribe');
 const actionSelect = document.getElementById('action');
 const instructionSelect = document.getElementById('instruction');
 const instructionLabel  = document.querySelector('label[for="instruction"]');
 
   
 let uploadFiles = [], accessToken = null, jobId = null, evt = null;
-
-// On load, check if we have a job ID and access token
-window.addEventListener("load", () => {
-    jobId       = localStorage.getItem("job_id");
-    accessToken = localStorage.getItem("access_token");
-    const logs  = localStorage.getItem("logs");
-    if (logs) {
-        document.getElementById("logs").textContent = logs;
-    }
-    if (jobId) {
-        openStream();
-    }
-});
-
 
 // Selecting processing mode
 function onModeChange() {
@@ -57,49 +39,6 @@ function updateInstructionVisibility() {
 
 actionSelect.addEventListener('change', updateInstructionVisibility);
 updateInstructionVisibility();
-
-// Connecting to OneDrive
-function showManualFallback() {
-    statusEl.textContent = 'Authentication failed – paste your token';
-    manualInput.style.display = 'block';
-    setTokenBtn.style.display = 'block';
-}
-
-function setToken(token) {
-    accessToken = token;
-    localStorage.setItem('access_token', token);
-    connectBtn.style.display = 'none';
-    manualInput.style.display = 'none';
-    setTokenBtn.style.display = 'none';
-    btnProcess.disabled = false;
-    statusEl.textContent = 'OneDrive connected.';
-}
-
-connectBtn.addEventListener('click', () => {
-manualInput.style.display = 'none';
-setTokenBtn.style.display = 'none';
-const popup = window.open('/auth/start', 'authPopup', 'width=600,height=700');
-if (!popup) return showManualFallback();
-const timer = setInterval(() => {
-    if (!popup || popup.closed) {
-        clearInterval(timer);
-        fetch('/auth/token', { credentials: 'same-origin' })
-        .then(r => r.json())
-        .then(body => {
-            if (body.access_token) setToken(body.access_token);
-            else showManualFallback();
-        })
-        .catch(showManualFallback);
-    }
-}, 500);
-});
-
-
-setTokenBtn.addEventListener('click', () => {
-    const t = manualInput.value.trim();
-    if (!t) return alert('Please paste a valid token.');
-    setToken(t);
-});
 
 
 // Processing logic
