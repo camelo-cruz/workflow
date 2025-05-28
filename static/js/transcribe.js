@@ -1,19 +1,36 @@
 const modeRadios = document.querySelectorAll('input[name="mode"]');
 const onlineUI = document.getElementById('online-ui');
-const uploadUI = document.getElementById('upload-ui');
 
+
+const remoteBaseDir = document.getElementById('remote-base-dir');
+const uploadUI = document.getElementById('upload-ui');
 const fileInput = document.getElementById('file-input');
 const btnUpload = document.getElementById('btn-upload-folder');
 const btnProcess = document.getElementById('btn-process');
 const btnCancel = document.getElementById('btn-cancel');
 const statusEl = document.getElementById('status');
 const progressEl = document.getElementById('upload-progress');
+const form = document.getElementById('form-transcribe');
 const actionSelect = document.getElementById('action');
 const instructionSelect = document.getElementById('instruction');
 const instructionLabel  = document.querySelector('label[for="instruction"]');
 
   
 let uploadFiles = [], accessToken = null, jobId = null, evt = null;
+
+// On load, check if we have a job ID and access token
+window.addEventListener("load", () => {
+    jobId       = localStorage.getItem("job_id");
+    accessToken = localStorage.getItem("access_token");
+    const logs  = localStorage.getItem("logs");
+    if (logs) {
+        document.getElementById("logs").textContent = logs;
+    }
+    if (jobId) {
+        openStream();
+    }
+});
+
 
 // Selecting processing mode
 function onModeChange() {

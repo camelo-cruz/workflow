@@ -1,34 +1,19 @@
 const connectBtn = document.getElementById('btn-connect');
-const manualInput = document.getElementById('manual-token');
 const setTokenBtn = document.getElementById('btn-set-token');
-const statusEl = document.getElementById('status');
-const btnProcess = document.getElementById('btn-process');
+const manualInput = document.getElementById('manual-token');
 
-
-connectBtn.addEventListener('click', () => {
-    manualInput.style.display = 'none';
-    setTokenBtn.style.display = 'none';
-    const popup = window.open('/auth/start', 'authPopup', 'width=600,height=700');
-    if (!popup) return showManualFallback();
-    const timer = setInterval(() => {
-        if (!popup || popup.closed) {
-            clearInterval(timer);
-            fetch('/auth/token', { credentials: 'same-origin' })
-            .then(r => r.json())
-            .then(body => {
-                if (body.access_token) setToken(body.access_token);
-                else showManualFallback();
-            })
-            .catch(showManualFallback);
-        }
-    }, 500);
+// 1) Handle incoming postMessage from popup
+window.addEventListener('message', event => {
+  if (event.origin !== window.location.origin) return;
+  const { access_token } = event.data || {};
+  if (access_token) {
+    // real OAuth success
+    applyAuthenticatedState('✅ Authenticated to OneDrive');
+    persistToken(access_token);
+  } else {
+    showManualFallback();
+  }
 });
-
-function showManualFallback() {
-    statusEl.textContent = 'Authentication failed – paste your token';
-    manualInput.style.display = 'block';
-    setTokenBtn.style.display = 'block';
-};
 
 function setToken(token) {
     accessToken = token;
@@ -38,22 +23,29 @@ function setToken(token) {
     setTokenBtn.style.display = 'none';
     btnProcess.disabled = false;
     statusEl.textContent = 'OneDrive connected.';
-};
+}
+
+connectBtn.addEventListener('click', () => {
+manualInput.style.display = 'none';
+setTokenBtn.style.display = 'none';
+statusEl.textContent = 'Connection to OneDrive in progress...';
+const popup = window.open('/auth/start', 'authPopup', 'width=600,height=700');
+    if (!popup) return showManualFallback();
+
+  // fallback if no postMessage arrives in 3 min
+  const fallbackTimer = setTimeout(showManualFallback, 180_000);
+  window.addEventListener('message', () => clearTimeout(fallbackTimer), { once: true });
+});
+
+// Connecting to OneDrive
+function showManualFallback() {
+    statusEl.textContent = 'Authentication failed – paste your token';
+    manualInput.style.display = 'block';
+    setTokenBtn.style.display = 'block';
+}
 
 setTokenBtn.addEventListener('click', () => {
     const t = manualInput.value.trim();
     if (!t) return alert('Please paste a valid token.');
     setToken(t);
-});
-
-window.addEventListener("load", () => {
-    jobId       = localStorage.getItem("job_id");
-    accessToken = localStorage.getItem("access_token");
-    const logs  = localStorage.getItem("logs");
-    if (logs) {
-        document.getElementById("logs").textContent = logs;
-    }
-    if (jobId) {
-        openStream();
-    }
 });
