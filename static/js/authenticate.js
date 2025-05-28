@@ -15,7 +15,7 @@ connectBtn.addEventListener('click', () => {
     setTokenBtn.style.display = 'block';
     statusEl.textContent = 'Connection to OneDrive in Progress...';
     window.open('/auth/start', 'authPopup', 'width=600,height=700');
-});
+}); 
 
 function setToken(token) {
     msal_token = token;
