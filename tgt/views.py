@@ -1,7 +1,6 @@
 import os
 import multiprocessing
 import tempfile
-import torch
 import uuid
 import json
 import threading
@@ -12,7 +11,6 @@ import shutil
 import queue
 import msal
 import base64
-import requests
 from zipfile import ZipFile
 from pathlib import Path
 from dotenv import load_dotenv
@@ -25,7 +23,6 @@ from .classes.Translator import Translator
 from .classes.Glosser import Glosser
 from .utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
 from .utils.reorder_columns import create_columns
-from urllib.parse import urlencode
 
 print("Running version:", os.getenv("APP_VERSION", "dev"))
 
@@ -152,31 +149,6 @@ def download_zip(request, job_id):
     threading.Thread(target=lambda: (time.sleep(2), cleanup())).start()
     return response
 
-
-def upload_file_replace_in_onedrive(local_file_path, target_drive_id,
-                                    parent_folder_id, file_name_in_folder,
-                                    access_token):
-    """
-    Simple (small-file) replace-upload via Graph:
-      PUT /drives/{drive-id}/items/{parent-id}:/{filename}:/content
-    """
-    url = (
-      f"https://graph.microsoft.com/v1.0/drives/{target_drive_id}"
-      f"/items/{parent_folder_id}:/{file_name_in_folder}:/content"
-    )
-
-    headers = {
-        "Authorization": f"Bearer {access_token}",
-        # must be octet-stream for binary
-        "Content-Type": "application/octet-stream"
-    }
-
-    with open(local_file_path, "rb") as f:
-        data = f.read()
-
-    resp = requests.put(url, headers=headers, data=data)
-    resp.raise_for_status()   # will surface any 4xx/5xx as exception
-
 # ————————————————————————————————————————————————————————————————
 # Worker: offline (unzipped folder already on disk)
 # ————————————————————————————————————————————————————————————————
@@ -274,7 +246,7 @@ def _online_worker(job_id, base_dir, token, action, language, instruction, q, ca
                     access_token=token
                 )
             except Exception as e:
-                put(f"[ERROR] Failed to download session: {e}")
+                put(f"Failed to download session: {e}. Will skip.")
                 shutil.rmtree(tmp_dir, ignore_errors=True)
                 continue
 
