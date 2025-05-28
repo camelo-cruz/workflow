@@ -3,23 +3,18 @@ const manualInput = document.getElementById('manual-token');
 const setTokenBtn = document.getElementById('btn-set-token');
 
 
+window.addEventListener('storage', (evt) => {
+  if (evt.key === 'msal_token' && evt.newValue) {
+    setToken(evt.newValue);
+    localStorage.removeItem('msal_token');
+  }
+});
+
 connectBtn.addEventListener('click', () => {
     manualInput.style.display = 'none';
     setTokenBtn.style.display = 'none';
-    const popup = window.open('/auth/start', 'authPopup', 'width=600,height=700');
-    if (!popup) return showManualFallback();
-    const timer = setInterval(() => {
-        if (!popup || popup.closed) {
-            clearInterval(timer);
-            fetch('/auth/token', { credentials: 'same-origin' })
-            .then(r => r.json())
-            .then(body => {
-                if (body.access_token) setToken(body.access_token);
-                else showManualFallback();
-            })
-            .catch(showManualFallback);
-        }
-    }, 500);
+    statusEl.textContent = 'Connection to OneDrive in Progress...';
+    window.open('/auth/start', 'authPopup', 'width=600,height=700');
 });
 
 function showManualFallback() {
@@ -29,8 +24,8 @@ function showManualFallback() {
 };
 
 function setToken(token) {
-    accessToken = token;
-    localStorage.setItem('access_token', token);
+    msal_token = token;
+    localStorage.setItem('msal_token', token);
     connectBtn.style.display = 'none';
     manualInput.style.display = 'none';
     setTokenBtn.style.display = 'none';
@@ -46,7 +41,7 @@ setTokenBtn.addEventListener('click', () => {
 
 window.addEventListener("load", () => {
     jobId       = localStorage.getItem("job_id");
-    accessToken = localStorage.getItem("access_token");
+    msal_token = localStorage.getItem("msal_token");
     const logs  = localStorage.getItem("logs");
     if (logs) {
         document.getElementById("logs").textContent = logs;

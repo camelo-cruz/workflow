@@ -63,24 +63,19 @@
   </div>
 
   <script>
-    // Server should inject the token into this variable
-    const token = "{{ token }}";
+  const token = "{{ token }}";
 
-    const copyBtn = document.getElementById('copy-btn');
-    const statusEl = document.getElementById('copy-status');
-
-    copyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(token)
-        .then(() => {
-          statusEl.style.visibility = 'visible';
-          setTimeout(() => {
-            statusEl.style.visibility = 'hidden';
-          }, 2000);
-        })
-        .catch(err => {
-          alert('Failed to copy token: ' + err);
-        });
-    });
+  localStorage.setItem('msal_token', token);
+  const copyBtn = document.getElementById('copy-btn');
+  const statusEl = document.getElementById('copy-status');
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(token)
+      .then(() => {
+        statusEl.style.visibility = 'visible';
+        setTimeout(() => { statusEl.style.visibility = 'hidden'; }, 2000);
+      })
+      .catch(err => { alert('Failed to copy token: ' + err); });
+   });
   </script>
 </body>
 </html>
