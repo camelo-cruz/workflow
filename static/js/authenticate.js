@@ -11,17 +11,11 @@ window.addEventListener('storage', (evt) => {
 });
 
 connectBtn.addEventListener('click', () => {
-    manualInput.style.display = 'none';
-    setTokenBtn.style.display = 'none';
+    manualInput.style.display = 'block';
+    setTokenBtn.style.display = 'block';
     statusEl.textContent = 'Connection to OneDrive in Progress...';
     window.open('/auth/start', 'authPopup', 'width=600,height=700');
 });
-
-function showManualFallback() {
-    statusEl.textContent = 'Authentication failed – paste your token';
-    manualInput.style.display = 'block';
-    setTokenBtn.style.display = 'block';
-};
 
 function setToken(token) {
     msal_token = token;
