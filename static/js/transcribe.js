@@ -77,7 +77,10 @@ updateInstructionVisibility();
         headers: { "Authorization": "Bearer " + token },
         body:    data
       });
-      console.log("Processing online with token:", token);
+      const text = await res.text();          // grab the raw response
+      console.log("POST /process/ →", res.status, res.statusText);
+      console.log("Response body:", text);
+  
       if (!res.ok) {
         throw new Error(`Server error: ${res.status} ${res.statusText}`);
       }
