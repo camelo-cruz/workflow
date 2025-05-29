@@ -48,13 +48,11 @@ parent_dir = os.path.dirname(current_dir)
 
 
 class Transcriber:
-    def __init__(self, input_dir, language, device=None, drive_id=None, onedrive_token=None):
+    def __init__(self, input_dir, language, device=None):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.batch_size = 8
-        self.drive_id = drive_id
-        self.onedrive_token = onedrive_token
         self.hugging_key = self._load_hugging_face_token()
 
     def _load_hugging_face_token(self):
@@ -68,6 +66,10 @@ class Transcriber:
             raise ValueError("Hugging Face key not found. Set it in Hugging Face Secrets or in materials/secrets.env")
         logger.info(f"Using Hugging Face token: {token[:10]}...")
         return token
+    
+    def _append_to_cell(self, df, idx, column, text):
+        old_val = df.at[idx, column]
+        df.at[idx, column] = ("" if pd.isna(old_val) else old_val) + text
 
     def load_trials_data(self, base_dir):
         csv_file = os.path.join(base_dir, 'trials_and_sessions.csv')
@@ -89,10 +91,6 @@ class Transcriber:
             df["transcription_original_script_utterance_used"] = ""
 
         return df, excel_out
-
-    def _append_to_cell(self, df, idx, column, text):
-        old_val = df.at[idx, column]
-        df.at[idx, column] = ("" if pd.isna(old_val) else old_val) + text
 
     def add_transcription_to_df(self, df, file, transcription, count, filename_regexp):
         series = df[df.isin([file])].stack()
@@ -123,43 +121,46 @@ class Transcriber:
                 self._append_to_cell(df, row_idx, col_name, text_auto + text_suffix)
 
     def transcribe_and_diarize(self, path_to_audio):
-        if self.language_code in ['zh', 'bn']:
-            model = whisper.load_model("large-v2", self.device)
-            prompt = "请使用简体中文转录。" if self.language_code == 'zh' else None
-            res = model.transcribe(path_to_audio, language=self.language_code, initial_prompt=prompt)
-            return res["text"].replace(prompt, "").strip() if prompt else res["text"]
-        
-        model = None
-        try:
-            model = whisperx.load_model("large-v2", self.device, compute_type="float16", language=self.language_code)
-        except:
-            model = whisperx.load_model("large-v2", self.device, compute_type="int8", language=self.language_code)
-        audio = whisperx.load_audio(path_to_audio)
-        result = model.transcribe(audio, batch_size=self.batch_size, language=self.language_code)
+        if self.language_code in ['en', 'fr', 'de', 'es', 'it', 'ja', 'nl', 'uk', 'pt', 'ar', 'cs',
+                             'ru', 'pl', 'hu', 'fi', 'fa', 'el', 'tr', 'da', 'he', 'vi', 'ko',
+                             'ur', 'te', 'hi', 'ca', 'ml', 'no', 'nn', 'sk', 'sl', 'hr', 'ro',
+                             'eu', 'gl', 'ka', 'lv', 'tl', 'zh']:
+            model = None
+            try:
+                model = whisperx.load_model("large-v2", self.device, compute_type="float16", language=self.language_code)
+            except:
+                model = whisperx.load_model("large-v2", self.device, compute_type="int8", language=self.language_code)
+            audio = whisperx.load_audio(path_to_audio)
+            result = model.transcribe(audio, batch_size=self.batch_size, language=self.language_code)
 
-        model_a, metadata = whisperx.load_align_model(language_code=result["language"], device=self.device)
-        result = whisperx.align(result["segments"], model_a, metadata, audio, self.device)
+            model_a, metadata = whisperx.load_align_model(language_code=result["language"], device=self.device)
+            result = whisperx.align(result["segments"], model_a, metadata, audio, self.device)
 
-        diarize_model = DiarizationPipeline(model_name="pyannote/speaker-diarization-3.1", use_auth_token=self.hugging_key, device=self.device)
-        diarize_segments = diarize_model(audio)
-        result = whisperx.assign_word_speakers(diarize_segments, result)
+            diarize_model = DiarizationPipeline(model_name="pyannote/speaker-diarization-3.1", use_auth_token=self.hugging_key, device=self.device)
+            diarize_segments = diarize_model(audio)
+            result = whisperx.assign_word_speakers(diarize_segments, result)
 
-        full_sentences, buffer_speaker, buffer_text = [], None, ""
-        for seg in result["segments"]:
-            spk = seg.get("speaker", buffer_speaker)
-            if spk is None: continue
-            txt = seg["text"].strip()
+            full_sentences, buffer_speaker, buffer_text = [], None, ""
+            for seg in result["segments"]:
+                spk = seg.get("speaker", buffer_speaker)
+                if spk is None: continue
+                txt = seg["text"].strip()
 
-            if buffer_speaker is None:
-                buffer_speaker, buffer_text = spk, txt
-            elif spk == buffer_speaker:
-                buffer_text += " " + txt
-            else:
+                if buffer_speaker is None:
+                    buffer_speaker, buffer_text = spk, txt
+                elif spk == buffer_speaker:
+                    buffer_text += " " + txt
+                else:
+                    full_sentences.append(f"{buffer_speaker}: {buffer_text}")
+                    buffer_speaker, buffer_text = spk, txt
+
+            if buffer_speaker:
                 full_sentences.append(f"{buffer_speaker}: {buffer_text}")
-                buffer_speaker, buffer_text = spk, txt
 
-        if buffer_speaker:
-            full_sentences.append(f"{buffer_speaker}: {buffer_text}")
+        else:
+            model = whisper.load_model("large-v2", self.device)
+            res = model.transcribe(path_to_audio, language=self.language_code)
+            return res["text"]
 
         return "  ".join(full_sentences)
 
@@ -193,7 +194,8 @@ class Transcriber:
                 logger.info(f"Processing file: {file} ({count}/{len(files)})")
                 try:
                     text = self.transcribe_and_diarize(path)
-                    text = clean_string(text)
+                    if self.language_code == 'de':
+                        text = clean_string(text)
                     if verbose:
                         tqdm.write(text)
                     self.add_transcription_to_df(df, file, text, count, filename_regexp)
