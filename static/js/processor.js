@@ -13,7 +13,16 @@ export async function startProcessing(elements, streamer) {
     const data = new FormData();
     data.append("action", actionSelect.value);
     data.append("instruction", instruction.value);
-    data.append("language", document.getElementById('language').value);
+    const langEl = document.getElementById('language');
+    const lang   = langEl.value.trim();
+    if (!lang) {
+      statusEl.textContent = "Please select a language.";
+      btnProcess.hidden = false;
+      btnCancel.hidden = true;
+      langEl.focus();
+      return;
+    }
+    data.append("language", lang);
 
     if (mode === 'online') {
       data.append("base_dir", document.getElementById('remote-base-dir').value);

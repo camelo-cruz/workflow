@@ -1,41 +1,69 @@
 // auth.js
 let accessToken = null;
 
-export function initAuth(connectBtn, manualInput, setTokenBtn, statusEl) {
+export function initAuth(connectBtn, logoutBtn, manualInput, setTokenBtn, statusEl) {
+  // Listen for storage-based token injection
   window.addEventListener('storage', evt => {
     if (evt.key === 'access_token' && evt.newValue) {
-      setToken(evt.newValue, connectBtn, manualInput, setTokenBtn, statusEl);
+      applyToken(evt.newValue, connectBtn, logoutBtn, manualInput, setTokenBtn, statusEl);
       localStorage.removeItem('access_token');
     }
   });
 
+  // “Connect” button shows the manual-paste UI
   connectBtn.addEventListener('click', () => {
-    manualInput.style.display = 'block';
-    setTokenBtn.style.display = 'block';
-    statusEl.textContent = 'Connecting to OneDrive…';
+    manualInput.style.display  = 'block';
+    setTokenBtn.style.display  = 'block';
+    statusEl.textContent       = 'Connecting to OneDrive…';
     window.open('/auth/start', 'authPopup', 'width=600,height=700');
   });
 
+  // “Use Token” button; paste from popup
   setTokenBtn.addEventListener('click', () => {
     const t = manualInput.value.trim();
     if (!t) return alert('Please paste a valid token.');
-    setToken(t, connectBtn, manualInput, setTokenBtn, statusEl);
+    applyToken(t, connectBtn, logoutBtn, manualInput, setTokenBtn, statusEl);
   });
 
-  // on load, restore token if present
+  // On load: if we already have a token, apply it
   const stored = localStorage.getItem('access_token');
   if (stored) {
-    setToken(stored, connectBtn, manualInput, setTokenBtn, statusEl);
+    applyToken(stored, connectBtn, logoutBtn, manualInput, setTokenBtn, statusEl);
   }
 }
 
-function setToken(token, connectBtn, manualInput, setTokenBtn, statusEl) {
+// This actually hides/shows everything once we have a token
+function applyToken(token, connectBtn, logoutBtn, manualInput, setTokenBtn, statusEl) {
   accessToken = token;
   localStorage.setItem('access_token', token);
-  connectBtn.style.display  = 'none';
-  manualInput.style.display = 'none';
-  setTokenBtn.style.display = 'none';
-  statusEl.textContent      = 'OneDrive connected.';
+
+  console.log('applyToken() after:', { 
+    access_token: localStorage.getItem('access_token'),
+    allKeys: Object.keys(localStorage)
+  });
+
+  connectBtn.style.display     = 'none';
+  logoutBtn.style.display      = 'block';
+  manualInput.style.display    = 'none';
+  setTokenBtn.style.display    = 'none';
+  statusEl.textContent         = 'OneDrive connected.';
+}
+
+// Expose for UI so the user can log out
+export function clearAccessToken(connectBtn, logoutBtn, manualInput, setTokenBtn, statusEl) {
+  accessToken = null;
+  localStorage.removeItem('access_token');
+
+  console.log('clearAccessToken() after:', { 
+    access_token: localStorage.getItem('access_token'),
+    allKeys: Object.keys(localStorage)
+  });
+
+  connectBtn.style.display     = 'block';
+  logoutBtn.style.display      = 'none';
+  manualInput.style.display    = 'none';
+  setTokenBtn.style.display    = 'none';
+  statusEl.textContent         = 'Not connected to OneDrive';
 }
 
 export function getAccessToken() {

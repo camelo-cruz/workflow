@@ -19,4 +19,10 @@ window.addEventListener('load', () => {
   if (pending) {
     streamer.open(pending);
   }
+
+  console.log('main.js loaded', {
+    access_token: localStorage.getItem('access_token'),
+    job_id: localStorage.getItem('job_id'),
+    allKeys: Object.keys(localStorage)
+  });
 });

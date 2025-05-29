@@ -1,5 +1,5 @@
 // ui.js
-import { initAuth, getAccessToken } from './auth.js';
+import { initAuth, getAccessToken , clearAccessToken} from './auth.js';
 
 export function initUI() {
   const modeRadios    = document.querySelectorAll('input[name="mode"]');
@@ -15,10 +15,17 @@ export function initUI() {
   const instruction   = document.getElementById('instruction');
   const instructionLabel = document.querySelector('label[for="instruction"]');
   const connectBtn    = document.getElementById('btn-connect');
+  const logoutBtn     = document.getElementById('btn-logout');
   const manualInput   = document.getElementById('manual-token');
   const setTokenBtn   = document.getElementById('btn-set-token');
 
-  initAuth(connectBtn, manualInput, setTokenBtn, statusEl);
+  // Initialize authentication UIs
+  initAuth(connectBtn, logoutBtn, manualInput, setTokenBtn, statusEl);
+
+  // Wire up “Logout” now that clearAccessToken is available
+  logoutBtn.addEventListener('click', () => {
+    clearAccessToken(connectBtn, logoutBtn, manualInput, setTokenBtn, statusEl);
+  });
 
   // mode switching
   function onModeChange() {
