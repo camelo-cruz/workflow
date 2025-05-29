@@ -1,7 +1,6 @@
 const modeRadios = document.querySelectorAll('input[name="mode"]');
 const onlineUI = document.getElementById('online-ui');
 
-
 const remoteBaseDir = document.getElementById('remote-base-dir');
 const uploadUI = document.getElementById('upload-ui');
 const fileInput = document.getElementById('file-input');
@@ -15,8 +14,57 @@ const actionSelect = document.getElementById('action');
 const instructionSelect = document.getElementById('instruction');
 const instructionLabel  = document.querySelector('label[for="instruction"]');
 
-  
-let uploadFiles = [], accessToken = null, jobId = null, evt = null;
+const connectBtn = document.getElementById('btn-connect');
+const manualInput = document.getElementById('manual-token');
+const setTokenBtn = document.getElementById('btn-set-token');
+
+let uploadFiles = [], jobId = null, evt = null;
+var accessToken = null;
+
+// 1. Authentication handling
+
+window.addEventListener('storage', (evt) => {
+  if (evt.key === 'access_token' && evt.newValue) {
+    setToken(evt.newValue);
+    localStorage.removeItem('access_token');
+  }
+});
+
+connectBtn.addEventListener('click', () => {
+    manualInput.style.display = 'block';
+    setTokenBtn.style.display = 'block';
+    statusEl.textContent = 'Connection to OneDrive in Progress...';
+    window.open('/auth/start', 'authPopup', 'width=600,height=700');
+}); 
+
+  function setToken(token) {
+    accessToken = token;
+    localStorage.setItem('access_token', token);
+
+    connectBtn.style.display  = 'none';
+    manualInput.style.display = 'none';
+    setTokenBtn.style.display = 'none';
+    btnProcess.disabled       = false;
+    statusEl.textContent      = 'OneDrive connected.';
+  }
+
+setTokenBtn.addEventListener('click', () => {
+    const t = manualInput.value.trim();
+    if (!t) return alert('Please paste a valid token.');
+    setToken(t);
+});
+
+window.addEventListener("load", () => {
+    jobId       = localStorage.getItem("job_id");
+    accessToken = localStorage.getItem("access_token");
+    const logs  = localStorage.getItem("logs");
+    if (logs) {
+        document.getElementById("logs").textContent = logs;
+    }
+    if (jobId) {
+        openStream();
+    }
+});
 
 // On load, check if we have a job ID and access token
 window.addEventListener("load", () => {
@@ -31,6 +79,8 @@ window.addEventListener("load", () => {
     }
 });
 
+
+// 2. Processing handling
 
 // Selecting processing mode
 function onModeChange() {
@@ -63,7 +113,6 @@ updateInstructionVisibility();
     btnProcess.hidden = true;
     btnCancel.hidden = false;
     const mode = document.querySelector('input[name="mode"]:checked').value;
-    console.log("Processing in mode:", mode);
     const data = new FormData();
     data.append("action", document.getElementById('action').value);
     data.append("instruction", document.getElementById('instruction').value);
@@ -71,21 +120,11 @@ updateInstructionVisibility();
   
     if (mode==='online') {
       data.append("base_dir", document.getElementById('remote-base-dir').value);
-      const token = localStorage.getItem("access_token");  
-      const res   = await fetch("/process/", {
-        method:  "POST",
-        headers: { "Authorization": "Bearer " + token },
-        body:    data
-      });
-      const text = await res.text();          // grab the raw response
-      console.log("POST /process/ →", res.status, res.statusText);
-      console.log("Response body:", text);
-  
-      if (!res.ok) {
-        throw new Error(`Server error: ${res.status} ${res.statusText}`);
-      }
-
-      const js = await res.json();
+      data.append("access_token", accessToken);
+      console.log("Using access token:", accessToken);
+      // normal fetch
+      const res = await fetch("/process/",{method:"POST",body:data,credentials:"same-origin"});
+      const js  = await res.json();
       jobId = js.job_id;
       localStorage.setItem("job_id", jobId);
       openStream();
