@@ -23,6 +23,13 @@ export async function startProcessing(elements, streamer) {
         body: data,
         credentials: "same-origin"
       });
+      if (!res.ok) {
+        const error = await res.text();
+        statusEl.textContent = `Error: ${error}`;
+        btnProcess.hidden = false;
+        btnCancel.hidden  = true;
+        return;
+      }
       const { job_id } = await res.json();
       streamer.open(job_id);
     } else {
