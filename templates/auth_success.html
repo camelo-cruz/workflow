@@ -68,6 +68,7 @@
   localStorage.setItem('msal_token', token);
   const copyBtn = document.getElementById('copy-btn');
   const statusEl = document.getElementById('copy-status');
+  console.log('Access token:', token);
   copyBtn.addEventListener('click', () => {
     navigator.clipboard.writeText(token)
       .then(() => {
