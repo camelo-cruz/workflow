@@ -63,6 +63,7 @@ updateInstructionVisibility();
     btnProcess.hidden = true;
     btnCancel.hidden = false;
     const mode = document.querySelector('input[name="mode"]:checked').value;
+    console.log("Processing in mode:", mode);
     const data = new FormData();
     data.append("action", document.getElementById('action').value);
     data.append("instruction", document.getElementById('instruction').value);
@@ -70,10 +71,18 @@ updateInstructionVisibility();
   
     if (mode==='online') {
       data.append("base_dir", document.getElementById('remote-base-dir').value);
-      data.append("access_token", accessToken);
-      // normal fetch
-      const res = await fetch("/process/",{method:"POST",body:data,credentials:"same-origin"});
-      const js  = await res.json();
+      const token = localStorage.getItem("access_token");  
+      const res   = await fetch("/process/", {
+        method:  "POST",
+        headers: { "Authorization": "Bearer " + token },
+        body:    data
+      });
+      console.log("Processing online with token:", token);
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.status} ${res.statusText}`);
+      }
+
+      const js = await res.json();
       jobId = js.job_id;
       localStorage.setItem("job_id", jobId);
       openStream();
