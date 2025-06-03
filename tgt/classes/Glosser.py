@@ -4,7 +4,7 @@ import shutil
 import tempfile
 import logging
 import pandas as pd
-from tqdm import tqdm
+from tqdm import tqdm 
 
 from .glossing.gloss_strategy import GlossStrategy
 from .glossing.gloss_strategy_factory import GlossStrategyFactory
