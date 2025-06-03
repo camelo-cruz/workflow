@@ -54,14 +54,20 @@ def set_global_variables():
     languages_path = os.path.join(parent_dir, 'materials', 'LANGUAGES')
     columns_path = os.path.join(parent_dir, 'materials', 'OBLIGATORY_COLUMNS')
     nolatin_path = os.path.join(parent_dir, 'materials', 'NO_LATIN')
-    leipzig_path = os.path.join(parent_dir, 'materials', 'LEIPZIG_GLOSSARY')
 
     LANGUAGES = load_json_file(languages_path)
     OBLIGATORY_COLUMNS = load_text_file(columns_path)
     NO_LATIN = load_text_file(nolatin_path)
-    LEIPZIG_GLOSSARY = load_json_file(leipzig_path)
 
-    return LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, LEIPZIG_GLOSSARY
+    return LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS
+
+def load_glossing_rules(filename):
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(script_dir)
+
+    file = os.path.join(parent_dir, 'materials', 'glossing_rules', filename)
+
+    return load_json_file(file)
 
 def find_language(language, LANGUAGES):
     """Finds the language code by its name."""

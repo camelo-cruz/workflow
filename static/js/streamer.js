@@ -36,6 +36,7 @@ export class Streamer {
     this.btnCancel.hidden  = true;
     this.btnProcess.hidden = false;
     localStorage.removeItem("job_id");
+    this.statusEl.textContent = 'finished';
     // download if offline:
     if (document.querySelector('input[name="mode"]:checked').value === 'upload') {
       fetch(`download/${this.jobId}/`)

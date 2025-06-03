@@ -50,7 +50,7 @@ jobs = {}
 def index(request):
     version = os.getenv("APP_VERSION", "dev")
     return render(request, "index.html", {
-        "app_version": version,   # ← changed from "version"
+        "app_version": version,
     })
 
 # ————————————————————————————————————————————————————————————————
