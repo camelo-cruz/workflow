@@ -2,7 +2,7 @@ import re
 import spacy
 from spacy.cli import download
 from spacy.util import is_package
-from ...utils.functions import load_glossing_rules
+from utils.functions import load_glossing_rules
 from deep_translator import GoogleTranslator
 from .default_gloss_strategy import DefaultGlossStrategy
 

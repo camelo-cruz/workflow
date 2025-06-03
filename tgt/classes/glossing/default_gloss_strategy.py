@@ -4,7 +4,7 @@ import spacy
 from deep_translator import GoogleTranslator
 from spacy.cli import download
 from spacy.util import is_package
-from ...utils.functions import load_glossing_rules
+from utils.functions import load_glossing_rules
 from .gloss_strategy import GlossStrategy
 
 

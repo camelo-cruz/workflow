@@ -4,7 +4,7 @@ import spacy_stanza
 from spacy.cli import download
 from spacy.util import is_package
 from .gloss_strategy import GlossStrategy
-from ...utils.functions import load_glossing_rules
+from utils.functions import load_glossing_rules
 
 from deep_translator import GoogleTranslator
 class VietnameseGlossStrategy(GlossStrategy):
