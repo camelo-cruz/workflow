@@ -19,7 +19,7 @@ export class Streamer {
     this.statusEl.textContent = `Job ${jobId}`;
     this.logsEl.textContent = "";
 
-    this.evt = new EventSource(`/stream/${jobId}/`);
+    this.evt = new EventSource(`/jobs/${jobId}/stream`);
     this.evt.onmessage = e => {
       const msg = e.data;
       if (msg === "[PING]") return;
@@ -38,7 +38,7 @@ export class Streamer {
     localStorage.removeItem("job_id");
     // download if offline:
     if (document.querySelector('input[name="mode"]:checked').value === 'upload') {
-      fetch(`download/${this.jobId}/`)
+      fetch(`/jobs/download/${this.jobId}/`)
         .then(r => r.blob())
         .then(blob => {
           const url = URL.createObjectURL(blob);

@@ -27,7 +27,7 @@ export async function startProcessing(elements, streamer) {
     if (mode === 'online') {
       data.append("base_dir", document.getElementById('remote-base-dir').value);
       data.append("access_token", getAccessToken());
-      const res = await fetch("/process/", {
+      const res = await fetch("/jobs/process", {
         method: "POST",
         body: data,
         credentials: "same-origin"
@@ -55,7 +55,7 @@ export async function startProcessing(elements, streamer) {
 
       statusEl.textContent = "Uploading…";
       const xhr = new XMLHttpRequest();
-      xhr.open("POST", "/process/");
+      xhr.open("POST", "/jobs/process");
       xhr.withCredentials = true;
       xhr.upload.onprogress = e => {
         if (e.lengthComputable) {
@@ -72,7 +72,7 @@ export async function startProcessing(elements, streamer) {
   };
 
   btnCancel.onclick = async () => {
-    await fetch("/cancel/", {
+    await fetch("/jobs/cancel", {
       method: "POST",
       headers: { "Content-Type":"application/json" },
       body: JSON.stringify({ job_id: streamer.jobId }),

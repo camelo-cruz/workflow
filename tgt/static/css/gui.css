@@ -1,4 +1,4 @@
-/* Global Layout */
+/* Reset & base */
 body, html {
   margin: 0;
   padding: 0;
@@ -26,10 +26,9 @@ body, html {
 }
 
 .sidebar .title {
-  margin-top: 0;
+  margin: 0 0 1.5rem;
   font-size: 1.8rem;
   text-align: center;
-  margin-bottom: 1.5rem;
 }
 
 /* Sidebar form layout */
@@ -38,7 +37,7 @@ body, html {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 300px; /* 💥 limit form width */
+  max-width: 300px; /* keep the form narrow */
   margin: 0 auto;
 }
 
@@ -49,6 +48,7 @@ body, html {
   width: 100%;
 }
 
+/* Inputs & selects */
 .sidebar input[type="text"],
 .sidebar select,
 .sidebar input[type="file"] {
@@ -60,46 +60,28 @@ body, html {
   box-sizing: border-box;
 }
 
-.sidebar input[type="checkbox"] {
-  margin-left: 0;
-  transform: scale(1.2);
-  margin-top: 0.5rem;
-}
-
-
+/* Buttons: primary & secondary share the same base styles */
 .sidebar .btn-primary,
 .sidebar .btn-secondary {
-  width: 100%; /* full width */
+  width: 100%;
   padding: 0.7rem;
   font-size: 1.1rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   text-align: center;
-  margin-top: 1rem; /* spacing between them */
+  margin-top: 1rem;
   box-sizing: border-box;
-}
-
-.sidebar .btn-primary {
   background-color: #9B0A0A;
   color: white;
 }
 
-.sidebar .btn-primary:hover {
-  background-color: #7F0707;
-}
-
-.sidebar .btn-secondary {
-  background-color: #9B0A0A;
-  color: white;
-}
-
+.sidebar .btn-primary:hover,
 .sidebar .btn-secondary:hover {
   background-color: #7F0707;
 }
 
-
-/* Status */
+/* Status box */
 .sidebar .status {
   margin-top: 1rem;
   font-size: 0.9rem;
@@ -110,13 +92,6 @@ body, html {
   width: 100%;
   text-align: center;
   box-sizing: border-box;
-}
-
-/* Logo */
-.sidebar-logo {
-  width: 120px;
-  display: block;
-  margin: 1rem auto;
 }
 
 /* Main panel (white) */
@@ -135,7 +110,7 @@ body, html {
 }
 
 .main .logo {
-  max-width: 120px; /* smaller logo */
+  max-width: 120px;
   height: auto;
   margin-bottom: 0.5rem;
 }
@@ -162,7 +137,9 @@ body, html {
   font-size: 1rem;
 }
 
+/* Progress bar */
 progress {
+  width: 100%;
   height: 20px;
   border-radius: 5px;
   appearance: none;
@@ -175,6 +152,6 @@ progress::-webkit-progress-bar {
 }
 
 progress::-webkit-progress-value {
-  background-color: #f44336; /* red bar */
+  background-color: #f44336; /* red fill */
   border-radius: 5px;
 }
