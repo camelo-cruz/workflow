@@ -34,4 +34,6 @@ openpyxl
 deepl
 deep_translator
 spacy
+spacy_stanza
 stanza
+python-multipart
