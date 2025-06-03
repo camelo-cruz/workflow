@@ -1,0 +1,38 @@
+{
+  "comment1": "Classifiers",
+  "con": ["CLF", null],
+  "cái": ["CLF", null],
+  "chiếc": ["CLF", null],
+  "đứa": ["CLF", null],
+  "tấm": ["CLF", null],
+
+  "comment2": "Negation/Polarity",
+  "không": ["NEG", null],
+  "chẳng": ["NEG", null],
+  "chưa": ["NEG", null],
+
+  "comment3": "Existential verbs (treated as verbal gloss)",
+  "có": ["EXIST", "VERB"],
+
+  "comment4": "Indefinite/interrogative/quantifiers",
+  "chi": ["any", "PRON"],
+  "cả": ["all", "PART"],
+  "mô": ["any", "PRON"],
+  "nào": ["any", "PRON"],
+  "hết": ["all", "PART"],
+  "ai": ["who", "PRON"],
+  "gì": ["what", "PRON"],
+  "đâu": ["where", "ADV"],
+  "bao": ["how.many", "ADV"],
+  "baonhiêu": ["how.many", "ADV"],
+
+  "và": ["and", "CONJ"],
+  "nhưng": ["but", "CONJ"],
+  "thì": ["TOP", "PART"],
+
+  "đó": ["DEM", "PART"],
+  "này": ["DEM", "PART"],
+  "đây": ["DEM", "ADV"],
+  "kia": ["DEM", "PART"],
+  "ấy": ["DEM", "PART"]
+}

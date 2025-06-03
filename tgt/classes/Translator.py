@@ -22,7 +22,7 @@ from ..utils.functions import (
 )
 
 # Initialize global variables for language settings
-LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 logger = logging.getLogger(__name__)
 
 
