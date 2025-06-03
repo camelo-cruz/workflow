@@ -12,7 +12,7 @@ from ..utils.functions import find_language, format_excel_output, set_global_var
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__) 
 
 class Glosser:
     def __init__(self, input_dir: str, language: str, instruction: str):
