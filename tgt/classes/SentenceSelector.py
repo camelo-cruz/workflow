@@ -29,7 +29,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from utils.functions import set_global_variables, find_language
 
-LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 
 class SentenceSelector():
     def __init__(self, input_dir, language, study, device):

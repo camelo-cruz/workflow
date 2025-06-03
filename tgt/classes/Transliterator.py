@@ -29,7 +29,7 @@ from tqdm import tqdm
 from .transliterate import translit
 from utils.functions import find_language, set_global_variables
 
-LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 
 
 class Transliterator:

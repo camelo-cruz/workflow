@@ -36,7 +36,7 @@ from utils.functions import (
 )
 
 # Global setup
-LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 warnings.filterwarnings("ignore")
 
 logger = logging.getLogger(__name__)

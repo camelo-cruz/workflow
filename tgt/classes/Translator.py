@@ -1,273 +1,262 @@
-# -*- coding: utf-8 -*-
-"""
-Copyright (C) 2024  Alejandra Camelo Cruz, Arne Goelz
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-Leibniz Institute General Linguistics (ZAS)
-"""
-
 import os
-import pandas as pd
-import argparse
-import torch
-import re
 import sys
-import deepl
-import logging
 import time
-import deepl
-from dotenv import load_dotenv 
-from deep_translator import GoogleTranslator
-from tqdm import tqdm
+import logging
+import argparse
+
+import pandas as pd
+import torch
 import openpyxl
 from openpyxl.styles import Font
-from utils.functions import set_global_variables, find_language
+from tqdm import tqdm
+from dotenv import load_dotenv
+from deep_translator import GoogleTranslator
+import deepl
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
-def setup_logging(log_file_path):
-    """Dynamically updates logging to write to a new log file."""
-    logger = logging.getLogger()
-    logger.setLevel(logging.INFO)  # Set the root logger's level to INFO
-    
-    # Remove existing handlers to avoid duplicate logs
-    if logger.hasHandlers():
-        logger.handlers.clear()
+from utils.functions import (
+    set_global_variables,
+    find_language,
+    setup_logging,
+    format_excel_output,
+)
 
-    # Create a file handler for the new log file
-    file_handler = logging.FileHandler(log_file_path, mode="a")  # "a" = append mode
-    file_handler.setLevel(logging.INFO)
-    file_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
-
-    # Create a console handler
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.INFO)
-    console_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
-
-    # Add both handlers to the logger
-    logger.addHandler(file_handler)
-    logger.addHandler(console_handler)
-    
-    logging.info(f"Logging started for {log_file_path}")
-
-LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS, _ = set_global_variables()
+# Initialize global variables for language settings
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
+logger = logging.getLogger(__name__)
 
 
-class Translator():
-    def __init__(self, input_dir, language, instruction, device="cpu"):
+class Translator:
+    def __init__(self, input_dir: str, language: str, instruction: str, device: str = "cpu"):
+        """
+        Initializes the Translator.
+
+        Args:
+            input_dir (str): Directory containing annotated Excel files.
+            language (str): Language name or code for translation source.
+            instruction (str): One of 'automatic_transcription', 'corrected_transcription', or 'sentences'.
+            device (str): Torch device to use ('cpu' or 'cuda').
+        """
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
-        self.instruction = instruction
+        self.instruction = self._normalize_instruction(instruction)
         self.device = device
 
-        logging.info(f"Initialized Translator for language: {language} (code: {self.language_code}) (instruction: {instruction})")
+        self.model = None
+        self.tokenizer = None
 
-    @staticmethod
-    def translate_with_pretrained(language_code, text, device="cpu"):
-        """ Translates text using the NLLB-200 model """
-        start_time = time.time()
-        model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-1.3B").to(device)
-        tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-1.3B", src_lang=f'{language_code}_Latn')
-        inputs = tokenizer(text, return_tensors="pt").to(device)
-        translated_tokens = model.generate(
-            **inputs, forced_bos_token_id= tokenizer.convert_tokens_to_ids("eng_Latn")
+        if self.instruction == "automatic":
+            self._load_pretrained_model()
+
+        logger.info(
+            f"Initialized Translator for language: {language} "
+            f"(code: {self.language_code}), instruction: {self.instruction}, device: {self.device}"
         )
 
-        translated = tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0]
-        end_time = time.time()
-
-        logging.info(f"Translated with NLLB-200 in {end_time - start_time:.2f} seconds")
-        return translated
-    
     @staticmethod
-    def translate_with_deepl(language_code, text):
-        """ Translates text using DeepL API, ensuring correct language codes """
+    def _normalize_instruction(instruction: str) -> str:
+        """
+        Maps argparse-style instructions to internal keywords.
+
+        Args:
+            instruction (str): One of the argparse choices.
+
+        Returns:
+            str: Normalized instruction key.
+        """
+        mapping = {
+            "automatic_transcription": "automatic",
+            "corrected_transcription": "corrected",
+            "sentences": "sentences",
+        }
+        return mapping.get(instruction, instruction)
+
+    def _load_pretrained_model(self) -> None:
+        """
+        Loads the Facebook NLLB-200 model and tokenizer for automatic translation.
+        """
         try:
-            # If running under PyInstaller, sys._MEIPASS is available
-            base_path = os.path.join(sys._MEIPASS, 'materials')
-            print("Using sys._MEIPASS for materials path")
-        except Exception:
-            # Fallback to using the script's directory if not running as a PyInstaller bundle
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            base_path = os.path.join(script_dir, 'materials')
-            print("Using script directory for materials path")
+            self.model = AutoModelForSeq2SeqLM.from_pretrained(
+                "facebook/nllb-200-1.3B"
+            ).to(self.device)
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                "facebook/nllb-200-1.3B", src_lang=f"{self.language_code}_Latn"
+            )
+            logger.info("Loaded NLLB-200 model and tokenizer")
+        except Exception as e:
+            logger.exception(f"Failed to load pretrained model: {e}")
+            raise
 
-        secrets_path = os.path.join(base_path, 'secrets.env')
+    def translate_with_pretrained(self, text: str) -> str:
+        """
+        Uses the NLLB-200 model to translate a single string to English.
 
-        if os.path.exists(secrets_path):
+        Args:
+            text (str): Text in source language.
+
+        Returns:
+            str: Translated text in English.
+        """
+        start = time.time()
+        inputs = self.tokenizer(text, return_tensors="pt").to(self.device)
+        translated_tokens = self.model.generate(
+            **inputs,
+            forced_bos_token_id=self.tokenizer.convert_tokens_to_ids("eng_Latn"),
+        )
+        translated = self.tokenizer.batch_decode(
+            translated_tokens, skip_special_tokens=True
+        )[0]
+        logger.info(f"Translated with NLLB-200 in {time.time() - start:.2f}s")
+        return translated
+
+    def translate_with_deepl(self, text: str) -> str | None:
+        """
+        Uses DeepL API to translate a string to English, falling back if source is undetected.
+
+        Args:
+            text (str): Text in source language.
+
+        Returns:
+            str | None: Translated text or None on failure.
+        """
+        try:
+            base_path = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
+            secrets_path = os.path.join(base_path, "materials", "secrets.env")
+            if not os.path.exists(secrets_path):
+                logger.error(f"Secrets file not found: {secrets_path}")
+                sys.exit(1)
+
             load_dotenv(secrets_path, override=True)
-        else:
-            print(f"Error: {secrets_path} not found.")
-            sys.exit(1)
-        
-        api_key = os.getenv("API_KEY")
-        if not api_key:
-            raise ValueError("API key not found. Check your secrets.env file.")
+            api_key = os.getenv("API_KEY")
+            if not api_key:
+                raise ValueError("API_KEY not found in environment")
 
-        deepl_client = deepl.DeepLClient(api_key)
-        
-        # Handle "PT" separately
-        if language_code.lower() == "pt":
-            language_code = "PT-BR"  # Default to Brazilian Portuguese
+            client = deepl.DeepLClient(api_key)
+            code = self.language_code.upper()
+            if code.lower() == "pt":
+                code = "PT-BR"
 
-        source_lang = language_code.upper()  # Ensure uppercase
+            try:
+                result = client.translate_text(text, source_lang=code, target_lang="EN-US")
+            except deepl.DeepLException:
+                result = client.translate_text(text, target_lang="EN-US")
 
-        try:
-            result = deepl_client.translate_text(text, source_lang=source_lang, target_lang='EN-US')
-        except deepl.DeepLException:
-            result = deepl_client.translate_text(text, target_lang='EN-US')
+            return result.text
+        except Exception as e:
+            logger.exception(f"DeepL translation failed: {e}")
+            return None
 
-        return result.text
+    def process_data(self, verbose: bool = False) -> None:
+        """
+        Walks through the input directory, translates rows in each annotated.xlsx file,
+        saves the updated file, and highlights the chosen translation column.
 
-    def process_data(self, verbose=False):
-        """ Processes and translates data from input Excel files """
-        logging.info(f"Starting translation process for directory: {self.input_dir}")
+        Args:
+            verbose (bool): If True, prints additional debug info.
+        """
         start_time = time.time()
+        logger.info(f"Starting translation for directory: {self.input_dir}")
 
-        automatic_column = "automatic_transcription"
-        corrected_column = "latin_transcription_everything"
-        sentences_column = "latin_transcription_utterance_used"
+        # Define source-column names based on instruction
+        auto_col = "automatic_transcription"
+        corr_col = "latin_transcription_everything"
+        sent_col = "latin_transcription_utterance_used"
 
+        # Override for non-Latin scripts
         if self.language_code in NO_LATIN:
-            corrected_column = "transcription_original_script"
-            sentences_column = "transcription_original_script_utterance_used"
-        files_to_process = []
-        for subdir, dirs, files in os.walk(self.input_dir):
-            for file in files:
-                if file.endswith('annotated.xlsx'):
-                    files_to_process.append(os.path.join(subdir, file))
- 
-        with tqdm(total=len(files_to_process), desc="Processing files", unit="file") as file_pbar:
-            for file_path in files_to_process:
-                log_file = os.path.join(os.path.dirname(file_path), "translation.log")
-                setup_logging(log_file)
-                logging.info(f"Processing file: {file_path}")
+            corr_col = "transcription_original_script"
+            sent_col = "transcription_original_script_utterance_used"
+
+        # Find all "*annotated.xlsx" files recursively
+        files = [
+            os.path.join(dp, f)
+            for dp, dn, filenames in os.walk(self.input_dir)
+            for f in filenames
+            if f.endswith("annotated.xlsx")
+        ]
+
+        for file_path in tqdm(files, desc="Processing files"):
+            log_path = os.path.join(os.path.dirname(file_path), "translation.log")
+            handler = setup_logging(logger, log_path)
+            try:
+                logger.info(f"Processing file: {file_path}")
                 df = pd.read_excel(file_path)
 
-                max_iterations = 100
-                iteration_count = 0
+                # Map of which target columns to write into for each instruction
+                cols_map = {
+                    "corrected": [
+                        "automatic_translation_corrected_transcription",
+                        "translation_everything",
+                    ],
+                    "automatic": ["automatic_translation_automatic_transcription"],
+                    "sentences": [
+                        "automatic_translation_utterance_used",
+                        "translation_utterance_used",
+                    ],
+                }
 
-                for i in range(len(df)):
-                    if i >= max_iterations:
-                        logging.info(f"Reached max iteration limit ({max_iterations}), exiting early.")
+                # Iterate row-wise, up to 100 rows
+                for idx, row in df.iterrows():
+                    if idx >= 100:
+                        logger.info(f"Reached max rows at {idx}")
                         break
 
-                    try:
-                        text_to_translate = df.at[i, corrected_column if self.instruction == 'corrected' else
-                                                        automatic_column if self.instruction == 'automatic' else
-                                                        sentences_column]
+                    # Select the appropriate source column
+                    if self.instruction == "corrected":
+                        source_col = corr_col
+                    elif self.instruction == "automatic":
+                        source_col = auto_col
+                    else:  # 'sentences'
+                        source_col = sent_col
 
-                        if pd.isna(text_to_translate) or not str(text_to_translate).strip():
-                            logging.info(f"Skipping row {i}: empty or whitespace value, raw value: {repr(text_to_translate)}")
-                            continue
-
-                        translation = None
-                        if self.instruction in ['sentences', 'corrected']:
-                            translation = GoogleTranslator(source=self.language_code, target='en').translate(text=text_to_translate)
-                        elif self.instruction == 'automatic':
-                            translation = self.translate_with_pretrained(self.language_code, text_to_translate, self.device)
-                        
-                        if not translation:
-                            logging.info(f"Skipping row {i}: translation failed or empty")
-                            continue
-
-                        columns_mapping = {
-                            'corrected': [
-                                "automatic_translation_corrected_transcription",
-                                "translation_everything"
-                            ],
-                            'automatic': [
-                                "automatic_translation_automatic_transcription"
-                            ],
-                            'sentences': [
-                                "automatic_translation_utterance_used",
-                                "translation_utterance_used"
-                            ]
-                        }
-
-                        for col in columns_mapping.get(self.instruction, []):
-                            df.at[i, col] = translation
-
-                        iteration_count += 1
-
-                    except Exception as e:
-                        logging.exception(f"Translation failed at row {i}: {e}")
+                    text = row.get(source_col)
+                    if pd.isna(text) or not str(text).strip():
+                        logger.info(f"Skipping row {idx}: empty text in '{source_col}'")
                         continue
 
-                # Reorder columns to ensure obligatory columns are at the end
-                extra_columns = [col for col in df.columns if col not in OBLIGATORY_COLUMNS]
-                df = df[extra_columns + [col for col in OBLIGATORY_COLUMNS if col in df.columns]]
+                    try:
+                        # Perform translation based on instruction
+                        if self.instruction in ("sentences", "corrected"):
+                            trans = GoogleTranslator(
+                                source=self.language_code, target="en"
+                            ).translate(text=str(text))
+                        else:  # 'automatic'
+                            trans = self.translate_with_pretrained(str(text))
 
+                        if not trans:
+                            logger.info(f"No translation obtained for row {idx}")
+                            continue
+
+                        # Write translation into each target column
+                        for target_col in cols_map[self.instruction]:
+                            df.at[idx, target_col] = trans
+
+                    except Exception as e:
+                        logger.exception(f"Row {idx} translation error: {e}")
+                        continue
+
+                # Reorder columns: non-obligatory first, then obligatory
+                extra_cols = [c for c in df.columns if c not in OBLIGATORY_COLUMNS]
+                df = df[extra_cols + [c for c in OBLIGATORY_COLUMNS if c in df.columns]]
+
+                # Save back to the same file (overwrites)
                 df.to_excel(file_path, index=False)
 
-                # Open the Excel file and modify cell formatting
-                wb = openpyxl.load_workbook(file_path)
-                ws = wb.active  # Select the first sheet
-
-                # Define the red font style
-                red_font = Font(color="FF0000")  # Hex code for red color
-
-                # Determine the target column name based on the instruction
-                if self.instruction == 'automatic':
-                    target_column = 'automatic_translation_automatic_transcription'
-                if self.instruction == 'corrected':
-                    target_column = 'translation_everything'
-                elif self.instruction == 'sentences':
-                    target_column = 'translation_utterance_used'
+                # Determine which column to highlight
+                if self.instruction == "automatic":
+                    column_to_highlight = "automatic_translation_automatic_transcription"
+                elif self.instruction == "corrected":
+                    column_to_highlight = "automatic_translation_corrected_transcription"
+                elif self.instruction == "sentences":
+                    column_to_highlight = "translation_utterance_used"
                 else:
-                    raise ValueError(f"Unsupported instruction: {self.instruction}")
+                    column_to_highlight = None
 
-                # Get the header row (first row) as a tuple of column names
-                header_row = next(ws.iter_rows(min_row=1, max_row=1, values_only=True))
+                # Apply Excel formatting highlight if column exists
+                if column_to_highlight and column_to_highlight in df.columns:
+                    format_excel_output(file_path, column_to_highlight)
 
-                # Ensure the target column exists in the header
-                if target_column not in header_row:
-                    raise ValueError(f"Target column '{target_column}' not found in header row.")
+            finally:
+                logger.removeHandler(handler)
 
-                # Find the column index (1-based) for the target column
-                target_index = header_row.index(target_column) + 1
-
-                # Apply red font to each cell in the target column (skip header row)
-                for row in ws.iter_rows(min_row=2):
-                    cell = row[target_index - 1]  # Adjust for 0-based indexing in row
-                    if cell.value:
-                        cell.font = red_font
-
-                # Save the modified Excel file
-                wb.save(file_path)
-
-                file_pbar.update(1)
-
-        end_time = time.time()
-        logging.info(f"Translation process completed in {end_time - start_time:.2f} seconds")
-
-
-def main():
-    """ Main function to translate manually prepared transcriptions """
-    parser = argparse.ArgumentParser(description="automatic transcription")
-    parser.add_argument("input_dir")
-    parser.add_argument("language")
-    parser.add_argument("--instruction", "-i",
-                        choices=["automatic_transcription",
-                                 "corrected_transcription",
-                                 "sentences"],
-                        help="Type of instruction for translation", required=False)
-    args = parser.parse_args()
-
-    translator = Translator(args.input_dir, args.language, args.instruction)
-    translator.process_data()
-
-
-if __name__ == "__main__":
-    main() 
+        logger.info(f"Completed translation in {time.time() - start_time:.2f}s")
