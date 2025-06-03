@@ -10,7 +10,7 @@ from .glossing.gloss_strategy import GlossStrategy
 from .glossing.gloss_strategy_factory import GlossStrategyFactory
 from ..utils.functions import find_language, format_excel_output, set_global_variables
 
-LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables() 
 
 logger = logging.getLogger(__name__) 
 
