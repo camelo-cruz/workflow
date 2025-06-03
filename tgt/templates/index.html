@@ -1,77 +1,79 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Transcription App</title>
-  <link rel="stylesheet" href="{% static 'style.css' %}">
-  <meta name="csrf-token" content="{{ csrf_token }}">
+  <link rel="stylesheet" href="/static/css/gui.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
 </head>
 <body>
-<div class="container">
-  
-  <div class="sidebar">
-    <h2 class="title">Automatic workflow LeibnizDream</h2>
-    <!-- Mode -->
-    <div class="mode-selector">
-      <label><input type="radio" name="mode" value="online" checked> Work Online</label>
-      <label><input type="radio" name="mode" value="upload"> Upload Files</label>
+  <div class="container">
+
+    <div class="sidebar">
+      <h2 class="title">Automatic workflow LeibnizDream</h2>
+      <!-- Mode -->
+      <div class="mode-selector">
+        <label><input type="radio" name="mode" value="online" checked> Work Online</label>
+        <label><input type="radio" name="mode" value="upload"> Upload Files</label>
+      </div>
+
+      <!-- Online -->
+      <div id="online-ui">
+        <button id="btn-connect" class="btn-secondary">Connect OneDrive</button>
+        <button id="btn-logout" class="btn-secondary" style="display:none;">Logout</button>
+        <input type="text" id="manual-token" placeholder="Paste access token here" style="display:none; width:100%;">
+        <button id="btn-set-token" class="btn-primary" style="display:none;">Use Token</button>
+
+        <label for="remote-base-dir">Directory Path</label>
+        <input type="text" id="remote-base-dir" name="base_dir" placeholder="/share-link-or-path" required>
+      </div>
+
+      <!-- Offline -->
+      <div id="upload-ui" style="display:none; margin-top:1em;">
+        <button id="btn-upload-folder" class="btn-secondary" type="button" style="margin-top:0.5em;">Select Folder</button>
+        <input type="file" id="file-input" webkitdirectory directory multiple style="display:none;">
+      </div>
+
+      <!-- Form -->
+      <form id="form-transcribe">
+        <label for="action">Action</label>
+        <select id="action" name="action" required>
+          <option value="transcribe">Transcribe</option>
+          <option value="translate">Translate</option>
+          <option value="gloss">Gloss</option>
+          <option value="create columns">Create columns</option>
+        </select>
+
+        <label for="instruction">Instruction</label>
+        <select id="instruction" name="instruction" style="display:none;">
+          <option value="corrected">corrected</option>
+          <option value="sentences">sentences</option>
+          <option value="automatic">automatic</option>
+        </select>
+
+        <label for="language">Source Language</label>
+        <input type="text" id="language" name="language" required>
+
+        <button id="btn-process" class="btn-primary" type="button">Start</button>
+        <button id="btn-cancel" class="btn-secondary" type="button" hidden style="margin-left:0.5em;">Cancel</button>
+
+        <div id="status" class="status">Not connected to OneDrive</div>
+        <progress id="upload-progress" value="0" max="100" style="display:none; width:100%;"></progress>
+      </form>
     </div>
 
-    <!-- Online -->
-    <div id="online-ui">
-      <button id="btn-connect" class="btn-secondary">Connect OneDrive</button>
-      <button id="btn-logout" class="btn-secondary" style="display:none;">Logout</button>
-      <input type="text" id="manual-token" placeholder="Paste access token here" style="display:none; width:100%;">
-      <button id="btn-set-token" class="btn-primary" style="display:none;">Use Token</button>
-
-      <label for="remote-base-dir">Directory Path</label>
-      <input type="text" id="remote-base-dir" name="base_dir" placeholder="/share-link-or-path" required>
+    <div class="main">
+      <img src="/static/zas_logo.jpg" alt="Logo" class="logo">
+      <p class="logo-text">LeibnizDream</p>
+      <pre id="logs"></pre>
     </div>
 
-    <!-- Offline -->
-    <div id="upload-ui" style="display:none; margin-top:1em;">
-      <button id="btn-upload-folder" class="btn-secondary" type="button" style="margin-top:0.5em;">Select Folder</button>
-      <input type="file" id="file-input" webkitdirectory directory multiple style="display:none;" />
+    <div class="app-version" style="position:fixed; bottom:0.5rem; right:0.5rem; z-index:1000;">
+      v{{ app_version }}
     </div>
-
-    <!-- Form -->
-    <form id="form-transcribe">
-      <label for="action">Action</label>
-      <select id="action" name="action" required>
-        <option value="transcribe">Transcribe</option>
-        <option value="translate">Translate</option>
-        <option value="gloss">Gloss</option>
-        <option value="create columns">Create columns</option>
-      </select>
-
-      <label for="instruction">Instruction</label>
-      <select id="instruction" name="instruction" style ="display:none;">
-        <option value="corrected">corrected</option>
-        <option value="sentences">sentences</option>
-        <option value="automatic">automatic</option>
-      </select>
-
-      <label for="language">Source Language</label>
-      <input type="text" id="language" name="language" required>
-
-      <button id="btn-process" class="btn-primary" type="button">Start</button>
-      <button id="btn-cancel" class="btn-secondary" type="button" hidden style="margin-left:0.5em;">Cancel</button>
-
-      <div id="status" class="status">Not connected to OneDrive</div>
-      <progress id="upload-progress" value="0" max="100" style="display:none; width:100%;"></progress>
-    </form>
   </div>
 
-  <div class="main">
-    <img src="{% static 'zas_logo.jpg' %}" alt="Logo" class="logo">
-    <p class="logo-text">LeibnizDream</p>
-    <pre id="logs"></pre>
-  </div>
-
-<div class="app-version" style="position:fixed; bottom:0.5rem; right:0.5rem; z-index:1000;">v{{ app_version }} </div>
-</div>
-<script type="module" src="{% static 'js/main.js' %}"></script>
+  <!-- Point to your JS bundle under /static/js/... -->
+  <script type="module" src="/static/js/main.js"></script>
 </body>
 </html>

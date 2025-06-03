@@ -3,10 +3,8 @@
 import os
 import uuid
 import multiprocessing
-import threading
 import traceback
 import requests
-import time
 import shutil
 import queue
 
@@ -60,15 +58,6 @@ async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "app_version": version})
 
 
-@router.get("/auth/token")
-async def get_access_token(request: Request):
-    token = request.session.get("access_token")
-    if token:
-        return JSONResponse({"access_token": token}, status_code=200)
-    else:
-        return JSONResponse({"error": "Not authenticated"}, status_code=401)
-
-
 @router.get("/auth/start")
 async def start_onedrive_auth(request: Request):
     host = request.headers.get("host")
@@ -104,7 +93,7 @@ async def onedrive_auth_redirect(request: Request):
     if "access_token" not in result:
         return JSONResponse({"error": "Token error", "details": result}, status_code=400)
 
-    request.session["access_token"] = result["access_token"]
+    # Return the access token to the frontend (e.g., via rendered template)
     return templates.TemplateResponse(
         "auth_success.html",
         {"request": request, "token": result["access_token"]}
@@ -301,9 +290,15 @@ async def process(
     job_id = str(uuid.uuid4())
     q = multiprocessing.Queue()
     cancel = multiprocessing.Event()
-    jobs[job_id] = {"queue": q, "cancel": cancel, "zip_path": None}
 
-    token = request.session.get("access_token") or access_token
+    token = access_token  # take token from form data
+    jobs[job_id] = {
+        "queue": q,
+        "cancel": cancel,
+        "zip_path": None,
+        "token": token
+    }
+
     if not language:
         q.put("[ERROR] Missing language")
         return {"job_id": job_id}
@@ -315,7 +310,7 @@ async def process(
         contents = await zipfile.read()
         with open(zip_path, "wb") as f:
             f.write(contents)
-        with ZipFile(zip_path, 'r') as archive:
+        with ZipFile(zip_path, "r") as archive:
             archive.extractall(tmp_dir)
         os.remove(zip_path)
 
@@ -329,7 +324,7 @@ async def process(
             raise HTTPException(status_code=400, detail="Missing base_dir or token")
         worker = _online_worker
         args = (job_id, base_dir, token, action, language, instruction, q, cancel)
-        # no base_dir folder to store
+        # no base_dir folder to store in-memory
 
     p = multiprocessing.Process(target=worker, args=args, daemon=True)
     p.start()
@@ -384,7 +379,7 @@ async def stream(job_id: str):
 # ───────────────────────────────── cancel ────────────────────────────────────────
 # ────────────────────────────────────────────────────────────────────────────────
 @router.post("/jobs/cancel")
-async def cancel(payload: dict = Body(...)):
+async def cancel_job(payload: dict = Body(...)):
     jid = payload.get("job_id")
     job = jobs.get(jid)
     if not job:
@@ -406,6 +401,7 @@ async def cancel(payload: dict = Body(...)):
 async def terms_view(request: Request):
     return templates.TemplateResponse("terms.html", {"request": request})
 
+
 @router.get("/privacy")
 async def privacy_view(request: Request):
-    return templates.TemplateResponse("privacy.html", {"request": request})
+    return templates.TemplateResponse("privacy.html", {"request": "request"})
