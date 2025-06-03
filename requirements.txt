@@ -29,7 +29,7 @@ msal
 pandas
 tqdm
 whisperx
-whisper
+openai-whisper
 openpyxl
 deepl
 deep_translator
