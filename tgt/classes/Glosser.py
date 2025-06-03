@@ -34,7 +34,7 @@ from tqdm import tqdm
 from torch.serialization import safe_globals
 from spacy.cli import download
 from deep_translator import GoogleTranslator
-from ..utils.functions import set_global_variables, find_language, format_excel_output
+from utils.functions import set_global_variables, find_language, format_excel_output
 from spacy.util import is_package
 
 

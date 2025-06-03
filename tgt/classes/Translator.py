@@ -33,7 +33,7 @@ from deep_translator import GoogleTranslator
 from tqdm import tqdm
 import openpyxl
 from openpyxl.styles import Font
-from ..utils.functions import set_global_variables, find_language
+from utils.functions import set_global_variables, find_language
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 def setup_logging(log_file_path):

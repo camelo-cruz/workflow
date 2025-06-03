@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "helmet": "^8.1.0",
-    "msal": "^1.4.18"
-  }
-}

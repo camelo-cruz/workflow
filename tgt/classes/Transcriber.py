@@ -26,7 +26,7 @@ from openpyxl.styles import Font
 import whisper
 import whisperx
 
-from ..utils.functions import (
+from utils.functions import (
     set_global_variables,
     find_language,
     clean_string,
