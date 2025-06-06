@@ -2,16 +2,13 @@ import os
 import sys
 import time
 import logging
-import argparse
 
 import pandas as pd
 import torch
 import openpyxl
 from openpyxl.styles import Font
 from tqdm import tqdm
-from dotenv import load_dotenv
-from deep_translator import GoogleTranslator
-import deepl
+
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 from utils.functions import (
@@ -38,19 +35,25 @@ class Translator:
             device (str): Torch device to use ('cpu' or 'cuda').
         """
         self.input_dir = input_dir
+        # find_language(...) returns a normalized two-letter code (e.g. 'pt', 'de', 'ru', etc.)
         self.language_code = find_language(language, LANGUAGES)
         self.instruction = self._normalize_instruction(instruction)
         self.device = device
 
-        self.model = None
-        self.tokenizer = None
+        # MarianMT model/tokenizer (for both language-specific and multilingual fallback)
+        self.marian_model = None
+        self.marian_tokenizer = None
 
-        if self.instruction == "automatic":
-            self._load_pretrained_model()
+        # Flag to indicate if we're using the multilingual model
+        self.using_multilingual = False
+
+        # Load Marian models (language-specific first; if that fails, load multilingual)
+        self._load_marian_model()
 
         logger.info(
             f"Initialized Translator for language: {language} "
             f"(code: {self.language_code}), instruction: {self.instruction}, device: {self.device}"
+            + (", using multilingual fallback" if self.using_multilingual else "")
         )
 
     @staticmethod
@@ -71,88 +74,130 @@ class Translator:
         }
         return mapping.get(instruction, instruction)
 
-    def _load_pretrained_model(self) -> None:
+    def _load_marian_model(self) -> None:
         """
-        Loads the Facebook NLLB-200 model and tokenizer for automatic translation.
+        Attempts to load a MarianMT model:
+          1. Try "Helsinki-NLP/opus-mt-<lang>-en"
+          2. On failure, fall back to "Helsinki-NLP/opus-mt-mul-en"
+
+        If multilingual falls back, set self.using_multilingual = True.
         """
+        # First attempt: language-specific
+        lang_model_name = f"Helsinki-NLP/opus-mt-{self.language_code}-en"
         try:
-            self.model = AutoModelForSeq2SeqLM.from_pretrained(
-                "facebook/nllb-200-1.3B"
-            ).to(self.device)
-            self.tokenizer = AutoTokenizer.from_pretrained(
-                "facebook/nllb-200-1.3B", src_lang=f"{self.language_code}_Latn"
+            self.marian_tokenizer = AutoTokenizer.from_pretrained(lang_model_name)
+            self.marian_model = (
+                AutoModelForSeq2SeqLM.from_pretrained(lang_model_name)
+                .to(self.device)
             )
-            logger.info("Loaded NLLB-200 model and tokenizer")
+            logger.info(f"Loaded MarianMT model and tokenizer: {lang_model_name}")
+            return
+
         except Exception as e:
-            logger.exception(f"Failed to load pretrained model: {e}")
-            raise
+            logger.warning(
+                f"Could not load MarianMT model '{lang_model_name}': {e}. "
+                "Falling back to multilingual model."
+            )
 
-    def translate_with_pretrained(self, text: str) -> str:
-        """
-        Uses the NLLB-200 model to translate a single string to English.
-
-        Args:
-            text (str): Text in source language.
-
-        Returns:
-            str: Translated text in English.
-        """
-        start = time.time()
-        inputs = self.tokenizer(text, return_tensors="pt").to(self.device)
-        translated_tokens = self.model.generate(
-            **inputs,
-            forced_bos_token_id=self.tokenizer.convert_tokens_to_ids("eng_Latn"),
-        )
-        translated = self.tokenizer.batch_decode(
-            translated_tokens, skip_special_tokens=True
-        )[0]
-        logger.info(f"Translated with NLLB-200 in {time.time() - start:.2f}s")
-        return translated
-
-    def translate_with_deepl(self, text: str) -> str | None:
-        """
-        Uses DeepL API to translate a string to English, falling back if source is undetected.
-
-        Args:
-            text (str): Text in source language.
-
-        Returns:
-            str | None: Translated text or None on failure.
-        """
+        # Fallback: multilingual → English
+        multi_model_name = "Helsinki-NLP/opus-mt-mul-en"
         try:
-            base_path = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
-            secrets_path = os.path.join(base_path, "materials", "secrets.env")
-            if not os.path.exists(secrets_path):
-                logger.error(f"Secrets file not found: {secrets_path}")
-                sys.exit(1)
+            self.marian_tokenizer = AutoTokenizer.from_pretrained(multi_model_name)
+            self.marian_model = (
+                AutoModelForSeq2SeqLM.from_pretrained(multi_model_name)
+                .to(self.device)
+            )
+            self.using_multilingual = True
+            logger.info(f"Loaded multilingual MarianMT model: {multi_model_name}")
+            return
 
-            load_dotenv(secrets_path, override=True)
-            api_key = os.getenv("API_KEY")
-            if not api_key:
-                raise ValueError("API_KEY not found in environment")
-
-            client = deepl.DeepLClient(api_key)
-            code = self.language_code.upper()
-            if code.lower() == "pt":
-                code = "PT-BR"
-
-            try:
-                result = client.translate_text(text, source_lang=code, target_lang="EN-US")
-            except deepl.DeepLException:
-                result = client.translate_text(text, target_lang="EN-US")
-
-            return result.text
         except Exception as e:
-            logger.exception(f"DeepL translation failed: {e}")
+            logger.exception(
+                f"Failed to load multilingual MarianMT model '{multi_model_name}': {e}. "
+                "No Marian model is available."
+            )
+            # Leave marian_model/tokenizer as None
+            self.marian_model = None
+            self.marian_tokenizer = None
+            self.using_multilingual = False
+
+    def _get_multilingual_prefix(self) -> str:
+        """
+        Returns the appropriate three-letter ISO token for the source language,
+        e.g. 'por' for Portuguese, 'deu' for German, etc., wrapped as '>>xxx<<'.
+
+        If we don't have a mapping, fallback to an empty prefix (the model will attempt auto-detect,
+        but results may be subpar).
+        """
+        iso_map = {
+            "ar": "ara",
+            "cs": "ces",
+            "de": "deu",
+            "en": "eng",
+            "es": "spa",
+            "fr": "fra",
+            "it": "ita",
+            "nl": "nld",
+            "pt": "por",
+            "ru": "rus",
+            "sv": "swe",
+            "zh": "zho",
+            # …add more as needed…
+        }
+        two_letter = self.language_code.lower()
+        three_letter = iso_map.get(two_letter)
+        if three_letter:
+            return f">>{three_letter}<< "
+        else:
+            # If we don't know a three-letter code, return empty string
+            return ""
+
+    def translate_with_marian(self, text: str) -> str | None:
+        """
+        Uses the MarianMT model to translate a string to English.
+
+        If using the multilingual model, the input will be prefixed with the language token.
+        Returns None if no Marian model is loaded or translation fails.
+        """
+        if self.marian_model is None or self.marian_tokenizer is None:
+            return None
+
+        try:
+            if self.using_multilingual:
+                # Prefix with language token, e.g. ">>por<< " for Portuguese
+                prefix = self._get_multilingual_prefix()
+                text_to_tokenize = prefix + text
+            else:
+                text_to_tokenize = text
+
+            start = time.time()
+            inputs = self.marian_tokenizer(
+                text_to_tokenize,
+                return_tensors="pt",
+                padding=True,
+                truncation=True
+            ).to(self.device)
+
+            translated_tokens = self.marian_model.generate(**inputs)
+            translated = self.marian_tokenizer.batch_decode(
+                translated_tokens, skip_special_tokens=True
+            )[0]
+            elapsed = time.time() - start
+            logger.info(
+                f"Translated with MarianMT ({'multilingual' if self.using_multilingual else 'lang-specific'}) "
+                f"in {elapsed:.2f}s"
+            )
+            return translated
+
+        except Exception as e:
+            logger.exception(f"MarianMT translation failed at runtime: {e}")
             return None
 
     def process_data(self, verbose: bool = False) -> None:
         """
         Walks through the input directory, translates rows in each annotated.xlsx file,
         saves the updated file, and highlights the chosen translation column.
-
-        Args:
-            verbose (bool): If True, prints additional debug info.
+        If MarianMT is unavailable (neither lang-specific nor multilingual), rows will be skipped.
         """
         start_time = time.time()
         logger.info(f"Starting translation for directory: {self.input_dir}")
@@ -206,34 +251,25 @@ class Translator:
                         source_col = corr_col
                     elif self.instruction == "automatic":
                         source_col = auto_col
-                    else:  # 'sentences'
+                    else:
                         source_col = sent_col
 
                     text = row.get(source_col)
                     if pd.isna(text) or not str(text).strip():
-                        logger.info(f"Skipping row {idx}: empty text in '{source_col}'")
+                        logger.debug(f"Skipping row {idx}: empty text in '{source_col}'")
                         continue
 
-                    try:
-                        # Perform translation based on instruction
-                        if self.instruction in ("sentences", "corrected"):
-                            trans = GoogleTranslator(
-                                source=self.language_code, target="en"
-                            ).translate(text=str(text))
-                        else:  # 'automatic'
-                            trans = self.translate_with_pretrained(str(text))
+                    # Try MarianMT (language-specific or multilingual)
+                    trans = self.translate_with_marian(str(text))
 
-                        if not trans:
-                            logger.info(f"No translation obtained for row {idx}")
-                            continue
-
-                        # Write translation into each target column
-                        for target_col in cols_map[self.instruction]:
-                            df.at[idx, target_col] = trans
-
-                    except Exception as e:
-                        logger.exception(f"Row {idx} translation error: {e}")
+                    if trans is None:
+                        # No Marian model available, so we skip
+                        logger.warning(f"Skipping row {idx}: no MarianMT model could translate.")
                         continue
+
+                    # Write translation into each target column
+                    for target_col in cols_map[self.instruction]:
+                        df.at[idx, target_col] = trans
 
                 # Reorder columns: non-obligatory first, then obligatory
                 extra_cols = [c for c in df.columns if c not in OBLIGATORY_COLUMNS]
@@ -259,4 +295,5 @@ class Translator:
             finally:
                 logger.removeHandler(handler)
 
-        logger.info(f"Completed translation in {time.time() - start_time:.2f}s")
+        elapsed_total = time.time() - start_time
+        logger.info(f"Completed translation in {elapsed_total:.2f}s")
