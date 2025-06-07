@@ -1,9 +1,9 @@
 import spacy
 from spacy.cli import download
 from spacy.util import is_package
-from .gloss_strategy import GlossStrategy
+from .abstract import GlossingStrategy
 
-class JapaneseGlossStrategy(GlossStrategy):
+class JapaneseGlossingStrategy(GlossingStrategy):
     def __init__(self, language_code: str):
         super().__init__(language_code)
         self.nlp = None
@@ -15,7 +15,7 @@ class JapaneseGlossStrategy(GlossStrategy):
             download(model_name)
         self.nlp = spacy.load(model_name)
 
-    def gloss_sentence(self, sentence: str) -> str:
+    def gloss(self, sentence: str) -> str:
         doc = self.nlp(sentence)
         glossed = ""
         for token in doc:

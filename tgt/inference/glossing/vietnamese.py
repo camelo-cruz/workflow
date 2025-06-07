@@ -3,11 +3,11 @@ import stanza
 import spacy_stanza
 from spacy.cli import download
 from spacy.util import is_package
-from .gloss_strategy import GlossStrategy
+from .abstract import GlossingStrategy
 from utils.functions import load_glossing_rules
 
 from deep_translator import GoogleTranslator
-class VietnameseGlossStrategy(GlossStrategy):
+class VietnameseGlossingStrategy(GlossingStrategy):
 
     def __init__(self, language_code: str):
         super().__init__(language_code)
@@ -21,7 +21,7 @@ class VietnameseGlossStrategy(GlossStrategy):
     def clean_vietnamese_lemma(self, lemma: str):
         return self.VI_OVERRIDES.get(lemma, None)
 
-    def gloss_sentence(self, sentence: str) -> str:
+    def gloss(self, sentence: str) -> str:
         doc = self.nlp(sentence)
         glossed = ""
         for token in doc: 

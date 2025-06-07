@@ -4,12 +4,12 @@ from spacy.cli import download
 from spacy.util import is_package
 from utils.functions import load_glossing_rules
 from deep_translator import GoogleTranslator
-from .default_gloss_strategy import DefaultGlossStrategy
+from .abstract import GlossingStrategy
 
 LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY")
 
 
-class PortugueseGlossStrategy(DefaultGlossStrategy):
+class PortugueseGlossingStrategy(GlossingStrategy):
     def __init__(self, language_code: str):
         super().__init__(language_code)
 
@@ -54,7 +54,7 @@ class PortugueseGlossStrategy(DefaultGlossStrategy):
         out = re.sub(r"\. +", " ", out)
         return out.strip()
 
-    def gloss_sentence(self, sentence: str) -> str:
+    def gloss(self, sentence: str) -> str:
         # First invoke DefaultGlossStrategy’s logic to get an “uncleaned” gloss
         doc = self.nlp(sentence)
         glossed_sentence = ""

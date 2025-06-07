@@ -5,12 +5,12 @@ from deep_translator import GoogleTranslator
 from spacy.cli import download
 from spacy.util import is_package
 from utils.functions import load_glossing_rules
-from .gloss_strategy import GlossStrategy
+from .abstract import GlossingStrategy
 
 
 LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY")
 
-class DefaultGlossStrategy(GlossStrategy):
+class DefaultGlossingStrategy(GlossingStrategy):
     def __init__(self, language_code: str):
         super().__init__(language_code)
         self.nlp = None
@@ -31,7 +31,7 @@ class DefaultGlossStrategy(GlossStrategy):
             download(model_name)
         self.nlp = spacy.load(model_name)
 
-    def gloss_sentence(self, sentence: str) -> str:
+    def gloss(self, sentence: str) -> str:
         doc = self.nlp(sentence)
         glossed_sentence = ""
         for token in doc:

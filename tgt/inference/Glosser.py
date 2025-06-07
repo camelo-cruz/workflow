@@ -6,8 +6,8 @@ import logging
 import pandas as pd
 from tqdm import tqdm 
 
-from .glossing.gloss_strategy import GlossStrategy
-from .glossing.gloss_strategy_factory import GlossStrategyFactory
+from .glossing.default import GlossingStrategy
+from .glossing.factory import GlossingStrategyFactory
 from utils.functions import find_language, format_excel_output, set_global_variables
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables() 
@@ -23,7 +23,7 @@ class Glosser:
         self._spacy_data_dir = tempfile.mkdtemp(prefix="spacy_data_")
         os.environ["SPACY_DATA"] = self._spacy_data_dir
 
-        self.strategy: GlossStrategy = GlossStrategyFactory.get_strategy(self.language_code)
+        self.strategy: GlossingStrategy = GlossingStrategyFactory.get_strategy(self.language_code)
         self.strategy.load_model()
 
         try:
@@ -65,7 +65,7 @@ class Glosser:
                     for cell in tqdm(source_series, desc="Processing sentences", total=len(source_series)):
                         if isinstance(cell, str):
                             lines = cell.split("\n")
-                            per_line = [self.strategy.gloss_sentence(line) for line in lines]
+                            per_line = [self.strategy.gloss(line) for line in lines]
                             glossed_utterances.append("\n".join(per_line))
                         else:
                             glossed_utterances.append("")
