@@ -12,6 +12,7 @@ LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY")
 class PortugueseGlossingStrategy(GlossingStrategy):
     def __init__(self, language_code: str):
         super().__init__(language_code)
+        self.nlp = None
 
     def load_model(self):
         model_name = "pt_core_news_lg"

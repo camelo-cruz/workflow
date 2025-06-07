@@ -26,7 +26,7 @@ class Transliterator:
         self.instruction = instruction
         self.device = device
         self.language_code = find_language(language, LANGUAGES)
-       self.strategy: TransliterationStrategy = TransliterationStrategyFactory.get_strategy(self.language_code)
+        self.strategy: TransliterationStrategy = TransliterationStrategyFactory.get_strategy(self.language_code)
 
     def transliterate_df(self, df: pd.DataFrame) -> pd.DataFrame:
         """Apply transliteration to the DataFrame and return it."""

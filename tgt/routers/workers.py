@@ -9,9 +9,10 @@ import base64
 from zipfile import ZipFile
 from pathlib import Path
 
-from inference.Transcriber import Transcriber
-from inference.Translator import Translator
-from inference.Glosser import Glosser
+from inference.api_interface.transcribe import Transcriber
+from inference.api_interface.translate import Translator
+from inference.api_interface.gloss import Glosser
+
 from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
 from utils.reorder_columns import create_columns
 
@@ -48,6 +49,8 @@ def _offline_worker(job_id, base_dir, action, language, instruction, q, cancel):
                 Translator(session, language, instruction, "cpu").process_data(verbose=True)
             elif action == "gloss":
                 Glosser(session, language, instruction).process_data()
+            elif action == "transliterate":
+                Transliterator(session, language, instruction).process_data(verbose=True)
             elif action == "create columns":
                 create_columns(session, language)
 
@@ -135,13 +138,15 @@ def _online_worker(job_id, share_link, token, action, language, instruction, q, 
 
             uploads = []
             if action == "transcribe":
-                Transcriber(session_path, language, "cpu").process_data(verbose=True)
+                Transcriber(session_path, language, "cpu").process_data()
                 uploads = ["transcription.log"]
             elif action == "translate":
-                Translator(session_path, language, instruction, "cpu").process_data(verbose=True)
+                Translator(session_path, language, instruction, "cpu").process_data()
                 uploads = ["translation.log"]
             elif action == "gloss":
                 Glosser(session_path, language, instruction).process_data()
+            elif action == "transliterate":
+                Transliterator(session, language, instruction).process_data()
             elif action == "create columns":
                 create_columns(session_path, language)
 

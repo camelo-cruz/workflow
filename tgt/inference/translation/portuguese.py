@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 class PortugueseTranslationStrategy(TranslationStrategy):
     def __init__(self, device: str = "cpu"):
         super().__init__("pt", device)
-        self._models_loaded = False
 
     def load_model(self):
         # Load your custom local model (converted from OPUS)

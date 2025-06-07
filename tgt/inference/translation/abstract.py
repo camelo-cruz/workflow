@@ -18,8 +18,6 @@ class TranslationStrategy(ABC):
         self._deepl_client = None
         self._deepl_source_lang = None
 
-        self.load_model()
-
 
     def _init_marian_model(self):
         """
