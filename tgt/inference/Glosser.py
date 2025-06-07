@@ -24,7 +24,6 @@ class Glosser:
         os.environ["SPACY_DATA"] = self._spacy_data_dir
 
         self.strategy: GlossingStrategy = GlossingStrategyFactory.get_strategy(self.language_code)
-        self.strategy.load_model()
 
         try:
             shutil.rmtree(self._spacy_data_dir)

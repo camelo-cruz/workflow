@@ -36,7 +36,6 @@ class Translator:
         self.device = device
 
         self.strategy = TranslationStrategyFactory.get_strategy(self.language_code)
-        self.strategy.load_model()
 
         logger.info(
             f"Initialized Translator (language={language}, code={self.language_code}, "

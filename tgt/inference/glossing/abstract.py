@@ -9,6 +9,7 @@ class GlossingStrategy(ABC):
     """
     def __init__(self, language_code: str):
         self.language_code = language_code
+        self.load_model()
 
     @abstractmethod
     def load_model(self):

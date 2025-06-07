@@ -18,6 +18,8 @@ class TranslationStrategy(ABC):
         self._deepl_client = None
         self._deepl_source_lang = None
 
+        self.load_model()
+
 
     def _init_marian_model(self):
         """
@@ -104,13 +106,15 @@ class TranslationStrategy(ABC):
         except Exception:
             return None
     
+    @abstractmethod
     def load_model(self):
         """
         Load the translation models. This method can be called by subclasses
         to ensure that both Marian and DeepL are initialized.
         """
         raise NotImplementedError(
-            "Subclasses must implement load_model() to initialize their translation models."
+            "Subclasses must implement load_model() to initialize their translation models. you can call "
+            "self._init_marian_model() and/or self._init_deepl_client() as needed."
         )
         
     @abstractmethod
