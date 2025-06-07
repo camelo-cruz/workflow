@@ -1,5 +1,13 @@
+import os
+import pandas as pd
+from tqdm import tqdm
+from utils.functions import find_language, format_excel_output, set_global_variables
 
-from .transliteration.factory import TransliterationStrategyFactory
+
+from ..transliteration.abstract import TransliterationStrategy
+from ..transliteration.factory import 
+
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables() 
 
 class Transliterator:
     """
@@ -18,7 +26,7 @@ class Transliterator:
         self.instruction = instruction
         self.device = device
         self.language_code = find_language(language, LANGUAGES)
-       self.strategy = TransliterationStrategyFactory.get_strategy(self.language_code)
+       self.strategy: TransliterationStrategy = TransliterationStrategyFactory.get_strategy(self.language_code)
 
     def transliterate_df(self, df: pd.DataFrame) -> pd.DataFrame:
         """Apply transliteration to the DataFrame and return it."""

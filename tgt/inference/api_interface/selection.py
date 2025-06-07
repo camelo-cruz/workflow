@@ -135,21 +135,3 @@ class SentenceSelector():
 
         print("Processing completed.")
 
-
-def main():
-    parser = argparse.ArgumentParser(description="Automatic selection of sentences.")
-    parser.add_argument("input_dir", help="Directory with files to select.")
-    parser.add_argument("source_language", help="Source language for selection.")
-    parser.add_argument("study", help="Name of the study.")
-    args = parser.parse_args()
-
-
-    language = args.source_language.lower()
-
-    # Create an instance of Transliterator and process the data
-    sentenceSelector = SentenceSelector(args.input_dir, language, args.study, verbose=True, device="cpu")
-    sentenceSelector.process_data()
-
-
-if __name__ == "__main__":
-    main()

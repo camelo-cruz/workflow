@@ -4,13 +4,14 @@ import logging
 import pandas as pd
 from tqdm import tqdm
 from utils.functions import find_language, setup_logging, format_excel_output, set_global_variables
-from .translation.factory import TranslationStrategyFactory
+
+from ..translation.abstract import TranslationStrategy
+from ..translation.factory import TranslationStrategyFactory
 
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 
 logger = logging.getLogger(__name__)
-
 
 class Translator:
     def __init__(
@@ -35,7 +36,7 @@ class Translator:
         self.instruction = self._normalize_instruction(instruction)
         self.device = device
 
-        self.strategy = TranslationStrategyFactory.get_strategy(self.language_code)
+        self.strategy: TranslationStrategy = TranslationStrategyFactory.get_strategy(self.language_code)
 
         logger.info(
             f"Initialized Translator (language={language}, code={self.language_code}, "
