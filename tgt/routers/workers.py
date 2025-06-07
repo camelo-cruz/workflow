@@ -9,9 +9,9 @@ import base64
 from zipfile import ZipFile
 from pathlib import Path
 
-from classes.Transcriber import Transcriber
-from classes.Translator import Translator
-from classes.Glosser import Glosser
+from inference.Transcriber import Transcriber
+from inference.Translator import Translator
+from inference.Glosser import Glosser
 from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
 from utils.reorder_columns import create_columns
 

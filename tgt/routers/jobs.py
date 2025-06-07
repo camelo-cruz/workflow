@@ -15,9 +15,9 @@ from fastapi import APIRouter, Request, Form, UploadFile, File, Body, HTTPExcept
 from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 
-from classes.Transcriber import Transcriber
-from classes.Translator import Translator
-from classes.Glosser import Glosser
+from inference.Transcriber import Transcriber
+from inference.Translator import Translator
+from inference.Glosser import Glosser
 from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
 from utils.reorder_columns import create_columns
 from .workers import _offline_worker, _online_worker
