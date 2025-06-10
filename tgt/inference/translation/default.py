@@ -1,17 +1,25 @@
-from .abstract import TranslationStrategy
+from inference.translation.abstract import TranslationStrategy
 
 class DefaultTranslationStrategy(TranslationStrategy):
-    """
-    A default chain: Marian → DeepL.
-    We explicitly call `load_model()` in __init__ so that both backends
-    are loaded at construction time.
-    """
+    """A default chain: Marian → DeepL."""
+
     def __init__(self, language_code: str, device: str = "cpu"):
         super().__init__(language_code, device)
-    
+        self.load_model()  # Call load_model here
+
     def load_model(self):
+        self._init_deepl_client()
         self._init_marian_model()
 
     def translate(self, text: str) -> str | None:
-        out = self._translate_marian(text)
-        return out
+        try:
+            out = self._translate_deepl(text)
+            return out
+        except Exception as e:
+            print(f"DeepL translation failed: {e}")
+            try:
+                out = self._translate_marian(text)
+                return out
+            except Exception as e:
+                print(f"Marian translation failed: {e}")
+                return None
