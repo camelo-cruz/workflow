@@ -15,11 +15,11 @@ class DefaultTranslationStrategy(TranslationStrategy):
         try:
             out = self._translate_deepl(text)
             return out
-        except Exception as e:
-            print(f"DeepL translation failed: {e}")
+        except Exception as e1:
+            print(f"DeepL translation failed: {e1}")
             try:
                 out = self._translate_marian(text)
                 return out
-            except Exception as e:
-                print(f"Marian translation failed: {e}")
+            except Exception as e2:
+                print(f"Marian translation failed: {e2}")
                 return None
