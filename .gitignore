@@ -8,3 +8,4 @@ tgt/spacy_models/*
 tgt/whisper_models/*
 tgt/tgt/*
 db.sqlite3
+tgt-venv/*

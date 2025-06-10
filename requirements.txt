@@ -1,13 +1,13 @@
 # MacOS dependencies
-torch==2.5.1; sys_platform == "darwin"
-torchvision==0.20.1; sys_platform == "darwin"
-torchaudio==2.5.1; sys_platform == "darwin"
+torch==2.6.0; sys_platform == "darwin"
+torchvision==0.21.0; sys_platform == "darwin"
+torchaudio==2.6.0; sys_platform == "darwin"
 
 # Windows dependencies
 --extra-index-url https://download.pytorch.org/whl/cu124
-torch==2.5.1+cu124; sys_platform == "win32"
-torchvision==0.20.1+cu124; sys_platform == "win32"
-torchaudio==2.5.1+cu124; sys_platform == "win32"
+torch==2.6.0+cu124; sys_platform == "win32"
+torchvision==0.21.0+cu124; sys_platform == "win32"
+torchaudio==2.6.0+cu124; sys_platform == "win32"
 
 annotated-types==0.7.0
 anyio==4.9.0
@@ -37,3 +37,7 @@ spacy
 spacy_stanza
 stanza
 python-multipart
+cupy-cuda12x; sys_platform == "linux"
+sacremoses
+pypinyin
+pykakasi
