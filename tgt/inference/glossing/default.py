@@ -1,19 +1,21 @@
 import re
 import spacy
 
-from deep_translator import GoogleTranslator
 from spacy.cli import download
 from spacy.util import is_package
 from utils.functions import load_glossing_rules
-from .abstract import GlossingStrategy
+from inference.glossing.abstract import GlossingStrategy
+from inference.translation.factory import TranslationStrategyFactory
 
 
-LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY")
+LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY.json")
 
 class DefaultGlossingStrategy(GlossingStrategy):
     def __init__(self, language_code: str):
         super().__init__(language_code)
         self.nlp = None
+        self.translation_strategy = TranslationStrategyFactory.get_strategy(language_code)
+        self.translation_strategy.load_model()
 
     def load_model(self):
         models = {
@@ -43,7 +45,7 @@ class DefaultGlossingStrategy(GlossingStrategy):
                 morph = token.morph.to_dict()
 
                 # Translate lemma → English
-                translated_lemma = GoogleTranslator(source=self.language_code, target="en").translate(text=lemma)
+                translated_lemma = self.translation_strategy.translate(text=lemma)
                 if isinstance(translated_lemma, str):
                     translated_lemma = translated_lemma.lower().replace(" ", "-")
 
@@ -65,3 +67,11 @@ class DefaultGlossingStrategy(GlossingStrategy):
                 glossed_word = re.sub(r"(?:\.|-|\b)None", "", glossed_word)
                 glossed_sentence += glossed_word + " "
         return glossed_sentence.strip()
+
+
+if __name__ == "__main__":
+    glossing_strategy = DefaultGlossingStrategy(language_code="de")
+    glossing_strategy.load_model()
+    sentence = "Ich sage dir, dass er ein guter Lehrer ist."
+    glossed_sentence = glossing_strategy.gloss(sentence)
+    print(glossed_sentence)

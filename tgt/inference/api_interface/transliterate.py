@@ -4,8 +4,8 @@ from tqdm import tqdm
 from utils.functions import find_language, format_excel_output, set_global_variables
 
 
-from ..transliteration.abstract import TransliterationStrategy
-from ..transliteration.factory import 
+from inference.transliteration.abstract import TransliterationStrategy
+from inference.transliteration.factory import TransliterationStrategyFactory
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables() 
 

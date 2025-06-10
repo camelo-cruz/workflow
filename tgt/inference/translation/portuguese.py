@@ -1,7 +1,7 @@
 # translation/portuguese.py
 
 from transformers import MarianMTModel, MarianTokenizer
-from .abstract import TranslationStrategy
+from inference.translation.abstract import TranslationStrategy
 import os
 import sys
 import deepl

@@ -3,7 +3,7 @@ import stanza
 import spacy_stanza
 from spacy.cli import download
 from spacy.util import is_package
-from .abstract import GlossingStrategy
+from inference.glossing.abstract import GlossingStrategy
 from utils.functions import load_glossing_rules
 
 from deep_translator import GoogleTranslator

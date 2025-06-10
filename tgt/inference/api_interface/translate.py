@@ -5,8 +5,8 @@ import pandas as pd
 from tqdm import tqdm
 from utils.functions import find_language, setup_logging, format_excel_output, set_global_variables
 
-from ..translation.abstract import TranslationStrategy
-from ..translation.factory import TranslationStrategyFactory
+from inference.translation.abstract import TranslationStrategy
+from inference.translation.factory import TranslationStrategyFactory
 
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()

@@ -1,0 +1,35 @@
+{
+  "extend":false,
+  "label_smoothing":0.0,
+  "labels_morph":{
+    "Case=Nom|Definite=Def|Gender=Masc|Number=Sing|PronType=Art":"Case=Nom|Definite=Def|Gender=Masc|Number=Sing|PronType=Art",
+    "Case=Nom|Gender=Masc|Number=Sing":"Case=Nom|Gender=Masc|Number=Sing",
+    "_":"",
+    "Case=Dat|Definite=Def|Gender=Masc|Number=Sing|PronType=Art":"Case=Dat|Definite=Def|Gender=Masc|Number=Sing|PronType=Art",
+    "Case=Dat|Gender=Masc|Number=Sing":"Case=Dat|Gender=Masc|Number=Sing",
+    "Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art":"Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art",
+    "Case=Nom|Gender=Fem|Number=Sing":"Case=Nom|Gender=Fem|Number=Sing",
+    "Case=Nom|Gender=Masc|Number=Sing|PronType=Dem":"Case=Nom|Gender=Masc|Number=Sing|PronType=Dem",
+    "Mood=Ind|Number=Sing|Tense=Pres":"Mood=Ind|Number=Sing|Tense=Pres",
+    "Case=Acc|Definite=Def|Gender=Neut|Number=Sing|PronType=Art":"Case=Acc|Definite=Def|Gender=Neut|Number=Sing|PronType=Art",
+    "Case=Nom|Gender=Neut|Number=Sing":"Case=Nom|Gender=Neut|Number=Sing",
+    "Case=Nom|Number=Sing":"Case=Nom|Number=Sing",
+    "Number=Sing":"Number=Sing"
+  },
+  "labels_pos":{
+    "Case=Nom|Definite=Def|Gender=Masc|Number=Sing|PronType=Art":0,
+    "Case=Nom|Gender=Masc|Number=Sing":0,
+    "_":0,
+    "Case=Dat|Definite=Def|Gender=Masc|Number=Sing|PronType=Art":0,
+    "Case=Dat|Gender=Masc|Number=Sing":0,
+    "Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art":0,
+    "Case=Nom|Gender=Fem|Number=Sing":0,
+    "Case=Nom|Gender=Masc|Number=Sing|PronType=Dem":0,
+    "Mood=Ind|Number=Sing|Tense=Pres":0,
+    "Case=Acc|Definite=Def|Gender=Neut|Number=Sing|PronType=Art":0,
+    "Case=Nom|Gender=Neut|Number=Sing":0,
+    "Case=Nom|Number=Sing":0,
+    "Number=Sing":0
+  },
+  "overwrite":true
+}

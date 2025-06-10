@@ -4,9 +4,9 @@ from spacy.cli import download
 from spacy.util import is_package
 from utils.functions import load_glossing_rules
 from deep_translator import GoogleTranslator
-from .abstract import GlossingStrategy
+from inference.glossing.abstract import GlossingStrategy
 
-LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY")
+LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY.json")
 
 
 class PortugueseGlossingStrategy(GlossingStrategy):

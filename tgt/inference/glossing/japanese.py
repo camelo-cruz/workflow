@@ -1,7 +1,7 @@
 import spacy
 from spacy.cli import download
 from spacy.util import is_package
-from .abstract import GlossingStrategy
+from inference.glossing.abstract import GlossingStrategy
 
 class JapaneseGlossingStrategy(GlossingStrategy):
     def __init__(self, language_code: str):

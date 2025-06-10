@@ -1,12 +1,9 @@
 import os
 import uuid
 import multiprocessing
-import traceback
-import requests
 import shutil
 import queue
 
-import base64
 from zipfile import ZipFile
 from pathlib import Path
 import tempfile
@@ -15,12 +12,6 @@ from fastapi import APIRouter, Request, Form, UploadFile, File, Body, HTTPExcept
 from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 
-from inference.api_interface.transcribe import Transcriber
-from inference.api_interface.translate import Translator
-from inference.api_interface.gloss import Glosser
-
-from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
-from utils.reorder_columns import create_columns
 from .workers import _offline_worker, _online_worker
 
 templates = Jinja2Templates(directory="templates")
@@ -33,7 +24,7 @@ async def index(request: Request):
     version = os.getenv("APP_VERSION", "dev")
     return templates.TemplateResponse("index.html", {"request": request, "app_version": version})
 
-@router.post("/jobs/process")
+@router.post("/process")
 async def process(
     request: Request,
     action: str = Form(...),
@@ -86,7 +77,7 @@ async def process(
     return {"job_id": job_id}
 
 
-@router.get("/jobs/{job_id}/stream")
+@router.get("/{job_id}/stream")
 async def stream(job_id: str):
     job = jobs.get(job_id)
     if not job:
@@ -127,7 +118,7 @@ async def stream(job_id: str):
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
-@router.post("/jobs/cancel")
+@router.post("/cancel")
 async def cancel_job(payload: dict = Body(...)):
     jid = payload.get("job_id")
     job = jobs.get(jid)
@@ -146,7 +137,7 @@ async def cancel_job(payload: dict = Body(...)):
     return {"status": "cancelled"}
 
 
-@router.get("/jobs/{job_id}/download")
+@router.get("/{job_id}/download")
 async def download_zip(job_id: str, background_tasks: BackgroundTasks):
     job = jobs.get(job_id)
     if not job:

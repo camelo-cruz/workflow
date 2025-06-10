@@ -7,8 +7,8 @@ import pandas as pd
 from tqdm import tqdm
 from utils.functions import find_language, format_excel_output, set_global_variables
 
-from ..glossing.abstract import GlossingStrategy
-from ..glossing.factory import GlossingStrategyFactory
+from inference.glossing.abstract import GlossingStrategy
+from inference.glossing.factory import GlossingStrategyFactory
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables() 
 

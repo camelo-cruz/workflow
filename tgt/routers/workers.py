@@ -12,6 +12,7 @@ from pathlib import Path
 from inference.api_interface.transcribe import Transcriber
 from inference.api_interface.translate import Translator
 from inference.api_interface.gloss import Glosser
+from inference.api_interface.transliterate import Transliterator
 
 from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
 from utils.reorder_columns import create_columns
@@ -146,7 +147,7 @@ def _online_worker(job_id, share_link, token, action, language, instruction, q, 
             elif action == "gloss":
                 Glosser(session_path, language, instruction).process_data()
             elif action == "transliterate":
-                Transliterator(session, language, instruction).process_data()
+                Transliterator(session_path, language, instruction).process_data()
             elif action == "create columns":
                 create_columns(session_path, language)
 
