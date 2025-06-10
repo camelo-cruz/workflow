@@ -10,8 +10,16 @@ class DefaultTranslationStrategy(TranslationStrategy):
         super().__init__(language_code, device)
     
     def load_model(self):
+        self._init_deepl_client()
         self._init_marian_model()
 
     def translate(self, text: str) -> str | None:
-        out = self._translate_marian(text)
-        return out
+        try:
+            return self._translate_deepl(text)
+        except Exception as e1:
+            print(f"[Fallback] DeepL failed: {e1}")
+            try:
+                return self._translate_marian(text)
+            except Exception as e2:
+                print(f"[Error] Marian also failed: {e2}")
+                return None

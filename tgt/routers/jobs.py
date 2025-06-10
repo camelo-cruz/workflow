@@ -77,7 +77,7 @@ async def process(
     return {"job_id": job_id}
 
 
-@router.get("/{job_id}/stream")
+@router.get("/stream/{job_id}")
 async def stream(job_id: str):
     job = jobs.get(job_id)
     if not job:
