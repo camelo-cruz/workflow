@@ -1,8 +1,0 @@
-{
-  "token_acc":1.0,
-  "pos_acc":0.0,
-  "morph_acc":0.7216161616,
-  "tag_acc":0.0,
-  "dep_uas":0.0,
-  "dep_las":0.0
-}

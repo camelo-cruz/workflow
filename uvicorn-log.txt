@@ -1,398 +1,0 @@
-[10.06.2025 12:44:40,58] Starting Uvicorn... 
-INFO:     Will watch for changes in these directories: ['C:\\Users\\camelo.cruz\\Documents\\GitHub\\workflow\\tgt']
-INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [72552] using StatReload
-INFO:     Started server process [53528]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     127.0.0.1:51734 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51734 - "GET /static/css/gui.css HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51734 - "GET /static/js/main.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51734 - "GET /static/images/zas_logo.jpg HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51734 - "GET /static/js/ui.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51734 - "GET /static/js/processor.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51734 - "GET /static/js/streamer.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51734 - "GET /static/js/auth.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51734 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-[10.06.2025 12:45:02,67] Starting Uvicorn... 
-INFO:     Will watch for changes in these directories: ['C:\\Users\\camelo.cruz\\Documents\\GitHub\\workflow\\tgt']
-INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [78712] using StatReload
-INFO:     Started server process [71600]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     127.0.0.1:51768 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51768 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-INFO:     127.0.0.1:51831 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51831 - "GET /static/css/gui.css HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51832 - "GET /static/images/zas_logo.jpg HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51833 - "GET /static/js/main.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51832 - "GET /static/js/processor.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51833 - "GET /static/js/ui.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51831 - "GET /static/js/streamer.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51832 - "GET /static/js/auth.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51832 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:51852 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51852 - "GET /static/css/gui.css HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51853 - "GET /static/images/zas_logo.jpg HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51852 - "GET /static/js/main.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51853 - "GET /static/js/processor.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51852 - "GET /static/js/ui.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51853 - "GET /static/js/streamer.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51852 - "GET /static/js/auth.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51852 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:51909 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51909 - "GET /static/css/gui.css HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51910 - "GET /static/images/zas_logo.jpg HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51909 - "GET /static/js/main.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51909 - "GET /static/js/ui.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51910 - "GET /static/js/processor.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51909 - "GET /static/js/streamer.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51909 - "GET /static/js/auth.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:51909 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:51924 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51924 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:52392 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52392 - "GET /static/css/gui.css HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:52393 - "GET /static/images/zas_logo.jpg HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:52392 - "GET /static/js/main.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:52393 - "GET /static/js/processor.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:52392 - "GET /static/js/ui.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:52393 - "GET /static/js/streamer.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:52393 - "GET /static/js/auth.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:52393 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-[10.06.2025 16:18:41,88] Starting Uvicorn... 
-INFO:     Will watch for changes in these directories: ['C:\\Users\\camelo.cruz\\Documents\\GitHub\\workflow\\tgt']
-INFO:     Uvicorn running on http://0.0.0.0:80 (Press CTRL+C to quit)
-INFO:     Started reloader process [4344] using StatReload
-INFO:     Started server process [84136]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     127.0.0.1:52628 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52628 - "GET /static/css/gui.css HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52629 - "GET /static/images/zas_logo.jpg HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52629 - "GET /static/js/main.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52628 - "GET /static/js/processor.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52629 - "GET /static/js/ui.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52628 - "GET /static/js/streamer.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52629 - "GET /static/js/auth.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52629 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     172.20.100.175:50115 - "GET / HTTP/1.1" 200 OK
-INFO:     172.20.100.175:50116 - "GET /static/images/zas_logo.jpg HTTP/1.1" 200 OK
-INFO:     172.20.100.175:50115 - "GET /static/css/gui.css HTTP/1.1" 200 OK
-INFO:     172.20.100.175:50118 - "GET /static/js/main.js HTTP/1.1" 200 OK
-INFO:     172.20.100.175:50116 - "GET /static/js/processor.js HTTP/1.1" 200 OK
-INFO:     172.20.100.175:50118 - "GET /static/js/ui.js HTTP/1.1" 200 OK
-INFO:     172.20.100.175:50115 - "GET /static/js/streamer.js HTTP/1.1" 200 OK
-INFO:     172.20.100.175:50116 - "GET /static/js/auth.js HTTP/1.1" 200 OK
-INFO:     172.20.100.175:50116 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     172.20.100.175:50116 - "GET / HTTP/1.1" 200 OK
-INFO:     172.20.100.185:57739 - "GET / HTTP/1.1" 200 OK
-INFO:     172.20.100.185:57739 - "GET /static/css/gui.css HTTP/1.1" 200 OK
-INFO:     172.20.100.185:57740 - "GET /static/images/zas_logo.jpg HTTP/1.1" 200 OK
-INFO:     172.20.100.185:57741 - "GET /static/js/main.js HTTP/1.1" 200 OK
-INFO:     172.20.100.185:57740 - "GET /static/js/processor.js HTTP/1.1" 200 OK
-INFO:     172.20.100.185:57739 - "GET /static/js/ui.js HTTP/1.1" 200 OK
-INFO:     172.20.100.185:57741 - "GET /static/js/streamer.js HTTP/1.1" 200 OK
-INFO:     172.20.100.185:57740 - "GET /static/js/auth.js HTTP/1.1" 200 OK
-INFO:     172.20.100.185:57739 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     172.20.100.185:57746 - "GET /auth/start HTTP/1.1" 302 Found
-INFO:     172.20.100.185:57751 - "GET /auth/start HTTP/1.1" 302 Found
-INFO:     172.20.100.172:50308 - "GET / HTTP/1.1" 200 OK
-INFO:     172.20.100.172:50308 - "GET /auth/start HTTP/1.1" 302 Found
-INFO:     127.0.0.1:52678 - "GET /auth/start HTTP/1.1" 302 Found
-INFO:     172.20.100.172:50487 - "GET /auth/start HTTP/1.1" 302 Found
-INFO:     172.20.100.175:50843 - "GET /auth/start HTTP/1.1" 302 Found
-INFO:     127.0.0.1:52878 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52879 - "GET /static/images/zas_logo.jpg HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52878 - "GET /static/css/gui.css HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52880 - "GET /static/js/main.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52878 - "GET /static/js/ui.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52880 - "GET /static/js/processor.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52881 - "GET /static/js/streamer.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52881 - "GET /static/js/auth.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52881 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     172.20.100.185:57793 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52916 - "GET / HTTP/1.1" 200 OK
-INFO:     172.20.100.175:51235 - "GET / HTTP/1.1" 200 OK
-INFO:     172.20.100.185:57796 - "GET / HTTP/1.1" 200 OK
-[10.06.2025 16:52:12,62] Starting Uvicorn... 
-INFO:     Will watch for changes in these directories: ['C:\\Users\\camelo.cruz\\Documents\\GitHub\\workflow\\tgt']
-INFO:     Uvicorn running on http://0.0.0.0:443 (Press CTRL+C to quit)
-INFO:     Started reloader process [62968] using StatReload
-INFO:     Started server process [76208]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-[10.06.2025 16:55:01,83] Starting Uvicorn... 
-INFO:     Will watch for changes in these directories: ['C:\\Users\\camelo.cruz\\Documents\\GitHub\\workflow\\tgt']
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [23996] using StatReload
-INFO:     Started server process [49000]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     127.0.0.1:53179 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53180 - "GET /static/images/zas_logo.jpg HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:53179 - "GET /static/css/gui.css HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:53180 - "GET /static/js/main.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:53180 - "GET /static/js/ui.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:53179 - "GET /static/js/processor.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:53180 - "GET /static/js/streamer.js HTTP/1.1" 304 Not Modified
-INFO:     127.0.0.1:53179 - "GET /static/js/auth.js HTTP/1.1" 304 Not Modified
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-WARNING:  Invalid HTTP request received.
-INFO:     172.20.100.175:0 - "GET / HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET /static/css/gui.css HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET /static/js/main.js HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET /static/images/zas_logo.jpg HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET /static/js/ui.js HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET /static/js/processor.js HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET /static/js/streamer.js HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET /static/js/auth.js HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET / HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET /auth/start HTTP/1.0" 302 Found
-INFO:     172.20.100.175:0 - "GET /auth/redirect?code=1.AR8AXAPzfhG_OkarO5qaSsglADDSwFgdFDBKkF79Y-Mx5eofACgfAA.AgABBAIAAABVrSpeuWamRam2jAF1XRQEAwDs_wUA9P9TwxSkRdAWc9AR8IXFYeQAahBbeAFCClUo6CJkfI_DDYKWMLG3LTBz47LKxg2Bgmj2qHqZk5RGYBteK5eRn_cO85lqS8iFZmhZCEJXAC4yO-hsKIO9Ljhi_K-0gZYD5TO7lUeY1-9HTzy6K9PoCbBvwmzwoqe4Pn55dTcp2YNMpwMHx0I779EdTntszM3T8ccLuUAgT7Lo6RPtE2nll8qu2yo9rWUpMuPM31huC8h76TxcGxX7UwDi7_jc5xaEBF3nbBF0Xaugluc_AvnPuYzRunuveC-2iBfPX-v6B9qiWKk_qKCFodCgH0-QsZc9qDVwo3P6kXGe6GvIVabNWacb-SUhBC-G8c-BbIy2HqNBYaMdqC6ergkncFjKO-_uoIj33OZOsfqFOUKd-tncOOMP-1ketXzIk4ELONXt5EybawXsUpNR7_EBSJyB1o5aSAwKc6rVgZDaEYpKTGdrBKlIiyXNCrET-ix1Pd2JjYbYgOqn7KC7hoLzNHEsyWgYWx7W94xr7wD4eZYLe5CvWuEs0pcPU-viDcMty65joItQX_ibzlIotAUMgxs-DKhAjIV8oHL-sRv3yM6P4BHfU5q5Qt1lhV1hiCsqFj0JU61ZNwY9-4e9SiRhe25Wln18z3dZWRzC2KMgGzq7RGSbK3NWAqPmIOWct03JaprqT_YTbmpLMv5yP_Hx3207MBgicrIOXvthm1d_WmZ8e3bRtVZ4J0CnMU1Ks8SdwMI1k2rvUA0HrPHo2eT5_kOXQxR5lJ6kszoLPCFLgr3cCq5EZztM6TiD61tR9kkXgUdXHOkZ9toxEMxvD6UJ-aCh8DiYjqJj&session_state=004d1679-36bd-97d4-8277-480c11a18e45 HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET /static/css/auth.css HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET /auth/start HTTP/1.0" 302 Found
-INFO:     172.20.100.175:0 - "GET /auth/redirect?code=1.AR8AXAPzfhG_OkarO5qaSsglADDSwFgdFDBKkF79Y-Mx5eofACgfAA.AgABBAIAAABVrSpeuWamRam2jAF1XRQEAwDs_wUA9P-crZeqoZqRF6tNdBPaLrfBLIinDmr6m3w96N2eS4--83Ots_MObvL9mfwSPD04hBAA8TFCL5UhIk6yaN9MN3d6WTxDzR-gbP8n63xtaW7Zo5MUyHnFFmkLLSym_ofwCJaNR-NIDrAM_nHgHV8KZVVOvk42Y0b2KnT5XEYsW3E_6UpH422sAoz_6vgHYuaGDkMH1ago7ZZiE2rR6XGkv0xQvmpfj_m27OIijaEIztG8hkPuH2BbBVJJXy8gjeSIx4LrI0uAEDpv0uFOF1UpI4FpJE4DUYHam1Fqp3wXMh1JS1y8d1Y3vxV5VVsyvFyg0QqbdU_fJYChitPx183lrF1SaTA2XFMUHCaRPxFIT6gNMbec1sjyAw-rJtaFjGVi0q1174fFw2aOtjCBJ6CmN5ssGKGzvvMLUfDXS2DUu2Per_RefndYjne_10g3AiK4f_-vCqruuX-2gyPCSG1hjCWxAgRjsuKMKb058h-Jog9Ib8OBZiBJURCDYgpdAHeyOwVQlhgN1mHG8NfOhHMamsiatjlEKv_BsDKwmEO886vNnxAOG9m0eKpkkNAmUgfRvOfZEy2S7tlqOAdfBgt-S4BkRC5Emhx_sSYiPegAnajU2J7TnZD-4N93IrjyNdPWIC62428PmrZdO6OZP27stE6ysbFjphjicvQRToLYbmwlRG5oX3XRb-PWzbQcqlPpj0gfBTey9osS1eR0BzV5DNZVdJb78RkpZPosNCZhTmxYGzOLXrjZPkvMsPkl5B51mfN8fHbEnsEyF_mCPCsBowKuSuyAgWM2OuhBH4vUjPKSrZTHSTNlP2z3euA89XZIn9Uc_g&session_state=004d1679-36bd-97d4-8277-480c11a18e45 HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET / HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET /auth/start HTTP/1.0" 302 Found
-INFO:     172.20.100.175:0 - "GET /auth/redirect?code=1.AR8AXAPzfhG_OkarO5qaSsglADDSwFgdFDBKkF79Y-Mx5eofACgfAA.AgABBAIAAABVrSpeuWamRam2jAF1XRQEAwDs_wUA9P_qyW5RxAmw4Eh9vl-Ubiu6Unia8FeDBhPKQpNcQ1dbjXblArXM2xCFiRiv2kBllDPmEjihmQ-DDW5gTk83Bw6oEBzfQUO_PSziHFIwGYES1NygcE8DyoFdvpZHUCHqQsHKyGGWuml4pzlB_nUtO9EEOF4ASoFVFZXlLasHfgKi5s-lCsTWBM4TdNNLL5AqY5WlWbg2-xjag75VfrVr6zkoJEIGAc07DW2peNknV8hwbhPXw_XuM-wp1sfjZ2FP-gD5YbOkIUTc-p48bOTJWpXvf5dy6dQBtWo7fNSVnD33sCY4XIsXYp0VRu-2-7s_NKSacEdksKL0qFXLRTaMdrcN76qb3GUybo84rBrOYFLEZtiUs9FYW-h_qQ8AipRFqHmEYGyE6jpTiaOZBqSLJ5DR2nFZsrexLDb9zEtK9VIipXpX7lIMqKSsRmy6MdVfbvorulmiFc-gXCPvzFyNBDyMeTjcsJwDYUCkQSLAS-rPDVFOnHDRRU1Vt0Vx6ondfE2qXlh13BbTVLp_WUTZkNn23G1-GcmzB4VhYd6lKvLEgjhPb-2FCSqizDCFXF5ixeLmt6NQOxL3Lu_0CwNxyBC5rtjLBg5rTU2iB4V4ZU1CBVoPuMQ-4fTuh7aXYIUVj8Qb1BohgwKDEJ5xx7sH_9Lm19ts3wQhZj7PQxicYD2gG0AoHQ3bmRYqpxCr03EdDBiimpxC54tLVQZBESvhRZDUVwpcwKnU0yMsIApzdKrWuUYG04RB2PQUP1WP1KnZ6u9dMQuqBvM9NVfyhDcusCk2hGUDFeaHosOixz9u67bEhbN5M2mOi7ZNWUqM7JBUKwHr&session_state=004d1679-36bd-97d4-8277-480c11a18e45 HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "POST /process/ HTTP/1.0" 307 Temporary Redirect
-INFO:     172.20.100.175:0 - "POST /process HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "GET /stream/c2be2cf8-59d4-4b69-8f4a-4980c8d6a457/ HTTP/1.0" 307 Temporary Redirect
-INFO:     172.20.100.175:0 - "GET /stream/c2be2cf8-59d4-4b69-8f4a-4980c8d6a457 HTTP/1.0" 200 OK
-Language recognized: ja
-Processing directory: C:\Users\CAMELO~1.CRU\AppData\Local\Temp\tmplh_fybaf\Session_1347898
-Transcribing:   0%|          | 0/20 [00:00<?, ?it/s]Processing file: blockNr_1_taskNr_3_trialNr_1_T1.mp3 (1/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                    Transcribing:   0%|          | 0/20 [00:12<?, ?it/s]Transcribing:   5%|5         | 1/20 [00:12<03:48, 12.04s/it]>>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-No active speech found in audio
-
-Processing file: blockNr_1_taskNr_3_trialNr_2_T2.mp3 (2/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_3_trialNr_2_T2.mp3': 'charmap' codec can't encode characters in position 12-28: character maps to <undefined>
-Transcribing:  10%|#         | 2/20 [00:30<04:44, 15.83s/it]Processing file: blockNr_1_taskNr_3_trialNr_3_T3.mp3 (3/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_3_trialNr_3_T3.mp3': 'charmap' codec can't encode characters in position 12-28: character maps to <undefined>
-Transcribing:  15%|#5        | 3/20 [00:48<04:46, 16.87s/it]Processing file: blockNr_1_taskNr_3_trialNr_4_T4.mp3 (4/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-INFO:     172.20.100.175:0 - "GET /stream/c2be2cf8-59d4-4b69-8f4a-4980c8d6a457 HTTP/1.0" 200 OK
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_3_trialNr_4_T4.mp3': 'charmap' codec can't encode characters in position 12-35: character maps to <undefined>
-Transcribing:  20%|##        | 4/20 [01:06<04:36, 17.28s/it]Processing file: blockNr_1_taskNr_4_trialNr_10_Recording.mp3 (5/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_10_Recording.mp3': 'charmap' codec can't encode characters in position 12-32: character maps to <undefined>
-Transcribing:  25%|##5       | 5/20 [01:24<04:23, 17.56s/it]Processing file: blockNr_1_taskNr_4_trialNr_11_Recording.mp3 (6/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_11_Recording.mp3': 'charmap' codec can't encode characters in position 12-29: character maps to <undefined>
-Transcribing:  30%|###       | 6/20 [01:42<04:06, 17.62s/it]Processing file: blockNr_1_taskNr_4_trialNr_12_Recording.mp3 (7/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_12_Recording.mp3': 'charmap' codec can't encode characters in position 12-40: character maps to <undefined>
-Transcribing:  35%|###5      | 7/20 [02:00<03:52, 17.88s/it]Processing file: blockNr_1_taskNr_4_trialNr_13_Recording.mp3 (8/20)
-INFO:     172.20.100.175:0 - "GET /stream/c2be2cf8-59d4-4b69-8f4a-4980c8d6a457 HTTP/1.0" 200 OK
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_13_Recording.mp3': 'charmap' codec can't encode characters in position 12-32: character maps to <undefined>
-Transcribing:  40%|####      | 8/20 [02:18<03:34, 17.90s/it]Processing file: blockNr_1_taskNr_4_trialNr_14_Recording.mp3 (9/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_14_Recording.mp3': 'charmap' codec can't encode characters in position 12-30: character maps to <undefined>
-Transcribing:  45%|####5     | 9/20 [02:37<03:18, 18.06s/it]Processing file: blockNr_1_taskNr_4_trialNr_15_Recording.mp3 (10/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_15_Recording.mp3': 'charmap' codec can't encode characters in position 12-44: character maps to <undefined>
-Transcribing:  50%|#####     | 10/20 [02:56<03:05, 18.57s/it]Processing file: blockNr_1_taskNr_4_trialNr_16_Recording.mp3 (11/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-INFO:     172.20.100.175:0 - "GET /stream/c2be2cf8-59d4-4b69-8f4a-4980c8d6a457 HTTP/1.0" 200 OK
-                                                             >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_16_Recording.mp3': 'charmap' codec can't encode characters in position 12-32: character maps to <undefined>
-Transcribing:  55%|#####5    | 11/20 [03:14<02:45, 18.41s/it]Processing file: blockNr_1_taskNr_4_trialNr_1_Recording.mp3 (12/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                             >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_1_Recording.mp3': 'charmap' codec can't encode characters in position 12-37: character maps to <undefined>
-Transcribing:  60%|######    | 12/20 [03:33<02:27, 18.49s/it]Processing file: blockNr_1_taskNr_4_trialNr_2_Recording.mp3 (13/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                             >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_2_Recording.mp3': 'charmap' codec can't encode characters in position 12-28: character maps to <undefined>
-Transcribing:  65%|######5   | 13/20 [03:51<02:08, 18.36s/it]Processing file: blockNr_1_taskNr_4_trialNr_3_Recording.mp3 (14/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                             >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_3_Recording.mp3': 'charmap' codec can't encode characters in position 12-30: character maps to <undefined>
-Transcribing:  70%|#######   | 14/20 [04:09<01:48, 18.15s/it]Processing file: blockNr_1_taskNr_4_trialNr_4_Recording.mp3 (15/20)
-INFO:     172.20.100.175:0 - "GET /stream/c2be2cf8-59d4-4b69-8f4a-4980c8d6a457 HTTP/1.0" 200 OK
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                             >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_4_Recording.mp3': 'charmap' codec can't encode characters in position 12-29: character maps to <undefined>
-Transcribing:  75%|#######5  | 15/20 [04:27<01:30, 18.12s/it]Processing file: blockNr_1_taskNr_4_trialNr_5_Recording.mp3 (16/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                             >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_5_Recording.mp3': 'charmap' codec can't encode characters in position 12-29: character maps to <undefined>
-Transcribing:  80%|########  | 16/20 [04:45<01:12, 18.13s/it]Processing file: blockNr_1_taskNr_4_trialNr_6_Recording.mp3 (17/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                             >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_6_Recording.mp3': 'charmap' codec can't encode characters in position 12-36: character maps to <undefined>
-Transcribing:  85%|########5 | 17/20 [05:03<00:54, 18.24s/it]Processing file: blockNr_1_taskNr_4_trialNr_7_Recording.mp3 (18/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-INFO:     172.20.100.175:0 - "GET /stream/c2be2cf8-59d4-4b69-8f4a-4980c8d6a457 HTTP/1.0" 200 OK
-                                                             >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_7_Recording.mp3': 'charmap' codec can't encode characters in position 12-36: character maps to <undefined>
-Transcribing:  90%|######### | 18/20 [05:22<00:36, 18.27s/it]Processing file: blockNr_1_taskNr_4_trialNr_8_Recording.mp3 (19/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                             >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_8_Recording.mp3': 'charmap' codec can't encode characters in position 12-32: character maps to <undefined>
-Transcribing:  95%|#########5| 19/20 [05:40<00:18, 18.35s/it]Processing file: blockNr_1_taskNr_4_trialNr_9_Recording.mp3 (20/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                             >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_9_Recording.mp3': 'charmap' codec can't encode characters in position 12-32: character maps to <undefined>
-Transcribing: 100%|##########| 20/20 [05:58<00:00, 18.23s/it]Transcribing: 100%|##########| 20/20 [05:58<00:00, 17.94s/it]
-Language recognized: ja
-Using Hugging Face token: hf_evljhiI...
-Processing directory: C:\Users\CAMELO~1.CRU\AppData\Local\Temp\tmpnqoz74t5\Session_1347902
-Transcribing:   0%|          | 0/20 [00:00<?, ?it/s]Processing file: blockNr_1_taskNr_3_trialNr_1_T1.mp3 (1/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-INFO:     172.20.100.175:0 - "GET /stream/c2be2cf8-59d4-4b69-8f4a-4980c8d6a457 HTTP/1.0" 200 OK
-                                                    >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_3_trialNr_1_T1.mp3': 'charmap' codec can't encode characters in position 12-22: character maps to <undefined>
-Transcribing:   5%|5         | 1/20 [00:17<05:34, 17.60s/it]Processing file: blockNr_1_taskNr_3_trialNr_2_T2.mp3 (2/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_3_trialNr_2_T2.mp3': 'charmap' codec can't encode characters in position 12-19: character maps to <undefined>
-Transcribing:  10%|#         | 2/20 [00:35<05:15, 17.53s/it]Processing file: blockNr_1_taskNr_3_trialNr_3_T3.mp3 (3/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_3_trialNr_3_T3.mp3': 'charmap' codec can't encode characters in position 12-20: character maps to <undefined>
-Transcribing:  15%|#5        | 3/20 [00:52<04:57, 17.50s/it]Processing file: blockNr_1_taskNr_3_trialNr_4_T4.mp3 (4/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_3_trialNr_4_T4.mp3': 'charmap' codec can't encode characters in position 12-26: character maps to <undefined>
-Transcribing:  20%|##        | 4/20 [01:10<04:45, 17.84s/it]Processing file: blockNr_1_taskNr_4_trialNr_10_Recording.mp3 (5/20)
-INFO:     172.20.100.175:0 - "GET /stream/c2be2cf8-59d4-4b69-8f4a-4980c8d6a457 HTTP/1.0" 200 OK
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_10_Recording.mp3': 'charmap' codec can't encode characters in position 12-23: character maps to <undefined>
-Transcribing:  25%|##5       | 5/20 [01:28<04:27, 17.81s/it]Processing file: blockNr_1_taskNr_4_trialNr_11_Recording.mp3 (6/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_11_Recording.mp3': 'charmap' codec can't encode characters in position 12-19: character maps to <undefined>
-Transcribing:  30%|###       | 6/20 [01:46<04:09, 17.85s/it]Processing file: blockNr_1_taskNr_4_trialNr_12_Recording.mp3 (7/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_12_Recording.mp3': 'charmap' codec can't encode characters in position 12-19: character maps to <undefined>
-Transcribing:  35%|###5      | 7/20 [02:04<03:50, 17.76s/it]Processing file: blockNr_1_taskNr_4_trialNr_13_Recording.mp3 (8/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-INFO:     172.20.100.175:0 - "GET /stream/c2be2cf8-59d4-4b69-8f4a-4980c8d6a457 HTTP/1.0" 200 OK
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_13_Recording.mp3': 'charmap' codec can't encode characters in position 12-24: character maps to <undefined>
-Transcribing:  40%|####      | 8/20 [02:21<03:31, 17.64s/it]Processing file: blockNr_1_taskNr_4_trialNr_14_Recording.mp3 (9/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_14_Recording.mp3': 'charmap' codec can't encode characters in position 12-19: character maps to <undefined>
-Transcribing:  45%|####5     | 9/20 [02:39<03:16, 17.87s/it]Processing file: blockNr_1_taskNr_4_trialNr_15_Recording.mp3 (10/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                            >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_15_Recording.mp3': 'charmap' codec can't encode characters in position 12-24: character maps to <undefined>
-Transcribing:  50%|#####     | 10/20 [02:57<02:58, 17.82s/it]Processing file: blockNr_1_taskNr_4_trialNr_16_Recording.mp3 (11/20)
-Lightning automatically upgraded your loaded checkpoint from v1.5.4 to v2.5.1.post0. To apply the upgrade to your files permanently, run `python -m pytorch_lightning.utilities.upgrade_checkpoint C:\Users\camelo.cruz\Documents\GitHub\workflow\tgt-venv\Lib\site-packages\whisperx\assets\pytorch_model.bin`
-                                                             >>Performing voice activity detection using Pyannote...
-Model was trained with pyannote.audio 0.0.1, yours is 3.3.2. Bad things might happen unless you revert pyannote.audio to 0.x.
-Model was trained with torch 1.10.0+cu102, yours is 2.6.0+cu124. Bad things might happen unless you revert torch to 1.x.
-Error on 'blockNr_1_taskNr_4_trialNr_16_Recording.mp3': 'charmap' codec can't encode characters in position 12-27: character maps to <undefined>
-Transcribing:  55%|#####5    | 11/20 [03:15<02:40, 17.81s/it]Processing file: blockNr_1_taskNr_4_trialNr_1_Recording.mp3 (12/20)
-INFO:     172.20.100.175:0 - "GET /stream/c2be2cf8-59d4-4b69-8f4a-4980c8d6a457 HTTP/1.0" 200 OK
-INFO:     172.20.100.175:0 - "POST /cancel/ HTTP/1.0" 307 Temporary Redirect
-INFO:     172.20.100.175:0 - "POST /cancel HTTP/1.0" 200 OK
