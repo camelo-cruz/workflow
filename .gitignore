@@ -9,3 +9,4 @@ tgt/whisper_models/*
 tgt/tgt/*
 db.sqlite3
 tgt-venv/*
+uvicorn-log.txt
