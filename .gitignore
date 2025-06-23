@@ -10,3 +10,5 @@ tgt/tgt/*
 db.sqlite3
 tgt-venv/*
 uvicorn-log.txt
+uvicorn-log.txt
+uvicorn-log.txt
