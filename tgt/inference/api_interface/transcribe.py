@@ -38,7 +38,7 @@ from utils.functions import (
 # Global setup
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 warnings.filterwarnings("ignore")
-
+sys.stdout.reconfigure(encoding='utf-8')
 logger = logging.getLogger(__name__)
 
 ffmpeg_path = find_ffmpeg()
