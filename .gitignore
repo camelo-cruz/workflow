@@ -13,3 +13,4 @@ uvicorn-log.txt
 uvicorn-log.txt
 uvicorn-log.txt
 *.pyc
+*.pyc
