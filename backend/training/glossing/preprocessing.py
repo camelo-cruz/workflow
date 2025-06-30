@@ -83,7 +83,7 @@ def gloss_to_ud_features(gloss: str) -> list[str]:
     return per_token_feats
 
 
-def build_docbin(lang: str, input_dir: str, pretrained_model : Language = None) -> DocBin:
+def build_docbin(lang: str, study: str, input_dir: str, pretrained_model : Language = None) -> DocBin:
     # 1. Load spacy model
     if pretrained_model:
         nlp = spacy.load(pretrained_model)
@@ -189,9 +189,9 @@ def build_docbin(lang: str, input_dir: str, pretrained_model : Language = None) 
                 fh.close()
 
     if all_examples:
-        pd.DataFrame(all_examples).to_excel(f"training/glossing/data/{lang}_train_spacy.xlsx", index=False)
+        pd.DataFrame(all_examples).to_excel(f"training/glossing/data/{lang}_{study}_train_spacy.xlsx", index=False)
 
-    save_path = SCRIPT_PATH / "data" / f"{lang}_train.spacy"
+    save_path = SCRIPT_PATH / "data" / f"{lang}_{study}_train.spacy"
     docbin.to_disk(save_path)
     msg.good(f"Built DocBin with {len(docbin)} documents from {input_dir}")
 

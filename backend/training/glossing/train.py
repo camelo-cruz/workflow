@@ -15,7 +15,7 @@ from spacy.training.loop import train as train_nlp
 from spacy.util import load_config
 from wasabi import msg
 
-METRICS = ["token_acc", "pos_acc", "morph_acc", "tag_acc", "dep_uas", "dep_las"]
+METRICS = ["token_acc", "morph_acc"]
 
 
 def chunk(l: List, n: int):
@@ -36,6 +36,7 @@ def flatten(l: List) -> List:
 
 def train(
     lang: str,
+    study: str,
     pretrained_model: Optional[str] = None,
     n_folds: int = 10,
     shuffle: bool = False,
@@ -48,8 +49,8 @@ def train(
     setup_gpu(use_gpu)
 
     # Set paths explicitly
-    corpus_path = Path(f"training/glossing/data/{lang}_train.spacy")
-    output_path = Path(f"training/glossing/data/{lang}_cv_scores.json")
+    corpus_path = Path(f"training/glossing/data/{lang}_{study}_train.spacy")
+    output_path = Path(f"training/glossing/data/{lang}_{study}_cv_scores.json")
     config_path = Path("training/glossing/configs/config.cfg")
     if not config_path.exists():
         raise FileNotFoundError(f"Config file not found at {config_path}")
@@ -91,23 +92,23 @@ def train(
             config["paths"]["dev"] = str(dev_path)
 
             nlp = init_nlp(config)
-            nlp, _ = train_nlp(nlp, None)
+            nlp, _ = train_nlp(nlp, None, use_gpu=use_gpu)
 
             msg.info("Evaluating on dev set")
             corpus = Corpus(str(dev_path), gold_preproc=False)
             examples = list(corpus(nlp))
-            gold_examples = [eg.reference for eg in examples]
-            scores = nlp.evaluate(gold_examples)
+            scores = nlp.evaluate(examples)
 
             for metric in METRICS:
                 if metric in scores:
                     all_scores[metric].append(scores[metric])
 
     msg.info(f"Computing average {n_folds}-fold CV score")
-    avg_scores = {
-        metric: sum(scores) / len(scores) if scores else 0.0
-        for metric, scores in all_scores.items()
-    }
+    avg_scores = {}
+    for metric, scores in all_scores.items():
+        valid_scores = [s for s in scores if s is not None]
+        avg_scores[metric] = sum(valid_scores) / len(valid_scores) if valid_scores else 0.0
+
     msg.table(avg_scores.items(), header=("Metric", "Score"))
 
     srsly.write_json(output_path, avg_scores)
@@ -117,6 +118,7 @@ def train(
 if __name__ == "__main__":
     # Example hardcoded call for script use
     lang = "de"
-    input_dir = "/Users/alejandra/Library/CloudStorage/OneDrive-FreigegebeneBibliotheken–Leibniz-ZAS/Leibniz Dream Data - Studies/F_Negative_Concepts/F07a-Comparatives/F07a_deu"
-    build_docbin(lang=lang, input_dir=input_dir)
-    train(lang=lang, n_folds=10, shuffle=True, use_gpu=-1)
+    study = "H"
+    input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/F_Negative_Concepts/F07a-Comparatives/F07a_deu"
+    build_docbin(lang=lang, study=study, input_dir=input_dir)
+    train(lang=lang, study=study, n_folds=2, shuffle=True, use_gpu=0)

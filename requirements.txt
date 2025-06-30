@@ -37,7 +37,7 @@ spacy
 spacy_stanza
 stanza
 python-multipart
-cupy-cuda12x; sys_platform == "linux"
 sacremoses
 pypinyin
 pykakasi
+cupy-cuda12x
