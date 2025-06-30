@@ -15,7 +15,7 @@ from spacy import util
 
 SCRIPT_PATH = Path(__file__).parent
 PARENT_PATH = SCRIPT_PATH.parent
-BASE_CONFIG_PATH = SCRIPT_PATH / "base_config.cfg"
+BASE_CONFIG_PATH = SCRIPT_PATH / "configs/base_config.cfg"
 
 TEXT_COLUMN = "latin_transcription_utterance_used"
 GLOSS_COLUMN = "glossing_utterance_used"
@@ -140,7 +140,7 @@ def build_docbin(lang: str, input_dir: str, pretrained_model : Language = None) 
                     continue
                 else:
                     msg.good(f"Matched {len(cleaned_texts)} texts with {len(cleaned_glosses)} glosses in file {file_path}")
-                    logger.info(f"Processing {len(cleaned_texts)} texts and glosses from {file_path}")
+                    logger.info(f"Matched {len(cleaned_texts)} texts with {len(cleaned_glosses)} glosses in file {file_path}")
                 
                 #5. Check if texts and glosses have the same number of tokens
                 for i, (text, gloss) in enumerate(zip(cleaned_texts, cleaned_glosses)):
@@ -189,8 +189,8 @@ def build_docbin(lang: str, input_dir: str, pretrained_model : Language = None) 
                 fh.close()
 
     if all_examples:
-        pd.DataFrame(all_examples).to_excel("training/glossing/data/train.xlsx", index=False)
-    
+        pd.DataFrame(all_examples).to_excel(f"training/glossing/data/{lang}_train_spacy.xlsx", index=False)
+
     save_path = SCRIPT_PATH / "data" / f"{lang}_train.spacy"
     docbin.to_disk(save_path)
     msg.good(f"Built DocBin with {len(docbin)} documents from {input_dir}")
@@ -202,26 +202,21 @@ def build_docbin(lang: str, input_dir: str, pretrained_model : Language = None) 
         msg.warn(f"Unknown codes: {len(UNKNOWN_CODES)}")
         logger.warning(f"Unknown codes: {UNKNOWN_CODES}")
     
-    # 7. Test if there are some problems with the data
-    with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
+    config = util.load_config(BASE_CONFIG_PATH)
+    config["nlp"]["lang"] = lang
+    config["paths"]["train"] = str(save_path)
+    config["paths"]["dev"] = str(save_path)
+    if pretrained_model:
+        config["paths"]["vectors"] = pretrained_model
 
-        config = util.load_config(BASE_CONFIG_PATH)
-        config["nlp"]["lang"] = lang
-        config["paths"]["train"] = str(save_path)
-        config["paths"]["dev"] = str(save_path)
-        if pretrained_model:
-            config["nlp"]["vectors"] = pretrained_model
+    config.to_disk("training/glossing/configs/config.cfg")
 
-        config.to_disk(tmpdir / "config.cfg")
+    fill_config(
+        base_path=Path("training/glossing/configs/config.cfg"),
+        output_file=Path("training/glossing/configs/config.cfg"),
+    )
 
-        fill_config(
-        base_path=tmpdir / "config.cfg",
-        output_file=tmpdir / "config.cfg",
-        )
-
-        debug_data(tmpdir / "config.cfg", silent=False, verbose=True)
-
+    debug_data("training/glossing/configs/config.cfg", silent=False, verbose=True)
 
 
 if __name__ == '__main__':

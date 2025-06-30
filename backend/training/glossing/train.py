@@ -36,6 +36,7 @@ def flatten(l: List) -> List:
 
 def train(
     lang: str,
+    pretrained_model: Optional[str] = None,
     n_folds: int = 10,
     shuffle: bool = False,
     use_gpu: int = 0,
@@ -47,14 +48,21 @@ def train(
     setup_gpu(use_gpu)
 
     # Set paths explicitly
-    corpus_path = Path("training/glossing/data/train.spacy")
-    config_path = Path("training/glossing/config.cfg")
-    output_path = Path("training/glossing/data/cv_scores.json")
+    corpus_path = Path(f"training/glossing/data/{lang}_train.spacy")
+    output_path = Path(f"training/glossing/data/{lang}_cv_scores.json")
+    config_path = Path("training/glossing/configs/config.cfg")
+    if not config_path.exists():
+        raise FileNotFoundError(f"Config file not found at {config_path}")
 
     # Load corpus
-    empty_nlp = spacy.blank(lang)
+    if pretrained_model:
+        nlp = spacy.load(pretrained_model)
+    else:
+        nlp = spacy.blank(lang)
+
     doc_bin = DocBin().from_disk(corpus_path)
-    docs = list(doc_bin.get_docs(empty_nlp.vocab))
+    docs = list(doc_bin.get_docs(nlp.vocab)) #? what is this for?
+    
     if shuffle:
         random.shuffle(docs)
 
@@ -69,15 +77,16 @@ def train(
 
         with tempfile.TemporaryDirectory() as tmpdir:
             tmpdir = Path(tmpdir)
-            train_path = tmpdir / "train.spacy"
+            train_path = tmpdir / "train.spacy" 
             dev_path = tmpdir / "dev.spacy"
 
-            DocBin(docs=train).to_disk(train_path)
-            DocBin(docs=dev).to_disk(dev_path)
+            DocBin(docs=train).to_disk(train_path) #? what is this for?
+            DocBin(docs=dev).to_disk(dev_path)#? what is this for?
             msg.good(f"Wrote temp data to {train_path} and {dev_path}")
 
             msg.info("Training model")
             config = load_config(config_path)
+            config["nlp"]["lang"] = lang
             config["paths"]["train"] = str(train_path)
             config["paths"]["dev"] = str(dev_path)
 
