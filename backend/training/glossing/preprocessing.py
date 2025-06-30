@@ -219,7 +219,7 @@ def build_docbin(lang: str, input_dir: str, pretrained_model : Language = None) 
 
         debug_data(tmpdir / "config.cfg", silent=False, verbose=True)
 
-    save_path = PARENT_PATH / "data" / f"{lang}_train.spacy"
+    save_path = SCRIPT_PATH / "data" / f"{lang}_train.spacy"
     docbin.to_disk(save_path)
     msg.good(f"Saved DocBin to {save_path}")
 
