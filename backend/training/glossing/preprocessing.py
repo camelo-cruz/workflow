@@ -190,9 +190,11 @@ def build_docbin(lang: str, input_dir: str, pretrained_model : Language = None) 
 
     if all_examples:
         pd.DataFrame(all_examples).to_excel("training/glossing/data/train.xlsx", index=False)
-
+    
+    save_path = SCRIPT_PATH / "data" / f"{lang}_train.spacy"
+    docbin.to_disk(save_path)
     msg.good(f"Built DocBin with {len(docbin)} documents from {input_dir}")
-    print("Total examples:", len(list(docbin.get_docs(nlp.vocab))))
+
     if TOKEN_WITHOUT_GLOSS:
         msg.warn(f"Tokens without gloss: {len(TOKEN_WITHOUT_GLOSS)}")
         logger.warning(f"Tokens without gloss: {TOKEN_WITHOUT_GLOSS}")
@@ -200,15 +202,16 @@ def build_docbin(lang: str, input_dir: str, pretrained_model : Language = None) 
         msg.warn(f"Unknown codes: {len(UNKNOWN_CODES)}")
         logger.warning(f"Unknown codes: {UNKNOWN_CODES}")
     
+    # 7. Test if there are some problems with the data
     with tempfile.TemporaryDirectory() as tmpdir:
         tmpdir = Path(tmpdir)
-        temp_docbin_path = tmpdir / "train.spacy"
-        docbin.to_disk(temp_docbin_path)
 
         config = util.load_config(BASE_CONFIG_PATH)
         config["nlp"]["lang"] = lang
-        config["paths"]["train"] = str(temp_docbin_path)
-        config["paths"]["dev"] = str(temp_docbin_path)
+        config["paths"]["train"] = str(save_path)
+        config["paths"]["dev"] = str(save_path)
+        if pretrained_model:
+            config["nlp"]["vectors"] = pretrained_model
 
         config.to_disk(tmpdir / "config.cfg")
 
@@ -219,9 +222,6 @@ def build_docbin(lang: str, input_dir: str, pretrained_model : Language = None) 
 
         debug_data(tmpdir / "config.cfg", silent=False, verbose=True)
 
-    save_path = SCRIPT_PATH / "data" / f"{lang}_train.spacy"
-    docbin.to_disk(save_path)
-    msg.good(f"Saved DocBin to {save_path}")
 
 
 if __name__ == '__main__':
