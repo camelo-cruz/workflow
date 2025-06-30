@@ -4,6 +4,7 @@
 "Masc":"Gender",
 "Fem":"Gender",
 "Neut":"Gender",
+"Masc,Neut":"Gender",
 "Sing":"Number",
 "Plur":"Number",
 "Nom":"Case",
@@ -13,9 +14,10 @@
 "Nom/Acc":"Case",
 "Nom/Dat":"Case",
 "Nom/Gen":"Case",
-"Acc/Dat":"Case",
-"Acc/Gen":"Case",
-"Dat/Gen":"Case",
+"Acc,Dat":"Case",
+"Acc,Gen":"Case",
+"Dat,Gen":"Case",
+"Nom,Acc,Dat":"Case",
 "Impf":"Tense",
 "Past":"Tense",
 "Pres":"Tense",
@@ -24,6 +26,5 @@
 "Rel":"Tense",
 "Ind":"Mood",
 "Int":"Mood",
-"Dem":"PronType",
-"_":"_"
+"Dem":"PronType"
 }
