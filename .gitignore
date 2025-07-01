@@ -15,3 +15,5 @@ uvicorn-log.txt
 *.pyc
 *.pyc
 /backend/models
+tgt/inference/glossing/__pycache__/factory.cpython-312.pyc
+*.pyc
