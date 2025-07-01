@@ -16,11 +16,11 @@ class CustomGlossingStrategy(GlossingStrategy):
         self.translation_strategy = TranslationStrategyFactory.get_strategy(language_code)
         self.translation_strategy.load_model()
 
-    def load_model(self, model_name: str = None):
-        model_name = 'de_dep_news_trf_custom_glossing'
+    def load_model(self, model_name: str):
+        model_name = model_name
         if model_name is None:
             raise ValueError("Model name must be provided for loading the custom glossing model.")
-        model_path = Path("training", "glossing", "models", model_name)
+        model_path = Path("models", model_name)
         self.nlp = spacy.load(model_path)
         
     def gloss(self, sentence: str) -> str:
@@ -33,11 +33,13 @@ class CustomGlossingStrategy(GlossingStrategy):
             else:
                 lemma = token.text
                 morph = token.morph.to_dict()
+                print(f"Token: {token.text}, Morph: {morph}")
 
                 # Translate lemma → English
                 #translated_lemma = self.translation_strategy.translate(text=lemma)
                 if isinstance(lemma, str):
                     lemma = lemma.lower().replace(" ", "-")
+                    lemma = self.translation_strategy.translate(text=lemma)
 
                 # Map morphological features via LEIPZIG_GLOSSARY
                 arttype = LEIPZIG_GLOSSARY.get(morph.get("PronType"), morph.get("PronType"))

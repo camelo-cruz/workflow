@@ -84,11 +84,19 @@ def gloss_to_ud_features(gloss: str) -> list[str]:
 
 
 def build_docbin(lang: str, study: str, input_dir: str, pretrained_model : Language = None) -> DocBin:
+    log_path = Path(input_dir) / "glossing_traindata.log"
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    fh = setup_file_logger(str(log_path))
+    if not logger.hasHandlers():
+        logger.addHandler(fh)
+
     # 1. Load spacy model
     if pretrained_model:
         nlp = spacy.load(pretrained_model)
+        logger.info(f"Loaded pretrained model: {pretrained_model}")
     else:
         nlp = spacy.blank(lang)
+        logger.info(f"Loaded blank model for language: {lang}")
 
     docbin = DocBin(attrs=["MORPH"], store_user_data=True)
     all_examples = []
@@ -98,11 +106,6 @@ def build_docbin(lang: str, study: str, input_dir: str, pretrained_model : Langu
             if not fname.endswith("annotated.xlsx"):
                 continue
 
-            log_path = f"{root}/traindata.log"
-            fh = setup_file_logger(log_path)
-
-            if not any(isinstance(h, logging.FileHandler) and h.baseFilename == fh.baseFilename for h in logger.handlers):
-                logger.addHandler(fh)
             try:
                 # 2. For each file, initialize helper lists
                 cleaned_texts = []
@@ -177,16 +180,11 @@ def build_docbin(lang: str, study: str, input_dir: str, pretrained_model : Langu
                         token.set_morph(feat)
                     docbin.add(doc)
                     all_examples.append({"text": text, "gloss": " ".join(feats)})
-                
-                logger.removeHandler(fh)
-                fh.close()
+            
             except Exception as e:
                 msg.fail(f"Error processing file {file_path}: {e}")
                 logger.error(f"Error processing file {file_path}: {e}")
                 continue
-            finally:
-                logger.removeHandler(fh)
-                fh.close()
 
     if all_examples:
         pd.DataFrame(all_examples).to_excel(f"training/glossing/data/{lang}_{study}_train_spacy.xlsx", index=False)
@@ -194,6 +192,7 @@ def build_docbin(lang: str, study: str, input_dir: str, pretrained_model : Langu
     save_path = SCRIPT_PATH / "data" / f"{lang}_{study}_train.spacy"
     docbin.to_disk(save_path)
     msg.good(f"Built DocBin with {len(docbin)} documents from {input_dir}")
+    logger.info(f"Built DocBin with {len(docbin)} documents from {input_dir}")
 
     if TOKEN_WITHOUT_GLOSS:
         msg.warn(f"Tokens without gloss: {len(TOKEN_WITHOUT_GLOSS)}")
@@ -218,7 +217,8 @@ def build_docbin(lang: str, study: str, input_dir: str, pretrained_model : Langu
 
     debug_data("training/glossing/configs/config.cfg", silent=False, verbose=True)
 
-
+    logger.removeHandler(fh)
+    fh.close()
 if __name__ == '__main__':
-    build_docbin("de", input_dir='/Users/alejandra/Library/CloudStorage/OneDrive-FreigegebeneBibliotheken–Leibniz-ZAS/Leibniz Dream Data - Studies/F_Negative_Concepts/F07a-Comparatives/F07a_deu',
+    build_docbin("de", study="H", input_dir="C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_deu_adults",
                  pretrained_model="de_core_news_lg")

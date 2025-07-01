@@ -5,7 +5,6 @@ from typing import List, Optional
 
 import spacy
 import srsly
-import typer
 from training.glossing.preprocessing import build_docbin
 
 from spacy.tokens import DocBin
@@ -42,83 +41,104 @@ def train(
     shuffle: bool = False,
     use_gpu: int = 0,
 ):
-    if n_folds <= 1:
-        raise ValueError("Number of folds must be greater than 1.")
-
+    # Optional GPU setup
     from spacy.cli._util import setup_gpu
-    setup_gpu(use_gpu)
+    if use_gpu >= 0:
+        setup_gpu(use_gpu)
+    else:
+        msg.info("Using CPU mode.")
 
-    # Set paths explicitly
+    # Paths
     corpus_path = Path(f"training/glossing/data/{lang}_{study}_train.spacy")
     output_path = Path(f"training/glossing/data/{lang}_{study}_cv_scores.json")
     config_path = Path("training/glossing/configs/config.cfg")
     if not config_path.exists():
         raise FileNotFoundError(f"Config file not found at {config_path}")
 
-    # Load corpus
+    # Load or blank nlp
     if pretrained_model:
         nlp = spacy.load(pretrained_model)
     else:
         nlp = spacy.blank(lang)
 
+    # Load docs
     doc_bin = DocBin().from_disk(corpus_path)
-    docs = list(doc_bin.get_docs(nlp.vocab)) #? what is this for?
-    
+    docs = list(doc_bin.get_docs(nlp.vocab))
     if shuffle:
         random.shuffle(docs)
 
-    folds = list(chunk(docs, n_folds))
-    all_scores = {metric: [] for metric in METRICS}
+    # Cross-validation
+    if n_folds > 1:
+        folds = list(chunk(docs, n_folds))
+        all_scores = {metric: [] for metric in METRICS}
 
-    for idx, fold in enumerate(folds):
-        dev = fold
-        train = flatten(get_all_except(folds, idx))
+        for idx, fold in enumerate(folds):
+            dev = fold
+            train_docs = flatten(get_all_except(folds, idx))
+            msg.divider(f"Fold {idx+1}, train: {len(train_docs)}, dev: {len(dev)}")
 
-        msg.divider(f"Fold {idx+1}, train: {len(train)}, dev: {len(dev)}")
+            with tempfile.TemporaryDirectory() as tmpdir:
+                tmpdir = Path(tmpdir)
+                train_path = tmpdir / "train.spacy"
+                dev_path = tmpdir / "dev.spacy"
 
-        with tempfile.TemporaryDirectory() as tmpdir:
-            tmpdir = Path(tmpdir)
-            train_path = tmpdir / "train.spacy" 
-            dev_path = tmpdir / "dev.spacy"
+                DocBin(docs=train_docs).to_disk(train_path)
+                DocBin(docs=dev).to_disk(dev_path)
+                msg.good(f"Wrote temp data to {train_path} and {dev_path}")
 
-            DocBin(docs=train).to_disk(train_path) #? what is this for?
-            DocBin(docs=dev).to_disk(dev_path)#? what is this for?
-            msg.good(f"Wrote temp data to {train_path} and {dev_path}")
+                msg.info("Training model for this fold")
+                config = load_config(config_path)
+                config["nlp"]["lang"] = lang
+                config["paths"]["train"] = str(train_path)
+                config["paths"]["dev"] = str(dev_path)
 
-            msg.info("Training model")
-            config = load_config(config_path)
-            config["nlp"]["lang"] = lang
-            config["paths"]["train"] = str(train_path)
-            config["paths"]["dev"] = str(dev_path)
+                fold_nlp = init_nlp(config)
+                fold_nlp, _ = train_nlp(fold_nlp, None, use_gpu=use_gpu)
 
-            nlp = init_nlp(config)
-            nlp, _ = train_nlp(nlp, None, use_gpu=use_gpu)
+                msg.info("Evaluating on dev set")
+                corpus = Corpus(str(dev_path), gold_preproc=False)
+                examples = list(corpus(fold_nlp))
+                scores = fold_nlp.evaluate(examples)
 
-            msg.info("Evaluating on dev set")
-            corpus = Corpus(str(dev_path), gold_preproc=False)
-            examples = list(corpus(nlp))
-            scores = nlp.evaluate(examples)
+                for metric in METRICS:
+                    val = scores.get(metric)
+                    if val is not None:
+                        all_scores[metric].append(val)
 
-            for metric in METRICS:
-                if metric in scores:
-                    all_scores[metric].append(scores[metric])
+        msg.info(f"Computing average {n_folds}-fold CV score")
+        avg_scores = {}
+        for metric, scores in all_scores.items():
+            valid = [s for s in scores if s is not None]
+            avg_scores[metric] = sum(valid) / len(valid) if valid else 0.0
 
-    msg.info(f"Computing average {n_folds}-fold CV score")
-    avg_scores = {}
-    for metric, scores in all_scores.items():
-        valid_scores = [s for s in scores if s is not None]
-        avg_scores[metric] = sum(valid_scores) / len(valid_scores) if valid_scores else 0.0
+        msg.table(avg_scores.items(), header=("Metric", "Score"))
+        srsly.write_json(output_path, avg_scores)
+        msg.good(f"Saved CV results to {output_path}")
 
-    msg.table(avg_scores.items(), header=("Metric", "Score"))
+    # Final train on all data
+    msg.divider("Training final model on all data")
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir = Path(tmpdir)
+        full_train_path = tmpdir / "train_full.spacy"
+        DocBin(docs=docs).to_disk(full_train_path)
 
-    srsly.write_json(output_path, avg_scores)
-    msg.good(f"Saved results to {output_path}")
+        config = load_config(config_path)
+        config["nlp"]["lang"] = lang
+        config["paths"]["train"] = str(full_train_path)
+        config["paths"]["dev"] = str(full_train_path)
+
+        final_nlp = init_nlp(config)
+        final_nlp, _ = train_nlp(final_nlp, None, use_gpu=use_gpu)
+
+        model_dir = Path(f"models/{lang}_{study}_custom_glossing")
+        model_dir.mkdir(parents=True, exist_ok=True)
+        final_nlp.to_disk(model_dir)
+        msg.good(f"Saved final model to {model_dir}")
 
 
 if __name__ == "__main__":
-    # Example hardcoded call for script use
     lang = "de"
     study = "H"
-    input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/F_Negative_Concepts/F07a-Comparatives/F07a_deu"
+    input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_deu_adults"
     build_docbin(lang=lang, study=study, input_dir=input_dir)
-    train(lang=lang, study=study, n_folds=2, shuffle=True, use_gpu=0)
+    train(lang=lang, study=study, n_folds=1, shuffle=True, use_gpu=0)
