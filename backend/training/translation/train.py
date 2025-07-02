@@ -70,7 +70,7 @@ def train(
     print(f"Using device: {device}")
 
     # Build or refresh translation dataset
-    build_translationset(input_dir, lang, study)
+    build_translationset(lang, study, input_dir)
     data_path = f"training/data/{lang}_{study}_train_translation.xlsx"
     df = pd.read_excel(data_path)
     src_texts = df["text"].tolist()

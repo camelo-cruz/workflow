@@ -248,9 +248,12 @@ def build_translationset(lang: str, study: str, input_dir: str) -> None:
         logger.addHandler(fh)
     out_dir = Path("training/data")
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"{lang}_{study}_train_translation.xlsx"
+    sent_out_path = out_dir / f"{lang}_{study}_train_translation.xlsx"
+    vocab_out_path = out_dir / f"{lang}_{study}_vocab.xlsx"
 
-    records = []
+    sent_records = []
+    vocab_records = []
+
     for root, dirs, files in os.walk(input_dir):
         for fname in files:
             if not fname.endswith("annotated.xlsx"):
@@ -258,35 +261,78 @@ def build_translationset(lang: str, study: str, input_dir: str) -> None:
             file_path = os.path.join(root, fname)
             try:
                 df = pd.read_excel(file_path)
-                df = df.dropna(subset=[TEXT_COLUMN, TRANSLATION_COLUMN])
+                df = df.dropna(subset=[TEXT_COLUMN, GLOSS_COLUMN, TRANSLATION_COLUMN])
 
-                # clean_text on the Series, then tolist()
+                # 1) clean each column
                 texts = df[TEXT_COLUMN].astype(str).map(clean_text).tolist()
+                glosses = df[GLOSS_COLUMN].astype(str).map(clean_text).tolist()
                 translations = df[TRANSLATION_COLUMN].astype(str).map(clean_text).tolist()
 
-                texts = [
-                    re.sub(r'[^A-Za-z]+', ' ', t).lower().strip()
-                    for t in texts
-                ]
+                # 2) check same number of lines
+                if not (len(texts) == len(glosses) == len(translations)):
+                    msg.warn(
+                        f"Line count mismatch in {file_path}: "
+                        f"{len(texts)} texts, {len(glosses)} glosses, {len(translations)} translations"
+                    )
+                    logger.warning(
+                        f"Line count mismatch in {file_path}: "
+                        f"{len(texts)} texts, {len(glosses)} glosses, {len(translations)} translations"
+                    )
+                    continue
+                msg.good(f"Matched {len(texts)} triples in file {file_path}")
 
-                translations = [
-                    re.sub(r'[^A-Za-z]+', ' ', tr).lower().strip()
-                    for tr in translations
-                ]
+                # 3) per-sentence alignment
+                for i, (t, g) in enumerate(zip(texts, glosses)):
+                    t_tokens  = t.split()
+                    g_tokens  = g.split()
 
-                records.extend(zip(texts, translations))
+                    if not (len(t_tokens) == len(g_tokens)):
+                        msg.warn(
+                            f"Token count mismatch at line {i} in {file_path}: "
+                            f"{len(t_tokens)} text vs {len(g_tokens)} gloss"
+                        )
+                        logger.warning(
+                            f"Token count mismatch at line {i} in {file_path}: "
+                            f"{len(t_tokens)} text vs {len(g_tokens)} gloss skipping"
+                        )
+                        continue
+
+                    # 4a) sentence-level record
+                    sent_records.append({
+                        "text": t,
+                        "gloss": g,
+                        "translation": tr
+                    })
+
+                    # 4b) word-by-word vocab records
+                    for tok, gloss_tok, tr_tok in zip(t_tokens, g_tokens, tr_tokens):
+                        vocab_records.append({
+                            "word": tok,
+                            "gloss": gloss_tok,
+                            "translation": tr_tok
+                        })
+
             except Exception as e:
-                logger.warning(f"Skipping {file_path}: {e}")
+                msg.fail(f"Skipping {file_path}: {e}")
+                logger.error(f"Error in {file_path}: {e}")
 
-    if not records:
-        logger.warning("No translation pairs found.")
-        return
+    # 5) dump to Excel
+    if sent_records:
+        pd.DataFrame(sent_records).to_excel(sent_out_path, index=False)
+        logger.info(f"Wrote {len(sent_records)} sentence pairs to {sent_out_path}")
+    else:
+        logger.warning("No sentence pairs written.")
 
-    out_df = pd.DataFrame(records, columns=["text", "translation"])
-    out_df.to_excel(out_path, index=False)
-    logger.info(f"Wrote {len(out_df)} translation pairs to {out_path}")
+    if vocab_records:
+        pd.DataFrame(vocab_records).to_excel(vocab_out_path, index=False)
+        logger.info(f"Wrote {len(vocab_records)} vocab entries to {vocab_out_path}")
+    else:
+        logger.warning("No vocab entries written.")
+
+    # clean up handler
     logger.removeHandler(fh)
     fh.close()
+
 
 if __name__ == '__main__':
     lang= "yo"
