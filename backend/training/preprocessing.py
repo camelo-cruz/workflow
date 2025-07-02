@@ -12,18 +12,25 @@ from spacy.cli.debug_data import debug_data
 from spacy.cli.init_config import fill_config
 from spacy.language import Language
 from spacy import util
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
+sys.stderr.reconfigure(encoding='utf-8')
 
 SCRIPT_PATH = Path(__file__).parent
 PARENT_PATH = SCRIPT_PATH.parent
-BASE_CONFIG_PATH = SCRIPT_PATH / "configs/base_config.cfg"
+BASE_CONFIG_PATH = SCRIPT_PATH / "glossing/configs/base_config.cfg"
 
 TEXT_COLUMN = "latin_transcription_utterance_used"
 GLOSS_COLUMN = "glossing_utterance_used"
+TRANSLATION_COLUMN = "translation_utterance_used"
 
 # Load mapping resources
 LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY.json")
-SPACY2CATEGORY = load_glossing_rules("VALUE2FEATURE.json")
-LEIPZIG2SPACY = {v: k for k, v in LEIPZIG_GLOSSARY.items()}
+LEIPZIG2UD: dict[str, tuple[str,str]] = {
+    entry["leipzig"]: (entry["category"], key)
+    for key, entry in LEIPZIG_GLOSSARY.items()
+}
 
 TOKEN_WITHOUT_GLOSS: set[str] = set() # Initialize set to store tokens without gloss
 UNKNOWN_CODES: set[str] = set() # Initialize set to store unknown codes. This means that the code is not in our list of LEIPZIG_GLOSSARY and needs to be added
@@ -32,7 +39,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 def setup_file_logger(log_path: str) -> logging.FileHandler:
-    fh = logging.FileHandler(log_path)
+    fh = logging.FileHandler(log_path, encoding='utf-8')
     fh.setLevel(logging.INFO)
     formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
     fh.setFormatter(formatter)
@@ -45,11 +52,15 @@ def clean_text(text: str) -> str:
     """
     if not isinstance(text, str):
         return ""
-    text = re.sub(r"\d+", "", text)  # remove numbers
-    text = re.sub(r"[\[\]\(\)\{\}]", "", text) # remove brackets
     text = text.replace("..", ".") # replace double dots with single dot
     text = text.replace(",", "")  # replace commas with nothing
+    text = re.sub(r'\s+', ' ', text)  # replace multiple spaces with a single space
     text = text.strip().strip('.') # remove dots in the beginning and end
+    text = re.sub(r"[\[\]\(\)\{\}]", "", text) # remove brackets
+    text = re.sub(r"^\d+\s*", "", text)  # remove numbers only at the start
+    text = text.replace("","")  # remove numbers only at the start
+    text = re.sub(r'\b(\d)(SG|PL)\b', r'\1.\2', text)
+
     return text.strip() 
 
 
@@ -57,28 +68,31 @@ def gloss_to_ud_features(gloss: str) -> list[str]:
     if not isinstance(gloss, str):
         return []
 
-    per_token_feats: list[str] = [] # Initialize list to store features for each token
+    per_token_feats: list[str] = []
     for token in gloss.split():
-        # Case 1: no “.” ⇒ not glossed because . means that the token has a gloss
-        if "." not in token:
-            per_token_feats.append('') # Why am I doing this? In spacy is nothing. Dict in morph.dict is empty
+        # decide if this token actually has gloss codes
+        is_gloss = ("." in token or token.isupper() or any(char.isdigit() for char in token))
+        if not is_gloss:
+            per_token_feats.append("") 
             TOKEN_WITHOUT_GLOSS.add(token)
             continue
 
-        # Case 2: has gloss, map each code
-        else:
-            codes = [c.upper() for c in token.split(".")[1:]]  # Convert codes to uppercase
-            feats: list[str] = []
-            for code in codes:
-                spacy_value = LEIPZIG2SPACY.get(code)
-                feat_name   = SPACY2CATEGORY.get(spacy_value)
-                if spacy_value and feat_name:
-                    feats.append(f"{feat_name}={spacy_value}")
-                else:
-                    UNKNOWN_CODES.add(code)  # Add unknown code to the set
+        feats: list[str] = []
+        codes = [c.upper() for c in token.split(".")]
+        # strip off any lowercase “lemma” prefix
+        if codes and codes[0].islower():
+            codes.pop(0)
 
-            # If no features mapped, use “_” as placeholder
-            per_token_feats.append("|".join(feats) if feats else '') # Which placeholder to use?
+        for code in codes:
+            ud_pair = LEIPZIG2UD.get(code)
+            if ud_pair:
+                feat_name, feat_val = ud_pair
+                feats.append(f"{feat_name}={feat_val}")
+            else:
+                UNKNOWN_CODES.add(code)
+
+        # join with "|" or use empty string if nothing mapped
+        per_token_feats.append("|".join(feats) if feats else "")
 
     return per_token_feats
 
@@ -91,6 +105,12 @@ def build_docbin(lang: str, study: str, input_dir: str, pretrained_model : Langu
         logger.addHandler(fh)
 
     # 1. Load spacy model
+    if not pretrained_model:
+        if lang == "de":
+            pretrained_model = "de_core_news_lg"
+        elif lang == "en":
+            pretrained_model = "en_core_web_lg"
+
     if pretrained_model:
         nlp = spacy.load(pretrained_model)
         logger.info(f"Loaded pretrained model: {pretrained_model}")
@@ -187,7 +207,7 @@ def build_docbin(lang: str, study: str, input_dir: str, pretrained_model : Langu
                 continue
 
     if all_examples:
-        pd.DataFrame(all_examples).to_excel(f"training/glossing/data/{lang}_{study}_train_spacy.xlsx", index=False)
+        pd.DataFrame(all_examples).to_excel(f"training/data/{lang}_{study}_train_spacy.xlsx", index=False)
 
     save_path = SCRIPT_PATH / "data" / f"{lang}_{study}_train.spacy"
     docbin.to_disk(save_path)
@@ -195,10 +215,10 @@ def build_docbin(lang: str, study: str, input_dir: str, pretrained_model : Langu
     logger.info(f"Built DocBin with {len(docbin)} documents from {input_dir}")
 
     if TOKEN_WITHOUT_GLOSS:
-        msg.warn(f"Tokens without gloss: {len(TOKEN_WITHOUT_GLOSS)}")
+        msg.warn(f"Tokens without gloss: {len(TOKEN_WITHOUT_GLOSS)}: {TOKEN_WITHOUT_GLOSS}")
         logger.warning(f"Tokens without gloss: {TOKEN_WITHOUT_GLOSS}")
     if UNKNOWN_CODES:
-        msg.warn(f"Unknown codes: {len(UNKNOWN_CODES)}")
+        msg.warn(f"Unknown codes: {len(UNKNOWN_CODES)}: {UNKNOWN_CODES}")
         logger.warning(f"Unknown codes: {UNKNOWN_CODES}")
     
     config = util.load_config(BASE_CONFIG_PATH)
@@ -215,10 +235,62 @@ def build_docbin(lang: str, study: str, input_dir: str, pretrained_model : Langu
         output_file=Path("training/glossing/configs/config.cfg"),
     )
 
-    debug_data("training/glossing/configs/config.cfg", silent=False, verbose=True)
+    debug_data("training/glossing/configs/config.cfg", silent=False, verbose=True, no_format=False)
 
     logger.removeHandler(fh)
     fh.close()
+
+def build_translationset(lang: str, study: str, input_dir: str) -> None:
+    log_path = Path(input_dir) / "translation_traindata.log"
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    fh = setup_file_logger(str(log_path))
+    if not logger.hasHandlers():
+        logger.addHandler(fh)
+    out_dir = Path("training/data")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_path = out_dir / f"{lang}_{study}_train_translation.xlsx"
+
+    records = []
+    for root, dirs, files in os.walk(input_dir):
+        for fname in files:
+            if not fname.endswith("annotated.xlsx"):
+                continue
+            file_path = os.path.join(root, fname)
+            try:
+                df = pd.read_excel(file_path)
+                df = df.dropna(subset=[TEXT_COLUMN, TRANSLATION_COLUMN])
+
+                # clean_text on the Series, then tolist()
+                texts = df[TEXT_COLUMN].astype(str).map(clean_text).tolist()
+                translations = df[TRANSLATION_COLUMN].astype(str).map(clean_text).tolist()
+
+                texts = [
+                    re.sub(r'[^A-Za-z]+', ' ', t).lower().strip()
+                    for t in texts
+                ]
+
+                translations = [
+                    re.sub(r'[^A-Za-z]+', ' ', tr).lower().strip()
+                    for tr in translations
+                ]
+
+                records.extend(zip(texts, translations))
+            except Exception as e:
+                logger.warning(f"Skipping {file_path}: {e}")
+
+    if not records:
+        logger.warning("No translation pairs found.")
+        return
+
+    out_df = pd.DataFrame(records, columns=["text", "translation"])
+    out_df.to_excel(out_path, index=False)
+    logger.info(f"Wrote {len(out_df)} translation pairs to {out_path}")
+    logger.removeHandler(fh)
+    fh.close()
+
 if __name__ == '__main__':
-    build_docbin("de", study="H", input_dir="C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_deu_adults",
-                 pretrained_model="de_core_news_lg")
+    lang= "yo"
+    study = "H"
+    input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_raw_files_yor/H06a_raw_files_yor_adults/data_1732047553925"
+    #build_docbin(lang, study, input_dir= input_dir, pretrained_model= None)
+    build_translationset(lang, study, input_dir)

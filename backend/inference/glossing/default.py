@@ -3,12 +3,8 @@ import spacy
 
 from spacy.cli import download
 from spacy.util import is_package
-from utils.functions import load_glossing_rules
 from inference.glossing.abstract import GlossingStrategy
 from inference.translation.factory import TranslationStrategyFactory
-
-
-LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY.json")
 
 class DefaultGlossingStrategy(GlossingStrategy):
     def __init__(self, language_code: str):
@@ -50,14 +46,14 @@ class DefaultGlossingStrategy(GlossingStrategy):
                     translated_lemma = translated_lemma.lower().replace(" ", "-")
 
                 # Map morphological features via LEIPZIG_GLOSSARY
-                arttype = LEIPZIG_GLOSSARY.get(morph.get("PronType"), morph.get("PronType"))
-                definite = LEIPZIG_GLOSSARY.get(morph.get("Definite"), morph.get("Definite"))
-                person = LEIPZIG_GLOSSARY.get(morph.get("Person"), morph.get("Person"))
-                number = LEIPZIG_GLOSSARY.get(morph.get("Number"), morph.get("Number"))
-                gender = LEIPZIG_GLOSSARY.get(morph.get("Gender"), morph.get("Gender"))
-                case   = LEIPZIG_GLOSSARY.get(morph.get("Case"), morph.get("Case"))
-                tense  = LEIPZIG_GLOSSARY.get(morph.get("Tense"), morph.get("Tense"))
-                mood   = LEIPZIG_GLOSSARY.get(morph.get("Mood"), morph.get("Mood"))
+                arttype  = self.map_leipzig(morph, "PronType")
+                definite = self.map_leipzig(morph, "Definite")
+                person   = self.map_leipzig(morph, "Person")
+                number   = self.map_leipzig(morph, "Number")
+                gender   = self.map_leipzig(morph, "Gender")
+                case     = self.map_leipzig(morph, "Case")
+                tense    = self.map_leipzig(morph, "Tense")
+                mood     = self.map_leipzig(morph, "Mood")
 
                 glossed_word = (
                     f"{translated_lemma}.{arttype}.{definite}."

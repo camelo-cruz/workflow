@@ -6,6 +6,7 @@ from abc import ABC, abstractmethod
 
 import deepl
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
 
 
 class TranslationStrategy(ABC):
@@ -24,12 +25,23 @@ class TranslationStrategy(ABC):
         Attempt to load a MarianMT model for <language_code>→en.
         If it fails, _marian_model and _marian_tokenizer stay as None.
         """
-        model_name = f"Helsinki-NLP/opus-mt-{self.language_code}-en"
+        if self.language_code == "yo":
+            model_name = f"Helsinki-NLP/opus-mt-mul-en"
+        else:
+            model_name = f"Helsinki-NLP/opus-mt-{self.language_code}-en"
         self._marian_tokenizer = AutoTokenizer.from_pretrained(model_name)
         self._marian_model = (
             AutoModelForSeq2SeqLM.from_pretrained(model_name)
             .to(self.device)
         )
+    
+    def _init_M2M100_model(self, model_path = None):
+        if model_path:
+            self._M2_M100_model = M2M100ForConditionalGeneration.from_pretrained(model_path)
+            self._M2_M100_tokenizer = M2M100Tokenizer.from_pretrained(model_path)
+        else:
+            self._M2_M100_model = M2M100ForConditionalGeneration.from_pretrained("facebook/m2m100_1.2B")
+            self._M2_M100_tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_1.2B")
 
     def _init_deepl_client(self):
         """
@@ -63,18 +75,12 @@ class TranslationStrategy(ABC):
             )
 
         try:
-            inputs = self._marian_tokenizer(
-                text,
-                return_tensors="pt",
-                padding=True,
-                truncation=True
-            ).to(self.device)
+            inputs = self._marian_tokenizer.encode(text, return_tensors="pt")
+            outputs = self._marian_model.generate(inputs, num_beams=4, max_length=50, early_stopping=True)
+            translated_text = self._marian_tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-            tokens = self._marian_model.generate(**inputs)
-            decoded = self._marian_tokenizer.batch_decode(
-                tokens, skip_special_tokens=True
-            )[0]
-            return decoded
+            return translated_text
+
         except Exception:
             return None
 
@@ -103,6 +109,14 @@ class TranslationStrategy(ABC):
             return result.text
         except Exception:
             return None
+    
+    def _translate_M2M100(self, text: str) -> str | None:
+        self._M2_M100_tokenizer.src_lang = self.language_code
+        encoded_hi = self._M2_M100_tokenizer(text, return_tensors="pt")
+        generated_tokens = self._M2_M100_model.generate(**encoded_hi, forced_bos_token_id=self._M2_M100_tokenizer.get_lang_id("en"))
+        decoded = self._M2_M100_tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
+
+        return decoded
     
     @abstractmethod
     def load_model(self):

@@ -5,7 +5,7 @@ from typing import List, Optional
 
 import spacy
 import srsly
-from training.glossing.preprocessing import build_docbin
+from training.preprocessing import build_docbin
 
 from spacy.tokens import DocBin
 from spacy.training.corpus import Corpus
@@ -49,8 +49,8 @@ def train(
         msg.info("Using CPU mode.")
 
     # Paths
-    corpus_path = Path(f"training/glossing/data/{lang}_{study}_train.spacy")
-    output_path = Path(f"training/glossing/data/{lang}_{study}_cv_scores.json")
+    corpus_path = Path(f"training/data/{lang}_{study}_train.spacy")
+    output_path = Path(f"training/data/{lang}_{study}_cv_scores.json")
     config_path = Path("training/glossing/configs/config.cfg")
     if not config_path.exists():
         raise FileNotFoundError(f"Config file not found at {config_path}")
@@ -130,15 +130,15 @@ def train(
         final_nlp = init_nlp(config)
         final_nlp, _ = train_nlp(final_nlp, None, use_gpu=use_gpu)
 
-        model_dir = Path(f"models/{lang}_{study}_custom_glossing")
+        model_dir = Path(f"models/glossing/{lang}_{study}_custom_glossing")
         model_dir.mkdir(parents=True, exist_ok=True)
         final_nlp.to_disk(model_dir)
         msg.good(f"Saved final model to {model_dir}")
 
 
 if __name__ == "__main__":
-    lang = "de"
+    lang = "yo"
     study = "H"
-    input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_deu_adults"
+    input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_raw_files_yor/H06a_raw_files_yor_adults/data_1732047553925"
     build_docbin(lang=lang, study=study, input_dir=input_dir)
     train(lang=lang, study=study, n_folds=1, shuffle=True, use_gpu=0)
