@@ -7,14 +7,17 @@ from inference.glossing.portuguese import PortugueseGlossingStrategy
 
 class GlossingStrategyFactory:
     @staticmethod
-    def get_strategy(language_code: str) -> GlossingStrategy:
-        if language_code in ["de", "uk", "ru", "en", "it"]:
-            return DefaultGlossingStrategy(language_code)
-        if language_code == "ja":
-            return JapaneseGlossingStrategy(language_code)
-        elif language_code == "vi":
-            return VietnameseGlossingStrategy(language_code)
-        elif language_code == "pt":
-            return PortugueseGlossingStrategy(language_code)
+    def get_strategy(language_code: str, custom_glossing_model = None) -> GlossingStrategy:
+        if custom_glossing_model:
+            pass
         else:
-            raise ValueError(f"No glossing strategy available for language code: {language_code}")
+            if language_code in ["de", "uk", "ru", "en", "it"]:
+                return DefaultGlossingStrategy(language_code)
+            if language_code == "ja":
+                return JapaneseGlossingStrategy(language_code)
+            elif language_code == "vi":
+                return VietnameseGlossingStrategy(language_code)
+            elif language_code == "pt":
+                return PortugueseGlossingStrategy(language_code)
+            else:
+                raise ValueError(f"No glossing strategy available for language code: {language_code}")
