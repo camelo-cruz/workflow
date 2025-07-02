@@ -5,8 +5,11 @@ from inference.translation.custom import CustomTranslationStrategy
 
 class TranslationStrategyFactory:
     @staticmethod
-    def get_strategy(language_code: str) -> TranslationStrategy:
-        if language_code in ["de", "uk", "ru", "en", "it", "yo"]:
-            return DefaultTranslationStrategy(language_code)
+    def get_strategy(language_code: str, custom_translation_model: str = None) -> TranslationStrategy:
+        if custom_translation_model:
+            return CustomTranslationStrategy(language_code, custom_translation_model)
         else:
-            raise ValueError(f"No translation strategy available for language code: {language_code}")
+            if language_code in ["de", "uk", "ru", "en", "it"]:
+                return DefaultTranslationStrategy(language_code)
+            else:
+                raise ValueError(f"No pretrained translation strategy available for language code: {language_code}")

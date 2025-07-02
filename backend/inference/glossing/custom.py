@@ -10,17 +10,15 @@ from inference.translation.factory import TranslationStrategyFactory
 LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY.json")
 
 class CustomGlossingStrategy(GlossingStrategy):
-    def __init__(self, language_code: str):
+    def __init__(self, language_code: str, custom_glossing_mode: str, custom_translation_model: str = None):
         super().__init__(language_code)
         self.nlp = None
-        self.translation_strategy = TranslationStrategyFactory.get_strategy(language_code)
+        self.custom_glossing_mode = custom_glossing_mode
+        self.translation_strategy = TranslationStrategyFactory.get_strategy(language_code, custom_translation_model)
         self.translation_strategy.load_model()
 
-    def load_model(self, model_name: str):
-        model_name = model_name
-        if model_name is None:
-            raise ValueError("Model name must be provided for loading the custom glossing model.")
-        model_path = Path("models/glossing", model_name)
+    def load_model(self):
+        model_path = Path("models/glossing", self.custom_glossing_mode)
         self.nlp = spacy.load(model_path)
         
     def gloss(self, sentence: str) -> str:
@@ -34,14 +32,12 @@ class CustomGlossingStrategy(GlossingStrategy):
                 lemma = token.text
                 morph = token.morph.to_dict()
                
-
-                # Translate lemma → English
-                translated_lemma = self.translation_strategy.translate(text=lemma)
-                print(f"Token: {token.text}, translated_lemma: {translated_lemma}, Morph: {morph}")
                 if isinstance(lemma, str):
                     lemma = lemma.lower().replace(" ", "-")
-                    #lemma = self.translation_strategy.translate(text=lemma)
-                    #print(f"Translated lemma: {lemma}")
+                    translated_lemma = self.translation_strategy.translate(text=lemma)[0]
+
+                    lemma = translated_lemma if translated_lemma else lemma
+                    
 
                 # Map morphological features via LEIPZIG_GLOSSARY
                 arttype  = self.map_leipzig(morph, "PronType")
@@ -63,8 +59,9 @@ class CustomGlossingStrategy(GlossingStrategy):
         return glossed_sentence.strip()
 
 if __name__ == "__main__":
-    glossing_strategy = CustomGlossingStrategy(language_code="yo")
-    glossing_strategy.load_model(model_name="yo_H_custom_glossing")
-    sentence = "Ehoro tí ó ń jẹun (ni ó pa àwọ̀ dà"
+    glossing_strategy = CustomGlossingStrategy(language_code="de", 
+                                               custom_glossing_mode="de_H_custom_glossing")
+    glossing_strategy.load_model()
+    sentence = "Das ist ein Test"
     glossed_sentence = glossing_strategy.gloss(sentence)
     print(glossed_sentence)

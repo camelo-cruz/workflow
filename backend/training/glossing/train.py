@@ -137,8 +137,8 @@ def train(
 
 
 if __name__ == "__main__":
-    lang = "yo"
+    lang = "de"
     study = "H"
-    input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_raw_files_yor/H06a_raw_files_yor_adults/data_1732047553925"
+    input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_raw_files_deu"
     build_docbin(lang=lang, study=study, input_dir=input_dir)
     train(lang=lang, study=study, n_folds=1, shuffle=True, use_gpu=0)
