@@ -322,20 +322,20 @@ export default function Inference() {
                 <Label htmlFor="model">Model</Label>
                 <Select value={selectedModel} onValueChange={setSelectedModel}>
                   <SelectTrigger id="model">
-                    <SelectValue placeholder="Select model" />
+                    <SelectValue
+                      placeholder={
+                        availableModels.length === 0
+                          ? "No models available"
+                          : "Select model"
+                      }
+                    />
                   </SelectTrigger>
                   <SelectContent>
-                    {availableModels.length === 0 ? (
-                      <SelectItem value="" disabled>
-                        No models available
+                    {availableModels.map((model) => (
+                      <SelectItem key={model} value={model}>
+                        {model}
                       </SelectItem>
-                    ) : (
-                      availableModels.map((model) => (
-                        <SelectItem key={model} value={model}>
-                          {model}
-                        </SelectItem>
-                      ))
-                    )}
+                    ))}
                   </SelectContent>
                 </Select>
                 {availableModels.length === 0 && (
