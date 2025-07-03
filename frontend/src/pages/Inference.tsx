@@ -75,6 +75,34 @@ export default function Inference() {
     getToken,
   );
 
+  // Fetch available models when action changes to translate or gloss
+  useEffect(() => {
+    if (action === "translate" || action === "gloss") {
+      const fetchModels = async () => {
+        try {
+          const response = await fetch(`/api/models/${action}`);
+          if (response.ok) {
+            const models = await response.json();
+            setAvailableModels(models);
+            if (models.length > 0 && !selectedModel) {
+              setSelectedModel(models[0]);
+            }
+          } else {
+            setAvailableModels([]);
+            addLog(`Failed to fetch ${action} models`, "warning");
+          }
+        } catch (error) {
+          setAvailableModels([]);
+          addLog(`Error fetching ${action} models: ${error}`, "error");
+        }
+      };
+      fetchModels();
+    } else {
+      setAvailableModels([]);
+      setSelectedModel("");
+    }
+  }, [action, selectedModel, addLog]);
+
   const handleSubmit = () => {
     if (!action || !instruction) {
       addLog("Please select action and instruction", "error");
