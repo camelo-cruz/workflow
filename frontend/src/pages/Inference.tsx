@@ -112,6 +112,10 @@ export default function Inference() {
       addLog("Please enter a language", "error");
       return;
     }
+    if ((action === "translate" || action === "gloss") && !selectedModel) {
+      addLog("Please select a model", "error");
+      return;
+    }
     if (mode === "online" && !baseDir.trim()) {
       addLog("Please enter base directory", "error");
       return;
@@ -124,7 +128,14 @@ export default function Inference() {
       return;
     }
 
-    submit({ mode, baseDir, action, instruction, language });
+    submit({
+      mode,
+      baseDir,
+      action,
+      instruction,
+      language,
+      model: selectedModel,
+    });
   };
 
   const getLogIcon = (type: LogType) => {
