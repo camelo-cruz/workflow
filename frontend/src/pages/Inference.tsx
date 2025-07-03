@@ -331,26 +331,24 @@ export default function Inference() {
                 <Label htmlFor="model">Model</Label>
                 <Select value={selectedModel} onValueChange={setSelectedModel}>
                   <SelectTrigger id="model">
-                    <SelectValue
-                      placeholder={
-                        availableModels.length === 0
-                          ? "No models available"
-                          : "Select model"
-                      }
-                    />
+                    <SelectValue placeholder="Select model" />
                   </SelectTrigger>
                   <SelectContent>
-                    {availableModels.map((model) => (
-                      <SelectItem key={model} value={model}>
-                        {model}
-                      </SelectItem>
-                    ))}
+                    {availableModels.length === 0 ? (
+                      <SelectItem value="default">Default Model</SelectItem>
+                    ) : (
+                      availableModels.map((model) => (
+                        <SelectItem key={model} value={model}>
+                          {model}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
                 {availableModels.length === 0 && (
-                  <p className="text-sm text-amber-600">
-                    No trained models found. Please train a model first in the
-                    Training section.
+                  <p className="text-sm text-blue-600">
+                    Using default model. Warning: if you want to use a custom
+                    model, choose from selection or train your own.
                   </p>
                 )}
               </div>
