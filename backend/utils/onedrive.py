@@ -7,7 +7,7 @@ def encode_share_link(link):
     encoded_url = base64.urlsafe_b64encode(link.encode()).decode().rstrip("=")
     return f"u!{encoded_url}"
 
-def download_sharepoint_folder(share_link, temp_dir, access_token, file_suffix: list =None):
+def download_sharepoint_folder(share_link, temp_dir, access_token, file_suffix: list = None):
     headers = {"Authorization": f"Bearer {access_token}"}
     share_id = encode_share_link(share_link)
     root_url = f"https://graph.microsoft.com/v1.0/shares/{share_id}/driveItem"
@@ -21,40 +21,39 @@ def download_sharepoint_folder(share_link, temp_dir, access_token, file_suffix: 
     session_folder_id_map = {}
 
     def recursive_collect_files(item, relative_path):
+        # If this item is a folder, recurse into it
         if "folder" in item:
             folder_path = os.path.join(temp_dir, relative_path, item['name'])
             os.makedirs(folder_path, exist_ok=True)
 
-            drive_id_inner = item['parentReference']['driveId']
-            item_id = item['id']
-            children_url = f"https://graph.microsoft.com/v1.0/drives/{drive_id_inner}/items/{item_id}/children"
-
-            children_response = requests.get(children_url, headers=headers)
-            children_response.raise_for_status()
-            children = children_response.json().get('value', [])
-
             if item['name'].startswith("Session_"):
                 session_folder_id_map[item['name']] = item['id']
 
-            for child in children:
+            children_url = (
+                f"https://graph.microsoft.com/v1.0/drives/"
+                f"{item['parentReference']['driveId']}/items/{item['id']}/children"
+            )
+            resp = requests.get(children_url, headers=headers)
+            resp.raise_for_status()
+            for child in resp.json().get('value', []):
                 recursive_collect_files(child, os.path.join(relative_path, item['name']))
 
+        # Otherwise, it's a file—check suffix and download if allowed
         else:
-            file_folder = os.path.join(temp_dir, relative_path)
-            os.makedirs(file_folder, exist_ok=True)
+            name = item['name']
+            # if no suffix filter given, or name ends with any of the allowed suffixes
+            if file_suffix is None or any(name.lower().endswith(s.lower()) for s in file_suffix):
+                file_folder = os.path.join(temp_dir, relative_path)
+                os.makedirs(file_folder, exist_ok=True)
+                file_path = os.path.join(file_folder, name)
 
-            filename = item['name']
-            if file_suffix:
-                
-            file_path = os.path.join(file_folder, filename)
-
-            download_url = item.get("@microsoft.graph.downloadUrl")
-            if download_url:
-                r = requests.get(download_url, stream=True)
-                r.raise_for_status()
-                with open(file_path, 'wb') as f:
-                    for chunk in r.iter_content(chunk_size=8192):
-                        f.write(chunk)
+                download_url = item.get("@microsoft.graph.downloadUrl")
+                if download_url:
+                    r = requests.get(download_url, stream=True)
+                    r.raise_for_status()
+                    with open(file_path, 'wb') as f:
+                        for chunk in r.iter_content(chunk_size=8192):
+                            f.write(chunk)
 
     recursive_collect_files(root_item, relative_path="")
     return temp_dir, drive_id, parent_folder_id, session_folder_id_map

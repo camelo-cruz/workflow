@@ -55,7 +55,7 @@ class TranslationDataset(Dataset):
         }
 
 
-def train(
+def train_m2m100(
     lang: str,
     study: str,
     input_dir: str,
@@ -131,4 +131,4 @@ if __name__ == "__main__":
     lang= "yo"
     study = "H"
     input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_raw_files_yor/H06a_raw_files_yor_adults/data_1732047553925"
-    train(lang, study, input_dir)
+    train_m2m100(lang, study, input_dir)

@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 templates = Jinja2Templates(directory="templates")
-router = APIRouter(tags=["auth"])
+router = APIRouter()
 
 TENANT_ID = os.getenv("TENANT_ID")
 CLIENT_ID = os.getenv("CLIENT_ID")
@@ -34,7 +34,7 @@ def _build_msal_app(cache=None):
         token_cache=cache
     )
 
-@router.get("/auth/start")
+@router.get("/start")
 async def start_onedrive_auth(request: Request):
     host   = request.headers.get("host")
     scheme = "http" if host.startswith(("localhost", "127.0.0.1")) else "https"
@@ -49,7 +49,7 @@ async def start_onedrive_auth(request: Request):
     return RedirectResponse(url=auth_url, status_code=302)
 
 
-@router.get("/auth/redirect")
+@router.get("/redirect")
 async def onedrive_auth_redirect(request: Request):
     code = request.query_params.get("code")
     if not code:

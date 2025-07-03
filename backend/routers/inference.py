@@ -37,7 +37,6 @@ async def process(
     job_id = str(uuid.uuid4())
     q = multiprocessing.Queue()
     cancel = multiprocessing.Event()
-
     token = access_token  # “token” now comes from form data
     jobs[job_id] = {
         "queue": q,

@@ -12,11 +12,12 @@ from fastapi import APIRouter, Request, Form, UploadFile, File, Body, HTTPExcept
 from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 
-from .workers import _offline_train_worker, _online_train_worker
+from .train_workers import _offline_train_worker, _online_train_worker  # Uses the updated two-phase online worker
 
 templates = Jinja2Templates(directory="templates")
 router = APIRouter()
 
+# In-memory store for tracking jobs
 jobs: dict[str, dict] = {}
 
 @router.get("/")
@@ -38,7 +39,7 @@ async def process(
     q = multiprocessing.Queue()
     cancel = multiprocessing.Event()
 
-    token = access_token  # “token” now comes from form data
+    token = access_token  # Token from form
     jobs[job_id] = {
         "queue": q,
         "cancel": cancel,
@@ -50,6 +51,7 @@ async def process(
         q.put("[ERROR] Missing language")
         return {"job_id": job_id}
 
+    # Choose worker based on presence of uploaded ZIP
     if zipfile is not None:
         tmp_dir = tempfile.mkdtemp()
         zip_path = Path(tmp_dir) / "upload.zip"
@@ -68,14 +70,15 @@ async def process(
         if not (base_dir and token):
             raise HTTPException(status_code=400, detail="Missing base_dir or token")
         worker = _online_train_worker
+        # Pass study as instruction for online worker
         args = (job_id, base_dir, token, action, language, study, q, cancel)
 
+    # Start worker process
     p = multiprocessing.Process(target=worker, args=args, daemon=True)
     p.start()
     jobs[job_id]["process"] = p
 
     return {"job_id": job_id}
-
 
 @router.get("/{job_id}/stream")
 async def stream(job_id: str):
@@ -86,7 +89,7 @@ async def stream(job_id: str):
     q: multiprocessing.Queue = job["queue"]
 
     def event_generator():
-        # flush any backlog
+        # Flush any backlog
         while True:
             try:
                 line = q.get_nowait()
@@ -95,28 +98,24 @@ async def stream(job_id: str):
 
             if line == "[DONE ALL]":
                 yield b"data: [DONE ALL]\n\n"
-                # job cleanup happens after streaming finishes
                 return
             elif line.startswith("[ZIP PATH] "):
-                zip_path = line[len("[ZIP PATH] "):].strip()
-                job["zip_path"] = zip_path
+                job["zip_path"] = line.split()[1]
             else:
                 yield f"data: {line}\n\n".encode("utf-8")
 
-        # then block on new messages until "[DONE ALL]"
+        # Block on new messages
         while True:
             line = q.get()
             if line == "[DONE ALL]":
                 yield b"data: [DONE ALL]\n\n"
                 break
             elif line.startswith("[ZIP PATH] "):
-                zip_path = line[len("[ZIP PATH] "):].strip()
-                job["zip_path"] = zip_path
+                job["zip_path"] = line.split()[1]
             else:
                 yield f"data: {line}\n\n".encode("utf-8")
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
-
 
 @router.post("/cancel")
 async def cancel_job(payload: dict = Body(...)):
@@ -135,7 +134,6 @@ async def cancel_job(payload: dict = Body(...)):
 
     jobs.pop(jid, None)
     return {"status": "cancelled"}
-
 
 @router.get("/{job_id}/download")
 async def download_zip(job_id: str, background_tasks: BackgroundTasks):
@@ -165,11 +163,9 @@ async def download_zip(job_id: str, background_tasks: BackgroundTasks):
         filename=f"{job_id}_results.zip"
     )
 
-
 @router.get("/terms")
 async def terms_view(request: Request):
     return templates.TemplateResponse("terms.html", {"request": request})
-
 
 @router.get("/privacy")
 async def privacy_view(request: Request):

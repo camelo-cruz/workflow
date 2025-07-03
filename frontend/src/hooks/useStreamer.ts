@@ -24,7 +24,7 @@ export function useStreamer(
     addLog(`Opened job ${jobId}`, "info");
     setIsProcessing(true);
 
-    const evt = new EventSource(`/jobs/${jobId}/stream`);
+    const evt = new EventSource(`/inference/${jobId}/stream`);
     evtRef.current = evt;
 
     evt.onmessage = (e) => {
@@ -45,7 +45,7 @@ export function useStreamer(
     const cancel = () => {
       const jobId = localStorage.getItem(JOB_KEY);
       if (!jobId) return;
-      fetch("/jobs/cancel", {
+      fetch("/inference/cancel", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ job_id: jobId }),

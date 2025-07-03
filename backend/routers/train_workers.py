@@ -1,4 +1,9 @@
 import os
+import shutil
+import tempfile
+import traceback
+from pathlib import Path
+import os
 import tempfile
 import traceback
 import shutil
@@ -9,9 +14,9 @@ import base64
 from zipfile import ZipFile
 from pathlib import Path
 
-from training.glossing.train import train_spacy
-
 from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
+from training.glossing.train import train_spacy
+from training.translation.train import train_m2m100
 
 def _list_session_children(share_link: str, token: str):
     """
@@ -25,87 +30,127 @@ def _list_session_children(share_link: str, token: str):
     return [
         entry
         for entry in entries
-        if entry.get("folder") and entry["name"].startswith("Session_")
-    ]
+        if entry.get("folder") and entry["name"].startswith("Session_")]
 
 def _online_train_worker(job_id, share_link, token, action, language, instruction, q, cancel):
-        """
-    Download each Session_* folder from OneDrive (online mode), run Transcriber/Translator/Glosser/create_columns,
-    upload results back into OneDrive, and report progress to the queue.
     """
-        def put(msg):
-            q.put(msg)
+    Download each Session_* folder from OneDrive (online mode) matching the given file_suffix,
+    then run Transcriber/Translator/Glosser/create_columns, upload results back into OneDrive,
+    and report progress to the queue.
+    """
+    def put(msg):
+        q.put(msg)
 
-        try:
-            put("Checking for multiple sessions in OneDrive…")
-            sessions_meta = _list_session_children(share_link, token)
+    try:
+        put("Checking for multiple sessions in OneDrive…")
+        sessions_meta = _list_session_children(share_link, token)
 
-            if not sessions_meta:
-                # if there are no nested Session_ folders, assume share_link points directly to a single Session
-                sessions_meta = [{"webUrl": share_link}]
+        # If no nested Session_ folders, treat the share_link as a single session
+        if not sessions_meta:
+            sessions_meta = [{"webUrl": share_link, "name": None}]
 
-            put(f"Found {len(sessions_meta)} sessions")
-            for entry in sessions_meta:
-                if cancel.is_set():
-                    put("[CANCELLED]")
-                    break
+        put(f"Found {len(sessions_meta)} session(s)")
 
-                session_link = entry.get("webUrl")
-                put(f"Downloading from OneDrive")
-                tmp_dir = tempfile.mkdtemp()
-                try:
-                    inp, drive_id, _, sess_map = download_sharepoint_folder(
-                        share_link=session_link,
-                        temp_dir=tmp_dir,
-                        access_token=token,
-                    )
-                except Exception as e:
-                    put(f"Failed to download session: {e}. Will skip.")
-                    shutil.rmtree(tmp_dir, ignore_errors=True)
-                    continue
+        # 1) Download phase: grab all sessions first
+        downloaded_sessions = []
+        for entry in sessions_meta:
+            if cancel.is_set():
+                put("[CANCELLED during download phase]")
+                break
 
-                
+            session_link = entry["webUrl"]
+            session_name = entry.get("name") or f"Session_{len(downloaded_sessions)+1}"
+            put(f"Downloading session '{session_name}'…")
 
-                session_name = entry.get("name") or next(iter(sess_map.keys()), Path(inp).name)
-                put(f"Processing session: {session_name}")
+            tmp_dir = tempfile.mkdtemp()
+            try:
+                inp, drive_id, parent_folder_id, sess_map = download_sharepoint_folder(
+                    share_link=session_link,
+                    temp_dir=tmp_dir,
+                    access_token=token,
+                    file_suffix=["annotated.xlsx"],
+                )
+            except Exception as e:
+                put(f"  ✗ Failed to download '{session_name}': {e}. Skipping.")
+                shutil.rmtree(tmp_dir, ignore_errors=True)
+                continue
 
-                session_path = os.path.join(inp, session_name)
-                if not os.path.isdir(session_path):
-                    session_path = inp
+            # Determine actual session folder on disk
+            # If root contains a subfolder named session_name, use it; else use root
+            candidate = os.path.join(inp, session_name)
+            session_path = candidate if os.path.isdir(candidate) else inp
 
-                uploads = []
-                if action == "gloos":
-                    train_spacy(session_path, language, "cpu").process_data()
+            downloaded_sessions.append({
+                "name": session_name,
+                "tmp_dir": tmp_dir,
+                "session_path": session_path,
+                "drive_id": drive_id,
+                "parent_folder_id": sess_map.get(session_name, parent_folder_id),
+            })
+            put(f"  ✓ Downloaded '{session_name}'")
+
+        if not downloaded_sessions:
+            put("[ERROR] No sessions downloaded; aborting.")
+            return
+
+        # 2) Processing & upload phase
+        for sess in downloaded_sessions:
+            if cancel.is_set():
+                put("[CANCELLED during processing phase]")
+                break
+
+            name = sess["name"]
+            path = sess["session_path"]
+            drive_id = sess["drive_id"]
+            parent_folder_id = sess["parent_folder_id"]
+
+            put(f"Processing session '{name}' with action='{action}'…")
+            try:
+                if action == "gloss":
+                    train_spacy(path, language, "cpu").process_data()
                     uploads = ["transcription.log"]
                 elif action == "translate":
-                    Translator(session_path, language, instruction, "cpu").process_data()
+                    train_m2m100(path, language, instruction, "cpu").process_data()
+                    uploads = []
+                else:
+                    put(f"  ⚠️ Unknown action '{action}', skipping.")
+                    continue
 
-                uploads.append("trials_and_sessions_annotated.xlsx")
+                uploads.append("training_data.log")
 
                 for fname in uploads:
                     if cancel.is_set():
-                        put("[CANCELLED]")
+                        put("[CANCELLED during uploads]")
                         break
-                    local_fp = os.path.join(session_path, fname)
+
+                    local_fp = os.path.join(path, fname)
                     if not os.path.exists(local_fp):
-                        put(f"Skipping missing: {fname}")
+                        put(f"  – Skipping missing file: {fname}")
                         continue
 
-                    put(f"Uploading {fname} for {session_name}")
+                    put(f"Uploading '{fname}' for session '{name}'…")
                     upload_file_replace_in_onedrive(
                         local_file_path=local_fp,
                         target_drive_id=drive_id,
-                        parent_folder_id=sess_map.get(session_name, ""),
+                        parent_folder_id=parent_folder_id,
                         file_name_in_folder=fname,
                         access_token=token,
                     )
+                    put(f"  ✓ Uploaded '{fname}'")
 
-                shutil.rmtree(tmp_dir, ignore_errors=True)
-                put(f"[DONE UPLOADED] {session_name}")
+            except Exception as e:
+                put(f"  [ERROR] Processing '{name}': {e}")
+                put(traceback.format_exc())
+            finally:
+                # Clean up this session's temp dir
+                shutil.rmtree(sess["tmp_dir"], ignore_errors=True)
+                put(f"Cleaned up temp for '{name}'")
 
-        except Exception as e:
-            put(f"[ERROR] {e}")
-            put(traceback.format_exc())
-        finally:
-            put("[DONE ALL]")
+        put("[DONE ALL]")
 
+    except Exception as e:
+        put(f"[ERROR] {e}")
+        put(traceback.format_exc())
+
+def _offline_train_worker():
+    pass

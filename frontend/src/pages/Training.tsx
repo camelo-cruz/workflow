@@ -101,7 +101,7 @@ export default function Training() {
     }
 
     try {
-      const res = await fetch("/jobs/train", {
+      const res = await fetch("/train/process", {
         method: "POST",
         body: form,
         credentials: "same-origin",
