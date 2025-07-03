@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -55,6 +55,8 @@ export default function Inference() {
   const [instruction, setInstruction] = useState("automatic");
   const [language, setLanguage] = useState("");
   const [logsExpanded, setLogsExpanded] = useState(false);
+  const [selectedModel, setSelectedModel] = useState("");
+  const [availableModels, setAvailableModels] = useState<string[]>([]);
 
   const addLog = (msg: string, type: LogType = "info") => {
     const time = new Date().toLocaleTimeString();
@@ -73,6 +75,18 @@ export default function Inference() {
     getToken,
   );
 
+  // Set default model when action changes to translate or gloss
+  useEffect(() => {
+    if (action === "translate" || action === "gloss") {
+      // For now, use default model since API endpoint doesn't exist yet
+      setAvailableModels([]);
+      setSelectedModel("default");
+    } else {
+      setAvailableModels([]);
+      setSelectedModel("");
+    }
+  }, [action]);
+
   const handleSubmit = () => {
     if (!action || !instruction) {
       addLog("Please select action and instruction", "error");
@@ -80,6 +94,10 @@ export default function Inference() {
     }
     if (!language.trim()) {
       addLog("Please enter a language", "error");
+      return;
+    }
+    if ((action === "translate" || action === "gloss") && !selectedModel) {
+      addLog("Please select a model", "error");
       return;
     }
     if (mode === "online" && !baseDir.trim()) {
@@ -94,7 +112,14 @@ export default function Inference() {
       return;
     }
 
-    submit({ mode, baseDir, action, instruction, language });
+    submit({
+      mode,
+      baseDir,
+      action,
+      instruction,
+      language,
+      model: selectedModel,
+    });
   };
 
   const getLogIcon = (type: LogType) => {
@@ -274,6 +299,35 @@ export default function Inference() {
                 </Select>
               </div>
             </div>
+
+            {/* Model Selection for Translation/Glossing */}
+            {(action === "translate" || action === "gloss") && (
+              <div className="space-y-2">
+                <Label htmlFor="model">Model</Label>
+                <Select value={selectedModel} onValueChange={setSelectedModel}>
+                  <SelectTrigger id="model">
+                    <SelectValue placeholder="Select model" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableModels.length === 0 ? (
+                      <SelectItem value="default">Default Model</SelectItem>
+                    ) : (
+                      availableModels.map((model) => (
+                        <SelectItem key={model} value={model}>
+                          {model}
+                        </SelectItem>
+                      ))
+                    )}
+                  </SelectContent>
+                </Select>
+                {availableModels.length === 0 && (
+                  <p className="text-sm text-blue-600">
+                    Using default model. Warning: if you want to use a custom
+                    model, choose from selection or train your own.
+                  </p>
+                )}
+              </div>
+            )}
 
             <div className="space-y-2">
               <Label htmlFor="language">Language</Label>
