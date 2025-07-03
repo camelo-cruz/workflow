@@ -55,6 +55,8 @@ export default function Inference() {
   const [instruction, setInstruction] = useState("automatic");
   const [language, setLanguage] = useState("");
   const [logsExpanded, setLogsExpanded] = useState(false);
+  const [selectedModel, setSelectedModel] = useState("");
+  const [availableModels, setAvailableModels] = useState<string[]>([]);
 
   const addLog = (msg: string, type: LogType = "info") => {
     const time = new Date().toLocaleTimeString();
