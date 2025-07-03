@@ -91,7 +91,7 @@ def _online_train_worker(
             return
 
         # --- TRAIN ON ALL SESSIONS AT ONCE ---
-        put(f"[INFO] Running '{action}' across {len(sessions)} session(s)")
+        put(f"[INFO] Training model. This may take a while…")
         try:
             if action == "gloss":
                 train_spacy(root_tmp, language, "cpu").process_data()

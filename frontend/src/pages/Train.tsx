@@ -46,7 +46,7 @@ export default function Train() {
   const [isConnected, setIsConnected] = useState(false);
   const [isTraining, setIsTraining] = useState(false);
   const [directoryPath, setDirectoryPath] = useState("");
-  const [trainAction, setTrainAction] = useState<"translate" | "gloss">("translate");
+  const [trainAction, setTrainAction] = useState<"gloss" | "translate">("gloss");
   const [language, setLanguage] = useState("");
   const [study, setStudy] = useState("");
   const [logsExpanded, setLogsExpanded] = useState(false);
@@ -188,13 +188,13 @@ export default function Train() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="trainAction">Train</Label>
-              <Select value={trainAction} onValueChange={value => setTrainAction(value as "translate" | "gloss")}>
+              <Select value={trainAction} onValueChange={value => setTrainAction(value as "gloss" | "translate")}>
                 <SelectTrigger id="trainAction">
                   <SelectValue placeholder="Select training type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="translate">Translate</SelectItem>
                   <SelectItem value="gloss">Gloss</SelectItem>
+                  <SelectItem value="translate">Translate</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -206,7 +206,7 @@ export default function Train() {
                   id="language"
                   value={language}
                   onChange={(e) => setLanguage(e.target.value)}
-                  placeholder="Enter the language (e.g., Spanish, French...)"
+                  placeholder="Enter the language (e.g., Spanish, French)"
                 />
               </div>
 
@@ -216,7 +216,7 @@ export default function Train() {
                   id="study"
                   value={study}
                   onChange={(e) => setStudy(e.target.value)}
-                  placeholder="Enter the study name (e.g., corpus1, dataset_v2...)"
+                  placeholder="Enter the study initial (e.g., F, H)"
                 />
               </div>
             </div>
