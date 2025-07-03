@@ -36,6 +36,9 @@ export function useJobSubmission(
     form.append("action", action);
     form.append("instruction", instruction);
     form.append("language", language);
+    if (model) {
+      form.append("model", model);
+    }
 
     if (mode === "online") {
       form.append("base_dir", baseDir);
