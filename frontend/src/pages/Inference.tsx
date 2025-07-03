@@ -82,18 +82,27 @@ export default function Inference() {
         try {
           const response = await fetch(`/api/models/${action}`);
           if (response.ok) {
-            const models = await response.json();
-            setAvailableModels(models);
-            if (models.length > 0 && !selectedModel) {
-              setSelectedModel(models[0]);
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+              const models = await response.json();
+              setAvailableModels(models);
+              if (models.length > 0 && !selectedModel) {
+                setSelectedModel(models[0]);
+              }
+            } else {
+              // API endpoint doesn't exist or returns HTML, use default model
+              setAvailableModels([]);
+              setSelectedModel("default");
             }
           } else {
+            // API endpoint doesn't exist, use default model
             setAvailableModels([]);
-            addLog(`Failed to fetch ${action} models`, "warning");
+            setSelectedModel("default");
           }
         } catch (error) {
+          // API endpoint doesn't exist, use default model
           setAvailableModels([]);
-          addLog(`Error fetching ${action} models: ${error}`, "error");
+          setSelectedModel("default");
         }
       };
       fetchModels();
