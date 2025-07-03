@@ -275,6 +275,37 @@ export default function Inference() {
               </div>
             </div>
 
+            {/* Model Selection for Translation/Glossing */}
+            {(action === "translate" || action === "gloss") && (
+              <div className="space-y-2">
+                <Label htmlFor="model">Model</Label>
+                <Select value={selectedModel} onValueChange={setSelectedModel}>
+                  <SelectTrigger id="model">
+                    <SelectValue placeholder="Select model" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableModels.length === 0 ? (
+                      <SelectItem value="" disabled>
+                        No models available
+                      </SelectItem>
+                    ) : (
+                      availableModels.map((model) => (
+                        <SelectItem key={model} value={model}>
+                          {model}
+                        </SelectItem>
+                      ))
+                    )}
+                  </SelectContent>
+                </Select>
+                {availableModels.length === 0 && (
+                  <p className="text-sm text-amber-600">
+                    No trained models found. Please train a model first in the
+                    Training section.
+                  </p>
+                )}
+              </div>
+            )}
+
             <div className="space-y-2">
               <Label htmlFor="language">Language</Label>
               <Input
