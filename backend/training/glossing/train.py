@@ -13,9 +13,10 @@ from spacy.training.initialize import init_nlp
 from spacy.training.loop import train as train_nlp
 from spacy.util import load_config
 from wasabi import msg
+from utils.functions import find_language, set_global_variables
 
 METRICS = ["token_acc", "morph_acc"]
-
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 
 def chunk(l: List, n: int):
     """Split a list l into n chunks of fairly equal number of elements"""
@@ -42,6 +43,7 @@ def train_spacy(
     shuffle: bool = False,
     use_gpu: int = 0,
 ):
+    lang = find_language(lang, LANGUAGES)
     # Optional GPU setup
     from spacy.cli._util import setup_gpu
     if use_gpu >= 0:
@@ -140,7 +142,7 @@ def train_spacy(
 
 
 if __name__ == "__main__":
-    lang = "de"
+    lang = "german"
     study = "H"
     #input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_raw_files_deu"
     input_dir = '/Users/alejandra/Library/CloudStorage/OneDrive-FreigegebeneBibliotheken–Leibniz-ZAS/Leibniz Dream Data - Studies/tests_alejandra/german/H06a_deu_adults Kopie'

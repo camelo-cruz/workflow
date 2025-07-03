@@ -66,7 +66,7 @@ export default function Inference() {
   const clearLogs = () => setLogs([]);
 
   const { connect, logout, getToken } = useOneDriveAuth(setIsConnected, addLog);
-  const { open: streamerOpen, cancel } = useStreamer(addLog, setIsProcessing);
+  const { open: streamerOpen, cancel } = useStreamer(addLog, setIsProcessing, "inference");
   const { fileInputRef, submit } = useJobSubmission(
     isProcessing,
     setIsProcessing,

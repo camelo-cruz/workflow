@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Inference from "./pages/Inference";
-import Training from "./pages/Training";
+import Train from "./pages/Train";
 import AuthSuccess from "./pages/AuthSuccess";
 import NotFound from "./pages/NotFound";
 
@@ -20,7 +20,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/inference" element={<Inference />} />
-          <Route path="/training" element={<Training />} />
+          <Route path="/train" element={<Train />} />
           <Route path="/success-auth" element={<AuthSuccess />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

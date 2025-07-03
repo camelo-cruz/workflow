@@ -78,6 +78,34 @@ async def process(
     return {"job_id": job_id}
 
 
+@router.get("/{job_id}/download")
+async def download_zip(job_id: str, background_tasks: BackgroundTasks):
+    job = jobs.get(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="No job")
+    zip_path = job.get("zip_path")
+    if not zip_path:
+        raise HTTPException(status_code=404, detail="No zip path")
+
+    base_dir = job.get("base_dir")
+
+    def cleanup():
+        try:
+            os.remove(zip_path)
+        except OSError:
+            pass
+        if base_dir and os.path.isdir(base_dir):
+            shutil.rmtree(base_dir, ignore_errors=True)
+        jobs.pop(job_id, None)
+
+    background_tasks.add_task(cleanup)
+
+    return FileResponse(
+        path=zip_path,
+        media_type="application/zip",
+        filename=f"{job_id}_results.zip"
+    )
+
 @router.get("/{job_id}/stream")
 async def stream(job_id: str):
     job = jobs.get(job_id)
@@ -136,35 +164,6 @@ async def cancel_job(payload: dict = Body(...)):
 
     jobs.pop(jid, None)
     return {"status": "cancelled"}
-
-
-@router.get("/{job_id}/download")
-async def download_zip(job_id: str, background_tasks: BackgroundTasks):
-    job = jobs.get(job_id)
-    if not job:
-        raise HTTPException(status_code=404, detail="No job")
-    zip_path = job.get("zip_path")
-    if not zip_path:
-        raise HTTPException(status_code=404, detail="No zip path")
-
-    base_dir = job.get("base_dir")
-
-    def cleanup():
-        try:
-            os.remove(zip_path)
-        except OSError:
-            pass
-        if base_dir and os.path.isdir(base_dir):
-            shutil.rmtree(base_dir, ignore_errors=True)
-        jobs.pop(job_id, None)
-
-    background_tasks.add_task(cleanup)
-
-    return FileResponse(
-        path=zip_path,
-        media_type="application/zip",
-        filename=f"{job_id}_results.zip"
-    )
 
 
 @router.get("/terms")
