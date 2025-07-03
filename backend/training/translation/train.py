@@ -56,9 +56,9 @@ class TranslationDataset(Dataset):
 
 
 def train_m2m100(
+    input_dir: str,
     lang: str,
     study: str,
-    input_dir: str,
     epochs: int = 5,
     batch_size: int = 8,
     lr: float = 5e-5,
@@ -130,5 +130,6 @@ def train_m2m100(
 if __name__ == "__main__":
     lang= "yo"
     study = "H"
-    input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_raw_files_yor/H06a_raw_files_yor_adults/data_1732047553925"
-    train_m2m100(lang, study, input_dir)
+    #input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_raw_files_yor/H06a_raw_files_yor_adults/data_1732047553925"
+    input_dir = '/Users/alejandra/Library/CloudStorage/OneDrive-FreigegebeneBibliotheken–Leibniz-ZAS/Leibniz Dream Data - Studies/tests_alejandra/german/H06a_deu_adults Kopie'
+    train_m2m100(input_dir, lang, study)
