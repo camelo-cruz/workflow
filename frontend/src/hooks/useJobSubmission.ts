@@ -20,12 +20,14 @@ export function useJobSubmission(
     action,
     instruction,
     language,
+    model,
   }: {
     mode: "online" | "upload";
     baseDir: string;
     action: string;
     instruction: string;
     language: string;
+    model?: string;
   }) => {
     setIsProcessing(true);
     addLog("Submitting job…", "info");
