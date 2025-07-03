@@ -36,3 +36,4 @@ tgt-venv/*
 uvicorn-log.txt
 /backend/training/glossing/models
 /backend/models
+*.pyc

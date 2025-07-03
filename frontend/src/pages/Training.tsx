@@ -38,6 +38,7 @@ type LogType = "info" | "success" | "error" | "warning";
 
 import { useOneDriveAuth } from "@/hooks/useOneDriveAuth";
 import { useStreamer } from "@/hooks/useStreamer";
+import { useTrainSubmission } from "@/hooks/useTrainSubmission";
 
 export default function Training() {
   const navigate = useNavigate();

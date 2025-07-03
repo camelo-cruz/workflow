@@ -14,6 +14,8 @@ from inference.api_interface.translate import Translator
 from inference.api_interface.gloss import Glosser
 from inference.api_interface.transliterate import Transliterator
 
+from training.glossing.train import train_spacy
+
 from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
 from utils.reorder_columns import create_columns
 

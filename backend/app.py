@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from routers.auth import router as auth_router
 from routers.jobs import router as jobs_router
+from routers.train import router as train_router
 
 # Decide by an env var—set DEV=1 in your shell when local‐deving.
 DEV = True
@@ -18,6 +19,7 @@ app = FastAPI()
 # Always include your API routers:
 app.include_router(auth_router)
 app.include_router(jobs_router, prefix="/jobs")
+app.include_router(train_router, prefix="/train")
 
 if DEV:
     # In dev, allow your React app (on :8080) to call your backend (on :8000)

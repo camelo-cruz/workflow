@@ -33,7 +33,8 @@ def flatten(l: List) -> List:
     return [item for sublist in l for item in sublist]
 
 
-def train(
+def train_spacy(
+    input_dir: str,
     lang: str,
     study: str,
     pretrained_model: Optional[str] = None,
@@ -47,6 +48,8 @@ def train(
         setup_gpu(use_gpu)
     else:
         msg.info("Using CPU mode.")
+    
+    build_docbin(lang=lang, study=study, input_dir=input_dir)
 
     # Paths
     corpus_path = Path(f"training/data/{lang}_{study}_train.spacy")
@@ -140,5 +143,4 @@ if __name__ == "__main__":
     lang = "de"
     study = "H"
     input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_raw_files_deu"
-    build_docbin(lang=lang, study=study, input_dir=input_dir)
-    train(lang=lang, study=study, n_folds=1, shuffle=True, use_gpu=0)
+    train_spacy(input_dir=input_dir, lang=lang, study=study, n_folds=1, shuffle=True, use_gpu=0)

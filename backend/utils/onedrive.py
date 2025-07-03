@@ -7,7 +7,7 @@ def encode_share_link(link):
     encoded_url = base64.urlsafe_b64encode(link.encode()).decode().rstrip("=")
     return f"u!{encoded_url}"
 
-def download_sharepoint_folder(share_link, temp_dir, access_token):
+def download_sharepoint_folder(share_link, temp_dir, access_token, file_suffix: list =None):
     headers = {"Authorization": f"Bearer {access_token}"}
     share_id = encode_share_link(share_link)
     root_url = f"https://graph.microsoft.com/v1.0/shares/{share_id}/driveItem"
@@ -44,6 +44,8 @@ def download_sharepoint_folder(share_link, temp_dir, access_token):
             os.makedirs(file_folder, exist_ok=True)
 
             filename = item['name']
+            if file_suffix:
+                
             file_path = os.path.join(file_folder, filename)
 
             download_url = item.get("@microsoft.graph.downloadUrl")
