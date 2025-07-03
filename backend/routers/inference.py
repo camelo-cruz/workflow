@@ -17,6 +17,8 @@ from .workers import _offline_worker, _online_worker
 templates = Jinja2Templates(directory="templates")
 router = APIRouter()
 
+MODELS_BASE = Path(__file__).parent.parent / "models"
+
 jobs: dict[str, dict] = {}
 
 @router.get("/")
@@ -173,3 +175,18 @@ async def terms_view(request: Request):
 @router.get("/privacy")
 async def privacy_view(request: Request):
     return templates.TemplateResponse("privacy.html", {"request": request})
+
+@router.get("/models/{task}")
+async def list_models(task: str):
+    if task not in ["translation", "glossing"]:
+        return JSONResponse({"error": "Invalid task"}, status_code=400)
+    
+    model_dir = MODELS_BASE / task
+    print(f"Models base directory: {MODELS_BASE}")
+    if not model_dir.exists() or not model_dir.is_dir():
+        print(f"No models found for task '{task}'")
+        return JSONResponse({"models": []})
+    
+    print(f"Model names for task '{task}': {model_names}")
+    model_names = [d.name for d in model_dir.iterdir() if d.is_dir()]
+    return {"models": model_names}

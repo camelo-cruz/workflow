@@ -75,17 +75,33 @@ export default function Inference() {
     getToken,
   );
 
-  // Set default model when action changes to translate or gloss
   useEffect(() => {
+  const fetchModels = async () => {
     if (action === "translate" || action === "gloss") {
-      // For now, use default model since API endpoint doesn't exist yet
-      setAvailableModels([]);
-      setSelectedModel("default");
+      const task = action === "translate" ? "translation" : "glossing";
+      try {
+        const res = await fetch(`/inference/models/${task}`);
+        if (!res.ok) throw new Error("Failed to fetch models");
+        const data = await res.json();
+        if (Array.isArray(data.models)) {
+          setAvailableModels(data.models);
+          setSelectedModel(data.models[0] || "default");
+          addLog(`Loaded ${data.models.length} ${task} models`, "success");
+        }
+      } catch (err) {
+        console.error("Model fetch error:", err);
+        setAvailableModels([]);
+        setSelectedModel("default");
+        addLog("Failed to load models. Using default.", "warning");
+      }
     } else {
       setAvailableModels([]);
       setSelectedModel("");
     }
-  }, [action]);
+  };
+
+  fetchModels();
+}, [action]);
 
   const handleSubmit = () => {
     if (!action || !instruction) {
