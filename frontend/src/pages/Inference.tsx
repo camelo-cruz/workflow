@@ -226,8 +226,15 @@ export default function Inference() {
       addLog("Please enter a language", "error");
       return;
     }
-    if ((action === "translate" || action === "gloss") && !selectedModel) {
-      addLog("Please select a model", "error");
+    if (action === "translate" && !selectedModel) {
+      addLog("Please select a translation model", "error");
+      return;
+    }
+    if (
+      action === "gloss" &&
+      (!selectedGlossingModel || !selectedTranslationModel)
+    ) {
+      addLog("Please select both glossing and translation models", "error");
       return;
     }
     if (mode === "online" && !baseDir.trim()) {
