@@ -43,6 +43,12 @@ export function useJobSubmission(
     if (model) {
       form.append("model", model);
     }
+    if (includeTranslation !== undefined) {
+      form.append("include_translation", includeTranslation.toString());
+    }
+    if (translationModel) {
+      form.append("translation_model", translationModel);
+    }
 
     if (mode === "online") {
       form.append("base_dir", baseDir);
