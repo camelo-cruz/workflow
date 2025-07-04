@@ -323,8 +323,8 @@ export default function Inference() {
                 <div className="space-y-2">
                   <Label htmlFor="model">
                     {action === "translate"
-                      ? "Translation Model"
-                      : "Glossing Model"}
+                      ? "Choose custom translation model"
+                      : "Choose custom glossing model"}
                   </Label>
                   <Select
                     value={selectedModel}
