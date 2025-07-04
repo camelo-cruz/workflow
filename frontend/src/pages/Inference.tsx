@@ -107,10 +107,9 @@ export default function Inference() {
 
   useEffect(() => {
     const fetchModels = async () => {
-      if (action === "translate" || action === "gloss") {
-        const task = action === "translate" ? "translation" : "glossing";
+      if (action === "translate") {
         try {
-          const res = await fetch(`/inference/models/${task}`);
+          const res = await fetch(`/inference/models/translation`);
           if (!res.ok) {
             throw new Error(`HTTP ${res.status}: ${res.statusText}`);
           }
@@ -122,8 +121,11 @@ export default function Inference() {
               ...data.models.filter((m) => m !== "Default"),
             ];
             setAvailableModels(models);
-            setSelectedModel(models[0]);
-            addLog(`Loaded ${data.models.length} ${task} models`, "success");
+            setSelectedModel("Default");
+            addLog(
+              `Loaded ${data.models.length} translation models`,
+              "success",
+            );
           }
         } catch (err) {
           console.error("Model fetch error:", err);
@@ -142,9 +144,73 @@ export default function Inference() {
             );
           }
         }
+      } else if (action === "gloss") {
+        // Fetch both glossing and translation models for glossing action
+        try {
+          const [glossRes, transRes] = await Promise.all([
+            fetch(`/inference/models/glossing`),
+            fetch(`/inference/models/translation`),
+          ]);
+
+          setBackendStatus("online");
+
+          if (glossRes.ok) {
+            const glossData = await glossRes.json();
+            if (Array.isArray(glossData.models)) {
+              const models = [
+                "Default",
+                ...glossData.models.filter((m) => m !== "Default"),
+              ];
+              setAvailableGlossingModels(models);
+              setSelectedGlossingModel("Default");
+              addLog(
+                `Loaded ${glossData.models.length} glossing models`,
+                "success",
+              );
+            }
+          }
+
+          if (transRes.ok) {
+            const transData = await transRes.json();
+            if (Array.isArray(transData.models)) {
+              const models = [
+                "Default",
+                ...transData.models.filter((m) => m !== "Default"),
+              ];
+              setAvailableTranslationModels(models);
+              setSelectedTranslationModel("Default");
+              addLog(
+                `Loaded ${transData.models.length} translation models`,
+                "success",
+              );
+            }
+          }
+        } catch (err) {
+          console.error("Model fetch error:", err);
+          setBackendStatus("offline");
+          setAvailableGlossingModels(["Default"]);
+          setAvailableTranslationModels(["Default"]);
+          setSelectedGlossingModel("Default");
+          setSelectedTranslationModel("Default");
+          if (err instanceof TypeError && err.message.includes("fetch")) {
+            addLog(
+              "Backend server is not running. Please start the backend server on port 8000.",
+              "error",
+            );
+          } else {
+            addLog(
+              `Failed to load models: ${err.message}. Using default.`,
+              "warning",
+            );
+          }
+        }
       } else {
         setAvailableModels([]);
+        setAvailableGlossingModels([]);
+        setAvailableTranslationModels([]);
         setSelectedModel("");
+        setSelectedGlossingModel("Default");
+        setSelectedTranslationModel("Default");
       }
     };
 
