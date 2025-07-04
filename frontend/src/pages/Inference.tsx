@@ -66,7 +66,11 @@ export default function Inference() {
   const clearLogs = () => setLogs([]);
 
   const { connect, logout, getToken } = useOneDriveAuth(setIsConnected, addLog);
-  const { open: streamerOpen, cancel } = useStreamer(addLog, setIsProcessing, "inference");
+  const { open: streamerOpen, cancel } = useStreamer(
+    addLog,
+    setIsProcessing,
+    "inference",
+  );
   const { fileInputRef, submit } = useJobSubmission(
     isProcessing,
     setIsProcessing,
@@ -76,33 +80,48 @@ export default function Inference() {
   );
 
   useEffect(() => {
-  const fetchModels = async () => {
-    if (action === "translate" || action === "gloss") {
-      const task = action === "translate" ? "translation" : "glossing";
-      try {
-        const res = await fetch(`/inference/models/${task}`);
-        if (!res.ok) throw new Error("Failed to fetch models");
-        const data = await res.json();
-        if (Array.isArray(data.models)) {
-          const models = ["Default", ...data.models.filter(m => m !== "Default")];
-          setAvailableModels(models);
-          setSelectedModel(models[0]);
-          addLog(`Loaded ${data.models.length} ${task} models`, "success");
+    const fetchModels = async () => {
+      if (action === "translate" || action === "gloss") {
+        const task = action === "translate" ? "translation" : "glossing";
+        try {
+          const res = await fetch(`/inference/models/${task}`);
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          }
+          const data = await res.json();
+          if (Array.isArray(data.models)) {
+            const models = [
+              "Default",
+              ...data.models.filter((m) => m !== "Default"),
+            ];
+            setAvailableModels(models);
+            setSelectedModel(models[0]);
+            addLog(`Loaded ${data.models.length} ${task} models`, "success");
+          }
+        } catch (err) {
+          console.error("Model fetch error:", err);
+          setAvailableModels(["Default"]);
+          setSelectedModel("Default");
+          if (err instanceof TypeError && err.message.includes("fetch")) {
+            addLog(
+              "Backend server is not running. Please start the backend server on port 8000.",
+              "error",
+            );
+          } else {
+            addLog(
+              `Failed to load models: ${err.message}. Using default.`,
+              "warning",
+            );
+          }
         }
-      } catch (err) {
-        console.error("Model fetch error:", err);
-        setAvailableModels(["Default"]);
-        setSelectedModel("Default");
-        addLog("Failed to load models. Using default.", "warning");
+      } else {
+        setAvailableModels([]);
+        setSelectedModel("");
       }
-    } else {
-      setAvailableModels([]);
-      setSelectedModel("");
-    }
-  };
+    };
 
-  fetchModels();
-}, [action]);
+    fetchModels();
+  }, [action]);
 
   const handleSubmit = () => {
     if (!action || !instruction) {
