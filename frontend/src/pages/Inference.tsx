@@ -133,6 +133,9 @@ export default function Inference() {
       instruction,
       language,
       model: selectedModel,
+      includeTranslation: action === "gloss" ? includeTranslation : undefined,
+      translationModel:
+        action === "gloss" && includeTranslation ? translationModel : undefined,
     });
   };
 
