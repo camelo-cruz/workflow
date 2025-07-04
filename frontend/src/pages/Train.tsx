@@ -85,10 +85,20 @@ export default function Train() {
     if (!trainAction) return addLog("Please select train action", "error");
     if (!language.trim()) return addLog("Please enter a language", "error");
     if (!study.trim()) return addLog("Please enter a study", "error");
-    if (!directoryPath.trim())
-      return addLog("Please enter OneDrive directory path", "error");
-    if (!isConnected)
-      return addLog("Please connect to OneDrive first", "error");
+
+    if (mode === "online") {
+      if (!directoryPath.trim())
+        return addLog("Please enter OneDrive directory path", "error");
+      if (!isConnected)
+        return addLog("Please connect to OneDrive first", "error");
+    } else {
+      if (
+        !fileInputRef.current?.files ||
+        fileInputRef.current.files.length === 0
+      ) {
+        return addLog("Please select files to upload", "error");
+      }
+    }
 
     // start
     addLog("Starting training job...", "info");
@@ -96,7 +106,7 @@ export default function Train() {
 
     // call hook-submitted function
     submit({
-      mode: "online",
+      mode,
       baseDir: directoryPath,
       action: trainAction,
       study,
