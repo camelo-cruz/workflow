@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ModelToggle } from "@/components/ui/model-toggle";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
