@@ -48,11 +48,13 @@ export default function Training() {
   >([]);
   const [isConnected, setIsConnected] = useState(false);
   const [isTraining, setIsTraining] = useState(false);
+  const [mode, setMode] = useState<"online" | "offline">("online");
   const [directoryPath, setDirectoryPath] = useState("");
   const [trainAction, setTrainAction] = useState("translate");
   const [language, setLanguage] = useState("");
   const [study, setStudy] = useState("");
   const [logsExpanded, setLogsExpanded] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const addLog = (msg: string, type: LogType = "info") => {
     const time = new Date().toLocaleTimeString();
