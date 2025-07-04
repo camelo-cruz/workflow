@@ -110,6 +110,10 @@ export default function Inference() {
       addLog("Please select a model", "error");
       return;
     }
+    if (action === "gloss" && includeTranslation && !translationModel) {
+      addLog("Please select a translation model", "error");
+      return;
+    }
     if (mode === "online" && !baseDir.trim()) {
       addLog("Please enter base directory", "error");
       return;
