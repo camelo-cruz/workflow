@@ -475,32 +475,31 @@ export default function Inference() {
               </div>
             </div>
 
-            {/* Model Selection for Translation/Glossing */}
-            {(action === "translate" || action === "gloss") && (
-              <div className="space-y-2">
-                <Label htmlFor="model">Model</Label>
-                <Select value={selectedModel} onValueChange={setSelectedModel}>
-                  <SelectTrigger id="model">
-                    <SelectValue placeholder="Select model" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availableModels.length === 0 ? (
-                      <SelectItem value="default">Default Model</SelectItem>
-                    ) : (
-                      availableModels.map((model) => (
-                        <SelectItem key={model} value={model}>
-                          {model}
-                        </SelectItem>
-                      ))
-                    )}
-                  </SelectContent>
-                </Select>
-                {availableModels.length === 0 && (
-                  <p className="text-sm text-blue-600">
-                    Using default model. Warning: if you want to use a custom
-                    model, choose from selection or train your own.
-                  </p>
-                )}
+            {/* Model Selection for Translation */}
+            {action === "translate" && (
+              <ModelToggle
+                label="Choose Translation Model"
+                models={availableModels}
+                selectedModel={selectedModel}
+                onModelChange={setSelectedModel}
+              />
+            )}
+
+            {/* Model Selection for Glossing - Dual Models */}
+            {action === "gloss" && (
+              <div className="space-y-4">
+                <ModelToggle
+                  label="Choose Glossing Model"
+                  models={availableGlossingModels}
+                  selectedModel={selectedGlossingModel}
+                  onModelChange={setSelectedGlossingModel}
+                />
+                <ModelToggle
+                  label="Choose Translation Model"
+                  models={availableTranslationModels}
+                  selectedModel={selectedTranslationModel}
+                  onModelChange={setSelectedTranslationModel}
+                />
               </div>
             )}
 
