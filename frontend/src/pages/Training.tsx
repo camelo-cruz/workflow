@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,6 +22,8 @@ import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Globe,
+  Upload,
+  FolderOpen,
   Play,
   X,
   CheckCircle2,
