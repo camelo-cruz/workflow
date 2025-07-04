@@ -319,29 +319,85 @@ export default function Inference() {
 
             {/* Model Selection for Translation/Glossing */}
             {(action === "translate" || action === "gloss") && (
-              <div className="space-y-2">
-                <Label htmlFor="model">Model</Label>
-                <Select value={selectedModel} onValueChange={setSelectedModel}>
-                  <SelectTrigger id="model">
-                    <SelectValue placeholder="Select model" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availableModels.length === 0 ? (
-                      <SelectItem value="default">Default Model</SelectItem>
-                    ) : (
-                      availableModels.map((model) => (
-                        <SelectItem key={model} value={model}>
-                          {model}
-                        </SelectItem>
-                      ))
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="model">
+                    {action === "translate"
+                      ? "Translation Model"
+                      : "Glossing Model"}
+                  </Label>
+                  <Select
+                    value={selectedModel}
+                    onValueChange={setSelectedModel}
+                  >
+                    <SelectTrigger id="model">
+                      <SelectValue placeholder="Select model" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableModels.length === 0 ? (
+                        <SelectItem value="default">Default Model</SelectItem>
+                      ) : (
+                        availableModels.map((model) => (
+                          <SelectItem key={model} value={model}>
+                            {model}
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {availableModels.length === 0 && (
+                    <p className="text-sm text-blue-600">
+                      Using default model. Warning: if you want to use a custom
+                      model, choose from selection or train your own.
+                    </p>
+                  )}
+                </div>
+
+                {/* Translation Option for Glossing */}
+                {action === "gloss" && (
+                  <div className="space-y-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="include-translation"
+                        checked={includeTranslation}
+                        onCheckedChange={setIncludeTranslation}
+                      />
+                      <Label
+                        htmlFor="include-translation"
+                        className="text-sm font-medium"
+                      >
+                        Include translation alongside glossing
+                      </Label>
+                    </div>
+
+                    {includeTranslation && (
+                      <div className="space-y-2">
+                        <Label htmlFor="translation-model">
+                          Translation Model
+                        </Label>
+                        <Select
+                          value={translationModel}
+                          onValueChange={setTranslationModel}
+                        >
+                          <SelectTrigger id="translation-model">
+                            <SelectValue placeholder="Select translation model" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="default-translation">
+                              Default Translation Model
+                            </SelectItem>
+                            <SelectItem value="custom-translation">
+                              Custom Translation Model
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <p className="text-xs text-blue-600">
+                          This will provide both glossing and translation output
+                          for your text.
+                        </p>
+                      </div>
                     )}
-                  </SelectContent>
-                </Select>
-                {availableModels.length === 0 && (
-                  <p className="text-sm text-blue-600">
-                    Using default model. Warning: if you want to use a custom
-                    model, choose from selection or train your own.
-                  </p>
+                  </div>
                 )}
               </div>
             )}
