@@ -84,9 +84,16 @@ export default function Inference() {
       // For now, use default model since API endpoint doesn't exist yet
       setAvailableModels([]);
       setSelectedModel("default");
+      // Reset translation options when changing actions
+      if (action === "gloss") {
+        setIncludeTranslation(false);
+        setTranslationModel("");
+      }
     } else {
       setAvailableModels([]);
       setSelectedModel("");
+      setIncludeTranslation(false);
+      setTranslationModel("");
     }
   }, [action]);
 
