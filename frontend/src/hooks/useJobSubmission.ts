@@ -21,6 +21,8 @@ export function useJobSubmission(
     instruction,
     language,
     model,
+    includeTranslation,
+    translationModel,
   }: {
     mode: "online" | "upload";
     baseDir: string;
@@ -28,6 +30,8 @@ export function useJobSubmission(
     instruction: string;
     language: string;
     model?: string;
+    includeTranslation?: boolean;
+    translationModel?: string;
   }) => {
     setIsProcessing(true);
     addLog("Submitting job…", "info");
