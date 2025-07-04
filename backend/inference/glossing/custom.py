@@ -17,7 +17,7 @@ class CustomGlossingStrategy(GlossingStrategy):
         try:
             self.translation_strategy = TranslationStrategyFactory.get_strategy(
                 language_code=language_code, 
-                model=translationModel
+                translationModel=translationModel
             )
             self.translation_strategy.load_model()
         except Exception as e:
@@ -25,7 +25,7 @@ class CustomGlossingStrategy(GlossingStrategy):
             self.translation_strategy = None
 
     def load_model(self):
-        model_path = Path("models/glossing", self.model)
+        model_path = Path("models/glossing", self.glossingModel)
         self.nlp = spacy.load(model_path)
         
     def gloss(self, sentence: str) -> str:

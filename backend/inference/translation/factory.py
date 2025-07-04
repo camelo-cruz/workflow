@@ -7,9 +7,9 @@ from inference.translation.M2M100 import M2M100Strategy
 
 class TranslationStrategyFactory:
     @staticmethod
-    def get_strategy(language_code: str, custom_translation_model: str = None) -> TranslationStrategy:
-        if custom_translation_model:
-            return CustomTranslationStrategy(language_code, custom_translation_model)
+    def get_strategy(language_code: str, translationModel: str = None) -> TranslationStrategy:
+        if translationModel:
+            return CustomTranslationStrategy(language_code, translationModel)
         elif language_code in ["yo", 'de']:
             return M2M100Strategy(language_code)
         else:
