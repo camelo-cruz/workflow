@@ -325,36 +325,51 @@ export default function Inference() {
             {/* Model Selection for Translation/Glossing */}
             {(action === "translate" || action === "gloss") && (
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="model">
-                    {action === "translate"
-                      ? "Choose custom translation model"
-                      : "Choose custom glossing model"}
-                  </Label>
-                  <Select
-                    value={selectedModel}
-                    onValueChange={setSelectedModel}
-                  >
-                    <SelectTrigger id="model">
-                      <SelectValue placeholder="Select model" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {availableModels.length === 0 ? (
-                        <SelectItem value="default">Default Model</SelectItem>
-                      ) : (
-                        availableModels.map((model) => (
-                          <SelectItem key={model} value={model}>
-                            {model}
-                          </SelectItem>
-                        ))
-                      )}
-                    </SelectContent>
-                  </Select>
-                  {availableModels.length === 0 && (
-                    <p className="text-sm text-blue-600">
-                      Using default model. Warning: if you want to use a custom
-                      model, choose from selection or train your own.
-                    </p>
+                {/* Custom Model Selection */}
+                <div className="space-y-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="use-custom-model"
+                      checked={useCustomModel}
+                      onCheckedChange={setUseCustomModel}
+                    />
+                    <Label
+                      htmlFor="use-custom-model"
+                      className="text-sm font-medium"
+                    >
+                      {action === "translate"
+                        ? "Choose custom translation model"
+                        : "Choose custom glossing model"}
+                    </Label>
+                  </div>
+
+                  {useCustomModel && (
+                    <div className="space-y-2">
+                      <Select
+                        value={selectedModel}
+                        onValueChange={setSelectedModel}
+                      >
+                        <SelectTrigger id="model">
+                          <SelectValue placeholder="Select custom model" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {availableModels.length === 0 ? (
+                            <SelectItem value="custom-trained">
+                              Custom Trained Model
+                            </SelectItem>
+                          ) : (
+                            availableModels.map((model) => (
+                              <SelectItem key={model} value={model}>
+                                {model}
+                              </SelectItem>
+                            ))
+                          )}
+                        </SelectContent>
+                      </Select>
+                      <p className="text-xs text-slate-600">
+                        Select your custom trained model or train a new one.
+                      </p>
+                    </div>
                   )}
                 </div>
 
