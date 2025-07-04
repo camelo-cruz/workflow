@@ -107,8 +107,12 @@ export default function Inference() {
       addLog("Please enter a language", "error");
       return;
     }
-    if ((action === "translate" || action === "gloss") && !selectedModel) {
-      addLog("Please select a model", "error");
+    if (
+      (action === "translate" || action === "gloss") &&
+      useCustomModel &&
+      !selectedModel
+    ) {
+      addLog("Please select a custom model", "error");
       return;
     }
     if (action === "gloss" && includeTranslation && !translationModel) {
