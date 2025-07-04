@@ -57,7 +57,9 @@ export default function Inference() {
   const [logsExpanded, setLogsExpanded] = useState(false);
   const [selectedModel, setSelectedModel] = useState("");
   const [availableModels, setAvailableModels] = useState<string[]>([]);
-  const [backendStatus, setBackendStatus] = useState<"checking" | "online" | "offline">("checking");
+  const [backendStatus, setBackendStatus] = useState<
+    "checking" | "online" | "offline"
+  >("checking");
 
   const addLog = (msg: string, type: LogType = "info") => {
     const time = new Date().toLocaleTimeString();
@@ -67,7 +69,11 @@ export default function Inference() {
   const clearLogs = () => setLogs([]);
 
   const { connect, logout, getToken } = useOneDriveAuth(setIsConnected, addLog);
-  const { open: streamerOpen, cancel } = useStreamer(addLog, setIsProcessing, "inference");
+  const { open: streamerOpen, cancel } = useStreamer(
+    addLog,
+    setIsProcessing,
+    "inference",
+  );
   const { fileInputRef, submit } = useJobSubmission(
     isProcessing,
     setIsProcessing,
@@ -90,41 +96,50 @@ export default function Inference() {
   }, []);
 
   useEffect(() => {
-  const fetchModels = async () => {
-    if (action === "translate" || action === "gloss") {
-      const task = action === "translate" ? "translation" : "glossing";
-      try {
-        const res = await fetch(`/inference/models/${task}`);
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    const fetchModels = async () => {
+      if (action === "translate" || action === "gloss") {
+        const task = action === "translate" ? "translation" : "glossing";
+        try {
+          const res = await fetch(`/inference/models/${task}`);
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          }
+          const data = await res.json();
+          setBackendStatus("online");
+          if (Array.isArray(data.models)) {
+            const models = [
+              "Default",
+              ...data.models.filter((m) => m !== "Default"),
+            ];
+            setAvailableModels(models);
+            setSelectedModel(models[0]);
+            addLog(`Loaded ${data.models.length} ${task} models`, "success");
+          }
+        } catch (err) {
+          console.error("Model fetch error:", err);
+          setBackendStatus("offline");
+          setAvailableModels(["Default"]);
+          setSelectedModel("Default");
+          if (err instanceof TypeError && err.message.includes("fetch")) {
+            addLog(
+              "Backend server is not running. Please start the backend server on port 8000.",
+              "error",
+            );
+          } else {
+            addLog(
+              `Failed to load models: ${err.message}. Using default.`,
+              "warning",
+            );
+          }
         }
-        const data = await res.json();
-        setBackendStatus("online");
-        if (Array.isArray(data.models)) {
-          const models = ["Default", ...data.models.filter(m => m !== "Default")];
-          setAvailableModels(models);
-          setSelectedModel(models[0]);
-          addLog(`Loaded ${data.models.length} ${task} models`, "success");
-        }
-      } catch (err) {
-        console.error("Model fetch error:", err);
-        setBackendStatus("offline");
-        setAvailableModels(["Default"]);
-        setSelectedModel("Default");
-        if (err instanceof TypeError && err.message.includes("fetch")) {
-          addLog("Backend server is not running. Please start the backend server on port 8000.", "error");
-        } else {
-          addLog(`Failed to load models: ${err.message}. Using default.`, "warning");
-        }
+      } else {
+        setAvailableModels([]);
+        setSelectedModel("");
       }
-    } else {
-      setAvailableModels([]);
-      setSelectedModel("");
-    }
-  };
+    };
 
-  fetchModels();
-}, [action]);
+    fetchModels();
+  }, [action]);
 
   const handleSubmit = () => {
     if (!action || !instruction) {
@@ -210,15 +225,24 @@ export default function Inference() {
                 <div className="flex flex-col">
                   <span className="text-sm font-medium">Backend</span>
                   <Badge
-                    variant={backendStatus === "online" ? "default" : "destructive"}
+                    variant={
+                      backendStatus === "online" ? "default" : "destructive"
+                    }
                     className="w-fit"
                   >
-                    {backendStatus === "checking" ? "Checking..." :
-                     backendStatus === "online" ? "Online" : "Offline"}
+                    {backendStatus === "checking"
+                      ? "Checking..."
+                      : backendStatus === "online"
+                        ? "Online"
+                        : "Offline"}
                   </Badge>
                 </div>
                 {backendStatus === "offline" && (
-                  <Button variant="outline" size="sm" onClick={checkBackendStatus}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={checkBackendStatus}
+                  >
                     Retry
                   </Button>
                 )}
@@ -227,28 +251,29 @@ export default function Inference() {
 
             {/* OneDrive Status */}
             <Card className="bg-white/80 backdrop-blur-sm">
-            <CardContent className="flex items-center gap-3 p-4">
-              <Globe className="h-5 w-5 text-blue-600" />
-              <div className="flex flex-col">
-                <span className="text-sm font-medium">OneDrive</span>
-                <Badge
-                  variant={isConnected ? "default" : "secondary"}
-                  className="w-fit"
-                >
-                  {isConnected ? "Connected" : "Disconnected"}
-                </Badge>
-              </div>
-              {isConnected ? (
-                <Button variant="outline" size="sm" onClick={logout}>
-                  Logout
-                </Button>
-              ) : (
-                <Button size="sm" onClick={connect}>
-                  Connect
-                </Button>
-              )}
-            </CardContent>
-          </Card>
+              <CardContent className="flex items-center gap-3 p-4">
+                <Globe className="h-5 w-5 text-blue-600" />
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium">OneDrive</span>
+                  <Badge
+                    variant={isConnected ? "default" : "secondary"}
+                    className="w-fit"
+                  >
+                    {isConnected ? "Connected" : "Disconnected"}
+                  </Badge>
+                </div>
+                {isConnected ? (
+                  <Button variant="outline" size="sm" onClick={logout}>
+                    Logout
+                  </Button>
+                ) : (
+                  <Button size="sm" onClick={connect}>
+                    Connect
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Mode Selection */}
