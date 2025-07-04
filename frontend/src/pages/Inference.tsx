@@ -57,7 +57,16 @@ export default function Inference() {
   const [language, setLanguage] = useState("");
   const [logsExpanded, setLogsExpanded] = useState(false);
   const [selectedModel, setSelectedModel] = useState("");
+  const [selectedGlossingModel, setSelectedGlossingModel] = useState("Default");
+  const [selectedTranslationModel, setSelectedTranslationModel] =
+    useState("Default");
   const [availableModels, setAvailableModels] = useState<string[]>([]);
+  const [availableGlossingModels, setAvailableGlossingModels] = useState<
+    string[]
+  >([]);
+  const [availableTranslationModels, setAvailableTranslationModels] = useState<
+    string[]
+  >([]);
   const [backendStatus, setBackendStatus] = useState<
     "checking" | "online" | "offline"
   >("checking");
