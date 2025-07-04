@@ -82,6 +82,19 @@ export default function Inference() {
     getToken,
   );
 
+  const checkBackendStatus = async () => {
+    try {
+      const res = await fetch("/inference/models/translation");
+      setBackendStatus(res.ok ? "online" : "offline");
+    } catch (err) {
+      setBackendStatus("offline");
+    }
+  };
+
+  useEffect(() => {
+    checkBackendStatus();
+  }, []);
+
   useEffect(() => {
     const fetchModels = async () => {
       if (action === "translate" || action === "gloss") {
