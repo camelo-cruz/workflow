@@ -395,7 +395,6 @@ export default function Inference() {
               </div>
               <div className="flex items-center gap-2">
                 <Button
-                  variant="outline"
                   size="sm"
                   onClick={copyLogsToClipboard}
                   disabled={logs.length === 0}
@@ -404,7 +403,6 @@ export default function Inference() {
                   Copy
                 </Button>
                 <Button
-                  variant="outline"
                   size="sm"
                   onClick={clearLogs}
                   disabled={logs.length === 0}
