@@ -49,6 +49,7 @@ export default function Train() {
   >([]);
   const [isConnected, setIsConnected] = useState(false);
   const [isTraining, setIsTraining] = useState(false);
+  const [mode, setMode] = useState<"online" | "upload">("online");
   const [directoryPath, setDirectoryPath] = useState("");
   const [trainAction, setTrainAction] = useState<"gloss" | "translate">(
     "gloss",
