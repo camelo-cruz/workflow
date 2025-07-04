@@ -307,29 +307,28 @@ export default function Inference() {
 
           {/* OneDrive Status */}
           <Card className="bg-white/80 backdrop-blur-sm">
-              <CardContent className="flex items-center gap-3 p-4">
-                <Globe className="h-5 w-5 text-blue-600" />
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium">OneDrive</span>
-                  <Badge
-                    variant={isConnected ? "default" : "secondary"}
-                    className="w-fit"
-                  >
-                    {isConnected ? "Connected" : "Disconnected"}
-                  </Badge>
-                </div>
-                {isConnected ? (
-                  <Button variant="outline" size="sm" onClick={logout}>
-                    Logout
-                  </Button>
-                ) : (
-                  <Button size="sm" onClick={connect}>
-                    Connect
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+            <CardContent className="flex items-center gap-3 p-4">
+              <Globe className="h-5 w-5 text-blue-600" />
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">OneDrive</span>
+                <Badge
+                  variant={isConnected ? "default" : "secondary"}
+                  className="w-fit"
+                >
+                  {isConnected ? "Connected" : "Disconnected"}
+                </Badge>
+              </div>
+              {isConnected ? (
+                <Button variant="outline" size="sm" onClick={logout}>
+                  Logout
+                </Button>
+              ) : (
+                <Button size="sm" onClick={connect}>
+                  Connect
+                </Button>
+              )}
+            </CardContent>
+          </Card>
         </div>
 
         {/* Mode Selection */}
