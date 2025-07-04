@@ -269,7 +269,6 @@ export default function Inference() {
 
   if (action === "translate") {
     payload.translationModel = selectedTranslationModel || "Default";
-    payload.glossingModel = selectedGlossingModel || "Default";
     addLog(`translation model: ${payload.translationModel}`, "info");
   } else if (action === "gloss") {
     payload.glossingModel = selectedGlossingModel || "Default";
