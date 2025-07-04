@@ -10,7 +10,7 @@ class TranslationStrategyFactory:
     def get_strategy(language_code: str, translationModel: str = None) -> TranslationStrategy:
         if translationModel:
             return CustomTranslationStrategy(language_code, translationModel)
-        elif language_code in ["yo", 'de']:
+        elif language_code in ['de']:
             return M2M100Strategy(language_code)
         else:
             raise ValueError(f"No pretrained translation strategy available for language code: {language_code}")

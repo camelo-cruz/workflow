@@ -42,7 +42,7 @@ class CustomGlossingStrategy(GlossingStrategy):
                 if isinstance(lemma, str):
                     lemma = lemma.lower().replace(" ", "-")
                     if self.translation_strategy:
-                        translated_lemma = self.translation_strategy.translate(text=lemma)[0]
+                        translated_lemma = self.translation_strategy.translate(text=lemma)
                     else:
                         translated_lemma = None
 

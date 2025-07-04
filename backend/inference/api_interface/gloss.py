@@ -79,5 +79,5 @@ class Glosser:
                     format_excel_output(excel_path, ["glossing_utterance_used"])
 
         except Exception as e:
-            logger.error(f"Error: {e}")
+            logger.error(f"Problem with file {excel_path} occurred: {e}")
             raise e
