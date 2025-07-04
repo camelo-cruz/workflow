@@ -79,13 +79,24 @@ export default function Training() {
       addLog("Please enter a study", "error");
       return;
     }
-    if (!directoryPath.trim()) {
-      addLog("Please enter OneDrive directory path", "error");
-      return;
-    }
-    if (!isConnected) {
-      addLog("Please connect to OneDrive first", "error");
-      return;
+
+    if (mode === "online") {
+      if (!directoryPath.trim()) {
+        addLog("Please enter OneDrive directory path", "error");
+        return;
+      }
+      if (!isConnected) {
+        addLog("Please connect to OneDrive first", "error");
+        return;
+      }
+    } else {
+      if (
+        !fileInputRef.current?.files ||
+        fileInputRef.current.files.length === 0
+      ) {
+        addLog("Please select files to upload", "error");
+        return;
+      }
     }
 
     setIsTraining(true);
@@ -96,11 +107,20 @@ export default function Training() {
     form.append("train_type", trainAction);
     form.append("language", language);
     form.append("study", study);
-    form.append("directory_path", directoryPath);
 
-    const token = getToken();
-    if (token) {
-      form.append("access_token", token);
+    if (mode === "online") {
+      form.append("directory_path", directoryPath);
+      const token = getToken();
+      if (token) {
+        form.append("access_token", token);
+      }
+    } else {
+      // Offline mode: add files
+      if (fileInputRef.current?.files) {
+        Array.from(fileInputRef.current.files).forEach((file, index) => {
+          form.append(`file_${index}`, file);
+        });
+      }
     }
 
     try {
