@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,6 +22,8 @@ import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Globe,
+  Upload,
+  FolderOpen,
   Play,
   X,
   CheckCircle2,
@@ -45,11 +47,13 @@ export default function Train() {
   const [logs, setLogs] = useState<Array<{ msg: string; type: LogType; time: string }>>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [isTraining, setIsTraining] = useState(false);
+  const [mode, setMode] = useState<"online" | "offline">("online");
   const [directoryPath, setDirectoryPath] = useState("");
   const [trainAction, setTrainAction] = useState<"gloss" | "translate">("gloss");
   const [language, setLanguage] = useState("");
   const [study, setStudy] = useState("");
   const [logsExpanded, setLogsExpanded] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const addLog = (msg: string, type: LogType = "info") => {
     const time = new Date().toLocaleTimeString();
@@ -60,36 +64,84 @@ export default function Train() {
   const { connect, logout, getToken } = useOneDriveAuth(setIsConnected, addLog);
   const { open: streamerOpen, cancel } = useStreamer(addLog, setIsTraining, "train");
 
-  // Use the hook for submission and processing state
-  const { fileInputRef, submit } = useTrainSubmission(
-    isTraining,
-    setIsTraining,
-    addLog,
-    streamerOpen,
-    getToken
-  );
+  const handleTrainSubmit = async () => {
+  if (!trainAction) {
+    addLog("Please select train action", "error");
+    return;
+  }
+  if (!language.trim()) {
+    addLog("Please enter a language", "error");
+    return;
+  }
+  if (!study.trim()) {
+    addLog("Please enter a study", "error");
+    return;
+  }
 
-  const handleTrainSubmit = () => {
-    // validations
-    if (!trainAction) return addLog("Please select train action", "error");
-    if (!language.trim()) return addLog("Please enter a language", "error");
-    if (!study.trim()) return addLog("Please enter a study", "error");
-    if (!directoryPath.trim()) return addLog("Please enter OneDrive directory path", "error");
-    if (!isConnected) return addLog("Please connect to OneDrive first", "error");
+  if (mode === "online") {
+    if (!directoryPath.trim()) {
+      addLog("Please enter OneDrive directory path", "error");
+      return;
+    }
+    if (!isConnected) {
+      addLog("Please connect to OneDrive first", "error");
+      return;
+    }
+  } else {
+    if (
+      !fileInputRef.current?.files ||
+      fileInputRef.current.files.length === 0
+    ) {
+      addLog("Please select files to upload", "error");
+      return;
+    }
+  }
 
-    // start
-    addLog("Starting training job...", "info");
-    setIsTraining(true);
+  addLog("Starting training job...", "info");
+  setIsTraining(true);
 
-    // call hook-submitted function
-    submit({
-      mode: "online",
-      baseDir: directoryPath,
-      action: trainAction,
-      study,
-      language,
+  const form = new FormData();
+  form.append("action", "train");
+  form.append("train_type", trainAction);
+  form.append("language", language);
+  form.append("study", study);
+
+  if (mode === "online") {
+    form.append("directory_path", directoryPath);
+    const token = getToken();
+    if (token) {
+      form.append("access_token", token);
+    }
+  } else {
+    // Offline mode: add files
+    if (fileInputRef.current?.files) {
+      Array.from(fileInputRef.current.files).forEach((file, index) => {
+        form.append(`file_${index}`, file);
+      });
+    }
+  }
+
+  try {
+    const res = await fetch("/jobs/train", {
+      method: "POST",
+      body: form,
+      credentials: "same-origin",
     });
-  };
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      addLog(`Training error: ${errorText}`, "error");
+      setIsTraining(false);
+      return;
+    }
+
+    const { job_id } = await res.json();
+    addLog(`Training job started with ID: ${job_id}`, "success");
+    streamerOpen(job_id);
+  } catch (error) {
+    addLog(`Training submission failed: ${error}`, "error");
+    setIsTraining(false);
+  }
 
   const getLogIcon = (type: LogType) => {
     switch (type) {
@@ -145,34 +197,70 @@ export default function Train() {
 
         </div>
 
-        {/* OneDrive Directory Path */}
+        {/* Data Source Selection */}
         <Card className="bg-white/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Globe className="h-5 w-5" />
+              <FolderOpen className="h-5 w-5" />
               Data Source
             </CardTitle>
             <CardDescription>
-              Connect to OneDrive and specify the directory path for training
-              data
+              Choose how to provide your training data
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="directoryPath">OneDrive Directory Path</Label>
-              <Input
-                id="directoryPath"
-                value={directoryPath}
-                onChange={(e) => setDirectoryPath(e.target.value)}
-                placeholder="e.g., /Documents/training-data"
-                disabled={!isConnected}
-              />
-              {!isConnected && (
-                <p className="text-sm text-red-600">
-                  Please connect to OneDrive first
-                </p>
-              )}
+            <div className="flex gap-4">
+              <Button
+                variant={mode === "online" ? "default" : "outline"}
+                onClick={() => setMode("online")}
+                className="flex-1"
+              >
+                <Globe className="h-4 w-4 mr-2" />
+                OneDrive
+              </Button>
+              <Button
+                variant={mode === "offline" ? "default" : "outline"}
+                onClick={() => setMode("offline")}
+                className="flex-1"
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                Upload Files
+              </Button>
             </div>
+
+            {mode === "online" ? (
+              <div className="space-y-2">
+                <Label htmlFor="directoryPath">OneDrive Directory Path</Label>
+                <Input
+                  id="directoryPath"
+                  value={directoryPath}
+                  onChange={(e) => setDirectoryPath(e.target.value)}
+                  placeholder="e.g., /Documents/training-data"
+                  disabled={!isConnected}
+                />
+                {!isConnected && (
+                  <p className="text-sm text-red-600">
+                    Please connect to OneDrive first
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Label htmlFor="fileUpload">Select Training Files</Label>
+                <Input
+                  ref={fileInputRef}
+                  id="fileUpload"
+                  type="file"
+                  multiple
+                  accept=".xlsx,.csv,.txt,.json"
+                  className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+                />
+                <p className="text-sm text-gray-600">
+                  Select training files (.xlsx, .csv, .txt, .json formats
+                  supported)
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
