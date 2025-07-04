@@ -9,7 +9,7 @@ const JOB_KEY = "job_id";
 export function useStreamer(
   addLog: (msg: string, type?: LogType) => void,
   setIsProcessing: (v: boolean) => void,
-  prefix: "inference" | "train" = "inference"
+  prefix: "inference" | "train"
 ) {
   const evtRef = useRef<EventSource | null>(null);
 

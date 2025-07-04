@@ -10,21 +10,14 @@ import tempfile
 
 from fastapi import APIRouter, Request, Form, UploadFile, File, Body, HTTPException, BackgroundTasks
 from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
-from fastapi.templating import Jinja2Templates
 
 from .workers import _offline_worker, _online_worker
 
-templates = Jinja2Templates(directory="templates")
 router = APIRouter()
 
 MODELS_BASE = Path(__file__).parent.parent / "models"
 
 jobs: dict[str, dict] = {}
-
-@router.get("/")
-async def index(request: Request):
-    version = os.getenv("APP_VERSION", "dev")
-    return templates.TemplateResponse("index.html", {"request": request, "app_version": version})
 
 @router.post("/process")
 async def process(
@@ -165,15 +158,6 @@ async def cancel_job(payload: dict = Body(...)):
     jobs.pop(jid, None)
     return {"status": "cancelled"}
 
-
-@router.get("/terms")
-async def terms_view(request: Request):
-    return templates.TemplateResponse("terms.html", {"request": request})
-
-
-@router.get("/privacy")
-async def privacy_view(request: Request):
-    return templates.TemplateResponse("privacy.html", {"request": request})
 
 @router.get("/models/{task}")
 async def list_models(task: str):

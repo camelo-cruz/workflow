@@ -10,20 +10,14 @@ import tempfile
 
 from fastapi import APIRouter, Request, Form, UploadFile, File, Body, HTTPException, BackgroundTasks
 from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
-from fastapi.templating import Jinja2Templates
 
 from .train_workers import _offline_train_worker, _online_train_worker  # Uses the updated two-phase online worker
 
-templates = Jinja2Templates(directory="templates")
 router = APIRouter()
 
-# In-memory store for tracking jobs
+
 jobs: dict[str, dict] = {}
 
-@router.get("/")
-async def index(request: Request):
-    version = os.getenv("APP_VERSION", "dev")
-    return templates.TemplateResponse("index.html", {"request": request, "app_version": version})
 
 @router.post("/process")
 async def process(
@@ -162,11 +156,3 @@ async def download_zip(job_id: str, background_tasks: BackgroundTasks):
         media_type="application/zip",
         filename=f"{job_id}_results.zip"
     )
-
-@router.get("/terms")
-async def terms_view(request: Request):
-    return templates.TemplateResponse("terms.html", {"request": request})
-
-@router.get("/privacy")
-async def privacy_view(request: Request):
-    return templates.TemplateResponse("privacy.html", {"request": request})
