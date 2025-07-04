@@ -56,10 +56,8 @@ export default function Inference() {
   const [instruction, setInstruction] = useState("automatic");
   const [language, setLanguage] = useState("");
   const [logsExpanded, setLogsExpanded] = useState(false);
-  const [selectedModel, setSelectedModel] = useState("");
   const [selectedGlossingModel, setSelectedGlossingModel] = useState("Default");
-  const [selectedTranslationModel, setSelectedTranslationModel] =
-    useState("Default");
+  const [selectedTranslationModel, setSelectedTranslationModel] = useState("Default");
   const [availableModels, setAvailableModels] = useState<string[]>([]);
   const [availableGlossingModels, setAvailableGlossingModels] = useState<
     string[]
@@ -121,7 +119,7 @@ export default function Inference() {
               ...data.models.filter((m) => m !== "Default"),
             ];
             setAvailableModels(models);
-            setSelectedModel("Default");
+            setSelectedTranslationModel("Default");
             addLog(
               `Loaded ${data.models.length} translation models`,
               "success",
@@ -131,7 +129,7 @@ export default function Inference() {
           console.error("Model fetch error:", err);
           setBackendStatus("offline");
           setAvailableModels(["Default"]);
-          setSelectedModel("Default");
+          setSelectedTranslationModel("Default");
           if (err instanceof TypeError && err.message.includes("fetch")) {
             addLog(
               "Backend server is not running. Please start the backend server on port 8000.",
@@ -208,7 +206,6 @@ export default function Inference() {
         setAvailableModels([]);
         setAvailableGlossingModels([]);
         setAvailableTranslationModels([]);
-        setSelectedModel("");
         setSelectedGlossingModel("Default");
         setSelectedTranslationModel("Default");
       }
@@ -218,51 +215,72 @@ export default function Inference() {
   }, [action]);
 
   const handleSubmit = () => {
-    if (!action || !instruction) {
-      addLog("Please select action and instruction", "error");
-      return;
-    }
-    if (!language.trim()) {
-      addLog("Please enter a language", "error");
-      return;
-    }
-    if (action === "translate" && !selectedModel) {
-      addLog("Please select a translation model", "error");
-      return;
-    }
-    if (
-      action === "gloss" &&
-      (!selectedGlossingModel || !selectedTranslationModel)
-    ) {
-      addLog("Please select both glossing and translation models", "error");
-      return;
-    }
-    if (mode === "online" && !baseDir.trim()) {
-      addLog("Please enter base directory", "error");
-      return;
-    }
-    if (
-      mode === "upload" &&
-      (!fileInputRef.current?.files || fileInputRef.current.files.length === 0)
-    ) {
-      addLog("Please select files to upload", "error");
-      return;
-    }
+  // 1) Basic validation
+  if (!action || !instruction) {
+    addLog("Please select action and instruction", "error");
+    return;
+  }
+  if (!language.trim()) {
+    addLog("Please enter a language", "error");
+    return;
+  }
+  if (mode === "online" && !baseDir.trim()) {
+    addLog("Please enter base directory", "error");
+    return;
+  }
+  if (
+    mode === "upload" &&
+    (!fileInputRef.current?.files || fileInputRef.current.files.length === 0)
+  ) {
+    addLog("Please select files to upload", "error");
+    return;
+  }
 
-    const modelToUse =
-      action === "gloss"
-        ? `${selectedGlossingModel}|${selectedTranslationModel}`
-        : selectedModel;
+  // 2) Action-specific validation
+  if (action === "translate" && !selectedTranslationModel) {
+    addLog("Please select a translation model", "error");
+    return;
+  }
+  if (
+    action === "gloss" &&
+    (!selectedGlossingModel || !selectedTranslationModel)
+  ) {
+    addLog("Please select both glossing and translation models", "error");
+    return;
+  }
 
-    submit({
-      mode,
-      baseDir,
-      action,
-      instruction,
-      language,
-      model: modelToUse,
-    });
+  // 3) Build payload
+  const payload: {
+    mode: "online" | "upload";
+    baseDir: string;
+    action: string;
+    instruction: string;
+    language: string;
+    model?: string;
+    glossingModel?: string;
+    translationModel?: string;
+  } = {
+    mode,
+    baseDir,
+    action,
+    instruction,
+    language,
   };
+
+  if (action === "translate") {
+    payload.translationModel = selectedTranslationModel || "Default";
+    payload.glossingModel = selectedGlossingModel || "Default";
+    addLog(`translation model: ${payload.translationModel}`, "info");
+  } else if (action === "gloss") {
+    payload.glossingModel = selectedGlossingModel || "Default";
+    payload.translationModel = selectedTranslationModel || "Default";
+    addLog(`glossing model: ${payload.glossingModel}`, "info");
+    addLog(`translation model: ${payload.translationModel}`, "info");
+  }
+
+  // 4) Submit
+  submit(payload);
+};
 
   const getLogIcon = (type: LogType) => {
     switch (type) {
@@ -447,8 +465,8 @@ export default function Inference() {
               <ModelToggle
                 label="Choose Translation Model"
                 models={availableModels}
-                selectedModel={selectedModel}
-                onModelChange={setSelectedModel}
+                selectedModel={selectedTranslationModel}
+                onModelChange={setSelectedTranslationModel}
               />
             )}
 

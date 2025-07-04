@@ -20,14 +20,16 @@ export function useJobSubmission(
     action,
     instruction,
     language,
-    model,
+    glossingModel,
+    translationModel,
   }: {
     mode: "online" | "upload";
     baseDir: string;
     action: string;
     instruction: string;
     language: string;
-    model?: string;
+    glossingModel?: string;
+    translationModel?: string;
   }) => {
     setIsProcessing(true);
     addLog("Submitting job…", "info");
@@ -36,8 +38,11 @@ export function useJobSubmission(
     form.append("action", action);
     form.append("instruction", instruction);
     form.append("language", language);
-    if (model) {
-      form.append("model", model);
+    if (glossingModel) {
+      form.append("glossingModel", glossingModel);
+    }
+    if (translationModel) {
+      form.append("translationModel", translationModel);
     }
 
     if (mode === "online") {

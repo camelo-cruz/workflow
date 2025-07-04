@@ -19,4 +19,4 @@ class M2M100Strategy(TranslationStrategy):
         generated_tokens = self._M2_M100_model.generate(**encoded_hi, forced_bos_token_id=self._M2_M100_tokenizer.get_lang_id("en"))
         decoded = self._M2_M100_tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
 
-        return decoded
+        return decoded[0] if decoded else None

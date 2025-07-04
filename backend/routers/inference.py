@@ -24,7 +24,8 @@ async def process(
     request: Request,
     action: str = Form(...),
     language: str = Form(...),
-    model: str | None = Form(...),
+    glossingModel: str | None = Form(...),
+    translationModel: str | None = Form(...),
     instruction: str | None = Form(None),
     access_token: str | None = Form(None),
     zipfile: UploadFile | None = File(None),
@@ -40,8 +41,10 @@ async def process(
         "zip_path": None,
         "token": token,
     }
-    if model == "Default":
-        model = None
+    if glossingModel == "Default":
+        glossingModel = None
+    if translationModel == "Default":
+        translationModel = None
 
     if not language:
         q.put("[ERROR] Missing language")
@@ -65,7 +68,7 @@ async def process(
         if not (base_dir and token):
             raise HTTPException(status_code=400, detail="Missing base_dir or token")
         worker = _online_worker
-        args = (job_id, base_dir, token, action, language, instruction, model, q, cancel)
+        args = (job_id, base_dir, token, action, language, instruction, translationModel, glossingModel, q, cancel)
 
     p = multiprocessing.Process(target=worker, args=args, daemon=True)
     p.start()

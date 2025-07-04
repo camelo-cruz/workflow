@@ -94,7 +94,7 @@ def _list_session_children(share_link: str, token: str):
     ]
 
 
-def _online_worker(job_id, share_link, token, action, language, instruction, model, q, cancel):
+def _online_worker(job_id, share_link, token, action, language, instruction, translationModel, glossingModel, q, cancel):
     """
     Download each Session_* folder from OneDrive (online mode), run Transcriber/Translator/Glosser/create_columns,
     upload results back into OneDrive, and report progress to the queue.
@@ -145,7 +145,7 @@ def _online_worker(job_id, share_link, token, action, language, instruction, mod
                 Translator(session_path, language, instruction, "cpu").process_data()
                 uploads = ["translation.log"]
             elif action == "gloss":
-                Glosser(session_path, language, instruction, model).process_data()
+                Glosser(session_path, language, instruction, glossingModel, translationModel).process_data()
             elif action == "transliterate":
                 Transliterator(session_path, language, instruction).process_data()
             elif action == "create columns":

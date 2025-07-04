@@ -8,9 +8,9 @@ from inference.glossing.custom import CustomGlossingStrategy
 
 class GlossingStrategyFactory:
     @staticmethod
-    def get_strategy(language_code: str, model = None) -> GlossingStrategy:
-        if model:
-            return CustomGlossingStrategy(language_code, model)
+    def get_strategy(language_code: str, glossingModel = None) -> GlossingStrategy:
+        if glossingModel:
+            return CustomGlossingStrategy(language_code, glossingModel)
         else:
             if language_code in ["de", "uk", "ru", "en", "it"]:
                 return DefaultGlossingStrategy(language_code)

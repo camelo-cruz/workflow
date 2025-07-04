@@ -10,14 +10,14 @@ from inference.translation.factory import TranslationStrategyFactory
 LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY.json")
 
 class CustomGlossingStrategy(GlossingStrategy):
-    def __init__(self, language_code: str, model: str, custom_translation_model: str = None):
+    def __init__(self, language_code: str, glossingModel: str, translationModel: str = None):
         super().__init__(language_code)
         self.nlp = None
-        self.model = model
+        self.glossingModel = glossingModel
         try:
             self.translation_strategy = TranslationStrategyFactory.get_strategy(
                 language_code=language_code, 
-                model=custom_translation_model
+                model=translationModel
             )
             self.translation_strategy.load_model()
         except Exception as e:

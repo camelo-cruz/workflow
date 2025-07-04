@@ -149,7 +149,7 @@ class Translator:
                 if self.instruction == "automatic":
                     column_to_highlight = "automatic_translation_automatic_transcription"
                 elif self.instruction == "corrected":
-                    column_to_highlight = "automatic_translation_corrected_transcription"
+                    column_to_highlight = "translation_everything"
                 elif self.instruction == "sentences":
                     column_to_highlight = "translation_utterance_used"
                 else:
