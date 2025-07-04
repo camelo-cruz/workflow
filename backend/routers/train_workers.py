@@ -6,7 +6,7 @@ import requests
 import base64
 
 from pathlib import Path
-from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
+from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive, encode_share_link
 from training.glossing.train import train_spacy
 from training.translation.train import train_m2m100
 
@@ -30,12 +30,20 @@ def _online_train_worker(
     token: str,
     action: str,
     language: str,
-    instruction: str,
+    study: str,
     q,       # multiprocessing.Queue
     cancel   # multiprocessing.Event
 ):
     def put(msg: str):
         q.put(msg)
+
+    share_id = encode_share_link(share_link)
+    root_url = f"https://graph.microsoft.com/v1.0/shares/{share_id}/driveItem"
+    resp = requests.get(root_url, headers={"Authorization": f"Bearer {token}"})
+    resp.raise_for_status()
+    root_item = resp.json()
+    root_drive_id        = root_item["parentReference"]["driveId"]
+    root_parent_folder_id = root_item["id"]
 
     root_tmp = tempfile.mkdtemp(prefix=f"{job_id}_")
     sessions = []
@@ -89,14 +97,29 @@ def _online_train_worker(
         if not sessions:
             put("[ERROR] No sessions available to train")
             return
+        #this wont upload becaus file does not exist yet. Need solution
+        # --- UPLOAD ONE LOG AT ROOT LEVEL ---
+        #output = "glossing_traindata.log" if action == "gloss" else "translation_traindata.log"
+        #try:
+        #    upload_file_replace_in_onedrive(
+        #        local_file_path=str(Path(root_tmp) / output),
+        #        target_drive_id=root_drive_id,
+        #        parent_folder_id=root_parent_folder_id,
+        #        file_name_in_folder=output,
+        #        access_token=token,
+        #    )
+        #    put(f"[INFO] Uploaded '{output}' to root folder")
+        #except Exception as e:
+        #    put(f"[ERROR] Upload failed for '{output}': {e}")
+        #    put(traceback.format_exc())
 
         # --- TRAIN ON ALL SESSIONS AT ONCE ---
         put(f"[INFO] Training model. This may take a while…")
         try:
             if action == "gloss":
-                train_spacy(root_tmp, language, "cpu").process_data()
+                train_spacy(root_tmp, language, study).process_data()
             elif action == "translate":
-                train_m2m100(root_tmp, language, instruction, "cpu").process_data()
+                train_m2m100(root_tmp, language, study).process_data()
             else:
                 put(f"[WARNING] Unknown action '{action}', skipping training")
         except Exception as e:
@@ -104,42 +127,12 @@ def _online_train_worker(
             put(traceback.format_exc())
             return
 
-        # --- UPLOAD OUTPUTS PER SESSION ---
-        outputs = ["training_data.log"]  # expand as needed
-        for sess in sessions:
-            if cancel.is_set():
-                put("[WARNING] Cancelled during upload phase")
-                return
-
-            name = sess["name"]
-            local_base = Path(sess["local_path"])
-            put(f"[INFO] Uploading outputs for '{name}'")
-
-            for fname in outputs:
-                fp = local_base / fname
-                if not fp.exists():
-                    put(f"[WARNING] Missing output '{fname}' in '{name}', skipping")
-                    continue
-
-                put(f"[INFO] Uploading '{fname}' to OneDrive")
-                try:
-                    upload_file_replace_in_onedrive(
-                        local_file_path=str(fp),
-                        target_drive_id=sess["drive_id"],
-                        parent_folder_id=sess["parent_folder_id"],
-                        file_name_in_folder=fname,
-                        access_token=token,
-                    )
-                    put(f"[INFO] Uploaded '{fname}' for '{name}'")
-                except Exception as e:
-                    put(f"[ERROR] Upload failed for '{name}/{fname}': {e}")
-                    put(traceback.format_exc())
-
         put("[DONE ALL]")
     finally:
         # always clean up the entire root_tmp
         shutil.rmtree(root_tmp, ignore_errors=True)
         put(f"[INFO] Cleaned up all temp dirs for job {job_id}")
+        put(f"[DONE ALL]")
 
 def _offline_train_worker():
     pass

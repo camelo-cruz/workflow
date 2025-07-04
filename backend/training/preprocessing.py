@@ -99,6 +99,7 @@ def gloss_to_ud_features(gloss: str) -> list[str]:
 
 def build_docbin(lang: str, study: str, input_dir: str, pretrained_model : Language = None) -> DocBin:
     log_path = Path(input_dir) / "glossing_traindata.log"
+    print(f"Log path: {log_path}")
     log_path.parent.mkdir(parents=True, exist_ok=True)
     fh = setup_file_logger(str(log_path))
     if not logger.hasHandlers():
