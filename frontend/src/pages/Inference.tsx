@@ -373,7 +373,7 @@ export default function Inference() {
                     {includeTranslation && (
                       <div className="space-y-2">
                         <Label htmlFor="translation-model">
-                          Translation Model
+                          Choose custom translation model
                         </Label>
                         <Select
                           value={translationModel}
