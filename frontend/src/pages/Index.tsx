@@ -66,7 +66,6 @@ const Index = () => {
               <Button
                 onClick={() => navigate("/training")}
                 className="w-full"
-                variant="outline"
                 size="lg"
               >
                 Start Training
