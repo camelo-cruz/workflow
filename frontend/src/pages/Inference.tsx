@@ -305,40 +305,8 @@ export default function Inference() {
             </div>
           </div>
 
-          <div className="flex gap-4">
-            {/* Backend Status */}
-            <Card className="bg-white/80 backdrop-blur-sm">
-              <CardContent className="flex items-center gap-3 p-4">
-                <Terminal className="h-5 w-5 text-gray-600" />
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium">Backend</span>
-                  <Badge
-                    variant={
-                      backendStatus === "online" ? "default" : "destructive"
-                    }
-                    className="w-fit"
-                  >
-                    {backendStatus === "checking"
-                      ? "Checking..."
-                      : backendStatus === "online"
-                        ? "Online"
-                        : "Offline"}
-                  </Badge>
-                </div>
-                {backendStatus === "offline" && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={checkBackendStatus}
-                  >
-                    Retry
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* OneDrive Status */}
-            <Card className="bg-white/80 backdrop-blur-sm">
+          {/* OneDrive Status */}
+          <Card className="bg-white/80 backdrop-blur-sm">
               <CardContent className="flex items-center gap-3 p-4">
                 <Globe className="h-5 w-5 text-blue-600" />
                 <div className="flex flex-col">
