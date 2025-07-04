@@ -249,13 +249,18 @@ export default function Inference() {
       return;
     }
 
+    const modelToUse =
+      action === "gloss"
+        ? `${selectedGlossingModel}|${selectedTranslationModel}`
+        : selectedModel;
+
     submit({
       mode,
       baseDir,
       action,
       instruction,
       language,
-      model: selectedModel,
+      model: modelToUse,
     });
   };
 
