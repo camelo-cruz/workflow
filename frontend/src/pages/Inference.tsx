@@ -137,7 +137,7 @@ export default function Inference() {
       action,
       instruction,
       language,
-      model: selectedModel,
+      model: useCustomModel ? selectedModel : "default",
       includeTranslation: action === "gloss" ? includeTranslation : undefined,
       translationModel:
         action === "gloss" && includeTranslation ? translationModel : undefined,
