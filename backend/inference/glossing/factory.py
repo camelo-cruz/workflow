@@ -3,13 +3,14 @@ from inference.glossing.default import DefaultGlossingStrategy
 from inference.glossing.japanese import JapaneseGlossingStrategy
 from inference.glossing.vietnamese import VietnameseGlossingStrategy
 from inference.glossing.portuguese import PortugueseGlossingStrategy
+from inference.glossing.custom import CustomGlossingStrategy
 
 
 class GlossingStrategyFactory:
     @staticmethod
-    def get_strategy(language_code: str, custom_glossing_model = None) -> GlossingStrategy:
-        if custom_glossing_model:
-            pass
+    def get_strategy(language_code: str, model = None) -> GlossingStrategy:
+        if model:
+            return CustomGlossingStrategy(language_code, model)
         else:
             if language_code in ["de", "uk", "ru", "en", "it"]:
                 return DefaultGlossingStrategy(language_code)

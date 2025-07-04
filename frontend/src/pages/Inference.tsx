@@ -84,14 +84,15 @@ export default function Inference() {
         if (!res.ok) throw new Error("Failed to fetch models");
         const data = await res.json();
         if (Array.isArray(data.models)) {
-          setAvailableModels(data.models);
-          setSelectedModel(data.models[0] || "default");
+          const models = ["Default", ...data.models.filter(m => m !== "Default")];
+          setAvailableModels(models);
+          setSelectedModel(models[0]);
           addLog(`Loaded ${data.models.length} ${task} models`, "success");
         }
       } catch (err) {
         console.error("Model fetch error:", err);
-        setAvailableModels([]);
-        setSelectedModel("default");
+        setAvailableModels(["Default"]);
+        setSelectedModel("Default");
         addLog("Failed to load models. Using default.", "warning");
       }
     } else {

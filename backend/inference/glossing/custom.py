@@ -10,15 +10,22 @@ from inference.translation.factory import TranslationStrategyFactory
 LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY.json")
 
 class CustomGlossingStrategy(GlossingStrategy):
-    def __init__(self, language_code: str, custom_glossing_mode: str, custom_translation_model: str = None):
+    def __init__(self, language_code: str, model: str, custom_translation_model: str = None):
         super().__init__(language_code)
         self.nlp = None
-        self.custom_glossing_mode = custom_glossing_mode
-        self.translation_strategy = TranslationStrategyFactory.get_strategy(language_code, custom_translation_model)
-        self.translation_strategy.load_model()
+        self.model = model
+        try:
+            self.translation_strategy = TranslationStrategyFactory.get_strategy(
+                language_code=language_code, 
+                model=custom_translation_model
+            )
+            self.translation_strategy.load_model()
+        except Exception as e:
+            print(f"Error loading translation strategy: {e}")
+            self.translation_strategy = None
 
     def load_model(self):
-        model_path = Path("models/glossing", self.custom_glossing_mode)
+        model_path = Path("models/glossing", self.model)
         self.nlp = spacy.load(model_path)
         
     def gloss(self, sentence: str) -> str:
@@ -34,10 +41,12 @@ class CustomGlossingStrategy(GlossingStrategy):
                
                 if isinstance(lemma, str):
                     lemma = lemma.lower().replace(" ", "-")
-                    translated_lemma = self.translation_strategy.translate(text=lemma)[0]
+                    if self.translation_strategy:
+                        translated_lemma = self.translation_strategy.translate(text=lemma)[0]
+                    else:
+                        translated_lemma = None
 
                     lemma = translated_lemma if translated_lemma else lemma
-                    
 
                 # Map morphological features via LEIPZIG_GLOSSARY
                 arttype  = self.map_leipzig(morph, "PronType")

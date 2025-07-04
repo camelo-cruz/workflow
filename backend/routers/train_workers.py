@@ -117,16 +117,15 @@ def _online_train_worker(
         put(f"[INFO] Training model. This may take a while…")
         try:
             if action == "gloss":
-                train_spacy(root_tmp, language, study).process_data()
+                train_spacy(root_tmp, language, study)
             elif action == "translate":
-                train_m2m100(root_tmp, language, study).process_data()
+                train_m2m100(root_tmp, language, study)
             else:
                 put(f"[WARNING] Unknown action '{action}', skipping training")
         except Exception as e:
             put(f"[ERROR] Training error: {e}")
             put(traceback.format_exc())
             return
-
         put("[DONE ALL]")
     finally:
         # always clean up the entire root_tmp

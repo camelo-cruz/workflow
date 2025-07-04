@@ -121,7 +121,7 @@ def train_spacy(
 
         # Evaluate on 10% test set
         msg.info("Evaluating on 10% test set")
-        from spacy.gold import Corpus
+        from spacy.training.corpus import Corpus
         corpus = Corpus(str(test_path), gold_preproc=False)
         examples = list(corpus(trained_nlp))
         scores = trained_nlp.evaluate(examples)

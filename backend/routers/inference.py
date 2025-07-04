@@ -11,7 +11,7 @@ import tempfile
 from fastapi import APIRouter, Request, Form, UploadFile, File, Body, HTTPException, BackgroundTasks
 from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
 
-from .workers import _offline_worker, _online_worker
+from .inference_workers import _offline_worker, _online_worker
 
 router = APIRouter()
 
@@ -24,6 +24,7 @@ async def process(
     request: Request,
     action: str = Form(...),
     language: str = Form(...),
+    model: str | None = Form(...),
     instruction: str | None = Form(None),
     access_token: str | None = Form(None),
     zipfile: UploadFile | None = File(None),
@@ -39,6 +40,8 @@ async def process(
         "zip_path": None,
         "token": token,
     }
+    if model == "Default":
+        model = None
 
     if not language:
         q.put("[ERROR] Missing language")
@@ -62,7 +65,7 @@ async def process(
         if not (base_dir and token):
             raise HTTPException(status_code=400, detail="Missing base_dir or token")
         worker = _online_worker
-        args = (job_id, base_dir, token, action, language, instruction, q, cancel)
+        args = (job_id, base_dir, token, action, language, instruction, model, q, cancel)
 
     p = multiprocessing.Process(target=worker, args=args, daemon=True)
     p.start()
@@ -170,6 +173,6 @@ async def list_models(task: str):
         print(f"No models found for task '{task}'")
         return JSONResponse({"models": []})
     
-    print(f"Model names for task '{task}': {model_names}")
     model_names = [d.name for d in model_dir.iterdir() if d.is_dir()]
+    print(f"Found models: {model_names}")
     return {"models": model_names}
