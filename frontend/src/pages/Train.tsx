@@ -183,34 +183,71 @@ export default function Train() {
           </Card>
         </div>
 
-        {/* OneDrive Directory Path */}
+        {/* Data Source */}
         <Card className="bg-white/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Globe className="h-5 w-5" />
+              <FolderOpen className="h-5 w-5" />
               Data Source
             </CardTitle>
             <CardDescription>
-              Connect to OneDrive and specify the directory path for training
-              data
+              Choose how to provide your training data
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="directoryPath">OneDrive Directory Path</Label>
-              <Input
-                id="directoryPath"
-                value={directoryPath}
-                onChange={(e) => setDirectoryPath(e.target.value)}
-                placeholder="e.g., /Documents/training-data"
-                disabled={!isConnected}
-              />
-              {!isConnected && (
-                <p className="text-sm text-red-600">
-                  Please connect to OneDrive first
-                </p>
-              )}
+            <div className="flex gap-4">
+              <Button
+                variant={mode === "online" ? "default" : "outline"}
+                onClick={() => setMode("online")}
+                className="flex-1"
+              >
+                <Globe className="h-4 w-4 mr-2" />
+                OneDrive
+              </Button>
+              <Button
+                variant={mode === "upload" ? "default" : "outline"}
+                onClick={() => setMode("upload")}
+                className="flex-1"
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                Upload Files
+              </Button>
             </div>
+
+            {mode === "online" ? (
+              <div className="space-y-2">
+                <Label htmlFor="directoryPath">OneDrive Directory Path</Label>
+                <Input
+                  id="directoryPath"
+                  value={directoryPath}
+                  onChange={(e) => setDirectoryPath(e.target.value)}
+                  placeholder="e.g., /Documents/training-data"
+                  disabled={!isConnected}
+                />
+                {!isConnected && (
+                  <p className="text-sm text-red-600">
+                    Please connect to OneDrive first
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Label htmlFor="fileUpload">Select Training Files</Label>
+                <Input
+                  ref={fileInputRef}
+                  id="fileUpload"
+                  type="file"
+                  multiple
+                  // @ts-ignore
+                  webkitdirectory=""
+                  directory=""
+                  className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+                />
+                <p className="text-sm text-gray-600">
+                  Select a folder containing your training data
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
