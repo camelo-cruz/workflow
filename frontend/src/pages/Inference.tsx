@@ -105,6 +105,7 @@ export default function Inference() {
             throw new Error(`HTTP ${res.status}: ${res.statusText}`);
           }
           const data = await res.json();
+          setBackendStatus("online");
           if (Array.isArray(data.models)) {
             const models = [
               "Default",
@@ -116,6 +117,7 @@ export default function Inference() {
           }
         } catch (err) {
           console.error("Model fetch error:", err);
+          setBackendStatus("offline");
           setAvailableModels(["Default"]);
           setSelectedModel("Default");
           if (err instanceof TypeError && err.message.includes("fetch")) {
