@@ -22,6 +22,8 @@ import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Globe,
+  Upload,
+  FolderOpen,
   Play,
   X,
   CheckCircle2,
@@ -42,23 +44,32 @@ import { useTrainSubmission } from "@/hooks/useTrainSubmission";
 
 export default function Train() {
   const navigate = useNavigate();
-  const [logs, setLogs] = useState<Array<{ msg: string; type: LogType; time: string }>>([]);
+  const [logs, setLogs] = useState<
+    Array<{ msg: string; type: LogType; time: string }>
+  >([]);
   const [isConnected, setIsConnected] = useState(false);
   const [isTraining, setIsTraining] = useState(false);
+  const [mode, setMode] = useState<"online" | "upload">("online");
   const [directoryPath, setDirectoryPath] = useState("");
-  const [trainAction, setTrainAction] = useState<"gloss" | "translate">("gloss");
+  const [trainAction, setTrainAction] = useState<"gloss" | "translate">(
+    "gloss",
+  );
   const [language, setLanguage] = useState("");
   const [study, setStudy] = useState("");
   const [logsExpanded, setLogsExpanded] = useState(false);
 
   const addLog = (msg: string, type: LogType = "info") => {
     const time = new Date().toLocaleTimeString();
-    setLogs(prev => [...prev, { msg, type, time }]);
+    setLogs((prev) => [...prev, { msg, type, time }]);
   };
   const clearLogs = () => setLogs([]);
 
   const { connect, logout, getToken } = useOneDriveAuth(setIsConnected, addLog);
-  const { open: streamerOpen, cancel } = useStreamer(addLog, setIsTraining, "train");
+  const { open: streamerOpen, cancel } = useStreamer(
+    addLog,
+    setIsTraining,
+    "train",
+  );
 
   // Use the hook for submission and processing state
   const { fileInputRef, submit } = useTrainSubmission(
@@ -66,7 +77,7 @@ export default function Train() {
     setIsTraining,
     addLog,
     streamerOpen,
-    getToken
+    getToken,
   );
 
   const handleTrainSubmit = () => {
@@ -74,8 +85,20 @@ export default function Train() {
     if (!trainAction) return addLog("Please select train action", "error");
     if (!language.trim()) return addLog("Please enter a language", "error");
     if (!study.trim()) return addLog("Please enter a study", "error");
-    if (!directoryPath.trim()) return addLog("Please enter OneDrive directory path", "error");
-    if (!isConnected) return addLog("Please connect to OneDrive first", "error");
+
+    if (mode === "online") {
+      if (!directoryPath.trim())
+        return addLog("Please enter OneDrive directory path", "error");
+      if (!isConnected)
+        return addLog("Please connect to OneDrive first", "error");
+    } else {
+      if (
+        !fileInputRef.current?.files ||
+        fileInputRef.current.files.length === 0
+      ) {
+        return addLog("Please select files to upload", "error");
+      }
+    }
 
     // start
     addLog("Starting training job...", "info");
@@ -83,7 +106,7 @@ export default function Train() {
 
     // call hook-submitted function
     submit({
-      mode: "online",
+      mode,
       baseDir: directoryPath,
       action: trainAction,
       study,
@@ -105,7 +128,9 @@ export default function Train() {
   };
 
   const copyLogsToClipboard = () => {
-    const logText = logs.map(log => `[${log.time}] ${log.type.toUpperCase()}: ${log.msg}`).join("\n");
+    const logText = logs
+      .map((log) => `[${log.time}] ${log.type.toUpperCase()}: ${log.msg}`)
+      .join("\n");
     navigator.clipboard.writeText(logText);
     addLog("Logs copied to clipboard", "success");
   };
@@ -116,12 +141,19 @@ export default function Train() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="icon" onClick={() => navigate("/")} className="hover:bg-white/80">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => navigate("/")}
+              className="hover:bg-white/80"
+            >
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Training</h1>
-              <p className="text-gray-600 mt-1">Train custom models for your data</p>
+              <p className="text-gray-600 mt-1">
+                Train custom models for your data
+              </p>
             </div>
           </div>
 
@@ -131,48 +163,91 @@ export default function Train() {
               <Globe className="h-5 w-5 text-blue-600" />
               <div className="flex flex-col">
                 <span className="text-sm font-medium">OneDrive</span>
-                <Badge variant={isConnected ? "default" : "secondary"} className="w-fit">
+                <Badge
+                  variant={isConnected ? "default" : "secondary"}
+                  className="w-fit"
+                >
                   {isConnected ? "Connected" : "Disconnected"}
                 </Badge>
               </div>
               {isConnected ? (
-                <Button variant="outline" size="sm" onClick={logout}>Logout</Button>
+                <Button variant="outline" size="sm" onClick={logout}>
+                  Logout
+                </Button>
               ) : (
-                <Button size="sm" onClick={connect}>Connect</Button>
+                <Button size="sm" onClick={connect}>
+                  Connect
+                </Button>
               )}
             </CardContent>
           </Card>
-
         </div>
 
-        {/* OneDrive Directory Path */}
+        {/* Data Source */}
         <Card className="bg-white/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Globe className="h-5 w-5" />
+              <FolderOpen className="h-5 w-5" />
               Data Source
             </CardTitle>
             <CardDescription>
-              Connect to OneDrive and specify the directory path for training
-              data
+              Choose how to provide your training data
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="directoryPath">OneDrive Directory Path</Label>
-              <Input
-                id="directoryPath"
-                value={directoryPath}
-                onChange={(e) => setDirectoryPath(e.target.value)}
-                placeholder="e.g., /Documents/training-data"
-                disabled={!isConnected}
-              />
-              {!isConnected && (
-                <p className="text-sm text-red-600">
-                  Please connect to OneDrive first
-                </p>
-              )}
+            <div className="flex gap-4">
+              <Button
+                variant={mode === "online" ? "default" : "outline"}
+                onClick={() => setMode("online")}
+                className="flex-1"
+              >
+                <Globe className="h-4 w-4 mr-2" />
+                OneDrive
+              </Button>
+              <Button
+                variant={mode === "upload" ? "default" : "outline"}
+                onClick={() => setMode("upload")}
+                className="flex-1"
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                Upload Files
+              </Button>
             </div>
+
+            {mode === "online" ? (
+              <div className="space-y-2">
+                <Label htmlFor="directoryPath">OneDrive Directory Path</Label>
+                <Input
+                  id="directoryPath"
+                  value={directoryPath}
+                  onChange={(e) => setDirectoryPath(e.target.value)}
+                  placeholder="e.g., /Documents/training-data"
+                  disabled={!isConnected}
+                />
+                {!isConnected && (
+                  <p className="text-sm text-red-600">
+                    Please connect to OneDrive first
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Label htmlFor="fileUpload">Select Training Files</Label>
+                <Input
+                  ref={fileInputRef}
+                  id="fileUpload"
+                  type="file"
+                  multiple
+                  // @ts-ignore
+                  webkitdirectory=""
+                  directory=""
+                  className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+                />
+                <p className="text-sm text-gray-600">
+                  Select a folder containing your training data
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -188,7 +263,12 @@ export default function Train() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="trainAction">Train</Label>
-              <Select value={trainAction} onValueChange={value => setTrainAction(value as "gloss" | "translate")}>
+              <Select
+                value={trainAction}
+                onValueChange={(value) =>
+                  setTrainAction(value as "gloss" | "translate")
+                }
+              >
                 <SelectTrigger id="trainAction">
                   <SelectValue placeholder="Select training type" />
                 </SelectTrigger>

@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ModelToggle } from "@/components/ui/model-toggle";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -56,7 +57,19 @@ export default function Inference() {
   const [language, setLanguage] = useState("");
   const [logsExpanded, setLogsExpanded] = useState(false);
   const [selectedModel, setSelectedModel] = useState("");
+  const [selectedGlossingModel, setSelectedGlossingModel] = useState("Default");
+  const [selectedTranslationModel, setSelectedTranslationModel] =
+    useState("Default");
   const [availableModels, setAvailableModels] = useState<string[]>([]);
+  const [availableGlossingModels, setAvailableGlossingModels] = useState<
+    string[]
+  >([]);
+  const [availableTranslationModels, setAvailableTranslationModels] = useState<
+    string[]
+  >([]);
+  const [backendStatus, setBackendStatus] = useState<
+    "checking" | "online" | "offline"
+  >("checking");
 
   const addLog = (msg: string, type: LogType = "info") => {
     const time = new Date().toLocaleTimeString();
@@ -66,7 +79,11 @@ export default function Inference() {
   const clearLogs = () => setLogs([]);
 
   const { connect, logout, getToken } = useOneDriveAuth(setIsConnected, addLog);
-  const { open: streamerOpen, cancel } = useStreamer(addLog, setIsProcessing, "inference");
+  const { open: streamerOpen, cancel } = useStreamer(
+    addLog,
+    setIsProcessing,
+    "inference",
+  );
   const { fileInputRef, submit } = useJobSubmission(
     isProcessing,
     setIsProcessing,
@@ -75,34 +92,130 @@ export default function Inference() {
     getToken,
   );
 
-  useEffect(() => {
-  const fetchModels = async () => {
-    if (action === "translate" || action === "gloss") {
-      const task = action === "translate" ? "translation" : "glossing";
-      try {
-        const res = await fetch(`/inference/models/${task}`);
-        if (!res.ok) throw new Error("Failed to fetch models");
-        const data = await res.json();
-        if (Array.isArray(data.models)) {
-          const models = ["Default", ...data.models.filter(m => m !== "Default")];
-          setAvailableModels(models);
-          setSelectedModel(models[0]);
-          addLog(`Loaded ${data.models.length} ${task} models`, "success");
-        }
-      } catch (err) {
-        console.error("Model fetch error:", err);
-        setAvailableModels(["Default"]);
-        setSelectedModel("Default");
-        addLog("Failed to load models. Using default.", "warning");
-      }
-    } else {
-      setAvailableModels([]);
-      setSelectedModel("");
+  const checkBackendStatus = async () => {
+    try {
+      const res = await fetch("/inference/models/translation");
+      setBackendStatus(res.ok ? "online" : "offline");
+    } catch (err) {
+      setBackendStatus("offline");
     }
   };
 
-  fetchModels();
-}, [action]);
+  useEffect(() => {
+    checkBackendStatus();
+  }, []);
+
+  useEffect(() => {
+    const fetchModels = async () => {
+      if (action === "translate") {
+        try {
+          const res = await fetch(`/inference/models/translation`);
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          }
+          const data = await res.json();
+          setBackendStatus("online");
+          if (Array.isArray(data.models)) {
+            const models = [
+              "Default",
+              ...data.models.filter((m) => m !== "Default"),
+            ];
+            setAvailableModels(models);
+            setSelectedModel("Default");
+            addLog(
+              `Loaded ${data.models.length} translation models`,
+              "success",
+            );
+          }
+        } catch (err) {
+          console.error("Model fetch error:", err);
+          setBackendStatus("offline");
+          setAvailableModels(["Default"]);
+          setSelectedModel("Default");
+          if (err instanceof TypeError && err.message.includes("fetch")) {
+            addLog(
+              "Backend server is not running. Please start the backend server on port 8000.",
+              "error",
+            );
+          } else {
+            addLog(
+              `Failed to load models: ${err.message}. Using default.`,
+              "warning",
+            );
+          }
+        }
+      } else if (action === "gloss") {
+        // Fetch both glossing and translation models for glossing action
+        try {
+          const [glossRes, transRes] = await Promise.all([
+            fetch(`/inference/models/glossing`),
+            fetch(`/inference/models/translation`),
+          ]);
+
+          setBackendStatus("online");
+
+          if (glossRes.ok) {
+            const glossData = await glossRes.json();
+            if (Array.isArray(glossData.models)) {
+              const models = [
+                "Default",
+                ...glossData.models.filter((m) => m !== "Default"),
+              ];
+              setAvailableGlossingModels(models);
+              setSelectedGlossingModel("Default");
+              addLog(
+                `Loaded ${glossData.models.length} glossing models`,
+                "success",
+              );
+            }
+          }
+
+          if (transRes.ok) {
+            const transData = await transRes.json();
+            if (Array.isArray(transData.models)) {
+              const models = [
+                "Default",
+                ...transData.models.filter((m) => m !== "Default"),
+              ];
+              setAvailableTranslationModels(models);
+              setSelectedTranslationModel("Default");
+              addLog(
+                `Loaded ${transData.models.length} translation models`,
+                "success",
+              );
+            }
+          }
+        } catch (err) {
+          console.error("Model fetch error:", err);
+          setBackendStatus("offline");
+          setAvailableGlossingModels(["Default"]);
+          setAvailableTranslationModels(["Default"]);
+          setSelectedGlossingModel("Default");
+          setSelectedTranslationModel("Default");
+          if (err instanceof TypeError && err.message.includes("fetch")) {
+            addLog(
+              "Backend server is not running. Please start the backend server on port 8000.",
+              "error",
+            );
+          } else {
+            addLog(
+              `Failed to load models: ${err.message}. Using default.`,
+              "warning",
+            );
+          }
+        }
+      } else {
+        setAvailableModels([]);
+        setAvailableGlossingModels([]);
+        setAvailableTranslationModels([]);
+        setSelectedModel("");
+        setSelectedGlossingModel("Default");
+        setSelectedTranslationModel("Default");
+      }
+    };
+
+    fetchModels();
+  }, [action]);
 
   const handleSubmit = () => {
     if (!action || !instruction) {
@@ -113,8 +226,15 @@ export default function Inference() {
       addLog("Please enter a language", "error");
       return;
     }
-    if ((action === "translate" || action === "gloss") && !selectedModel) {
-      addLog("Please select a model", "error");
+    if (action === "translate" && !selectedModel) {
+      addLog("Please select a translation model", "error");
+      return;
+    }
+    if (
+      action === "gloss" &&
+      (!selectedGlossingModel || !selectedTranslationModel)
+    ) {
+      addLog("Please select both glossing and translation models", "error");
       return;
     }
     if (mode === "online" && !baseDir.trim()) {
@@ -129,13 +249,18 @@ export default function Inference() {
       return;
     }
 
+    const modelToUse =
+      action === "gloss"
+        ? `${selectedGlossingModel}|${selectedTranslationModel}`
+        : selectedModel;
+
     submit({
       mode,
       baseDir,
       action,
       instruction,
       language,
-      model: selectedModel,
+      model: modelToUse,
     });
   };
 
@@ -317,32 +442,31 @@ export default function Inference() {
               </div>
             </div>
 
-            {/* Model Selection for Translation/Glossing */}
-            {(action === "translate" || action === "gloss") && (
-              <div className="space-y-2">
-                <Label htmlFor="model">Model</Label>
-                <Select value={selectedModel} onValueChange={setSelectedModel}>
-                  <SelectTrigger id="model">
-                    <SelectValue placeholder="Select model" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availableModels.length === 0 ? (
-                      <SelectItem value="default">Default Model</SelectItem>
-                    ) : (
-                      availableModels.map((model) => (
-                        <SelectItem key={model} value={model}>
-                          {model}
-                        </SelectItem>
-                      ))
-                    )}
-                  </SelectContent>
-                </Select>
-                {availableModels.length === 0 && (
-                  <p className="text-sm text-blue-600">
-                    Using default model. Warning: if you want to use a custom
-                    model, choose from selection or train your own.
-                  </p>
-                )}
+            {/* Model Selection for Translation */}
+            {action === "translate" && (
+              <ModelToggle
+                label="Choose Translation Model"
+                models={availableModels}
+                selectedModel={selectedModel}
+                onModelChange={setSelectedModel}
+              />
+            )}
+
+            {/* Model Selection for Glossing - Dual Models */}
+            {action === "gloss" && (
+              <div className="space-y-4">
+                <ModelToggle
+                  label="Choose Glossing Model"
+                  models={availableGlossingModels}
+                  selectedModel={selectedGlossingModel}
+                  onModelChange={setSelectedGlossingModel}
+                />
+                <ModelToggle
+                  label="Choose Translation Model"
+                  models={availableTranslationModels}
+                  selectedModel={selectedTranslationModel}
+                  onModelChange={setSelectedTranslationModel}
+                />
               </div>
             )}
 
@@ -395,7 +519,6 @@ export default function Inference() {
               </div>
               <div className="flex items-center gap-2">
                 <Button
-                  variant="outline"
                   size="sm"
                   onClick={copyLogsToClipboard}
                   disabled={logs.length === 0}
@@ -404,7 +527,6 @@ export default function Inference() {
                   Copy
                 </Button>
                 <Button
-                  variant="outline"
                   size="sm"
                   onClick={clearLogs}
                   disabled={logs.length === 0}
