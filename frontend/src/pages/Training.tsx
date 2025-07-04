@@ -332,6 +332,7 @@ export default function Training() {
                 onClick={handleTrainSubmit}
                 disabled={isTraining}
                 className="flex-1"
+                variant="default"
               >
                 {isTraining ? (
                   <>
