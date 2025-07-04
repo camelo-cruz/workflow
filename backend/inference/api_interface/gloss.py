@@ -15,15 +15,17 @@ LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 logger = logging.getLogger(__name__) 
 
 class Glosser:
-    def __init__(self, input_dir: str, language: str, instruction: str):
+    def __init__(self, input_dir: str, language: str, instruction: str, model: str | None = None):
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
         self.instruction = instruction
-
+        self.model = model
+        print(f"Initializing Glosser for language: {self.language_code}, instruction: {self.instruction}, model: {self.model}", flush=True)
+        
         self._spacy_data_dir = tempfile.mkdtemp(prefix="spacy_data_")
         os.environ["SPACY_DATA"] = self._spacy_data_dir
 
-        self.strategy: GlossingStrategy = GlossingStrategyFactory.get_strategy(self.language_code)
+        self.strategy: GlossingStrategy = GlossingStrategyFactory.get_strategy(self.language_code, model)
         self.strategy.load_model()
 
         try:

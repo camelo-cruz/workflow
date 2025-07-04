@@ -64,7 +64,7 @@ const Index = () => {
             </CardHeader>
             <CardContent className="text-center">
               <Button
-                onClick={() => navigate("/training")}
+                onClick={() => navigate("/train")}
                 className="w-full"
                 size="lg"
               >

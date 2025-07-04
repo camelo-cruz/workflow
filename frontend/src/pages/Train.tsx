@@ -40,17 +40,16 @@ type LogType = "info" | "success" | "error" | "warning";
 
 import { useOneDriveAuth } from "@/hooks/useOneDriveAuth";
 import { useStreamer } from "@/hooks/useStreamer";
+import { useTrainSubmission } from "@/hooks/useTrainSubmission";
 
-export default function Training() {
+export default function Train() {
   const navigate = useNavigate();
-  const [logs, setLogs] = useState<
-    Array<{ msg: string; type: LogType; time: string }>
-  >([]);
+  const [logs, setLogs] = useState<Array<{ msg: string; type: LogType; time: string }>>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [isTraining, setIsTraining] = useState(false);
   const [mode, setMode] = useState<"online" | "offline">("online");
   const [directoryPath, setDirectoryPath] = useState("");
-  const [trainAction, setTrainAction] = useState("translate");
+  const [trainAction, setTrainAction] = useState<"gloss" | "translate">("gloss");
   const [language, setLanguage] = useState("");
   const [study, setStudy] = useState("");
   const [logsExpanded, setLogsExpanded] = useState(false);
@@ -58,93 +57,91 @@ export default function Training() {
 
   const addLog = (msg: string, type: LogType = "info") => {
     const time = new Date().toLocaleTimeString();
-    setLogs((prev) => [...prev, { msg, type, time }]);
+    setLogs(prev => [...prev, { msg, type, time }]);
   };
-
   const clearLogs = () => setLogs([]);
 
   const { connect, logout, getToken } = useOneDriveAuth(setIsConnected, addLog);
-  const { open: streamerOpen, cancel } = useStreamer(addLog, setIsTraining);
+  const { open: streamerOpen, cancel } = useStreamer(addLog, setIsTraining, "train");
 
   const handleTrainSubmit = async () => {
-    if (!trainAction) {
-      addLog("Please select train action", "error");
+  if (!trainAction) {
+    addLog("Please select train action", "error");
+    return;
+  }
+  if (!language.trim()) {
+    addLog("Please enter a language", "error");
+    return;
+  }
+  if (!study.trim()) {
+    addLog("Please enter a study", "error");
+    return;
+  }
+
+  if (mode === "online") {
+    if (!directoryPath.trim()) {
+      addLog("Please enter OneDrive directory path", "error");
       return;
     }
-    if (!language.trim()) {
-      addLog("Please enter a language", "error");
+    if (!isConnected) {
+      addLog("Please connect to OneDrive first", "error");
       return;
     }
-    if (!study.trim()) {
-      addLog("Please enter a study", "error");
+  } else {
+    if (
+      !fileInputRef.current?.files ||
+      fileInputRef.current.files.length === 0
+    ) {
+      addLog("Please select files to upload", "error");
       return;
     }
+  }
 
-    if (mode === "online") {
-      if (!directoryPath.trim()) {
-        addLog("Please enter OneDrive directory path", "error");
-        return;
-      }
-      if (!isConnected) {
-        addLog("Please connect to OneDrive first", "error");
-        return;
-      }
-    } else {
-      if (
-        !fileInputRef.current?.files ||
-        fileInputRef.current.files.length === 0
-      ) {
-        addLog("Please select files to upload", "error");
-        return;
-      }
+  addLog("Starting training job...", "info");
+  setIsTraining(true);
+
+  const form = new FormData();
+  form.append("action", "train");
+  form.append("train_type", trainAction);
+  form.append("language", language);
+  form.append("study", study);
+
+  if (mode === "online") {
+    form.append("directory_path", directoryPath);
+    const token = getToken();
+    if (token) {
+      form.append("access_token", token);
     }
-
-    setIsTraining(true);
-    addLog("Starting training job...", "info");
-
-    const form = new FormData();
-    form.append("action", "train");
-    form.append("train_type", trainAction);
-    form.append("language", language);
-    form.append("study", study);
-
-    if (mode === "online") {
-      form.append("directory_path", directoryPath);
-      const token = getToken();
-      if (token) {
-        form.append("access_token", token);
-      }
-    } else {
-      // Offline mode: add files
-      if (fileInputRef.current?.files) {
-        Array.from(fileInputRef.current.files).forEach((file, index) => {
-          form.append(`file_${index}`, file);
-        });
-      }
-    }
-
-    try {
-      const res = await fetch("/jobs/train", {
-        method: "POST",
-        body: form,
-        credentials: "same-origin",
+  } else {
+    // Offline mode: add files
+    if (fileInputRef.current?.files) {
+      Array.from(fileInputRef.current.files).forEach((file, index) => {
+        form.append(`file_${index}`, file);
       });
-
-      if (!res.ok) {
-        const errorText = await res.text();
-        addLog(`Training error: ${errorText}`, "error");
-        setIsTraining(false);
-        return;
-      }
-
-      const { job_id } = await res.json();
-      addLog(`Training job started with ID: ${job_id}`, "success");
-      streamerOpen(job_id);
-    } catch (error) {
-      addLog(`Training submission failed: ${error}`, "error");
-      setIsTraining(false);
     }
-  };
+  }
+
+  try {
+    const res = await fetch("/jobs/train", {
+      method: "POST",
+      body: form,
+      credentials: "same-origin",
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      addLog(`Training error: ${errorText}`, "error");
+      setIsTraining(false);
+      return;
+    }
+
+    const { job_id } = await res.json();
+    addLog(`Training job started with ID: ${job_id}`, "success");
+    streamerOpen(job_id);
+  } catch (error) {
+    addLog(`Training submission failed: ${error}`, "error");
+    setIsTraining(false);
+  }
 
   const getLogIcon = (type: LogType) => {
     switch (type) {
@@ -160,9 +157,7 @@ export default function Training() {
   };
 
   const copyLogsToClipboard = () => {
-    const logText = logs
-      .map((log) => `[${log.time}] ${log.type.toUpperCase()}: ${log.msg}`)
-      .join("\n");
+    const logText = logs.map(log => `[${log.time}] ${log.type.toUpperCase()}: ${log.msg}`).join("\n");
     navigator.clipboard.writeText(logText);
     addLog("Logs copied to clipboard", "success");
   };
@@ -173,19 +168,12 @@ export default function Training() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => navigate("/")}
-              className="hover:bg-white/80"
-            >
+            <Button variant="outline" size="icon" onClick={() => navigate("/")} className="hover:bg-white/80">
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Training</h1>
-              <p className="text-gray-600 mt-1">
-                Train custom models for your data
-              </p>
+              <p className="text-gray-600 mt-1">Train custom models for your data</p>
             </div>
           </div>
 
@@ -195,24 +183,18 @@ export default function Training() {
               <Globe className="h-5 w-5 text-blue-600" />
               <div className="flex flex-col">
                 <span className="text-sm font-medium">OneDrive</span>
-                <Badge
-                  variant={isConnected ? "default" : "secondary"}
-                  className="w-fit"
-                >
+                <Badge variant={isConnected ? "default" : "secondary"} className="w-fit">
                   {isConnected ? "Connected" : "Disconnected"}
                 </Badge>
               </div>
               {isConnected ? (
-                <Button variant="outline" size="sm" onClick={logout}>
-                  Logout
-                </Button>
+                <Button variant="outline" size="sm" onClick={logout}>Logout</Button>
               ) : (
-                <Button size="sm" onClick={connect}>
-                  Connect
-                </Button>
+                <Button size="sm" onClick={connect}>Connect</Button>
               )}
             </CardContent>
           </Card>
+
         </div>
 
         {/* Data Source Selection */}
@@ -294,13 +276,13 @@ export default function Training() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="trainAction">Train</Label>
-              <Select value={trainAction} onValueChange={setTrainAction}>
+              <Select value={trainAction} onValueChange={value => setTrainAction(value as "gloss" | "translate")}>
                 <SelectTrigger id="trainAction">
                   <SelectValue placeholder="Select training type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="translate">Translate</SelectItem>
                   <SelectItem value="gloss">Gloss</SelectItem>
+                  <SelectItem value="translate">Translate</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -312,7 +294,7 @@ export default function Training() {
                   id="language"
                   value={language}
                   onChange={(e) => setLanguage(e.target.value)}
-                  placeholder="Enter the language (e.g., Spanish, French...)"
+                  placeholder="Enter the language (e.g., Spanish, French)"
                 />
               </div>
 
@@ -322,7 +304,7 @@ export default function Training() {
                   id="study"
                   value={study}
                   onChange={(e) => setStudy(e.target.value)}
-                  placeholder="Enter the study name (e.g., corpus1, dataset_v2...)"
+                  placeholder="Enter the study initial (e.g., F, H)"
                 />
               </div>
             </div>

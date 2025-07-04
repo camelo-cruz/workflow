@@ -41,3 +41,4 @@ sacremoses
 pypinyin
 pykakasi
 cupy-cuda12x
+wandb

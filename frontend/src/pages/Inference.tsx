@@ -70,7 +70,7 @@ export default function Inference() {
   const clearLogs = () => setLogs([]);
 
   const { connect, logout, getToken } = useOneDriveAuth(setIsConnected, addLog);
-  const { open: streamerOpen, cancel } = useStreamer(addLog, setIsProcessing);
+  const { open: streamerOpen, cancel } = useStreamer(addLog, setIsProcessing, "inference");
   const { fileInputRef, submit } = useJobSubmission(
     isProcessing,
     setIsProcessing,
@@ -79,16 +79,25 @@ export default function Inference() {
     getToken,
   );
 
-  // Set default model when action changes to translate or gloss
   useEffect(() => {
+  const fetchModels = async () => {
     if (action === "translate" || action === "gloss") {
-      // For now, use default model since API endpoint doesn't exist yet
-      setAvailableModels([]);
-      setSelectedModel("default");
-      // Reset translation options when changing actions
-      if (action === "gloss") {
-        setIncludeTranslation(false);
-        setTranslationModel("");
+      const task = action === "translate" ? "translation" : "glossing";
+      try {
+        const res = await fetch(`/inference/models/${task}`);
+        if (!res.ok) throw new Error("Failed to fetch models");
+        const data = await res.json();
+        if (Array.isArray(data.models)) {
+          const models = ["Default", ...data.models.filter(m => m !== "Default")];
+          setAvailableModels(models);
+          setSelectedModel(models[0]);
+          addLog(`Loaded ${data.models.length} ${task} models`, "success");
+        }
+      } catch (err) {
+        console.error("Model fetch error:", err);
+        setAvailableModels(["Default"]);
+        setSelectedModel("Default");
+        addLog("Failed to load models. Using default.", "warning");
       }
     } else {
       setAvailableModels([]);
@@ -96,7 +105,10 @@ export default function Inference() {
       setIncludeTranslation(false);
       setTranslationModel("");
     }
-  }, [action]);
+  };
+
+  fetchModels();
+}, [action]);
 
   const handleSubmit = () => {
     if (!action || !instruction) {

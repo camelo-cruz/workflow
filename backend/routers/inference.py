@@ -10,25 +10,21 @@ import tempfile
 
 from fastapi import APIRouter, Request, Form, UploadFile, File, Body, HTTPException, BackgroundTasks
 from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
-from fastapi.templating import Jinja2Templates
 
-from .workers import _offline_worker, _online_worker
+from .inference_workers import _offline_worker, _online_worker
 
-templates = Jinja2Templates(directory="templates")
 router = APIRouter()
 
-jobs: dict[str, dict] = {}
+MODELS_BASE = Path(__file__).parent.parent / "models"
 
-@router.get("/")
-async def index(request: Request):
-    version = os.getenv("APP_VERSION", "dev")
-    return templates.TemplateResponse("index.html", {"request": request, "app_version": version})
+jobs: dict[str, dict] = {}
 
 @router.post("/process")
 async def process(
     request: Request,
     action: str = Form(...),
     language: str = Form(...),
+    model: str | None = Form(...),
     instruction: str | None = Form(None),
     access_token: str | None = Form(None),
     zipfile: UploadFile | None = File(None),
@@ -37,7 +33,6 @@ async def process(
     job_id = str(uuid.uuid4())
     q = multiprocessing.Queue()
     cancel = multiprocessing.Event()
-
     token = access_token  # “token” now comes from form data
     jobs[job_id] = {
         "queue": q,
@@ -45,6 +40,8 @@ async def process(
         "zip_path": None,
         "token": token,
     }
+    if model == "Default":
+        model = None
 
     if not language:
         q.put("[ERROR] Missing language")
@@ -68,7 +65,7 @@ async def process(
         if not (base_dir and token):
             raise HTTPException(status_code=400, detail="Missing base_dir or token")
         worker = _online_worker
-        args = (job_id, base_dir, token, action, language, instruction, q, cancel)
+        args = (job_id, base_dir, token, action, language, instruction, model, q, cancel)
 
     p = multiprocessing.Process(target=worker, args=args, daemon=True)
     p.start()
@@ -76,6 +73,34 @@ async def process(
 
     return {"job_id": job_id}
 
+
+@router.get("/{job_id}/download")
+async def download_zip(job_id: str, background_tasks: BackgroundTasks):
+    job = jobs.get(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="No job")
+    zip_path = job.get("zip_path")
+    if not zip_path:
+        raise HTTPException(status_code=404, detail="No zip path")
+
+    base_dir = job.get("base_dir")
+
+    def cleanup():
+        try:
+            os.remove(zip_path)
+        except OSError:
+            pass
+        if base_dir and os.path.isdir(base_dir):
+            shutil.rmtree(base_dir, ignore_errors=True)
+        jobs.pop(job_id, None)
+
+    background_tasks.add_task(cleanup)
+
+    return FileResponse(
+        path=zip_path,
+        media_type="application/zip",
+        filename=f"{job_id}_results.zip"
+    )
 
 @router.get("/{job_id}/stream")
 async def stream(job_id: str):
@@ -137,40 +162,17 @@ async def cancel_job(payload: dict = Body(...)):
     return {"status": "cancelled"}
 
 
-@router.get("/{job_id}/download")
-async def download_zip(job_id: str, background_tasks: BackgroundTasks):
-    job = jobs.get(job_id)
-    if not job:
-        raise HTTPException(status_code=404, detail="No job")
-    zip_path = job.get("zip_path")
-    if not zip_path:
-        raise HTTPException(status_code=404, detail="No zip path")
-
-    base_dir = job.get("base_dir")
-
-    def cleanup():
-        try:
-            os.remove(zip_path)
-        except OSError:
-            pass
-        if base_dir and os.path.isdir(base_dir):
-            shutil.rmtree(base_dir, ignore_errors=True)
-        jobs.pop(job_id, None)
-
-    background_tasks.add_task(cleanup)
-
-    return FileResponse(
-        path=zip_path,
-        media_type="application/zip",
-        filename=f"{job_id}_results.zip"
-    )
-
-
-@router.get("/terms")
-async def terms_view(request: Request):
-    return templates.TemplateResponse("terms.html", {"request": request})
-
-
-@router.get("/privacy")
-async def privacy_view(request: Request):
-    return templates.TemplateResponse("privacy.html", {"request": request})
+@router.get("/models/{task}")
+async def list_models(task: str):
+    if task not in ["translation", "glossing"]:
+        return JSONResponse({"error": "Invalid task"}, status_code=400)
+    
+    model_dir = MODELS_BASE / task
+    print(f"Models base directory: {MODELS_BASE}")
+    if not model_dir.exists() or not model_dir.is_dir():
+        print(f"No models found for task '{task}'")
+        return JSONResponse({"models": []})
+    
+    model_names = [d.name for d in model_dir.iterdir() if d.is_dir()]
+    print(f"Found models: {model_names}")
+    return {"models": model_names}
