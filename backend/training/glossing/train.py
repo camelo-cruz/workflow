@@ -5,7 +5,7 @@ from typing import List, Optional
 
 import spacy
 import srsly
-from training.preprocessing import build_docbin
+
 
 from spacy.tokens import DocBin
 from spacy.training.corpus import Corpus
@@ -72,7 +72,6 @@ def train_spacy(
 
     # Build binary docs from annotated data
     msg.info("Building DocBin from input directory")
-    build_docbin(lang=lang, study=study, input_dir=input_dir)
 
     # Paths for data and config
     corpus_path = Path(f"training/data/{lang}_{study}_train.spacy")

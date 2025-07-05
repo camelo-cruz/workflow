@@ -13,6 +13,10 @@ from spacy.cli.init_config import fill_config
 from spacy.language import Language
 from spacy import util
 import sys
+from utils.functions import find_language, set_global_variables
+
+
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 
 sys.stdout.reconfigure(encoding='utf-8')
 sys.stderr.reconfigure(encoding='utf-8')
@@ -97,7 +101,8 @@ def gloss_to_ud_features(gloss: str) -> list[str]:
     return per_token_feats
 
 
-def build_docbin(lang: str, study: str, input_dir: str, pretrained_model : Language = None) -> DocBin:
+def build_docbin(input_dir: str, lang: str, study: str, pretrained_model : Language = None) -> DocBin:
+    lang = find_language(lang, LANGUAGES)
     log_path = Path(input_dir) / "glossing_traindata.log"
     print(f"Log path: {log_path}")
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -241,7 +246,7 @@ def build_docbin(lang: str, study: str, input_dir: str, pretrained_model : Langu
     logger.removeHandler(fh)
     fh.close()
 
-def build_translationset(lang: str, study: str, input_dir: str) -> None:
+def build_translationset(input_dir: str, lang: str, study: str) -> None:
     log_path = Path(input_dir) / "translation_traindata.log"
     log_path.parent.mkdir(parents=True, exist_ok=True)
     fh = setup_file_logger(str(log_path))
