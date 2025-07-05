@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import re
 from utils.functions import load_glossing_rules
 
 LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY.json")
@@ -21,8 +22,3 @@ class GlossingStrategy(ABC):
     def gloss(self, sentence: str) -> str:
         raise NotImplementedError("Subclasses must implement gloss_sentence()")
     
-    @staticmethod
-    def map_leipzig(morph, feat):
-        val = morph.get(feat)
-        entry = LEIPZIG_GLOSSARY.get(val, {})
-        return entry.get("leipzig", val)

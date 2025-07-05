@@ -9,7 +9,7 @@ import subprocess
 import urllib.request
 import zipfile
 import openpyxl
-
+import re
 from openpyxl.styles import Font
 
 def load_json_file(file_path):
@@ -184,4 +184,3 @@ def setup_logging(logger, log_path):
     logger.addHandler(file_handler)
 
     return file_handler
-

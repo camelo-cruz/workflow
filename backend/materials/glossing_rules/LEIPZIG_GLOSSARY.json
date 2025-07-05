@@ -31,7 +31,7 @@
 "Impf":{"category":"Tense","leipzig":"IMPF"},
 "Perf":{"category":"Tense","leipzig":"PERF"},
 "Fin":{"category":"VerbForm","leipzig":"FIN"},
-"Part":{"category":"VerbForm","leipzig":"PASTP"},
+"Part":{"category":"VerbForm","leipzig":"PARTP"},
 "Prog":{"category":"VerbForm","leipzig":"PROG"},
 "Tns":{"category":"VerbForm","leipzig":"TNS"},
 "1":{"category":"Person","leipzig":"1"},
