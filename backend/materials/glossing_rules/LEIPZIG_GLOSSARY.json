@@ -5,6 +5,7 @@
 "Ind":{"category":"PronType","leipzig":"IND"},
 "Int":{"category":"PronType","leipzig":"INT"},
 "Rel":{"category":"PronType","leipzig":"REL"},
+"Dem,Rel":{"category":"PronType","leipzig":"DEM/REL"},
 "Masc":{"category":"Gender","leipzig":"M"},
 "Fem":{"category":"Gender","leipzig":"F"},
 "Neut":{"category":"Gender","leipzig":"N"},

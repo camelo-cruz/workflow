@@ -3,6 +3,7 @@ from inference.glossing.spacy import SpaCyGlossingStrategy
 from inference.glossing.japanese import JapaneseGlossingStrategy
 from inference.glossing.vietnamese import VietnameseGlossingStrategy
 from inference.glossing.portuguese import PortugueseGlossingStrategy
+from inference.glossing.stanza import StanzaGlossingStrategy
 
 
 class GlossingStrategyFactory:
@@ -13,7 +14,7 @@ class GlossingStrategyFactory:
                                          glossingModel=glossingModel, 
                                          translationModel=translationModel)
         elif language_code in ["de", "uk", "ru", "en", "it"]:
-            return SpaCyGlossingStrategy(language_code)
+            return StanzaGlossingStrategy(language_code)
         elif language_code == "ja":
             return JapaneseGlossingStrategy(language_code)
         elif language_code == "vi":
