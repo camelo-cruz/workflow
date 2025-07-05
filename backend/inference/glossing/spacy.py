@@ -17,10 +17,10 @@ class SpaCyGlossingStrategy(GlossingStrategy):
     """
     # spaCy model names for each language
     DEFAULT_SPACY = {
-        "de": "de_dep_news_trf",
-        "uk": "uk_core_news_trf",
+        "de": "de_dep_news_lg",
+        "uk": "uk_core_news_lg",
         "ru": "ru_core_news_lg",
-        "en": "en_core_web_trf",
+        "en": "en_core_web_lg",
         "it": "it_core_news_lg",
     }
 
@@ -102,12 +102,12 @@ class SpaCyGlossingStrategy(GlossingStrategy):
             # Lexical Features
             "PronType", "NumType", "Poss", "Reflex", "Other", 
             "Abbr", "Typo", "Foreign", "ExtPos", "Clusivity",
-            # Nominal Features
-            "Number", "Gender", "Animacy", "NounClass", "Case", 
-            "Definite", "Deixis", "DeixisRef", "Degree",
             # Verbal Features
             "VerbForm", "Mood", "Tense", "Aspect", "Voice", 
             "Evident", "Polarity", "Person", "Polite"
+            # Nominal Features
+            "Number", "Gender", "Animacy", "NounClass", "Case", 
+            "Definite", "Deixis", "DeixisRef", "Degree",
         ]
 
         mapped_parts = []
