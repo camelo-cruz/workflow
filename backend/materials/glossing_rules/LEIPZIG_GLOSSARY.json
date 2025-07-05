@@ -44,5 +44,5 @@
 "Interj":{"category":"Other","leipzig":"INTERJ"},
 "Clf":{"category":"Other","leipzig":"CLF"},
 "Cop":{"category":"Other","leipzig":"COP"},
-"Foc":{"category":"Other","leipzig":"FOC"}
+"Foc":{"category":"Voice","leipzig":"FOC"}
 }
