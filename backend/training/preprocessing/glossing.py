@@ -80,12 +80,14 @@ class GlossingPreprocessor(BasePreprocessor):
                            for line in g.split('\n') if line.strip()]
                 if len(texts) != len(glosses):
                     msg.warn(f"Skipped {fname}: {len(texts)} vs {len(glosses)}")
+                    self.logger.warning(f"Skipped {fname}: {len(texts)} vs {len(glosses)}")
                     continue
                 for text, gloss in zip(texts, glosses):
                     feats = self._map_gloss(gloss)
                     doc = nlp(text)
                     if len(doc) != len(feats):
                         msg.warn(f"Token mismatch: '{text}'")
+                        self.logger.warning(f"Token mismatch: '{text}'")
                         continue
                     for token, feat in zip(doc, feats):
                         token.set_morph(feat)
@@ -101,8 +103,10 @@ class GlossingPreprocessor(BasePreprocessor):
         msg.good(f"Built Gloss DocBin: {len(docbin)} docs")
         if self.tokens_without_gloss:
             msg.warn(f"Tokens without gloss: {self.tokens_without_gloss}")
+            self.logger.info(f"Built Gloss DocBin: {len(docbin)} docs")
         if self.unknown_codes:
             msg.warn(f"Unknown gloss codes: {self.unknown_codes}")
+            self.logger.info(f"Unknown gloss codes: {self.unknown_codes}")
 
         # spaCy config and debug
         cfg = util.load_config(self.base_config_path)
