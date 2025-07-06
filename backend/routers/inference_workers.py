@@ -9,10 +9,10 @@ import base64
 from zipfile import ZipFile
 from pathlib import Path
 
-from inference.api_interface.transcribe import Transcriber
-from inference.api_interface.translate import Translator
-from inference.api_interface.gloss import Glosser
-from inference.api_interface.transliterate import Transliterator
+from inference.data_processors.transcribe import Transcriber
+from inference.data_processors.translate import Translator
+from inference.data_processors.gloss import Glosser
+from inference.data_processors.transliterate import Transliterator
 
 from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
 from utils.reorder_columns import create_columns
