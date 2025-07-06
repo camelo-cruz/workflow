@@ -7,7 +7,6 @@ from transformers import (
     M2M100Tokenizer,
     get_linear_schedule_with_warmup
 )
-from training.preprocessing import build_translationset
 from torch.optim import AdamW
 
 
@@ -70,7 +69,6 @@ def train_m2m100(
     print(f"Using device: {device}")
 
     # Build or refresh translation dataset
-    build_translationset(lang, study, input_dir)
     data_path = f"training/data/{lang}_{study}_train_translation.xlsx"
     df = pd.read_excel(data_path)
     src_texts = df["text"].tolist()

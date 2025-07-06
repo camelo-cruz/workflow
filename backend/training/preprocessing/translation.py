@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 from wasabi import msg
 
-from training.preprocessing.base import BasePreprocessor
+from training.preprocessing.abstract import BasePreprocessor
 
 
 class TranslationPreprocessor(BasePreprocessor):

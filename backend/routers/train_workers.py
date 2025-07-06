@@ -7,7 +7,7 @@ import base64
 
 from pathlib import Path
 from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive, encode_share_link
-from backend.training.glossing.train_spacy import train_spacy
+from training.glossing.train_spacy import train_spacy
 from training.translation.train import train_m2m100
 from training.preprocessing.glossing import GlossingPreprocessor
 
@@ -103,7 +103,8 @@ def _online_train_worker(
         put(f"[INFO] Training model. This may take a while…")
         try:
             if action == "gloss":
-                GlossingPreprocessor.preprocess(input_dir=root_tmp, lang=language, study=study)
+                preprocessor = GlossingPreprocessor(input_dir=root_tmp, lang=language, study=study)
+                preprocessor.preprocess()
                 # --- UPLOAD ONE LOG AT ROOT LEVEL ---
                 output = "glossing_traindata.log" if action == "gloss" else "translation_traindata.log"
                 try:

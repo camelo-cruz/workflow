@@ -15,7 +15,7 @@ from utils.functions import (
     set_global_variables,
 )
 
-from training.preprocessing.base import BasePreprocessor
+from training.preprocessing.abstract import BasePreprocessor
 
 class GlossingPreprocessor(BasePreprocessor):
     """
@@ -30,8 +30,19 @@ class GlossingPreprocessor(BasePreprocessor):
             entry["leipzig"]: (entry["category"], key)
             for key, entry in self.LEIPZIG_GLOSSARY.items()
         }
+        self.base_config_path = Path(__file__).parent.parent / 'glossing' / 'configs' / 'glossing_config.cfg'
         self.tokens_without_gloss: set[str] = set()
         self.unknown_codes: set[str] = set()
+        self.pretrained_model = self._default_model()
+
+    
+    def _default_model(self) -> str:
+        if self.lang == "de":
+            return "de_core_news_lg"
+        if self.lang == "en":
+            return "en_core_web_lg"
+        else:
+            return None
 
     def _map_gloss(self, gloss: str) -> list[str]:
         if not isinstance(gloss, str):

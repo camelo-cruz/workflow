@@ -22,6 +22,7 @@ from tqdm import tqdm
 from dotenv import load_dotenv
 from whisperx.diarize import DiarizationPipeline
 from openpyxl.styles import Font
+from inference.pii_identifier.spacy_ner import PII_Identifier
 
 import whisper
 import whisperx
@@ -29,7 +30,7 @@ import whisperx
 from utils.functions import (
     set_global_variables,
     find_language,
-    clean_string,
+    clean_german_transcription,
     find_ffmpeg,
     setup_logging,
     format_excel_output
@@ -54,6 +55,7 @@ class Transcriber:
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.batch_size = 8
         self.hugging_key = self._load_hugging_face_token()
+        self.pii_identifier = PII_Identifier(self.language_code)
 
     def _load_hugging_face_token(self):
         token = os.getenv("HUGGING_KEY")
@@ -194,8 +196,10 @@ class Transcriber:
                 logger.info(f"Processing file: {file} ({count}/{len(files)})")
                 try:
                     text = self.transcribe_and_diarize(path)
+                    if self.pii_identifier.nlp:
+                        entities, text = self.pii_identifier.identify_and_annotate(text)
                     if self.language_code == 'de':
-                        text = clean_string(text)
+                        text = clean_german_transcription(text)
                     if verbose:
                         tqdm.write(text)
                     self.add_transcription_to_df(df, file, text, count, filename_regexp)

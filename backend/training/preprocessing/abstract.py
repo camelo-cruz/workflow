@@ -28,8 +28,6 @@ class BasePreprocessor(ABC):
         input_dir: str,
         lang: str,
         study: str,
-        base_config_path: str,
-        pretrained_model: Language | str = None,
     ):
         self.input_dir = Path(input_dir)
         self.study = study
@@ -45,12 +43,7 @@ class BasePreprocessor(ABC):
         # Logger configuration
         self.logger = logging.getLogger(self.__class__.__name__)
         self.logger.setLevel(logging.INFO)
-
-        # Model selection
-        self.pretrained_model = pretrained_model or self._default_model()
-
-        # Base config path for spaCy pipelines
-        self.base_config_path = Path(base_config_path)
+        
 
     def _default_model(self) -> str:
         if self.lang == "de":

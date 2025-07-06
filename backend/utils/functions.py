@@ -85,22 +85,31 @@ def find_language(language, LANGUAGES):
         print(f"Unsupported language: {language}")
         sys.exit(1)
 
-def clean_string(input_string):
+def clean_german_transcription(input_string: str) -> str:
     """
-    Process a string by converting it to lowercase and removing punctuation.
-
-    Parameters:
-        input_string (str): The string to be processed.
-
-    Returns:
-        str: The processed string.
+    Lowercase & remove punctuation from input_string,
+    but leave any NER annotations of the form [LABEL: …] untouched.
     """
-    lowercase_string = input_string.lower()
+    # 1) find and stash all [LABEL: …] spans
+    protected = {}
+    def _protect(matcher):
+        key = f"__PROTECT_{len(protected)}__"
+        protected[key] = matcher.group(0)
+        return key
 
-    translator = str.maketrans("", "", string.punctuation)
-    processed_string = lowercase_string.translate(translator)
+    # this regex grabs anything from '[' up to the next ']'
+    temp = re.sub(r"\[[^\]]+\]", _protect, input_string)
 
-    return processed_string
+    # 2) lowercase and strip punctuation (you can tweak which punct to remove)
+    punct_to_remove = string.punctuation  # or exclude '{}' if you want to keep braces too
+    translator = str.maketrans("", "", punct_to_remove)
+    cleaned = temp.lower().translate(translator)
+
+    # 3) restore the protected spans
+    for key, span in protected.items():
+        cleaned = cleaned.replace(key, span)
+
+    return cleaned
 
 
 def install_ffmpeg():
