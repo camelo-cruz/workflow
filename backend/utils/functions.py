@@ -87,29 +87,25 @@ def find_language(language, LANGUAGES):
 
 def clean_german_transcription(input_string: str) -> str:
     """
-    Lowercase & remove punctuation from input_string,
-    but leave any NER annotations of the form [LABEL: …] untouched.
+    Lowercase & strip punctuation from input_string,
+    but leave any [LABEL: …] spans exactly as-is.
     """
-    # 1) find and stash all [LABEL: …] spans
-    protected = {}
-    def _protect(matcher):
-        key = f"__PROTECT_{len(protected)}__"
-        protected[key] = matcher.group(0)
-        return key
-
-    # this regex grabs anything from '[' up to the next ']'
-    temp = re.sub(r"\[[^\]]+\]", _protect, input_string)
-
-    # 2) lowercase and strip punctuation (you can tweak which punct to remove)
-    punct_to_remove = string.punctuation  # or exclude '{}' if you want to keep braces too
-    translator = str.maketrans("", "", punct_to_remove)
-    cleaned = temp.lower().translate(translator)
-
-    # 3) restore the protected spans
-    for key, span in protected.items():
-        cleaned = cleaned.replace(key, span)
-
-    return cleaned
+    # Prepare your punctuation translator
+    translator = str.maketrans("", "", string.punctuation)
+    
+    # This regex captures any [...] span as its own piece
+    parts = re.split(r"(\[[^\]]+\])", input_string)
+    
+    cleaned_parts = []
+    for part in parts:
+        # If it’s an annotation (e.g. “[PER: Hans]”), leave untouched
+        if re.fullmatch(r"\[[^\]]+\]", part):
+            cleaned_parts.append(part)
+        else:
+            # Otherwise lowercase & remove punctuation
+            cleaned_parts.append(part.lower().translate(translator))
+    
+    return "".join(cleaned_parts)
 
 
 def install_ffmpeg():

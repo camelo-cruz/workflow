@@ -34,7 +34,7 @@ class PII_Identifier:
         # 1) spaCy NER
         for ent in doc.ents:
             if ent.label_ in self.SPACY_LABELS:
-                if ent.text != "Ellie":
+                if ent.text != "Ellie" and ent.text != "Elli":
                     spans.append((ent.start_char, ent.end_char, ent.label_, ent.text))
 
         # 2) regex-based PII

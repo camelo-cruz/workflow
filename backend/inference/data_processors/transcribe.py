@@ -13,19 +13,13 @@ Leibniz Institute General Linguistics (ZAS)
 
 import os
 import re
-import sys
 import torch
 import logging
 import warnings
 import pandas as pd
 from tqdm import tqdm
-from dotenv import load_dotenv
-from whisperx.diarize import DiarizationPipeline
-from openpyxl.styles import Font
 from inference.pii_identifier.spacy_ner import PII_Identifier
-
-import whisper
-import whisperx
+from inference.transcription.factory import TranscriptionStrategyFactory
 
 from utils.functions import (
     set_global_variables,
@@ -53,22 +47,10 @@ class Transcriber:
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
-        self.batch_size = 8
-        self.hugging_key = self._load_hugging_face_token()
         self.pii_identifier = PII_Identifier(self.language_code)
+        self.strategy = TranscriptionStrategyFactory.get_strategy(self.language_code)
+        self.strategy.load_model()
 
-    def _load_hugging_face_token(self):
-        token = os.getenv("HUGGING_KEY")
-        if not token:
-            secrets_path = os.path.join(parent_dir, 'materials', 'secrets.env')
-            if os.path.exists(secrets_path):
-                load_dotenv(secrets_path, override=True)
-                token = os.getenv("HUGGING_KEY")
-        if not token:
-            raise ValueError("Hugging Face key not found. Set it in Hugging Face Secrets or in materials/secrets.env")
-        logger.info(f"Using Hugging Face token: {token[:10]}...")
-        return token
-    
     def _append_to_cell(self, df, idx, column, text):
         old_val = df.at[idx, column]
         df.at[idx, column] = ("" if pd.isna(old_val) else old_val) + text
@@ -122,50 +104,6 @@ class Transcriber:
                 self._append_to_cell(df, row_idx, 'automatic_transcription', text_auto + text_suffix)
                 self._append_to_cell(df, row_idx, col_name, text_auto + text_suffix)
 
-    def transcribe_and_diarize(self, path_to_audio):
-        if self.language_code in ['en', 'fr', 'de', 'es', 'it', 'ja', 'nl', 'uk', 'pt', 'ar', 'cs',
-                             'ru', 'pl', 'hu', 'fi', 'fa', 'el', 'tr', 'da', 'he', 'vi', 'ko',
-                             'ur', 'te', 'hi', 'ca', 'ml', 'no', 'nn', 'sk', 'sl', 'hr', 'ro',
-                             'eu', 'gl', 'ka', 'lv', 'tl', 'zh']:
-            model = None
-            try:
-                model = whisperx.load_model("large-v2", self.device, compute_type="float16", language=self.language_code)
-            except:
-                model = whisperx.load_model("large-v2", self.device, compute_type="int8", language=self.language_code)
-            audio = whisperx.load_audio(path_to_audio)
-            result = model.transcribe(audio, batch_size=self.batch_size, language=self.language_code)
-
-            model_a, metadata = whisperx.load_align_model(language_code=result["language"], device=self.device)
-            result = whisperx.align(result["segments"], model_a, metadata, audio, self.device)
-
-            diarize_model = DiarizationPipeline(model_name="pyannote/speaker-diarization-3.1", use_auth_token=self.hugging_key, device=self.device)
-            diarize_segments = diarize_model(audio)
-            result = whisperx.assign_word_speakers(diarize_segments, result)
-
-            full_sentences, buffer_speaker, buffer_text = [], None, ""
-            for seg in result["segments"]:
-                spk = seg.get("speaker", buffer_speaker)
-                if spk is None: continue
-                txt = seg["text"].strip()
-
-                if buffer_speaker is None:
-                    buffer_speaker, buffer_text = spk, txt
-                elif spk == buffer_speaker:
-                    buffer_text += " " + txt
-                else:
-                    full_sentences.append(f"{buffer_speaker}: {buffer_text}")
-                    buffer_speaker, buffer_text = spk, txt
-
-            if buffer_speaker:
-                full_sentences.append(f"{buffer_speaker}: {buffer_text}")
-
-        else:
-            model = whisper.load_model("large-v2", self.device)
-            res = model.transcribe(path_to_audio, language=self.language_code)
-            return res["text"]
-
-        return "  ".join(full_sentences)
-
     def process_data(self, verbose=True):
         filename_regexp = re.compile(r'blockNr_(?P<block>\d+)_taskNr_(?P<task>\d+)_trialNr_(?P<trial>\d+).*')
 
@@ -195,7 +133,7 @@ class Transcriber:
                 path = os.path.abspath(os.path.join(subdir, file))
                 logger.info(f"Processing file: {file} ({count}/{len(files)})")
                 try:
-                    text = self.transcribe_and_diarize(path)
+                    text = self.strategy.transcribe(path)
                     if self.pii_identifier.nlp:
                         entities, text = self.pii_identifier.identify_and_annotate(text)
                     if self.language_code == 'de':
