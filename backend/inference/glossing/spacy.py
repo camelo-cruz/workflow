@@ -110,7 +110,7 @@ class SpaCyGlossingStrategy(GlossingStrategy):
         features_in_order = [
             # Lexical Features
             "PronType", "NumType", "Poss", "Reflex", "Other", 
-            "Abbr", "Typo", "Foreign", "ExtPos", "Clusivity",
+            "Abbr", "ExtPos", "Clusivity", #"Typo", "Foreign",
             # Verbal Features
             "VerbForm", "Mood", "Tense", "Aspect", "Voice", 
             "Evident", "Polarity", "Person", "Polite"
