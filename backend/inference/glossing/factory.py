@@ -15,6 +15,8 @@ class GlossingStrategyFactory:
                                          translationModel=translationModel)
         elif language_code in ["de", "uk", "ru", "en", "it"]:
             return SpaCyGlossingStrategy(language_code)
+        elif language_code in ["tr"]:
+            return StanzaGlossingStrategy(language_code)
         elif language_code == "ja":
             return JapaneseGlossingStrategy(language_code)
         elif language_code == "vi":

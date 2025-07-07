@@ -12,5 +12,10 @@ class TranslationStrategyFactory:
             return CustomTranslationStrategy(language_code, translationModel)
         elif language_code in ['de']:
             return M2M100Strategy(language_code)
+        elif language_code in ['tr']:
+            try:
+                return MarianStrategy(language_code)
+            except Exception as e:
+                return M2M100Strategy(language_code)
         else:
             raise ValueError(f"No pretrained translation strategy available for language code: {language_code}")
