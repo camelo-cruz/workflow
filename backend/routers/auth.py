@@ -38,7 +38,7 @@ def _build_msal_app(cache=None):
 async def start_onedrive_auth(request: Request):
     host   = request.headers.get("host")
     scheme = "http" if host.startswith(("localhost", "127.0.0.1")) else "https"
-    redirect_uri = f"{scheme}://{host}/auth/redirect"
+    redirect_uri = f"{scheme}://{host}/api/auth/redirect"
 
     msal_app = _build_msal_app()
     auth_url = msal_app.get_authorization_request_url(
@@ -57,7 +57,7 @@ async def onedrive_auth_redirect(request: Request):
 
     host   = request.headers.get("host")
     scheme = "http" if host.startswith(("localhost", "127.0.0.1")) else "https"
-    redirect_uri = f"{scheme}://{host}/auth/redirect"
+    redirect_uri = f"{scheme}://{host}/api/auth/redirect"
 
     msal_app = _build_msal_app()
     result = msal_app.acquire_token_by_authorization_code(
@@ -73,6 +73,6 @@ async def onedrive_auth_redirect(request: Request):
     # Build a frontend URL that Vite will serve at /auth/success
     host   = request.headers.get("host")  # via proxy this is localhost:8080
     scheme = "http" if host.startswith(("localhost", "127.0.0.1")) else "https"
-    frontend_success = f"{scheme}://localhost:8080/success-auth#token={token}"
+    frontend_success = f"{scheme}://localhost:8000/success-auth#token={token}"
 
     return RedirectResponse(url=frontend_success, status_code=302)

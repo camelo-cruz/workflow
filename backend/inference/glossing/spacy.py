@@ -17,12 +17,18 @@ class SpaCyGlossingStrategy(GlossingStrategy):
     """
     # spaCy model names for each language
     DEFAULT_SPACY = {
-        "de": "de_dep_news_lg",
-        "uk": "uk_core_news_lg",
-        "ru": "ru_core_news_lg",
-        "en": "en_core_web_lg",
-        "it": "it_core_news_lg",
-    }
+            'de': 'de_core_news_lg',
+            'en': 'en_core_web_lg',
+            'fr': 'fr_core_news_lg',
+            'zh': 'zh_core_web_lg',
+            'el': 'el_core_news_lg',
+            'it': 'it_core_news_lg',
+            'ja': 'ja_core_news_lg',
+            'pt': 'pt_core_news_lg',
+            'ro': 'ro_core_news_lg',
+            'ru': 'ru_core_news_lg',
+            'uk': 'uk_core_news_lg'
+        }
 
     def __init__(self,
                  language_code: str,
@@ -49,18 +55,20 @@ class SpaCyGlossingStrategy(GlossingStrategy):
         - Else assume it's a custom subfolder under models/glossing/.
         """
 
-        if self.glossing_model in self.DEFAULT_SPACY:
-            pkg = self.DEFAULT_SPACY[self.glossing_model]
+        if self.language_code in self.DEFAULT_SPACY:
+            pkg = self.DEFAULT_SPACY[self.language_code]
             if not is_package(pkg):
                 print(f"{pkg} not found — downloading…")
                 download(pkg)
             self.nlp = spacy.load(pkg)
 
-        else:
+        elif self.glossing_model:
             model_dir = Path("models/glossing") / (self.glossing_model)
             if not model_dir.exists():
                 raise ValueError(f"Custom glossing model not found at {model_dir}")
             self.nlp = spacy.load(model_dir)
+        else:
+            raise ValueError("No glossing model specified or available for this language.")
 
     def gloss(self, sentence: str) -> str:
         doc = self.nlp(sentence)
@@ -80,7 +88,8 @@ class SpaCyGlossingStrategy(GlossingStrategy):
             # optional translation
             if self.translation_strategy:
                 lemma = self.translation_strategy.translate(text=lemma)
-        
+                lemma = lemma.replace(" ", "-")  # replace spaces with hyphens
+
             # build the Leipzig gloss
             gloss_feats = self.UD2LEIPZIG(token.morph.to_dict())
             if gloss_feats:

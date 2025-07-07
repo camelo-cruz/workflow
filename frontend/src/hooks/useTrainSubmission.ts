@@ -46,7 +46,7 @@ export function useTrainSubmission(
       form.append("access_token", token);
 
       try {
-        const res = await fetch("/train/process", {
+        const res = await fetch("/api/train/process", {
           method: "POST",
           body: form,
           credentials: "same-origin",
@@ -81,7 +81,7 @@ export function useTrainSubmission(
 
         addLog("Uploading zip…", "info");
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", "/train/process");
+        xhr.open("POST", "api/train/process");
         xhr.withCredentials = true;
         xhr.upload.onprogress = (e) => {
           if (e.lengthComputable) {

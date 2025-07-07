@@ -7,18 +7,8 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     proxy: {
-      // forward everything under /auth to FastAPI on :8000
-      "/auth": {
-        target: "http://localhost:8000",
-        changeOrigin: true,
-        secure: false,
-      },
-      "/inference": {
-        target: "http://localhost:8000",
-        changeOrigin: true,
-        secure: false,
-      },
-      "/train": {
+      // forward everything under /api to FastAPI on :8000
+      "/api": {
         target: "http://localhost:8000",
         changeOrigin: true,
         secure: false,

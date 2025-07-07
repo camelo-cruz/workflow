@@ -25,7 +25,7 @@ export function useStreamer(
     addLog(`Opened job ${jobId}`, "info");
     setIsProcessing(true);
 
-    const evt = new EventSource(`/${prefix}/${jobId}/stream`);
+    const evt = new EventSource(`api/${prefix}/${jobId}/stream`);
     evtRef.current = evt;
 
     evt.onmessage = (e) => {
