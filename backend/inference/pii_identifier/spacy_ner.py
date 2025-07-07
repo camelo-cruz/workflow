@@ -1,6 +1,8 @@
 import re
 import spacy
 from typing import List, Tuple, Dict
+from spacy.cli import download as spacy_download
+from importlib import util
 
 class PII_Identifier:
     """
@@ -18,15 +20,47 @@ class PII_Identifier:
         "SSN":     r"\b\d{3}-\d{2}-\d{4}\b",
         # add more patterns as needed
     }
-
     def __init__(self, lang: str):
+        # Map of language codes to spaCy model names
+        models = {
+            'de': 'de_core_news_lg',
+            'en': 'en_core_web_lg',
+            'fr': 'fr_core_news_lg',
+            'zh': 'zh_core_web_lg',
+            'el': 'el_core_news_lg',
+            'it': 'it_core_news_lg',
+            'ja': 'ja_core_news_lg',
+            'pt': 'pt_core_news_lg',
+            'ro': 'ro_core_news_lg',
+            'ru': 'ru_core_news_lg',
+            'uk': 'uk_core_news_lg'
+        }
+
         self.lang = lang
-        if self.lang == "de":
-            self.nlp = spacy.load("de_core_news_lg")
-        elif self.lang == "en":
-            self.nlp = spacy.load("en_core_web_lg")
-        else:
+        model_name = models.get(lang)
+
+        if not model_name:
+            # No model defined for this language
             self.nlp = None
+            return
+
+        # Check if the model package is already installed
+        if not util.find_spec(model_name):
+            try:
+                print(f"Model '{model_name}' not found. Downloading…")
+                spacy_download(model_name)
+            except Exception as e:
+                print(f"Failed to download '{model_name}': {e}")
+                self.nlp = None
+                return
+
+        # Try to load the model
+        try:
+            self.nlp = spacy.load(model_name)
+        except Exception as e:
+            print(f"Failed to load '{model_name}': {e}")
+            self.nlp = None
+
 
     def identify_and_annotate(self, text: str):
         spans: List[Tuple[int,int,str,str]] = []
