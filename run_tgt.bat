@@ -1,13 +1,13 @@
 @echo off
 
 REM Change to your project directory
-cd /d C:\Users\camelo.cruz\Documents\Desktop\workflow\
+cd /d C:\Users\camelo.cruz\Desktop\workflow
 
 REM Activate the Conda environment
-CALL C:\Users\camelo.cruz\Documents\Desktop\workflow\tgt-venv\Scripts\activate.bat
+CALL C:\Users\camelo.cruz\Desktop\workflow\tgt-venv\Scripts\activate.bat
 
 REM Change to backend directory
-cd /d C:\Users\camelo.cruz\Documents\Desktop\workflow\backend
+cd /d C:\Users\camelo.cruz\Desktop\workflow\backend
 
 REM Ensure the log directory exists
 if not exist "..\logs" mkdir "..\logs"
