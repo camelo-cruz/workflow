@@ -3,6 +3,9 @@ import uuid
 import multiprocessing
 import shutil
 import queue
+import asyncio
+from fastapi import APIRouter, HTTPException
+from sse_starlette.sse import EventSourceResponse
 
 from zipfile import ZipFile
 from pathlib import Path
@@ -105,45 +108,43 @@ async def download_zip(job_id: str, background_tasks: BackgroundTasks):
         filename=f"{job_id}_results.zip"
     )
 
-@router.get("/{job_id}/stream")
-async def stream(job_id: str):
+# Assume `jobs` is your global dict of job metadata populated elsewhere
+def get_job_or_404(job_id: str):
     job = jobs.get(job_id)
     if not job:
         raise HTTPException(status_code=404, detail="Unknown job_id")
+    return job
 
+@router.get("/{job_id}/stream")
+async def stream(job_id: str):
+    """
+    Stream server-sent events from a multiprocessing.Queue using EventSourceResponse.
+    Guarantees proper end-of-stream framing.
+    """
+    job = get_job_or_404(job_id)
     q: multiprocessing.Queue = job["queue"]
 
-    def event_generator():
-        # flush any backlog
+    async def event_publisher():
+        # Continuously pull from the blocking multiprocessing.Queue in a threadpool
+        loop = asyncio.get_event_loop()
         while True:
-            try:
-                line = q.get_nowait()
-            except queue.Empty:
-                break
+            # Offload blocking q.get() to thread pool
+            line = await loop.run_in_executor(None, q.get)
 
-            if line == "[DONE ALL]":
-                yield b"data: [DONE ALL]\n\n"
-                # job cleanup happens after streaming finishes
-                return
-            elif line.startswith("[ZIP PATH] "):
+            # Handle ZIP path messages internally
+            if isinstance(line, str) and line.startswith("[ZIP PATH] "):
                 zip_path = line[len("[ZIP PATH] "):].strip()
                 job["zip_path"] = zip_path
-            else:
-                yield f"data: {line}\n\n".encode("utf-8")
+                continue
 
-        # then block on new messages until "[DONE ALL]"
-        while True:
-            line = q.get()
+            # Yield SSE data event
+            yield {"data": line}
+
+            # Break on termination
             if line == "[DONE ALL]":
-                yield b"data: [DONE ALL]\n\n"
                 break
-            elif line.startswith("[ZIP PATH] "):
-                zip_path = line[len("[ZIP PATH] "):].strip()
-                job["zip_path"] = zip_path
-            else:
-                yield f"data: {line}\n\n".encode("utf-8")
 
-    return StreamingResponse(event_generator(), media_type="text/event-stream")
+    return EventSourceResponse(event_publisher())
 
 
 @router.post("/cancel")

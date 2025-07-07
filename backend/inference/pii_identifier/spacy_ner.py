@@ -3,8 +3,9 @@ import spacy
 from typing import List, Tuple, Dict
 from spacy.cli import download as spacy_download
 from importlib import util
+from inference.pii_identifier.abstract import PIIStrategy
 
-class PII_Identifier:
+class SpacyIdentifier(PIIStrategy):
     """
     Identifies and annotates Personally Identifiable Information (PII)
     in text using spaCy NER plus regex rules for structured identifiers.
@@ -20,7 +21,8 @@ class PII_Identifier:
         "SSN":     r"\b\d{3}-\d{2}-\d{4}\b",
         # add more patterns as needed
     }
-    def __init__(self, lang: str):
+    
+    def load_model(self):
         # Map of language codes to spaCy model names
         models = {
             'de': 'de_core_news_lg',
@@ -35,9 +37,7 @@ class PII_Identifier:
             'ru': 'ru_core_news_lg',
             'uk': 'uk_core_news_lg'
         }
-
-        self.lang = lang
-        model_name = models.get(lang)
+        model_name = models.get(self.lang)
 
         if not model_name:
             # No model defined for this language
@@ -60,6 +60,7 @@ class PII_Identifier:
         except Exception as e:
             print(f"Failed to load '{model_name}': {e}")
             self.nlp = None
+        print(f"spaCy NER initialized for language: {self.lang}")
 
 
     def identify_and_annotate(self, text: str):

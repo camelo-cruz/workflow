@@ -46,7 +46,7 @@ export function useStreamer(
     const cancel = () => {
       const jobId = localStorage.getItem(JOB_KEY);
       if (!jobId) return;
-      fetch(`/${prefix}/cancel`, {
+      fetch(`api/${prefix}/cancel`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ job_id: jobId }),

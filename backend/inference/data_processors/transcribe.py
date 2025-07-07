@@ -18,8 +18,13 @@ import logging
 import warnings
 import pandas as pd
 from tqdm import tqdm
-from inference.pii_identifier.spacy_ner import PII_Identifier
+from inference.pii_identifier.factory import PIIIdentifierFactory
 from inference.transcription.factory import TranscriptionStrategyFactory
+import sys
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
 
 from utils.functions import (
     set_global_variables,
@@ -47,7 +52,9 @@ class Transcriber:
         self.input_dir = input_dir
         self.language_code = find_language(language, LANGUAGES)
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
-        self.pii_identifier = PII_Identifier(self.language_code)
+        self.pii_identifier = PIIIdentifierFactory.get_strategy(self.language_code)
+        print('pii_identifier', self.pii_identifier)
+        print('nlp', self.pii_identifier.nlp)
         self.strategy = TranscriptionStrategyFactory.get_strategy(self.language_code)
         self.strategy.load_model()
 
@@ -61,9 +68,9 @@ class Transcriber:
         excel_out = os.path.join(base_dir, 'trials_and_sessions_annotated.xlsx')
 
         if os.path.exists(csv_file):
-            df = pd.read_csv(csv_file)
+            df = pd.read_csv(csv_file, encoding='utf-8')
         elif os.path.exists(excel_file):
-            df = pd.read_excel(excel_file)
+            df = pd.read_excel(excel_file, encoding='utf-8')
         else:
             raise FileNotFoundError("No trials_and_sessions file found in the directory.")
 
@@ -135,6 +142,7 @@ class Transcriber:
                 try:
                     text = self.strategy.transcribe(path)
                     if self.pii_identifier.nlp:
+                        print(f"Identifying PII in {file}...")
                         entities, text = self.pii_identifier.identify_and_annotate(text)
                     if self.language_code == 'de':
                         text = clean_german_transcription(text)
