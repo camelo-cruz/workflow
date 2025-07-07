@@ -92,7 +92,7 @@ export default function Inference() {
 
   const checkBackendStatus = async () => {
     try {
-      const res = await fetch("/inference/models/translation");
+      const res = await fetch("/api/inference/models/translation");
       setBackendStatus(res.ok ? "online" : "offline");
     } catch (err) {
       setBackendStatus("offline");
@@ -107,7 +107,7 @@ export default function Inference() {
     const fetchModels = async () => {
       if (action === "translate") {
         try {
-          const res = await fetch(`/inference/models/translation`);
+          const res = await fetch(`/api/inference/models/translation`);
           if (!res.ok) {
             throw new Error(`HTTP ${res.status}: ${res.statusText}`);
           }
@@ -146,8 +146,8 @@ export default function Inference() {
         // Fetch both glossing and translation models for glossing action
         try {
           const [glossRes, transRes] = await Promise.all([
-            fetch(`/inference/models/glossing`),
-            fetch(`/inference/models/translation`),
+            fetch(`/api/inference/models/glossing`),
+            fetch(`/api/inference/models/translation`),
           ]);
 
           setBackendStatus("online");
