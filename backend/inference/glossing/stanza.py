@@ -65,9 +65,9 @@ class StanzaGlossingStrategy(GlossingStrategy):
                     lemma = token.text.lower()
 
                 # optional translation
-                if self.translation_strategy:
-                    lemma = self.translation_strategy.translate(text=lemma)
-                    lemma = lemma.replace(" ", "-")  # replace spaces with hyphens
+                #if self.translation_strategy:
+                #    lemma = self.translation_strategy.translate(text=lemma)
+                #    lemma = lemma.replace(" ", "-")  # replace spaces with hyphens
             
                 # build the Leipzig gloss
                 feats_dict = self.parse_stanza_feats(token.feats)

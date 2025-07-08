@@ -80,4 +80,3 @@ class Glosser:
 
         except Exception as e:
             logger.error(f"Problem with file {excel_path} occurred: {e}")
-            raise e

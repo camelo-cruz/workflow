@@ -44,5 +44,10 @@
 "Interj":{"category":"Other","leipzig":"INTERJ"},
 "Clf":{"category":"Other","leipzig":"CLF"},
 "Cop":{"category":"Other","leipzig":"COP"},
-"Foc":{"category":"Voice","leipzig":"FOC"}
+"Foc":{"category":"Voice","leipzig":"FOC"},
+"Infm":{"category":"Polite","leipzig":"INFM"},
+"Pos":{"category":"Degree","leipzig":"POS"},
+"Cau":{"category":"Voice","leipzig":"CAU"},
+"Hab":{"category":"Aspect","leipzig":"HAB"},
+"Cnd":{"category":"Mood","leipzig":"CND"}
 }

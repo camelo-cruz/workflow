@@ -86,9 +86,9 @@ class SpaCyGlossingStrategy(GlossingStrategy):
                 lemma = token.text.lower()
 
             # optional translation
-            if self.translation_strategy:
-                lemma = self.translation_strategy.translate(text=lemma)
-                lemma = lemma.replace(" ", "-")  # replace spaces with hyphens
+            #if self.translation_strategy:
+            #    lemma = self.translation_strategy.translate(text=lemma)
+            #    lemma = lemma.replace(" ", "-")  # replace spaces with hyphens
 
             # build the Leipzig gloss
             gloss_feats = self.UD2LEIPZIG(token.morph.to_dict())
