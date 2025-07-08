@@ -7,16 +7,6 @@ parent_dir = os.path.dirname(current_dir)
 
 
 class WhisperStrategy(TranscriptionStrategy):
-    def __init__(self, *args, **kwargs):
-        """
-        Initializes the Whisper transcription strategy.
-
-        Args:
-            *args: Positional arguments.
-            **kwargs: Keyword arguments, including 'input_dir', 'language', and 'device'.
-        """
-        super().__init__(*args, **kwargs)
-    
     def load_model(self):
          self.model = whisper.load_model("large-v2", self.device)
 

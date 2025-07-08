@@ -12,15 +12,10 @@ parent_dir = os.path.dirname(current_dir)
 class WhisperxStrategy(TranscriptionStrategy):
     def __init__(self, *args, **kwargs):
         """
-        Initializes the Whisperx transcription strategy.
-        
-        Args:
-            *args: Positional arguments.
-            **kwargs: Keyword arguments, including 'input_dir', 'language', and 'device'.
-        """
+        Initialize the Whisperx transcription strategy.	"""
         super().__init__(*args, **kwargs)
         self.hugging_key = self._load_hugging_face_token()
-        self.batch_size = kwargs.get('batch_size', 8)  # Default batch size if not provided
+        self.batch_size = kwargs.get('batch_size', 8)
     
     def _load_hugging_face_token(self):
         token = os.getenv("HUGGING_KEY")
@@ -34,10 +29,6 @@ class WhisperxStrategy(TranscriptionStrategy):
         return token
     
     def load_model(self):
-        """
-        Load the Whisperx model. This method can be called by subclasses
-        to ensure that the model is initialized.
-        """
         try:
             self.model = whisperx.load_model("large-v2", self.device, compute_type="float16", language=self.language_code)
         except:
@@ -71,5 +62,8 @@ class WhisperxStrategy(TranscriptionStrategy):
 
         if buffer_speaker:
             full_sentences.append(f"{buffer_speaker}: {buffer_text}")
+
+        joined_text = "  ".join(full_sentences)
         
-        return "  ".join(full_sentences)
+        return joined_text
+    

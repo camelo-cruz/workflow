@@ -14,25 +14,6 @@ class StanzaGlossingStrategy(GlossingStrategy):
     or a custom one in models/glossing/, plus optional translation.
     """
 
-    def __init__(self,
-                 language_code: str,
-                 glossingModel: str = None,
-                 translationModel: str = None):
-        super().__init__(language_code)
-        self.glossing_model = glossingModel
-        self.nlp = None
-
-        # load translation strategy if requested
-        try:
-            self.translation_strategy = TranslationStrategyFactory.get_strategy(
-                language_code=language_code,
-                translationModel=translationModel
-            )
-            self.translation_strategy.load_model()
-        except Exception as e:
-            print(f"Warning: could not load translation model: {e}")
-            self.translation_strategy = None
-
     def load_model(self):
         _orig = torch.load
         torch.load = lambda f, *a, **k: _orig(f, *a, weights_only=False, **k)
@@ -70,6 +51,7 @@ class StanzaGlossingStrategy(GlossingStrategy):
                 #    lemma = lemma.replace(" ", "-")  # replace spaces with hyphens
             
                 # build the Leipzig gloss
+
                 feats_dict = self.parse_stanza_feats(token.feats)
                 gloss_feats = self.UD2LEIPZIG(feats_dict)
                 if gloss_feats:
@@ -78,33 +60,3 @@ class StanzaGlossingStrategy(GlossingStrategy):
                     out_tokens.append(lemma)
 
         return " ".join(out_tokens)
-    
-    @staticmethod
-    def map_leipzig(morph, feat):
-        val = morph.get(feat)
-        entry = LEIPZIG_GLOSSARY.get(val, {})
-        return entry.get("leipzig", val)
-    
-    def UD2LEIPZIG(self, morph):
-        # Map all morphological features via LEIPZIG_GLOSSARY in defined order
-        features_in_order = [
-            # Lexical Features
-            "PronType", "NumType", "Poss", "Reflex", "Other", 
-            "Abbr", "Typo", "Foreign", "ExtPos", "Clusivity",
-            # Verbal Features
-            "VerbForm", "Mood", "Tense", "Aspect", "Voice", 
-            "Evident", "Polarity", "Person", "Polite",
-            # Nominal Features
-            "Number", "Gender", "Animacy", "NounClass", "Case", 
-            "Definite", "Deixis", "DeixisRef", "Degree",
-        ]
-
-        mapped_parts = []
-        for feature in features_in_order:
-            value = self.map_leipzig(morph, feature)
-            if value and value != "None":
-                mapped_parts.append(value)
-
-        glossed_word = ".".join(mapped_parts)
-
-        return glossed_word if glossed_word else ""

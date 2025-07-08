@@ -2,8 +2,6 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from inference.translation.abstract import TranslationStrategy
 
 class MarianStrategy(TranslationStrategy):
-    def __init__(self, language_code: str, device: str = "cpu"):
-        super().__init__(language_code, device)
 
     def load_model(self):
             """

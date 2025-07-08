@@ -56,7 +56,6 @@ class Transcriber:
         print('pii_identifier', self.pii_identifier)
         print('nlp', self.pii_identifier.nlp)
         self.strategy = TranscriptionStrategyFactory.get_strategy(self.language_code)
-        self.strategy.load_model()
 
     def _append_to_cell(self, df, idx, column, text):
         old_val = df.at[idx, column]

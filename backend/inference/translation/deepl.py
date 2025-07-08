@@ -4,10 +4,6 @@ import sys
 import deepl
 
 class DeeplStrategy(TranslationStrategy):
-
-    def __init__(self, language_code: str, device: str = "cpu"):
-        super().__init__(language_code, device)
-
     def load_model(self):
             """
             Attempt to create a DeepL client. If the API key is missing

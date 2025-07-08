@@ -2,8 +2,6 @@ from inference.translation.abstract import TranslationStrategy
 from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
 
 class M2M100Strategy(TranslationStrategy):
-    def __init__(self, language_code, device: str = "cpu"):
-        super().__init__(language_code, device)
 
     def load_model(self, model_path = None):
         if model_path:
