@@ -42,3 +42,4 @@ pypinyin
 pykakasi
 cupy-cuda12x
 wandb
+sse_starlette

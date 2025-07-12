@@ -117,13 +117,3 @@ def create_columns(directory, language):
                     print(f"Error processing the file {csv_file_path}: {e}")
 
 
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="automatic transcription")
-    parser.add_argument("input_dir")
-    parser.add_argument("language")
-    
-    args = parser.parse_args()
-    process_data(args.input_dir, args.language)
-
-

@@ -2,17 +2,14 @@ import os
 import tempfile
 import traceback
 import shutil
-import queue
+import glob
 import requests
 import base64
 
 from zipfile import ZipFile
 from pathlib import Path
 
-from inference.data_processors.transcribe import Transcriber
-from inference.data_processors.translate import Translator
-from inference.data_processors.gloss import Glosser
-from inference.data_processors.transliterate import Transliterator
+from inference.data_processors.factory import ProcessorFactory
 
 from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
 from utils.reorder_columns import create_columns
@@ -44,16 +41,8 @@ def _offline_worker(job_id, base_dir, action, language, instruction, q, cancel):
             name = os.path.basename(session)
             put(f"Processing session: {name}")
 
-            if action == "transcribe":
-                Transcriber(session, language, "cpu").process_data(verbose=True)
-            elif action == "translate":
-                Translator(session, language, instruction, "cpu").process_data(verbose=True)
-            elif action == "gloss":
-                Glosser(session, language, instruction).process_data()
-            elif action == "transliterate":
-                Transliterator(session, language, instruction).process_data(verbose=True)
-            elif action == "create columns":
-                create_columns(session, language)
+            processor = ProcessorFactory.get_processor(language, action, instruction)
+            processor.process(session)
 
         # create ZIP of entire folder
         zip_path = Path(tempfile.gettempdir()) / f"{job_id}_output.zip"
@@ -138,20 +127,11 @@ def _online_worker(job_id, share_link, token, action, language, instruction, tra
                 session_path = inp
 
             uploads = []
-            if action == "transcribe":
-                Transcriber(session_path, language, "cpu").process_data()
-                uploads = ["transcription.log"]
-            elif action == "translate":
-                Translator(session_path, language, instruction, "cpu").process_data()
-                uploads = ["translation.log"]
-            elif action == "gloss":
-                Glosser(session_path, language, instruction, glossingModel, translationModel).process_data()
-            elif action == "transliterate":
-                Transliterator(session_path, language, instruction).process_data()
-            elif action == "create columns":
-                create_columns(session_path, language)
+            processor = ProcessorFactory.get_processor(language, action, instruction, translationModel, glossingModel)
+            processor.process(session_path)
 
             uploads.append("trials_and_sessions_annotated.xlsx")
+            uploads.append(f"{processor.__class__.__name__}.log")
 
             for fname in uploads:
                 if cancel.is_set():

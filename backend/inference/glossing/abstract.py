@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import re
 from utils.functions import load_glossing_rules
 from inference.translation.factory import TranslationStrategyFactory
 
@@ -17,7 +16,6 @@ class GlossingStrategy(ABC):
         self.glossing_model = glossingModel
         self.nlp = None
 
-        # load translation strategy if requested
         try:
             self.translation_strategy = TranslationStrategyFactory.get_strategy(
                 language_code=language_code,

@@ -71,7 +71,8 @@ async def onedrive_auth_redirect(request: Request):
         return JSONResponse({"error": "Token error", "details": result}, status_code=400)
 
     # Build a frontend URL that Vite will serve at /auth/success
-    host   = request.headers.get("host")  # via proxy this is localhost:8080
+    host   = request.headers.get("host")
+    host = "localhost:8080"
     scheme = "http" if host.startswith(("localhost", "127.0.0.1")) else "https"
     frontend_success = f"{scheme}://{host}/success-auth#token={token}"
 
