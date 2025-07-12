@@ -1,15 +1,7 @@
 name: "Hugging Face TGT App CI/CD"
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - 'v*'
-
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   sync_to_hub:
