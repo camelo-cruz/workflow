@@ -89,7 +89,7 @@ class BasePreprocessor(ABC):
         """
         Read data from an Excel file into a DataFrame.
         """
-        if path.suffix.lower() in {".xlsx", ".xls"}:
+        if path.suffix.lower() in {".xlsx"}:
             return pd.read_excel(path)
         else:
             raise ValueError(f"Unsupported file format: {path.suffix}")
@@ -98,8 +98,9 @@ class BasePreprocessor(ABC):
         """
         Write the processed DataFrame back to disk with a suffix.
         """
+        data_dir = Path(__file__).parent.parent / "data"
         output_path = f"{self.__class__.__name__}_processed.csv"
-        df.to_csv(output_path, index=False)
+        df.to_csv(data_dir / output_path, index=False)
 
 
     @abstractmethod
