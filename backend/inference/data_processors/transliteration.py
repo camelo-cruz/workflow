@@ -29,6 +29,11 @@ class Transliterator(DataProcessor):
         self.strategy: TransliterationStrategy = TransliterationStrategyFactory.get_strategy(
             self.language
         )
+        self.columns_to_highlight = (
+            "latin_transcription_utterance_used"
+            if self.instruction == "sentences"
+            else "latin_transcription_everything"
+        )
 
     def _process_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
         # determine source/target columns by instruction
@@ -59,15 +64,3 @@ class Transliterator(DataProcessor):
                 if translit not in df.at[idx, target]:
                     df.at[idx, target] += translit + " "
         return df
-
-    def _write_file(self, path: str, df: pd.DataFrame):
-        # write DataFrame back to the same Excel file
-        df.to_excel(path, index=False)
-        # apply any post‐formatting (e.g. column widths, styles)
-        # note: for 'corrected' instruction, we target 'latin_transcription_everything'
-        target_col = (
-            "latin_transcription_utterance_used"
-            if self.instruction == "sentences"
-            else "latin_transcription_everything"
-        )
-        format_excel_output(path, target_col)
