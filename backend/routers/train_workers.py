@@ -9,7 +9,7 @@ from pathlib import Path
 from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive, encode_share_link
 from training.glossing.train_spacy import train_spacy
 from training.translation.train import train_m2m100
-from training.preprocessing.glossing import GlossingPreprocessor
+from training.preprocessing.spacy import GlossingPreprocessor
 
 def _list_session_children(share_link: str, token: str):
     """

@@ -10,7 +10,6 @@ import pandas as pd
 from tqdm import tqdm
 
 from utils.functions import (
-    load_glossing_rules,
     find_language,
     set_global_variables,
 )
