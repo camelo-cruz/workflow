@@ -12,7 +12,7 @@ from pathlib import Path
 import tempfile
 
 from fastapi import APIRouter, Request, Form, UploadFile, File, Body, HTTPException, BackgroundTasks
-from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
+from fastapi.responses import JSONResponse, FileResponse
 
 from .inference_workers import _offline_worker, _online_worker
 
@@ -108,7 +108,6 @@ async def download_zip(job_id: str, background_tasks: BackgroundTasks):
         filename=f"{job_id}_results.zip"
     )
 
-# Assume `jobs` is your global dict of job metadata populated elsewhere
 def get_job_or_404(job_id: str):
     job = jobs.get(job_id)
     if not job:
@@ -145,7 +144,6 @@ async def stream(job_id: str):
                 break
 
     return EventSourceResponse(event_publisher())
-
 
 @router.post("/cancel")
 async def cancel_job(payload: dict = Body(...)):

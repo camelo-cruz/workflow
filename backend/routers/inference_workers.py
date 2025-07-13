@@ -11,8 +11,7 @@ from pathlib import Path
 
 from inference.data_processors.factory import ProcessorFactory
 
-from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive
-from utils.reorder_columns import create_columns
+from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive, list_session_children
 
 
 def _offline_worker(job_id, base_dir, action, language, instruction, q, cancel):
@@ -67,22 +66,6 @@ def _offline_worker(job_id, base_dir, action, language, instruction, q, cancel):
         put("[DONE ALL]")
 
 
-def _list_session_children(share_link: str, token: str):
-    """
-    Helper for the online worker: list all Session_* folders under a OneDrive share link.
-    """
-    share_id = base64.urlsafe_b64encode(share_link.encode()).decode().rstrip("=")
-    url = f"https://graph.microsoft.com/v1.0/shares/u!{share_id}/driveItem/children"
-    resp = requests.get(url, headers={"Authorization": f"Bearer {token}"})
-    resp.raise_for_status()
-    entries = resp.json().get("value", [])
-    return [
-        entry
-        for entry in entries
-        if entry.get("folder") and entry["name"].startswith("Session_")
-    ]
-
-
 def _online_worker(job_id, share_link, token, action, language, instruction, translationModel, glossingModel, q, cancel):
     """
     Download each Session_* folder from OneDrive (online mode), run Transcriber/Translator/Glosser/create_columns,
@@ -93,7 +76,7 @@ def _online_worker(job_id, share_link, token, action, language, instruction, tra
 
     try:
         put("Checking for multiple sessions in OneDrive…")
-        sessions_meta = _list_session_children(share_link, token)
+        sessions_meta = list_session_children(share_link, token)
 
         if not sessions_meta:
             # if there are no nested Session_ folders, assume share_link points directly to a single Session

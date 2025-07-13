@@ -1,7 +1,21 @@
 import os
-import tempfile
 import requests
 import base64
+
+def list_session_children(share_link: str, token: str):
+    """
+    Helper for the online worker: list all Session_* folders under a OneDrive share link.
+    """
+    share_id = base64.urlsafe_b64encode(share_link.encode()).decode().rstrip("=")
+    url = f"https://graph.microsoft.com/v1.0/shares/u!{share_id}/driveItem/children"
+    resp = requests.get(url, headers={"Authorization": f"Bearer {token}"})
+    resp.raise_for_status()
+    entries = resp.json().get("value", [])
+    return [
+        entry
+        for entry in entries
+        if entry.get("folder") and entry["name"].startswith("Session_")
+    ]
 
 def encode_share_link(link):
     encoded_url = base64.urlsafe_b64encode(link.encode()).decode().rstrip("=")

@@ -6,24 +6,13 @@ import requests
 import base64
 
 from pathlib import Path
-from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive, encode_share_link
 from training.glossing.train_spacy import train_spacy
 from training.translation.train import train_m2m100
 from training.preprocessing.spacy import GlossingPreprocessor
-
-def _list_session_children(share_link: str, token: str):
-    """
-    List all 'Session_*' folders under a OneDrive share link.
-    """
-    share_id = base64.urlsafe_b64encode(share_link.encode()).decode().rstrip("=")
-    url = f"https://graph.microsoft.com/v1.0/shares/u!{share_id}/driveItem/children"
-    resp = requests.get(url, headers={"Authorization": f"Bearer {token}"})
-    resp.raise_for_status()
-    entries = resp.json().get("value", [])
-    return [
-        entry for entry in entries
-        if entry.get("folder") and entry["name"].startswith("Session_")
-    ]
+from utils.onedrive import (download_sharepoint_folder, 
+                            upload_file_replace_in_onedrive, 
+                            encode_share_link,
+                            list_session_children)
 
 def _online_train_worker(
     job_id: str,
@@ -32,8 +21,8 @@ def _online_train_worker(
     action: str,
     language: str,
     study: str,
-    q,       # multiprocessing.Queue
-    cancel   # multiprocessing.Event
+    q,
+    cancel
 ):
     def put(msg: str):
         q.put(msg)
@@ -51,7 +40,7 @@ def _online_train_worker(
 
     try:
         put(f"[INFO] Job {job_id}: listing sessions…")
-        meta_entries = _list_session_children(share_link, token)
+        meta_entries = list_session_children(share_link, token)
         if not meta_entries:
             # treat the share link itself as one “root” session
             meta_entries = [{"webUrl": share_link, "name": None}]
@@ -99,7 +88,7 @@ def _online_train_worker(
             put("[ERROR] No sessions available to train")
             return
         
-        # --- TRAIN ON ALL SESSIONS AT ONCE ---
+        
         put(f"[INFO] Training model. This may take a while…")
         try:
             if action == "gloss":
