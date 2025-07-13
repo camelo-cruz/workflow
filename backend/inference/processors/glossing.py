@@ -8,7 +8,7 @@ from inference.glossing.factory import GlossingStrategyFactory
 from inference.glossing.abstract import GlossingStrategy
 from inference.translation.factory import TranslationStrategyFactory
 
-from inference.data_processors.abstract import DataProcessor
+from inference.processors.abstract import DataProcessor
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 

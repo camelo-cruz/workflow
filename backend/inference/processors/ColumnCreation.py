@@ -1,4 +1,4 @@
-from inference.data_processors.abstract import DataProcessor
+from inference.processors.abstract import DataProcessor
 from utils.reorder_columns import create_columns
 
 class ColumnCreationProcessor(DataProcessor):

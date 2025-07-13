@@ -31,7 +31,7 @@ class MarianStrategy(TranslationStrategy):
 
             try:
                 inputs = self._marian_tokenizer.encode(text, return_tensors="pt")
-                outputs = self._marian_model.generate(inputs, num_beams=4, max_length=50, early_stopping=True)
+                outputs = self._marian_model.generate(inputs)
                 translated_text = self._marian_tokenizer.decode(outputs[0], skip_special_tokens=True)
 
                 return translated_text

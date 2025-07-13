@@ -2,11 +2,12 @@ import whisperx
 import os
 from dotenv import load_dotenv
 from whisperx.diarize import DiarizationPipeline
+from pathlib import Path
 
 from inference.transcription.abstract import TranscriptionStrategy
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
+_this_file = Path(__file__).resolve()
+parent_dir = _this_file.parent.parent.parent
 
 
 class WhisperxStrategy(TranscriptionStrategy):
@@ -21,6 +22,7 @@ class WhisperxStrategy(TranscriptionStrategy):
         token = os.getenv("HUGGING_KEY")
         if not token:
             secrets_path = os.path.join(parent_dir, 'materials', 'secrets.env')
+            print(f"Loading Hugging Face token from {secrets_path}")
             if os.path.exists(secrets_path):
                 load_dotenv(secrets_path, override=True)
                 token = os.getenv("HUGGING_KEY")

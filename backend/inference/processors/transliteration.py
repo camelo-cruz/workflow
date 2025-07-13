@@ -10,7 +10,7 @@ from utils.functions import (
 from inference.transliteration.abstract import TransliterationStrategy
 from inference.transliteration.factory import TransliterationStrategyFactory
 
-from inference.data_processors.abstract import DataProcessor  # wherever you put it
+from inference.processors.abstract import DataProcessor  # wherever you put it
 
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 

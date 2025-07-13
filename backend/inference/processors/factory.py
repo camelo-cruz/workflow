@@ -1,9 +1,9 @@
-from inference.data_processors.abstract import DataProcessor
-from inference.data_processors.transcription import TranscriptionProcessor
-from inference.data_processors.translation import TranslationProcessor
-from inference.data_processors.glossing import GlossingProcessor
-from inference.data_processors.transliteration import Transliterator
-from inference.data_processors.ColumnCreation import ColumnCreationProcessor
+from inference.processors.abstract import DataProcessor
+from inference.processors.transcription import TranscriptionProcessor
+from inference.processors.translation import TranslationProcessor
+from inference.processors.glossing import GlossingProcessor
+from inference.processors.transliteration import Transliterator
+from inference.processors.ColumnCreation import ColumnCreationProcessor
 
 class ProcessorFactory:
     @staticmethod

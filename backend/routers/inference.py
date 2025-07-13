@@ -10,7 +10,7 @@ from fastapi import APIRouter, HTTPException, Request, Form, UploadFile, File, B
 from fastapi.responses import JSONResponse, FileResponse
 from sse_starlette.sse import EventSourceResponse
 from multiprocessing import Process, Queue, Event
-from routers.inference_workers import OneDriveWorker, ZipWorker
+from routers.api_inference_workers import OneDriveWorker, ZipWorker
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -49,8 +49,8 @@ class JobManager:
         cls._jobs.pop(job_id, None)
 
 
-async def run_worker(process_fn, args: tuple):
-    proc = Process(target=process_fn, args=args, daemon=True)
+async def run_worker(process_fn):
+    proc = Process(target=process_fn, daemon=True)
     proc.start()
     return proc
 

@@ -29,7 +29,8 @@ class DataProcessor(ABC):
         files = self._find_files(input_dir)
         for path in tqdm(files, desc=f"Processing {self.__class__.__name__} files"):
             log_name = f"{self.__class__.__name__}.log"
-            log_path = os.path.join(input_dir, log_name)
+            log_path = os.path.join(Path(path).parent, log_name)
+            print(f"[DEBUG] Writing log to: {log_path}")
 
             fh = logging.FileHandler(log_path, mode="a")
             fh.setFormatter(logging.Formatter("%(asctime)s %(levelname)s: %(message)s"))

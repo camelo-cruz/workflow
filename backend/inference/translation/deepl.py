@@ -2,6 +2,10 @@ from inference.translation.abstract import TranslationStrategy
 import os
 import sys
 import deepl
+from pathlib import Path
+
+_this_file = Path(__file__).resolve()
+parent_dir = _this_file.parent.parent.parent
 
 class DeeplStrategy(TranslationStrategy):
     def load_model(self):
@@ -9,8 +13,7 @@ class DeeplStrategy(TranslationStrategy):
             Attempt to create a DeepL client. If the API key is missing
             or DeepL is unreachable, leave them as None.
             """
-            base_path = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
-            secrets_path = os.path.join(base_path, "materials", "secrets.env")
+            secrets_path = os.path.join(parent_dir, 'materials', 'secrets.env')
             from dotenv import load_dotenv
             load_dotenv(secrets_path, override=True)
             api_key = os.getenv("DEEPL_API_KEY")
