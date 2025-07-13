@@ -2,143 +2,191 @@ import os
 import tempfile
 import traceback
 import shutil
-import glob
-import requests
-import base64
-
 from zipfile import ZipFile
 from pathlib import Path
 
 from inference.data_processors.factory import ProcessorFactory
+from utils.onedrive import (
+    download_sharepoint_folder,
+    upload_file_replace_in_onedrive,
+    list_session_children,
+)
 
-from utils.onedrive import download_sharepoint_folder, upload_file_replace_in_onedrive, list_session_children
+class BaseWorker:
+    def __init__(self, base_dir, action, language, instruction,
+                 translationModel, glossingModel, job_id=0, q=None, cancel=None):
+        self.job_id = job_id
+        self.base_dir = base_dir
+        self.action = action
+        self.language = language
+        self.instruction = instruction
+        self.translationModel = translationModel
+        self.glossingModel = glossingModel
+        self.q = q
+        self.cancel = cancel
 
+    def put(self, msg):
+        if self.q:
+            self.q.put(msg)
+        else:
+            print(msg)
 
-def _offline_worker(job_id, base_dir, action, language, instruction, q, cancel):
+    def initial_message(self):
+        # Hook: override in subclasses if you need to log or prepare before processing.
+        self.put(f"Starting job {self.job_id} – action: {self.action}")
+
+    def folder_to_process(self):
+        # By default, just process the single base_dir
+        yield self.base_dir
+
+    def after_process(self, folder_path):
+        # Hook: override in subclasses for per‐folder teardown (e.g. zipping or uploading)
+        pass
+
+    def run(self):
+        try:
+            self.initial_message()
+            for folder in self.folder_to_process():
+                if self.cancel.is_set():
+                    self.put("[CANCELLED]")
+                    break
+
+                session_name = os.path.basename(folder.rstrip(os.sep))
+                self.put(f"Processing session: {session_name}")
+
+                processor = ProcessorFactory.get_processor(
+                    self.language,
+                    self.action,
+                    self.instruction,
+                    self.translationModel,
+                    self.glossingModel,
+                )
+                processor.process(folder)
+                self.after_process(folder)
+
+        except Exception as e:
+            self.put(f"[ERROR] {e}")
+            self.put(traceback.format_exc())
+        finally:
+            self.put("[DONE ALL]")
+
+class ZipWorker(BaseWorker):
     """
-    Process an uploaded ZIP (offline mode).  Walk through all Session_* folders,
-    run Transcriber/Translator/Glosser/create_columns, then zip up the results.
+    Processes a single local folder (or multiple if your base_dir contains
+    sub-folders named “Session_*”), then zips up only the output files you care
+    about and reports the zip path.
     """
-    def put(msg): 
-        q.put(msg)
+    def initial_message(self):
+        self.put("Preparing to process and zip outputs…")
 
-    try:
-        put("Processing uploaded files…")
-
-        # find all Session_* directories
-        sessions = [
-            os.path.join(root, subdir)
-            for root, dirs, _ in os.walk(base_dir)
-            for subdir in dirs if subdir.startswith("Session_")
-        ]
-
-        for session in sessions:
-            if cancel.is_set():
-                put("[CANCELLED]")
-                break
-
-            name = os.path.basename(session)
-            put(f"Processing session: {name}")
-
-            processor = ProcessorFactory.get_processor(language, action, instruction)
-            processor.process(session)
-
-        # create ZIP of entire folder
-        zip_path = Path(tempfile.gettempdir()) / f"{job_id}_output.zip"
-        with ZipFile(zip_path, "w") as z:
-            for root, _, files in os.walk(base_dir):
-                for file in files:
-                    if file in (
+    def after_process(self, folder_path):
+        # Name the zip after the job
+        zip_path = Path(tempfile.gettempdir()) / f"{self.job_id}_output.zip"
+        with ZipFile(zip_path, "w") as zf:
+            # Walk the processed folder and only include certain filenames
+            for root, _, files in os.walk(folder_path):
+                for fname in files:
+                    if fname in (
                         "trials_and_sessions_annotated.xlsx",
                         "transcription.log",
                         "translation.log",
                     ):
-                        full = os.path.join(root, file)
-                        rel = os.path.relpath(full, base_dir)
-                        z.write(full, arcname=rel)
-
-        put(f"[ZIP PATH] {zip_path}")
-        # The caller (jobs.py) will write into jobs[job_id]["zip_path"] and ["base_dir"]
-    except Exception as e:
-        put(f"[ERROR] {e}")
-        put(traceback.format_exc())
-    finally:
-        put("[DONE ALL]")
+                        full = os.path.join(root, fname)
+                        # make the archive paths relative to the base_dir
+                        rel = os.path.relpath(full, self.base_dir)
+                        zf.write(full, arcname=rel)
+        self.put(f"[ZIP PATH] {zip_path}")
 
 
-def _online_worker(job_id, share_link, token, action, language, instruction, translationModel, glossingModel, q, cancel):
+class OneDriveWorker(BaseWorker):
     """
-    Download each Session_* folder from OneDrive (online mode), run Transcriber/Translator/Glosser/create_columns,
-    upload results back into OneDrive, and report progress to the queue.
+    Downloads every session folder from a OneDrive share, processes them,
+    then uploads the outputs back to OneDrive and cleans up.
     """
-    def put(msg):
-        q.put(msg)
+    def __init__(self, job_id, base_dir, action, language, instruction,
+                 translationModel, glossingModel, q, cancel,
+                 share_link, token):
+        super().__init__(job_id, base_dir, action, language, instruction,
+                         translationModel, glossingModel, q, cancel)
+        self.share_link = share_link
+        self.token = token
+        self.sessions_meta = []
 
-    try:
-        put("Checking for multiple sessions in OneDrive…")
-        sessions_meta = list_session_children(share_link, token)
+    def initial_message(self):
+        self.put("Checking for sessions on OneDrive…")
+        metas = list_session_children(self.share_link, self.token)
+        if not metas:
+            metas = [{"webUrl": self.share_link, "name": None}]
+        self.sessions_meta = metas
+        self.put(f"Found {len(self.sessions_meta)} session(s).")
 
-        if not sessions_meta:
-            # if there are no nested Session_ folders, assume share_link points directly to a single Session
-            sessions_meta = [{"webUrl": share_link}]
-
-        put(f"Found {len(sessions_meta)} sessions")
-        for entry in sessions_meta:
-            if cancel.is_set():
-                put("[CANCELLED]")
+    def folder_to_process(self):
+        for meta in self.sessions_meta:
+            if self.cancel.is_set():
                 break
 
-            session_link = entry.get("webUrl")
-            put(f"Downloading from OneDrive")
+            link = meta["webUrl"]
+            name = meta.get("name") or "session"
+            self.put(f"Downloading session '{name}'…")
             tmp_dir = tempfile.mkdtemp()
             try:
                 inp, drive_id, _, sess_map = download_sharepoint_folder(
-                    share_link=session_link,
+                    share_link=link,
                     temp_dir=tmp_dir,
-                    access_token=token,
+                    access_token=self.token,
                 )
             except Exception as e:
-                put(f"Failed to download session: {e}. Will skip.")
+                self.put(f"Failed to download '{name}': {e}. Skipping.")
                 shutil.rmtree(tmp_dir, ignore_errors=True)
                 continue
 
-            session_name = entry.get("name") or next(iter(sess_map.keys()), Path(inp).name)
-            put(f"Processing session: {session_name}")
-
-            session_path = os.path.join(inp, session_name)
+            # session folder on disk
+            session_path = os.path.join(inp, name)
             if not os.path.isdir(session_path):
                 session_path = inp
 
-            uploads = []
-            processor = ProcessorFactory.get_processor(language, action, instruction, translationModel, glossingModel)
-            processor.process(session_path)
+            # stash some state for after_process
+            self._current = {
+                "tmp_dir": tmp_dir,
+                "drive_id": drive_id,
+                "sess_map": sess_map,
+                "session_name": name,
+            }
+            yield session_path
 
-            uploads.append("trials_and_sessions_annotated.xlsx")
-            uploads.append(f"{processor.__class__.__name__}.log")
+    def after_process(self, folder_path):
+        info = self._current
+        name = info["session_name"]
+        drive_id = info["drive_id"]
+        sess_map = info["sess_map"]
+        tmp_dir = info["tmp_dir"]
 
-            for fname in uploads:
-                if cancel.is_set():
-                    put("[CANCELLED]")
-                    break
-                local_fp = os.path.join(session_path, fname)
-                if not os.path.exists(local_fp):
-                    put(f"Skipping missing: {fname}")
-                    continue
+        # upload any relevant outputs
+        uploads = [
+            "trials_and_sessions_annotated.xlsx",
+            f"{ProcessorFactory.get_processor.__qualname__}.log"
+        ]
+        for fname in uploads:
+            if self.cancel.is_set():
+                self.put("[CANCELLED UPLOAD]")
+                break
+            local_fp = os.path.join(folder_path, fname)
+            if not os.path.exists(local_fp):
+                self.put(f"Skipping missing file: {fname}")
+                continue
 
-                put(f"Uploading {fname} for {session_name}")
-                upload_file_replace_in_onedrive(
-                    local_file_path=local_fp,
-                    target_drive_id=drive_id,
-                    parent_folder_id=sess_map.get(session_name, ""),
-                    file_name_in_folder=fname,
-                    access_token=token,
-                )
+            parent_id = sess_map.get(name, "")
+            self.put(f"Uploading '{fname}' for session '{name}'…")
+            upload_file_replace_in_onedrive(
+                local_file_path=local_fp,
+                target_drive_id=drive_id,
+                parent_folder_id=parent_id,
+                file_name_in_folder=fname,
+                access_token=self.token,
+            )
 
-            shutil.rmtree(tmp_dir, ignore_errors=True)
-            put(f"[DONE UPLOADED] {session_name}")
+        shutil.rmtree(tmp_dir, ignore_errors=True)
+        self.put(f"[DONE UPLOADED] {name}")
 
-    except Exception as e:
-        put(f"[ERROR] {e}")
-        put(traceback.format_exc())
-    finally:
-        put("[DONE ALL]")
+class TrainSpacyWorker(BaseWorker):
+    pass

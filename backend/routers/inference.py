@@ -1,26 +1,59 @@
 import os
 import uuid
-import multiprocessing
 import shutil
-import queue
-import asyncio
-from fastapi import APIRouter, HTTPException
-from sse_starlette.sse import EventSourceResponse
-
-from zipfile import ZipFile
-from pathlib import Path
 import tempfile
-
-from fastapi import APIRouter, Request, Form, UploadFile, File, Body, HTTPException, BackgroundTasks
+import asyncio
+import logging
+from pathlib import Path
+from zipfile import ZipFile
+from fastapi import APIRouter, HTTPException, Request, Form, UploadFile, File, Body, BackgroundTasks
 from fastapi.responses import JSONResponse, FileResponse
+from sse_starlette.sse import EventSourceResponse
+from multiprocessing import Process, Queue, Event
+from routers.inference_workers import OneDriveWorker, ZipWorker
 
-from .inference_workers import _offline_worker, _online_worker
-
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
-MODELS_BASE = Path(__file__).parent.parent / "models"
+MODELS_BASE = Path(__file__).resolve().parent.parent / "models"
 
-jobs: dict[str, dict] = {}
+class Job:
+    def __init__(self, job_id: str):
+        self.id = job_id
+        self.queue: Queue = Queue()
+        self.cancel_event: Event = Event()
+        self.base_dir: str | None = None
+        self.zip_path: str | None = None
+        self.token: str | None = None
+        self.process: Process | None = None
+
+class JobManager:
+    _jobs: dict[str, Job] = {}
+
+    @classmethod
+    def create(cls) -> Job:
+        job_id = str(uuid.uuid4())
+        job = Job(job_id)
+        cls._jobs[job_id] = job
+        return job
+
+    @classmethod
+    def get(cls, job_id: str) -> Job:
+        job = cls._jobs.get(job_id)
+        if not job:
+            raise HTTPException(status_code=404, detail=f"Job '{job_id}' not found")
+        return job
+
+    @classmethod
+    def remove(cls, job_id: str):
+        cls._jobs.pop(job_id, None)
+
+
+async def run_worker(process_fn, args: tuple):
+    proc = Process(target=process_fn, args=args, daemon=True)
+    proc.start()
+    return proc
+
 
 @router.post("/process")
 async def process(
@@ -34,147 +67,105 @@ async def process(
     zipfile: UploadFile | None = File(None),
     base_dir: str | None = Form(None),
 ):
-    job_id = str(uuid.uuid4())
-    q = multiprocessing.Queue()
-    cancel = multiprocessing.Event()
-    token = access_token  # “token” now comes from form data
-    jobs[job_id] = {
-        "queue": q,
-        "cancel": cancel,
-        "zip_path": None,
-        "token": token,
-    }
-    if glossingModel == "Default":
-        glossingModel = None
-    if translationModel == "Default":
-        translationModel = None
+    # Initialize job
+    job = JobManager.create()
+    job.token = access_token
+
+    # Normalize model names
+    glossingModel = None if glossingModel == "Default" else glossingModel
+    translationModel = None if translationModel == "Default" else translationModel
 
     if not language:
-        q.put("[ERROR] Missing language")
-        return {"job_id": job_id}
+        job.queue.put("[ERROR] Missing language")
+        return {"job_id": job.id}
 
-    if zipfile is not None:
+    if zipfile:
         tmp_dir = tempfile.mkdtemp()
-        zip_path = Path(tmp_dir) / "upload.zip"
+        archive_path = Path(tmp_dir) / "upload.zip"
         contents = await zipfile.read()
-        with open(zip_path, "wb") as f:
-            f.write(contents)
-        with ZipFile(zip_path, "r") as archive:
+        archive_path.write_bytes(contents)
+        with ZipFile(archive_path, 'r') as archive:
             archive.extractall(tmp_dir)
-        os.remove(zip_path)
+        archive_path.unlink()
 
-        worker = _offline_worker
-        args = (job_id, tmp_dir, action, language, instruction, q, cancel)
-        jobs[job_id]["base_dir"] = tmp_dir
-
+        worker_fn = ZipWorker(tmp_dir, action, 
+                              language, instruction, 
+                              translationModel, glossingModel, 
+                              job.id, job.queue, job.cancel_event)
+        job.base_dir = tmp_dir
     else:
-        if not (base_dir and token):
-            raise HTTPException(status_code=400, detail="Missing base_dir or token")
-        worker = _online_worker
-        args = (job_id, base_dir, token, action, language, instruction, translationModel, glossingModel, q, cancel)
+        if not base_dir or not access_token:
+            raise HTTPException(status_code=400, detail="Missing base_dir or access_token for online processing")
+        worker_fn = OneDriveWorker(base_dir, action, 
+                                   language, instruction, 
+                                   translationModel, glossingModel, job.id, 
+                                   job.queue, job.cancel_event, 
+                                   share_link=base_dir, token=access_token)
 
-    p = multiprocessing.Process(target=worker, args=args, daemon=True)
-    p.start()
-    jobs[job_id]["process"] = p
+    job.process = await run_worker(worker_fn.run)
+    return {"job_id": job.id}
 
-    return {"job_id": job_id}
-
-
-@router.get("/{job_id}/download")
-async def download_zip(job_id: str, background_tasks: BackgroundTasks):
-    job = jobs.get(job_id)
-    if not job:
-        raise HTTPException(status_code=404, detail="No job")
-    zip_path = job.get("zip_path")
-    if not zip_path:
-        raise HTTPException(status_code=404, detail="No zip path")
-
-    base_dir = job.get("base_dir")
-
-    def cleanup():
-        try:
-            os.remove(zip_path)
-        except OSError:
-            pass
-        if base_dir and os.path.isdir(base_dir):
-            shutil.rmtree(base_dir, ignore_errors=True)
-        jobs.pop(job_id, None)
-
-    background_tasks.add_task(cleanup)
-
-    return FileResponse(
-        path=zip_path,
-        media_type="application/zip",
-        filename=f"{job_id}_results.zip"
-    )
-
-def get_job_or_404(job_id: str):
-    job = jobs.get(job_id)
-    if not job:
-        raise HTTPException(status_code=404, detail="Unknown job_id")
-    return job
 
 @router.get("/{job_id}/stream")
 async def stream(job_id: str):
-    """
-    Stream server-sent events from a multiprocessing.Queue using EventSourceResponse.
-    Guarantees proper end-of-stream framing.
-    """
-    job = get_job_or_404(job_id)
-    q: multiprocessing.Queue = job["queue"]
+    job = JobManager.get(job_id)
 
-    async def event_publisher():
-        # Continuously pull from the blocking multiprocessing.Queue in a threadpool
+    async def event_generator():
         loop = asyncio.get_event_loop()
         while True:
-            # Offload blocking q.get() to thread pool
-            line = await loop.run_in_executor(None, q.get)
-
-            # Handle ZIP path messages internally
-            if isinstance(line, str) and line.startswith("[ZIP PATH] "):
-                zip_path = line[len("[ZIP PATH] "):].strip()
-                job["zip_path"] = zip_path
+            message = await loop.run_in_executor(None, job.queue.get)
+            if isinstance(message, str) and message.startswith("[ZIP PATH] "):
+                job.zip_path = message.replace("[ZIP PATH] ", "").strip()
                 continue
-
-            # Yield SSE data event
-            yield {"data": line}
-
-            # Break on termination
-            if line == "[DONE ALL]":
+            yield {"data": message}
+            if message == "[DONE ALL]":
                 break
 
-    return EventSourceResponse(event_publisher())
+    return EventSourceResponse(event_generator())
+
+
+@router.get("/{job_id}/download")
+async def download(job_id: str, background_tasks: BackgroundTasks):
+    job = JobManager.get(job_id)
+    if not job.zip_path:
+        raise HTTPException(status_code=404, detail="Results not ready")
+
+    def cleanup():
+        try:
+            os.remove(job.zip_path)
+        except OSError:
+            logger.warning(f"Failed to delete zip file {job.zip_path}")
+        if job.base_dir and os.path.isdir(job.base_dir):
+            shutil.rmtree(job.base_dir, ignore_errors=True)
+        JobManager.remove(job_id)
+
+    background_tasks.add_task(cleanup)
+    return FileResponse(
+        path=job.zip_path,
+        media_type="application/zip",
+        filename=f"{job.id}_results.zip"
+    )
 
 @router.post("/cancel")
-async def cancel_job(payload: dict = Body(...)):
-    jid = payload.get("job_id")
-    job = jobs.get(jid)
-    if not job:
-        raise HTTPException(status_code=404, detail="Unknown job_id")
-
-    q: multiprocessing.Queue = job["queue"]
-    q.put("[CANCELLED]")
-    q.put("[DONE ALL]")
-
-    proc = job.get("process")
-    if proc and proc.is_alive():
-        proc.terminate()
-
-    jobs.pop(jid, None)
+async def cancel(payload: dict = Body(...)):
+    job_id = payload.get("job_id")
+    job = JobManager.get(job_id)
+    job.queue.put("[CANCELLED]")
+    job.queue.put("[DONE ALL]")
+    if job.process and job.process.is_alive():
+        job.process.terminate()
+    JobManager.remove(job_id)
     return {"status": "cancelled"}
 
 
 @router.get("/models/{task}")
 async def list_models(task: str):
-    if task not in ["translation", "glossing"]:
-        return JSONResponse({"error": "Invalid task"}, status_code=400)
-    
-    model_dir = MODELS_BASE / task
-    print(f"Models base directory: {MODELS_BASE}")
-    if not model_dir.exists() or not model_dir.is_dir():
-        print(f"No models found for task '{task}'")
-        return JSONResponse({"models": []})
-    
-    model_names = [d.name for d in model_dir.iterdir() if d.is_dir()]
-    print(f"Found models: {model_names}")
-    return {"models": model_names}
+    if task not in ("translation", "glossing"):
+        raise HTTPException(status_code=400, detail="Invalid task")
+
+    dir_path = MODELS_BASE / task
+    if not dir_path.is_dir():
+        return {"models": []}
+
+    models = [d.name for d in dir_path.iterdir() if d.is_dir()]
+    return {"models": models}
