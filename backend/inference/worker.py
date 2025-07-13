@@ -28,7 +28,8 @@ class BaseWorker:
         self.put(f"Starting job {self.job_id} – action: {self.action}")
 
     def folder_to_process(self):
-        # By default, just process the single base_dir
+        # By default, just process the single base_dir. In some cases
+        # you might want to override this to yield multiple folders.
         yield self.base_dir
 
     def after_process(self, folder_path):
@@ -97,11 +98,8 @@ def main():
 
 
 if __name__ == "__main__":
-    worker = BaseWorker(
-        base_dir = '/Users/alejandra/Desktop/data',
-        action = 'translate',
-        language = 'german',
-        instruction = 'corrected',
-    )
-    worker.run()
+    main()
 
+# use example:
+# inside the backend directory:
+# python inference/worker.py --base-dir /path/to/session --action translate --language german --instruction automatic
