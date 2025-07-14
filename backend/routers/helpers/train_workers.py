@@ -14,14 +14,13 @@ from routers.helpers.onedrive import (
     encode_share_link,
     list_session_children
 )
-from inference.worker import BaseWorker
 
 # Configure module-level logger
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class OneDriveWorker(BaseWorker):
+class OneDriveWorker():
     def __init__(self, base_dir, action, language, instruction,
                  translationModel, glossingModel, study, token, job):
         super().__init__(base_dir, action, language, instruction,
