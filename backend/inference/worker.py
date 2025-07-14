@@ -6,16 +6,16 @@ from inference.processors.factory import ProcessorFactory
 
 class BaseWorker:
     def __init__(self, base_dir, action, language, instruction,
-                 translationModel=None, glossingModel=None, job_id=0, q=None, cancel=None):
-        self.job_id = job_id
+                 translationModel=None, glossingModel=None, job=None):
         self.base_dir = base_dir
         self.action = action
         self.language = language
         self.instruction = instruction
         self.translationModel = translationModel
         self.glossingModel = glossingModel
-        self.q = q
-        self.cancel = cancel
+        self.job_id = job.id if job else None
+        self.q = job.queue if job else None
+        self.cancel = job.cancel_event if job else None
 
     def put(self, msg):
         if self.q:

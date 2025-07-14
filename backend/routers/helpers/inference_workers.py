@@ -46,12 +46,11 @@ class OneDriveWorker(BaseWorker):
     Downloads every session folder from a OneDrive share, processes them,
     then uploads the outputs back to OneDrive and cleans up.
     """
-    def __init__(self, job_id, base_dir, action, language, instruction,
-                 translationModel, glossingModel, q, cancel,
-                 share_link, token):
-        super().__init__(job_id, base_dir, action, language, instruction,
-                         translationModel, glossingModel, q, cancel)
-        self.share_link = share_link
+    def __init__(self, base_dir, action, language, instruction,
+                 translationModel, glossingModel, token, job):
+        super().__init__(base_dir, action, language, instruction,
+                         translationModel, glossingModel, job)
+        self.share_link = base_dir
         self.token = token
         self.sessions_meta = []
 

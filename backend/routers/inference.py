@@ -91,16 +91,14 @@ async def process(
         worker_fn = ZipWorker(tmp_dir, action, 
                               language, instruction, 
                               translationModel, glossingModel, 
-                              job.id, job.queue, job.cancel_event)
+                              job)
         job.base_dir = tmp_dir
     else:
         if not base_dir or not access_token:
             raise HTTPException(status_code=400, detail="Missing base_dir or access_token for online processing")
         worker_fn = OneDriveWorker(base_dir, action, 
                                    language, instruction, 
-                                   translationModel, glossingModel, job.id, 
-                                   job.queue, job.cancel_event, 
-                                   share_link=base_dir, token=access_token)
+                                   translationModel, glossingModel, access_token, job)
 
     job.process = await run_worker(worker_fn.run)
     return {"job_id": job.id}

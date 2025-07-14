@@ -1,129 +1,142 @@
-import os
-import shutil
+import logging
 import tempfile
-import traceback
+import shutil
 import requests
-import base64
-
 from pathlib import Path
+from typing import List, Dict, Optional
+
 from training.glossing.train_spacy import train_spacy
 from training.translation.train import train_m2m100
 from training.preprocessing.spacy import GlossingPreprocessor
-from routers.helpers.onedrive import (download_sharepoint_folder, 
-                            upload_file_replace_in_onedrive, 
-                            encode_share_link,
-                            list_session_children)
+from routers.helpers.onedrive import (
+    download_sharepoint_folder,
+    upload_file_replace_in_onedrive,
+    encode_share_link,
+    list_session_children
+)
+from inference.worker import BaseWorker
 
-def _online_train_worker(
-    job_id: str,
-    share_link: str,
-    token: str,
-    action: str,
-    language: str,
-    study: str,
-    q,
-    cancel
-):
-    def put(msg: str):
-        q.put(msg)
+# Configure module-level logger
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-    share_id = encode_share_link(share_link)
-    root_url = f"https://graph.microsoft.com/v1.0/shares/{share_id}/driveItem"
-    resp = requests.get(root_url, headers={"Authorization": f"Bearer {token}"})
-    resp.raise_for_status()
-    root_item = resp.json()
-    root_drive_id        = root_item["parentReference"]["driveId"]
-    root_parent_folder_id = root_item["id"]
 
-    root_tmp = tempfile.mkdtemp(prefix=f"{job_id}_")
-    sessions = []
+class OneDriveWorker(BaseWorker):
+    def __init__(self, base_dir, action, language, instruction,
+                 translationModel, glossingModel, study, token, job):
+        super().__init__(base_dir, action, language, instruction,
+                         translationModel, glossingModel, job)
+        self.share_link = base_dir
+        self.token = token
+        self.study = study
+        self.sessions_meta = []
+        # Fetch metadata for the shared item
+        metadata_url = f"https://graph.microsoft.com/v1.0/shares/{encode_share_link(self.share_link)}/driveItem"
+        resp = requests.get(metadata_url, headers={"Authorization": f"Bearer {self.token}"})
+        resp.raise_for_status()
+        self.item = resp.json()
 
-    try:
-        put(f"[INFO] Job {job_id}: listing sessions…")
-        meta_entries = list_session_children(share_link, token)
-        if not meta_entries:
-            # treat the share link itself as one “root” session
-            meta_entries = [{"webUrl": share_link, "name": None}]
+        self.root_drive_id = self.item["parentReference"]["driveId"]
+        self.root_parent_folder_id = self.item["id"]
 
-        put(f"[INFO] Found {len(meta_entries)} session(s)")
-        
-        # Download each session under root_tmp/<session_name>
-        for entry in meta_entries:
-            if cancel.is_set():
-                put("[WARNING] Cancelled during download phase")
+    def run(self):
+        self.put(f"[INFO] Job {self.job_id}: downloading sessions")
+
+        # Download and collect session folders
+        try:
+            sessions = self._gather_sessions()
+        except Exception as e:
+            self.put(f"[ERROR] Failed to download sessions: {e}")
+            logger.exception("Download sessions error")
+            return
+
+        if not sessions:
+            self.put(f"[ERROR] No sessions available for training")
+            return
+
+        # Create temporary root for processing
+        with tempfile.TemporaryDirectory(prefix=f"{self.job_id}_") as tmpdir:
+            temp_root = Path(tmpdir)
+            self.temp_root = temp_root  # store for after_process
+
+            self.put(f"[INFO] Starting training phase")
+            try:
+                if self.action == "gloss":
+                    preprocessor = GlossingPreprocessor(
+                        input_dir=str(temp_root),
+                        lang=self.language,
+                        study=self.study
+                    )
+                    preprocessor.preprocess()
+                else:
+                    self.put(f"[WARNING] Unsupported action '{self.action}'")
+                    return
+            except Exception as e:
+                self.put(f"[ERROR] Training failed: {e}")
+                logger.exception("Training error")
                 return
 
+            self.put("[DONE ALL]")
+
+        self.put(f"[INFO] Cleaned up temporary files for job {self.job_id}")
+
+        # After process/upload logs
+        self.after_process()
+
+    def _gather_sessions(self) -> List[Dict[str, str]]:
+        """List and download session folders to a temporary root directory."""
+        entries = list_session_children(self.share_link, self.token) or [
+            {"webUrl": self.share_link, "name": None}
+        ]
+        sessions: List[Dict[str, str]] = []
+
+        for entry in entries:
             name = entry.get("name") or "root"
-            put(f"[INFO] Downloading session '{name}'")
-            
-            local_dir = os.path.join(root_tmp, name)
-            os.makedirs(local_dir, exist_ok=True)
+            self.put(f"[INFO] Downloading session '{name}'...")
+            local_dir = Path(tempfile.mkdtemp(prefix=f"{self.job_id}_")) / name
+            local_dir.mkdir(parents=True, exist_ok=True)
 
             try:
-                # returns (downloaded_path, drive_id, parent_folder_id, _)
                 inp_dir, drive_id, parent_folder_id, _ = download_sharepoint_folder(
                     share_link=entry["webUrl"],
-                    temp_dir=local_dir,
-                    access_token=token,
-                    file_suffix=["annotated.xlsx"],
+                    temp_dir=str(local_dir),
+                    access_token=self.token,
+                    file_suffix=["annotated.xlsx"]
                 )
             except Exception as e:
-                put(f"[ERROR] Failed to download '{name}': {e}")
-                put(traceback.format_exc())
-                # leave missing sessions out of uploads
+                self.put(f"[ERROR] Download failed for '{name}': {e}")
+                logger.exception("Download error for session %s", name)
                 continue
 
-            # Normalize: if download created a subfolder named name, dive in
-            candidate = Path(inp_dir) / name
-            session_path = str(candidate if candidate.is_dir() else inp_dir)
+            inp_path = Path(inp_dir)
+            session_path = inp_path / name if (inp_path / name).is_dir() else inp_path
 
             sessions.append({
                 "name": name,
                 "drive_id": drive_id,
                 "parent_folder_id": parent_folder_id,
-                "local_path": session_path
+                "local_path": str(session_path)
             })
 
-        if not sessions:
-            put("[ERROR] No sessions available to train")
+        return sessions
+
+    def after_process(self):
+        """Upload the training log back to OneDrive."""
+        log_file = Path(self.temp_root) / "glossing_traindata.log"
+        if not log_file.exists():
+            self.put(f"[WARNING] Log file {log_file} not found, skipping upload")
             return
-        
-        
-        put(f"[INFO] Training model. This may take a while…")
+
         try:
-            if action == "gloss":
-                preprocessor = GlossingPreprocessor(input_dir=root_tmp, lang=language, study=study)
-                preprocessor.preprocess()
-                # --- UPLOAD ONE LOG AT ROOT LEVEL ---
-                output = "glossing_traindata.log" if action == "gloss" else "translation_traindata.log"
-                try:
-                    upload_file_replace_in_onedrive(
-                        local_file_path=str(Path(root_tmp) / output),
-                        target_drive_id=root_drive_id,
-                        parent_folder_id=root_parent_folder_id,
-                        file_name_in_folder=output,
-                        access_token=token,
-                    )
-                    put(f"[INFO] Uploaded '{output}' to root folder")
-                except Exception as e:
-                    put(f"[ERROR] Upload failed for '{output}': {e}")
-                    put(traceback.format_exc())
-
-                train_spacy(root_tmp, language, study)
-            elif action == "translate":
-                train_m2m100(root_tmp, language, study)
-            else:
-                put(f"[WARNING] Unknown action '{action}', skipping training")
+            # Upload to the original folder
+            upload_file_replace_in_onedrive(
+                local_file_path=str(log_file),
+                target_drive_id=self.root_drive_id,
+                parent_folder_id=self.root_parent_folder_id,
+                file_name_in_folder=log_file.name,
+                access_token=self.token
+            )
+            self.put(f"[INFO] Uploaded '{log_file.name}'")
         except Exception as e:
-            put(f"[ERROR] Training error: {e}")
-            put(traceback.format_exc())
-            return
-        put("[DONE ALL]")
-    finally:
-        # always clean up the entire root_tmp
-        shutil.rmtree(root_tmp, ignore_errors=True)
-        put(f"[INFO] Cleaned up all temp dirs for job {job_id}")
-        put(f"[DONE ALL]")
-
-def _offline_train_worker():
-    pass
+            self.put(f"[ERROR] Upload failed for '{log_file.name}': {e}")
+            logger.exception("Upload error for %s", log_file)
