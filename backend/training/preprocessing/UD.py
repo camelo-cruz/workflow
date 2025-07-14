@@ -1,12 +1,19 @@
 import re
 import pandas as pd
 from typing import Union
-from training.preprocessing.abstract import AbstractPreprocessor
+from training.preprocessing.abstract import BasePreprocessor
 
-class UDPreprocessor(AbstractPreprocessor):
+class UDPreprocessor(BasePreprocessor):
     def _process_dataframe(self, df: pd.DataFrame):
-        pass
-    
+        text = df[self.TEXT_COLUMN].apply(self._clean_text)
+        gloss = df[self.GLOSS_COLUMN].apply(self._clean_text)
+
+        new_df = pd.DataFrame({
+            'text': text,
+            'gloss': gloss,
+        })
+        return new_df
+
     def _clean_text(self, text: Union[str, float]) -> str:
         """
         Clean and normalize text fields:

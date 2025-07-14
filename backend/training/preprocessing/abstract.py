@@ -14,24 +14,18 @@ from utils.functions import (
     set_global_variables,
 )
 
-
 class BasePreprocessor(ABC):
     """
     Abstract base class for data preprocessing:
-      - Discovers input files, reads data, applies cleaning, and writes outputs.
-      - Supports customizable text cleaning and file patterns.
+      - Discovers input files, reads data, applies cleaning, and writes a combined output.
+      - Processes all files into a single DataFrame and writes one CSV.
     """
     # Default column names
     TEXT_COLUMN = "latin_transcription_utterance_used"
     GLOSS_COLUMN = "glossing_utterance_used"
     TRANSLATION_COLUMN = "translation_utterance_used"
 
-    def __init__(
-        self,
-        lang: str,
-        study: str,
-        file_pattern: str = "*annotated.xlsx",
-    ) -> None:
+    def __init__(self, lang: str, study: str, file_pattern: str = "*annotated.xlsx") -> None:
         self.study = study
         self.file_pattern = file_pattern
 
@@ -50,10 +44,13 @@ class BasePreprocessor(ABC):
         handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s: %(message)s"))
         self.logger.addHandler(handler)
 
-    def preprocess(self, input_dir) -> None:
+    def preprocess(self, input_dir: Union[str, Path]) -> None:
         """
-        Main entry point: finds matching files, processes each, and writes output.
+        Main entry point: finds matching files, processes each,
+        aggregates into one DataFrame, and writes a single CSV.
+        Accepts a path string or Path; converts internally.
         """
+        input_dir = Path(input_dir)
         files = self._find_files(input_dir)
         log_path = input_dir / f"{self.__class__.__name__}.log"
 
@@ -61,6 +58,8 @@ class BasePreprocessor(ABC):
         file_handler = logging.FileHandler(log_path, mode="a", encoding="utf-8")
         file_handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s: %(message)s"))
         self.logger.addHandler(file_handler)
+
+        processed_dfs: List[pd.DataFrame] = []
 
         try:
             for path in tqdm(files, desc=f"Processing {input_dir}"):
@@ -70,11 +69,17 @@ class BasePreprocessor(ABC):
                     self.logger.info(f"Loaded DataFrame ({len(df)} rows) from {path.name}")
 
                     processed = self._process_dataframe(df)
-                    self._write_file(processed)
-                    self.logger.info(f"Wrote processed data for {path.name}")
-
+                    processed_dfs.append(processed)
                 except Exception as e:
                     self.logger.error(f"Error processing {path.name}: {e}", exc_info=True)
+
+            # Combine all processed data
+            if processed_dfs:
+                combined = pd.concat(processed_dfs, ignore_index=True)
+                self._write_combined_file(combined)
+                self.logger.info(f"Wrote combined processed data ({len(combined)} rows)")
+            else:
+                self.logger.warning("No processed data to write.")
         finally:
             self.logger.removeHandler(file_handler)
             file_handler.close()
@@ -88,24 +93,24 @@ class BasePreprocessor(ABC):
         """
         Read data from an Excel file into a DataFrame.
         """
-        if path.suffix.lower() in {".xlsx"}:
+        if path.suffix.lower() == ".xlsx":
             return pd.read_excel(path)
         else:
             raise ValueError(f"Unsupported file format: {path.suffix}")
 
-    def _write_file(self, df: pd.DataFrame) -> None:
+    def _write_combined_file(self, df: pd.DataFrame) -> None:
         """
-        Write the processed DataFrame back to disk with a suffix.
+        Write the combined DataFrame back to disk as a single CSV.
         """
         data_dir = Path(__file__).parent.parent / "data"
-        output_path = f"{self.__class__.__name__}_processed.csv"
-        df.to_csv(data_dir / output_path, index=False)
-
+        data_dir.mkdir(parents=True, exist_ok=True)
+        filename = f"{self.__class__.__name__}_{self.lang}_{self.study}.csv"
+        df.to_csv(data_dir / filename, index=False)
 
     @abstractmethod
     def _process_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Abstract method to process the DataFrame.
-        Must be implemented by subclasses to apply specific preprocessing logic.
+        Must be implemented by subclasses for specific logic.
         """
         raise NotImplementedError("Subclasses must implement _process_dataframe")

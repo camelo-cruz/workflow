@@ -13,7 +13,7 @@ class BaseWorker:
         self.instruction = instruction
         self.translationModel = translationModel
         self.glossingModel = glossingModel
-        self.job_id = job.id if job else None
+        self.job_id = job.id if job else 0
         self.q = job.queue if job else None
         self.cancel = job.cancel_event if job else None
 
