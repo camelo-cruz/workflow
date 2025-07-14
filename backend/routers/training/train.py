@@ -38,9 +38,6 @@ async def process(
     job = JobManager.create()
     job.token = access_token
 
-    # Normalize model names
-    glossingModel = None if glossingModel == "Default" else glossingModel
-    translationModel = None if translationModel == "Default" else translationModel
 
     if not language:
         job.queue.put("[ERROR] Missing language")
@@ -55,17 +52,11 @@ async def process(
             archive.extractall(tmp_dir)
         archive_path.unlink()
 
-        worker_fn = ZipWorker(tmp_dir, action, 
-                              language, instruction, 
-                              translationModel, glossingModel, 
-                              job)
-        job.base_dir = tmp_dir
+        #TODO: Handle the case where multiple files are uploaded
     else:
         if not base_dir or not access_token:
             raise HTTPException(status_code=400, detail="Missing base_dir or access_token for online processing")
-        worker_fn = OneDriveWorker(base_dir, action, 
-                                   language, instruction, 
-                                   translationModel, glossingModel, study, access_token, job)
+        worker_fn = OneDriveWorker(base_dir, language, action, study, access_token, job)
 
     job.process = await run_worker(worker_fn.run)
     return {"job_id": job.id}

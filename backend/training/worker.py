@@ -24,26 +24,31 @@ class TrainingWorker:
             self.q.put(msg)
         else:
             print(msg)
+
+    def folder_to_process(self):
+        return self.base_dir
     
+    def after_preprocess(self):
+        pass
+
     def run(self):
         try:
             self.put(f"Starting training job {self.job_id} – action: {self.action}")
 
-            preprocessor = UDPreprocessor(
+            self.preprocessor = UDPreprocessor(
                 lang=self.language,
                 study=self.study,
                 file_pattern="*annotated.xlsx"
             )
-            preprocessor.preprocess(self.base_dir)
-
+            self.preprocessor.preprocess(self.folder_to_process())
+            self.after_preprocess()
             self.put(f"Training completed for job {self.job_id}")
 
         except Exception as e:
             self.put(f"[ERROR] {str(e)}")
             traceback.print_exc()
         finally:
-            if self.cancel and self.cancel.is_set():
-                self.put("[CANCELLED]")
+            self.put("[DONE ALL]")
 
 def main():
     parser = argparse.ArgumentParser(

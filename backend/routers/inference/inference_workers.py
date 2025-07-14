@@ -70,16 +70,17 @@ class OneDriveWorker(BaseWorker):
 
             link = meta.get("webUrl")
             self.put(f"Downloading from OneDrive")
-            tmp_dir = tempfile.mkdtemp()
+            self._tempdir_obj = tempfile.TemporaryDirectory(prefix=f"{self.job_id}_")
+            self.temp_root = Path(self._tempdir_obj.name)
             try:
                 inp, drive_id, _, sess_map = download_sharepoint_folder(
                     share_link=link,
-                    temp_dir=tmp_dir,
+                    temp_dir=str(self.temp_root),
                     access_token=self.token,
                 )
             except Exception as e:
                 self.put(f"Failed to download session': {e}. Skipping.")
-                shutil.rmtree(tmp_dir, ignore_errors=True)
+                shutil.rmtree(self.temp_root, ignore_errors=True)
                 continue
 
             # session folder on disk
@@ -91,7 +92,6 @@ class OneDriveWorker(BaseWorker):
 
             # stash some state for after_process
             self._current = {
-                "tmp_dir": tmp_dir,
                 "drive_id": drive_id,
                 "sess_map": sess_map,
                 "session_name": name,
@@ -103,7 +103,6 @@ class OneDriveWorker(BaseWorker):
         name = info["session_name"]
         drive_id = info["drive_id"]
         sess_map = info["sess_map"]
-        tmp_dir = info["tmp_dir"]
 
         # upload any relevant outputs
         uploads = [
@@ -129,6 +128,9 @@ class OneDriveWorker(BaseWorker):
                 access_token=self.token,
             )
 
-        shutil.rmtree(tmp_dir, ignore_errors=True)
+        shutil.rmtree(self.temp_root, ignore_errors=True)
         self.put(f"[DONE UPLOADED] {name}")
+
+        self._tempdir_obj.cleanup()
+        self.put(f"[INFO] Deleted temporary directory {self.temp_root}")
 
