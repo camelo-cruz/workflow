@@ -5,9 +5,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-from routers.auth      import router as auth_router
-from routers.inference import router as inference_router
-from routers.train     import router as train_router
+from routers.auth import router as auth_router
+from routers.inference.inference import router as inference_router
+from routers.training.train import router as train_router
 
 # 1) DEV flag from env
 DEV = os.getenv("DEV", "0") == "1"
