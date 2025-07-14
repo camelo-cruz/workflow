@@ -18,6 +18,11 @@ logging.basicConfig(level=logging.INFO,
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 
 class DataProcessor(ABC):
+    '''
+    This is in charge of finding the files to process and writing the output next to the input.
+    This should define what to do with the dataframes in _process_dataframe.
+    It also logs, next to the input file, the processing steps in a log file.
+    '''
     def __init__(self, language: str, instruction: str):
         self.language = find_language(language, LANGUAGES)
         self.instruction = instruction

@@ -1,703 +1,522 @@
-text,gloss
-,
-,
-,
-,
-,
-Ehoro tí ó ń jẹun,Rabbit REL SG.TNS PROG eat
-Ehoro tí ó ń ṣubú,Rabbit REL SG.TNS PROG fall
-Bọ́ọ̀lù tí ó ń yí gbirigbiri,Ball REL SG.TNS PROG roll rolling-manner
-Kìnìún kan tí ó ń fa màlúù méjì,Lion one REL SG.TNS PROG pull cow two
-,
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-adìyẹ kan tí eku ń fún ní èso,hen one REL rat PROG give LOC fruit
-ajá kan tí ó ń wẹ àgùntàn méjì,dog one REL SG.TNS PROG wash sheep two
-ewúrẹ́ kan tí olóńgbò méjì ń fà,goat one REL cat two PROG pull
-ibùsùn tí olóńgbò kan ń fò lórí rẹ̀,bed REL cat one PROG jump LOC-head SG.GEN
-igi tí ewúrẹ́ kan jókòó sábẹ́ rẹ̀,tree REL goat one sit LOC-under SG.GEN
-ewúrẹ́ méjì tí ó ń ti olóńgbò kan,goat two REL SG.TNS PROG push cat one
-ẹṣin kan tí ó ń fà màlúù méjì,horse one REL SG.TNS PROG pull cow two
-adìyẹ kan tí ọ̀pọ̀lọ́ kan ń ju ọsàn sí,hen one REL toad one PROG throw orange to
-Ilé tí àgùntàn kan ń fò lórí rẹ̀,House REL sheep one PROG jump LOC-head SG.GEN
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sí abẹ́ rẹ̀,Table REL toad one sit LOC under SG.GEN
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan,toad two REL SG.TNS PROG catch duck one
-olóńgbò tí pẹ́pẹ́yẹ ń fún ní òdòdó,cat REL duck PROG give LOC flower
-Ajá tí adìyẹ ń ju bọ́ọ̀lù sí,Dog REL hen PROG throw ball to
-ajá méjì tí àgùntàn ń mú,dog two REL sheep PROG catch
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-,
-,
-,
-,
-,
-Ehoro tí ń jẹun,Rabbit REL.SG.TNS PROG eat
-Ehoro tó ṣubú,Rabbit REL.SG.TNS fall
-Bọ́ọ̀lù tó ń yí gbirigbiri,Ball REL.SG.TNS PROG roll rolling-manner
-Kìnìún tó ń fa màlúù méjì,Lion REL.SG.TNS PROG pull cow two
-,
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-ajá kan tó ń wẹ àgùntàn méjì,dog one REL.SG.TNS PROG wash sheep two
-Ilé tí àgùntàn ń fò lórí rẹ̀,House REL sheep PROG jump LOC-head SG.GEN
-igi tí àgùntàn jókòó sí abẹ́ rẹ̀,tree REL sheep sit LOC under SG.GEN
-ẹṣin tó ń fà màlúù méjì,horse REL.SG.TNS PROG pull cow two
-àkùkọ tí eku kan ń fún ní èso,cock REL rat one PROG give LOC fruit
-ewúrẹ́ méjì tó ń ti olóńgbò kan,goat two REL.SG.TNS PROG push cat one
-,
-adìyẹ kan tí ọ̀pọ̀lọ́ ń ju ọsàn sí,hen one REL toad PROG throw orange to
-olóńgbò kan tí pẹ́pẹ́yẹ kan ń fún ní òdòdó,cat one REL duck one PROG give LOC flower
-Ajá kan tí adìyẹ ń ju bọ́ọ̀lù sí,Dog one REL hen PROG throw ball to
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan,toad two REL SG.TNS PROG catch duck one
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀ fún,toad one REL duck two PROG wash give
-ewúrẹ́ kan tí olóńgbò méjì ń fà,goat one REL cat two PROG pull
-ibùsùn tí olóńgbò ń fò lórí rẹ̀,bed REL cat PROG jump LOC-head SG.GEN
-Tábìlì tí ọ̀pọ̀lọ́ jókòó sí abẹ́ rẹ̀,Table REL toad sit LOC under SG.GEN
-,
-,
-,
-,
-,
-,
-Ehoro tí ó ṣubú ni ó pa àwọ̀ dà,Rabbit REL SG.TNS fall FOC SG.TNS paint colour change
-Bọ́ọ̀lù tí ó ń yí gbirigbiri ni ó pa àwọ̀ dà,Ball REL SG.TNS PROG roll rolling-mannereat FOC SG.TNS paint colour change
-Kìnìún tí ó ń fa màlúù méjì ni ó pa àwọ̀ dà,Lion REL SG.TNS PROG pull cow two FOC SG.TNS paint colour change
-,
-ọ̀pọ̀lọ́ tí pẹ́pẹ́yẹ méjì ń wẹ̀ ni ó pa àwọ̀ dà,toad REL duck two PROG wash FOC SG.TNS paint colour change
-Ajá kan tí adìyẹ ń ju bọ́ọ̀lù sí ni ó pa àwọ̀ dà,Dog one REL hen PROG throw ball to FOC SG.TNS paint colour change
-*Ilé tí adìyẹ àti àgùntàn tí ó ń fò ati àgùntàn tí ó jókòó lórí rẹ̀ ni ó pa àwọ̀ dà,House REL hen and sheep REL SG.TNS PROG jump and sheep REL SG.TNS sit LOC-head SG.GEN FOC SG.TNS paint colour change
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sí abẹ́ rẹ̀ ni ó pa àwọ̀ dà,Table REL toad one sit LOC under SG.GEN FOC SG.TNS paint colour change
-adìyẹ kan tí eku kan ń fún ní èso ni ó pa àwọ̀ dà,hen one REL rat one PROG give LOC fruit FOC SG.TNS paint colour change
-ewúrẹ́ méjì tí ó ń ti olóńgbò kan ni ó pa àwọ̀ dà,goat two REL SG.TNS PROG push cat one FOC SG.TNS paint colour change
-ewúrẹ́ kan tí olóńgbò méjì ń fà ni ó pa àwọ̀ dà,goat one REL cat two PROG pull FOC SG.TNS paint colour change
-ẹṣin kan tí ó ń fà màlúù méjì ni ó pa àwọ̀ dà,horse one REL SG.TNS PROG pull cow two FOC SG.TNS paint colour change
-ajá kan tí ó ń wẹ àgùntàn méjì ni ó pa àwọ̀ dà,dog one REL SG.TNS PROG wash sheep two FOC SG.TNS paint colour change
-ẹṣin méjì tí màlúù kan ń tì ni ó pa àwọ̀ dà,horse two REL cow one PROG push FOC SG.TNS paint colour change
-adìyẹ kan tí ọ̀pọ̀lọ́ kan ń ju ọsàn sókè sí ni ó pa àwọ̀ dà,hen one REL toad one PROG throw orange LOC-up to FOC SG.TNS paint colour change
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan ni ó pa àwọ̀ dà,toad two REL SG.TNS PROG catch duck one FOC SG.TNS paint colour change
-ibùsùn tí olóńgbò kan ń fò lórí rẹ̀ ni ó pa àwọ̀ dà,bed REL cat one PROG jump LOC-head SG.GEN FOC SG.TNS paint colour change
-ajá méjì tí àgùntàn kan ń mú ni ó pa àwọ̀ dà,dog two REL sheep one PROG catch FOC SG.TNS paint colour change
-olóńgbò kan tí pẹ́pẹ́yẹ kan ń fún ní òdòdó ni ó pa àwọ̀ dà,cat one REL duck one PROG give LOC flower FOC SG.TNS paint colour change
-igi tí ewúrẹ́ kan jókòó sí abẹ́ rẹ̀ ni ó pa àwọ̀ dà,tree REL goat one sit LOC under SG.GEN FOC SG.TNS paint colour change
-,
-,
-,
-,
-,
-Ehoro tó ń jẹun,Rabbit REL.SG.TNS PROG eat
-Ehoro tó ṣubú,Rabbit REL.SG.TNS fall
-Bọ́ọ̀lù tó ń yí gbirigbiri,Ball REL.SG.TNS PROG roll rolling-manner
-Kìnìún tó ń fa màlúù méjì,Lion REL.SG.TNS PROG pull cow two
-,
-ewúrẹ́ tí olóńgbò méjì ń fà,goat REL cat two PROG pull
-Ajá tí adìyẹ ń ju bọ́ọ̀lù sí,Dog REL hen PROG throw ball to
-ewúrẹ́ méjì tó ń ti olóńgbò kan,goat two REL.SG.TNS PROG push cat one
-Ilé tí àgùntàn kan ń fò lórí rẹ̀,House REL sheep one PROG jump LOC-head SG.GEN
-ẹṣin tó ń fà màlúù méjì,horse REL.SG.TNS PROG pull cow two
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sábẹ́ ẹ̀,Table REL toad one sit LOC-under SG.GEN
-adìyẹ tí eku kan ń fún ní èso,hen REL rat one PROG give LOC fruit
-adìyẹ tí ọ̀pọ̀lọ́ kan ń ju ọsàn sí,hen REL toad one PROG throw orange to
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-igi tí ewúrẹ́ kan jókòó sábẹ́ ẹ̀,tree REL goat one sit LOC-under SG.GEN
-ajá tó ń wẹ àgùntàn méjì,dog REL.SG.TNS PROG wash sheep two
-olóńgbò tí pẹ́pẹ́yẹ ń fún ní òdòdó,cat REL duck PROG give LOC flower
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-ọ̀pọ̀lọ́ méjì tó ń mú pẹ́pẹ́yẹ kan,toad two REL.SG.TNS PROG catch duck one
-ibùsùn tí olóńgbò kan ti ń fò,bed REL cat one PERF PROG jump
-,
-,
-,
-,
-,
-Ehoro tó ń jẹun,Rabbit REL.SG.TNS PROG eat
-Ehoro tó ṣubú,Rabbit REL.SG.TNS fall
-Bọ́ọ̀lù tó ń yí gbirigbiri,Ball REL.SG.TNS PROG roll rolling-manner
-Kìnìún tó ń fa màlúù méjì,Lion REL.SG.TNS PROG pull cow two
-,
-ajá kan tó ń wẹ àgùntàn méjì,dog one REL.SG.TNS PROG wash sheep two
-màlúù kan tó ń fa ẹṣin méjì,cow one REL.SG.TNS PROG pull horse two
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-ewúrẹ́ méjì tó ń ti olóńgbò kan,goat two REL.SG.TNS PROG push cat one
-adìyẹ kan tí eku kan ń fún ní èso,hen one REL rat one PROG give LOC fruit
-ẹṣin méjì tí màlúù kan ń tì,horse one REL cow one PROG push
-ibùsùn tí olóńgbò kan ń fò lórí ẹ̀,bed REL cat one PROG jump LOC-head SG.GEN
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan,toad two REL SG.TNS PROG catch duck one
-adìyẹ kan tí ọ̀pọ̀lọ́ ń ju ọsàn sí,hen one REL toad PROG throw orange to
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sí abẹ́ ẹ̀,Table REL toad one sit LOC under SG.GEN
-Ilé tí àgùntàn kan ń fò lórí ẹ̀,House REL sheep one PROG jump LOC-head SG.GEN
-Ajá tí adìyẹ kan ń ju bọ́ọ̀lù sí,Dog REL hen one PROG throw ball to
-ajá méjì tí àgùntàn kán mú,dog two REL sheep one.TNS catch
-ewúrẹ́ kan tí olóńgbò méjì ń fà,goat one REL cat two PROG pull
-olóńgbò kan tí pẹ́pẹ́yẹ ń fún ní òdòdó,cat one REL duck PROG give LOC flower
-igi tí ewúrẹ́ kan jókòó sí abẹ́ ẹ̀,tree REL goat one sit LOC under SG.GEN
-,
-,
-,
-,
-,
-Ehoro tó ń jẹun,Rabbit REL.SG.TNS PROG eat
-Ehoro tó ṣubú,Rabbit REL.SG.TNS fall
-Bọ́ọ̀lù tó ń yí gbirigbiri,Ball REL.SG.TNS PROG roll rolling-manner
-Kìnìún tó ń fa màlúù méjì,Lion REL.SG.TNS PROG pull cow two
-,
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-ibùsùn tí olóńgbò kan ń fò lórí rẹ̀,bed REL cat one PROG jump LOC-head SG.GEN
-,
-Ilé tí àgùntàn kan ń fò lórí rẹ̀,House REL sheep one PROG jump LOC-head SG.GEN
-ọ̀pọ̀lọ́ tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad REL duck two PROG wash
-ewúrẹ́ tí olóńgbò méjì ń fà,goat REL cat two PROG pull
-ewúrẹ́ méjì tó ń ti olóńgbò kan,goat two REL.SG.TNS PROG push cat one
-olóńgbò tí pẹ́pẹ́yẹ ń fún ní òdòdó,cat REL duck PROG give LOC flower
-igi tí ewúrẹ́ kan jókòó sábẹ́ rẹ̀,tree REL goat one sit LOC-under SG.GEN
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-adìyẹ tí eku kan ń fún ní èso,hen REL rat one PROG give LOC fruit
-ajá tó ń wẹ àgùntàn méjì,dog REL.SG.TNS PROG wash sheep two
-ọ̀pọ̀lọ́ méjì tó ń mú pẹ́pẹ́yẹ kan,toad two REL.SG.TNS PROG catch duck one
-adìyẹ tí ọ̀pọ̀lọ́ kan ń ju ọsàn sí,hen REL toad one PROG throw orange to
-Ajá tí adìyẹ kan ń ju bọ́ọ̀lù sí,Dog REL hen one PROG throw ball to
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sábẹ́ rẹ̀,Table REL toad one sit LOC-under SG.GEN
-,
-,
-,
-,
-,
-Ehoro tí ó ń jẹun,Rabbit REL SG.TNS PROG eat
-Ehoro tí ó ṣubú,Rabbit REL SG.TNS fall
-,
-Kìnìún kan tí ó fa màlúù méjì,Lion one REL SG.TNS pull cow two
-,
-ajá méjì tí àgùntàn kan mú,dog two REL sheep one catch
-ọ̀pọ̀lọ́ kan tí ó jókòó sábẹ́ tábìlì,toad one REL SG.TNS sit LOC-under table
-ajá kan tí ó wẹ àgùntàn méjì,dog one REL SG.TNS wash sheep two
-olóńgbò kan tí ó ń fò lórí ibùsùn,cat one REL SG.TNS PROG jump LOC-head bed
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-ẹṣin kan tí ó ń fà màlúù méjì,horse one REL SG.TNS PROG pull cow two
-igi kan tí ewúrẹ́ kan jókòó lábẹ́ rẹ̀,tree one REL goat one sit LOC-under SG.GEN
-ewúrẹ́ kan tí olóńgbò méjì ń fà,goat one REL cat two PROG pull
-Ajá kan tí adìyẹ kan ń ju bọ́ọ̀lù sí,Dog one REL hen one PROG throw ball to
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan,toad two REL SG.TNS PROG catch duck one
-àgùntàn kan tí ó ń fò lórí ilé … Hààà! Ilé kan tí àgùntàn kan ń fò lórí rẹ̀,sheep one REL SG.TNS PROG jump LOC-head house House one REL sheep one PROG jump LOC-head SG.GEN
-adìyẹ kan tí ọ̀pọ̀lọ́ kan ń ju ọsàn sí,hen one REL toad one PROG throw orange to
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-adìyẹ kan tí eku kan ń fún ní èso,hen one REL rat one PROG give LOC fruit
-olóńgbò kan tí pẹ́pẹ́yẹ kan ń fún ní òdòdó,cat one REL duck one PROG give LOC flower
-ewúrẹ́ méjì tí ó ń ti olóńgbò kan,goat two REL SG.TNS PROG push cat one
-,
-,
-,
-,
-,
-Ehoro kan tí ń jẹun,Rabbit one REL.SG.TNS PROG eat
-Ehoro kan tí ó ṣubú,Rabbit one REL SG.TNS fall
-Bọ́ọ̀lù tí ó ń yí gbirigbiri,Ball REL SG.TNS PROG roll rolling-manner
-Kìnìún tí ó ń fa màlúù méjì,Lion REL SG.TNS PROG pull cow two
-,
-igi tí ewúrẹ́ jókòó sábẹ́ rẹ̀,tree REL goat sit LOC-under SG.GEN
-Ilé tí àgùntàn kan ń fò lórí rẹ̀,House REL sheep one PROG jump LOC-head SG.GEN
-olóńgbò tí pẹ́pẹ́yẹ ń fún ní òdòdó,cat REL duck PROG give LOC flower
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan,toad two REL SG.TNS PROG catch duck one
-adìyẹ tí eku ń fún ní èso,hen REL rat PROG give LOC fruit
-Ajá tí adìyẹ ń ju bọ́ọ̀lù sí,Dog REL hen PROG throw ball to
-ẹṣin tí ń fà màlúù méjì,horse REL.SG.TNS PROG pull cow two
-ewúrẹ́ tí olóńgbò méjì ń fà,goat REL cat two PROG pull
-adìyẹ tí ọ̀pọ̀lọ́ ń ju ọsàn sí,hen REL toad PROG throw orange to
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-ajá tí ń wẹ àgùntàn méjì,dog REL.SG.TNS PROG wash sheep two
-ibùsùn tí olóńgbò ń fò lórí rẹ̀,bed REL cat PROG jump LOC-head SG.GEN
-ewúrẹ́ méjì tí ó ń ti olóńgbò kan,goat two REL SG.TNS PROG push cat one
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sábẹ́ rẹ̀,Table REL toad one sit LOC-under SG.GEN
-ọ̀pọ̀lọ́ tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad REL duck two PROG wash
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-,
-,
-,
-,
-,
-Ehoro tí ó ń jẹun,Rabbit REL SG.TNS PROG eat
-Ehoro tí ó ń ṣubú,Rabbit REL SG.TNS PROG fall
-Bọ́ọ̀lù tó ń yí gbirigbiri,Ball REL.SG.TNS PROG roll rolling-manner
-Kìnìún tó ń fa màlúù méjì,Lion REL.SG.TNS PROG pull cow two
-,
-ewúrẹ́ tó ń fa olóńgbò méjì olóńgbò méjì tó ń fa ewúrẹ́ kan,goat REL.SG.TNS PROG pull cat two cat two RELSG.TNS PROG pull goat one
-ewúrẹ́ méjì tó ń ti olóńgbò kan,goat two REL.SG.TNS PROG push cat one
-igi tí ewúrẹ́ jókòó sí abẹ́ rẹ̀ ni ó pa àwọ̀ dà,tree REL goat sit LOC under SG.GEN FOC SG.TNS paint colour change
-ajá kan tí ó ń wẹ àgùntàn méjì ni ó pa àwọ̀ dà,dog one REL SG.TNS PROG wash sheep two FOC SG.TNS paint colour change
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan ni ó pa àwọ̀ dà,toad two REL SG.TNS PROG catch duck one FOC SG.TNS paint colour change
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sí abẹ́ rẹ̀ ni ó pa àwọ̀ dà,Table REL toad one sit LOC under SG.GEN FOC SG.TNS paint colour change
-ibùsùn tí olóńgbò kan ń fò ní orí rẹ̀ ni ó pa àwọ̀ dà,bed REL cat one PROG jump LOC head SG.GEN FOC SG.TNS paint colour change
-Ajá tí adìyẹ kan ń ju bọ́ọ̀lù sí ni ó pa àwọ̀ dà,Dog REL hen one PROG throw ball to FOC SG.TNS paint colour change
-olóńgbò tí ó ń gba òdòdó lọ́wọ́ pẹ́pẹ́yẹ ni ó pa àwọ̀ dà,cat REL SG.TNS PROG give flower LOC-hand duck FOC SG.TNS paint colour change
-màlúù méjì tí ẹṣin kan ń tì ni ó pa àwọ̀ dà,cow two REL horse one PROG push FOC SG.TNS paint colour change
-adìyẹ kan tí eku ń fún ní èso ni ó pa àwọ̀ dà,hen one REL rat PROG give LOC fruit FOC SG.TNS paint colour change
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀ ni ó pa àwọ̀ dà,toad one REL duck two PROG wash FOC SG.TNS paint colour change
-ẹṣin kan tí ó ń fà màlúù méjì ni ó pa àwọ̀ dà,horse one REL SG.TNS PROG pull cow two FOC SG.TNS paint colour change
-adìyẹ kan tí ọ̀pọ̀lọ́ ń ju ọsàn sí ló pa àwọ̀ dà,hen one REL toad PROG throw orange to FOC.SG.TNS paint colour change
-Ilé tí àgùntàn kan ń fò lórí rẹ̀ ni ó pa àwọ̀ dà,House REL sheep one PROG jump LOC-head SG.GEN FOC SG.TNS paint colour change
-ajá méjì tí àgùntàn kan ń tì ni ó pa àwọ̀ dà,dog two REL sheep one PROG catch FOC SG.TNS paint colour change
-,
-,
-,
-,
-,
-Ehoro tí ó ń jẹun,Rabbit REL SG.TNS PROG eat
-Ehoro tí ó ń ṣubú,Rabbit REL SG.TNS PROG fall
-Bọ́ọ̀lù tí ó ń yí gbirigbiri,Ball REL SG.TNS PROG roll rolling-manner
-Kìnìún kan tí ó ń fa màlúù méjì,Lion one REL SG.TNS PROG pull cow two
-,
-ewúrẹ́ méjì tí ó ń ti olóńgbò,goat two REL SG.TNS PROG push cat
-màlúù méjì tí ẹṣin kan ń tì,cow two REL horse one PROG push
-ewúrẹ́ kan tí ó jókòó sí abẹ́ igi igi tí ewúrẹ́ kan jókòó sí abẹ́ rẹ̀,goat one REL SG.TNS sit LOC under tree tree REL goat one sit LOC under SG.GEN
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-Ajá kan tí adìyẹ ń ju bọ́ọ̀lù sí,Dog one REL hen PROG throw ball to
-Ilé tí àgùntàn kan ń fò lórí rẹ̀,House REL sheep one PROG jump LOC-head SG.GEN
-adìyẹ kan tí ọ̀pọ̀lọ́ kan ń ju ọsàn sókè sí,hen one REL toad one PROG throw orange LOC-up to
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan,toad two REL SG.TNS PROG catch duck one
-ẹṣin kan tí ó ń fà màlúù méjì,horse one REL SG.TNS PROG pull cow two
-ibùsùn kan tí olóńgbò kan ń fò lórí rẹ̀,bed one REL cat one PROG jump LOC-head SG.GEN
-ọ̀pọ̀lọ́ kjan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-olóńgbò kan tí pẹ́pẹ́yẹ kan ń fún ní òdòdó,cat one REL duck one PROG give LOC flower
-adìyẹ kan tí eku kan ń fún ní èso adìyẹ kan tí eku ń fún ní èso,hen one REL rat one PROG give LOC fruit hen one REL rat PROG give LOC fruit
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sí abẹ́ rẹ̀,Table REL toad one sit LOC under SG.GEN
-ajá kan tí ó ń wẹ àgùntàn méjì,dog one REL SG.TNS PROG wash sheep two
-ewúrẹ́ kan tí olóńgbò méjì ń fà,goat one REL cat two PROG pull
-,
-,
-,
-,
-,
-Ehoro tí ó ń jẹun,Rabbit REL SG.TNS PROG eat
-Ehoro tí ó ń ṣubú,Rabbit REL SG.TNS PROG fall
-Bọ́ọ̀lù tí ó ń yí gbirigbiri,Ball REL SG.TNS PROG roll rolling-manner
-Kìnìún tí ó ń fa màlúù méjì,Lion REL SG.TNS PROG pull cow two
-,
-adìyẹ tí ọ̀pọ̀lọ́ kan ń ju ọsàn sí,hen REL toad one PROG throw orange to
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-ajá tí ó ń wẹ àgùntàn méjì,dog REL SG.TNS PROG wash sheep two
-ewúrẹ́ tí olóńgbò méjì ń fà,goat REL cat two PROG pull
-igi tí ewúrẹ́ kan jókòó sábẹ́ rẹ̀,tree REL goat one sit LOC-under SG.GEN
-ọ̀pọ̀lọ́ tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad REL duck two PROG wash
-ewúrẹ́ méjì tí ó ń ti olóńgbò kan,goat two REL SG.TNS PROG push cat one
-ibùsùn tí olóńgbò kan ń fò lórí rẹ̀,bed REL cat one PROG jump LOC-head SG.GEN
-ẹṣin kan tí ó ń fà màlúù méjì,horse one REL SG.TNS PROG pull cow two
-Ilé tí àgùntàn kan ń fò lórí rẹ̀,House REL sheep one PROG jump LOC-head SG.GEN
-adìyẹ tí eku kan ń fún ní èso,hen REL rat one PROG give LOC fruit
-olóńgbò tí pẹ́pẹ́yẹ kan ń fún ní òdòdó,cat REL duck one PROG give LOC flower
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sábẹ́ rẹ̀,Table REL toad one sit LOC-under SG.GEN
-Ajá tí adìyẹ kan ń ju bọ́ọ̀lù sí,Dog REL hen one PROG throw ball to
-ọ̀pọ̀lọ́ méjì tí ń mú pẹ́pẹ́yẹ kan,toad two REL.SG.TNS PROG catch duck one
-,
-,
-,
-,
-,
-Ehoro tí ó ń jẹun,Rabbit REL SG.TNS PROG eat
-Ehoro tí ó ṣubú,Rabbit REL SG.TNS fall
-Bọ́ọ̀lù tí ó ń yí gbirigbiri,Ball REL SG.TNS PROG roll rolling-manner
-Kìnìún tí ó ń fa màlúù méjì,Lion REL SG.TNS PROG pull cow two
-,
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan,toad two REL SG.TNS PROG catch duck one
-màlúù méjì tí ẹṣin kan ń tì,cow two REL horse one PROG push
-ẹṣin kan tí ó ń fà màlúù méjì,horse one REL SG.TNS PROG pull cow two
-ajá kan tí ó ń wẹ àgùntàn méjì,dog one REL SG.TNS PROG wash sheep two
-àgùntàn kan tí ó ń fò lórí ilé,House one REL SG.TNS PROG jump LOC-head house
-adìyẹ kan tí ọ̀pọ̀lọ́ ń ju ọsàn sí,hen one REL toad PROG throw orange to
-ọ̀pọ̀lọ́ kan tí ó jókòó lábẹ́ tábìlì,toad one REL SG sit LOC-under table
-Ajá kan tí ó ń ju bọ́ọ̀lù sí adìyẹ kan,Dog one REL SG.TNS PROG throw ball LOC hen one
-igi tí ewúrẹ́ kan jókòó lábẹ́ rẹ̀,tree REL goat one sit LOC-under SG.GEN
-ewúrẹ́ méjì tó ń ti olóńgbò kan,goat two REL.SG.TNS PROG push cat one
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-ewúrẹ́ kan tí olóńgbò méjì ń fà,goat one REL cat two PROG pull
-ibùsùn tí olóńgbò kan ń fò lórí rẹ̀,bed REL cat one PROG jump LOC-head SG.GEN
-adìyẹ kan tí eku ń fún ní èso,hen one REL rat PROG give LOC fruit
-olóńgbò kan tí adìyẹ kan ń fún ní òdòdó,cat one REL hen one PROG give LOC flower
-,
-,
-,
-,
-,
-Ehoro tí ó ń jẹun ni ó pa àwọ̀ dà,Rabbit REL SG.TNS PROG eat FOC SG.TNS paint colour change
-Ehoro tí ó ṣubú ni ó pa àwọ̀ dà,Rabbit REL SG.TNS fall FOC SG.TNS paint colour change
-Bọ́ọ̀lù tó ń yí gbirigbiri ni ó pa àwọ̀ dà,Ball REL.SG.TNS PROG roll rolling-mannereat FOC SG.TNS paint colour change
-Kìnìún tó ń fa màlúù méjì ni ó pa àwọ̀ dà,Lion REL.SG.TNS PROG pull cow two FOC SG.TNS paint colour change
-,
-ẹṣin méjì tí màlúù ń tì ni ó pa àwọ̀ dà,horse two REL cow PROG push FOC SG.TNS paint colour change
-Ajá tí adìyẹ ń ju bọ́ọ̀lù sí ni ó pa àwọ̀ dà,Dog REL hen PROG throw ball to FOC SG.TNS paint colour change
-adìyẹ tí ọ̀pọ̀lọ́ ń ju bọ́ọ̀lú sí ni ó pa àwọ̀ dà,hen REL toad PROG throw ball to FOC SG.TNS paint colour change
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀ ni ó pa àwọ̀ dà,toad one REL duck two PROG wash FOC SG.TNS paint colour change
-adìyẹ tí eku ń fún ní èso ni ó pa àwọ̀ dà,hen REL rat PROG give LOC fruit FOC SG.TNS paint colour change
-ewúrẹ́ tó jókòó sábẹ́ igi … igi tí ewúrẹ́ jókòó sábẹ́ rẹ̀ ni ó pa àwọ̀ dà,goat REL.SG.TNS sit LOC-under tree … tree REL goat sit LOC-under SG.GEN FOC SG.TNS paint colour change
-olóńgbò tí pẹ́pẹ́yẹ ń fún ní òdòdó ni ó pa àwọ̀ dà,cat REL duck PROG give LOC flower FOC SG.TNS paint colour change
-ewúrẹ́ méjì tí ó ń ti olóńgbò kan ni ó pa àwọ̀ dà,goat two REL SG.TNS PROG push cat one FOC SG.TNS paint colour change
-ẹṣin kan tí ó ń fà màlúù méjì ni ó pa àwọ̀ dà,horse one REL SG.TNS PROG pull cow two FOC SG.TNS paint colour change
-*Ilé tí àgùntàn jókòó sí . tí ó fò ni ó pa àwọ̀ dà Ilé tí àgùntàn tó fò ni ó pa àwọ̀ dà,House REL sheep sit LOC . REL SG.TNS jump FOC SG.TNS paint colour change House REL sheep REL SG.TNS jump FOC SG.TNS paint colour change
-àgùntàn méjì tí ajá ń mú ni ó pa àwọ̀ dà,sheep two REL dog PROG catch FOC SG.TNS paint colour change
-ewúrẹ́ tí ó ń fà olóńgbò méjì ni ó pa àwọ̀ dà ewúrẹ́ kan tí olóńgbò ń fà . tí olóńgbò méjì ń fà ni ó pa àwọ̀ dà,goat REL SG.TNS PROG pull cat two FOC SG.TNS paint colour change goat one REL cat PROG pull . REL cat two PROG pull FOC SG.TNS paint colour change
-ajá kan tí ó ń wẹ àgùntàn méjì ni ó pa àwọ̀ dà,dog one REL SG.TNS PROG wash sheep two FOC SG.TNS paint colour change
-Tábìlì tí ewúrẹ́ wà lábẹ́ rẹ̀ ni ó pa àwọ̀ dà,Table REL goat be LOC-under SG.GEN FOC SG.TNS paint colour change
-ibùsùn tí olóńgbò ń fò lórí rẹ̀ ni ó pa àwọ̀ dà,bed REL cat PROG jump LOC-head SG.GEN FOC SG.TNS paint colour change
-pẹ́pẹ́yẹ méjì tí ó ń mú ọ̀pọ̀lọ́ kan ni ó pa àwọ̀ dà ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan ni ó pa àwọ̀ dà,duck two REL SG.TNS PROG catch toad one FOC SG.TNS paint colour change toad two REL SG.TNS PROG catch duck one FOC SG.TNS paint colour change
-,
-,
-,
-,
-,
-Ehoro tó ń jẹun,Rabbit REL.SG.TNS PROG eat
-Ehoro tí ó ń ṣubú,Rabbit REL SG.TNS PROG fall
-Bọ́ọ̀lù tí ó ń yí gbirigbiri,Ball REL SG.TNS PROG roll rolling-manner
-Kìnìún tí ó ń fa màlúù méjì,Lion REL SG.TNS PROG pull cow two
-,
-,
-ewúrẹ́ tí ó jókòó sábẹ́ igi,goat REL SG.TNS sit LOC-under tree
-ewúrẹ́ kan tí olóńgbò méjì ń fà,goat one REL cat two PROG pull
-àgùntàn tí ó ń fò lórí ilé,sheep REL SG.TNS PROG jump LOC-head house
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-ajá kan tí ó ń wẹ àgùntàn méjì,dog one REL SG.TNS PROG wash sheep two
-,
-ọ̀pọ̀lọ́ kan tí ó jókòó sábẹ́ tábìlì,toad one REL SG.TNS sit LOC-under table
-ibùsùn tí olóńgbò ń fò lórí rẹ̀,bed REL cat PROG jump LOC-head SG.GEN
-Ajá kan tí adìyẹ ń ju bọ́ọ̀lù sí,Dog one REL hen PROG throw ball to
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-adìyẹ kan tí ọ̀pọ̀lọ́ kan ń ju bọ́ọ̀lù sí,hen one REL toad one PROG throw orange to
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan,toad two REL SG.TNS PROG catch duck one
-adìyẹ kan tí eku kan ń fún ní èso,hen one REL rat one PROG give LOC fruit
-ẹṣin kan tí ó ń fà màlúù méjì,horse one REL SG.TNS PROG pull cow two
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-,
-,
-,
-,
-,
-Ehoro tó ń jẹun,Rabbit REL.SG.TNS PROG eat
-Ehoro tó ṣubú,Rabbit REL.SG.TNS fall
-Bọ́ọ̀lù tó ń yí gbirigbiri,Ball REL.SG.TNS PROG roll rolling-manner
-Kìnìún tó ń fa màlúù méjì,Lion REL.SG.TNS PROG pull cow two
-,
-adìyẹ tí eku ń fún ní èso,hen REL rat PROG give LOC fruit
-ẹṣin kan tó ń fà màlúù méjì,horse one REL.SG.TNS PROG pull cow two
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sábẹ́ rẹ̀,Table REL toad one sit LOC-under SG.GEN
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan,toad two REL SG.TNS PROG catch duck one
-igi tí ewúrẹ́ kan jókòó sábẹ́ rẹ̀,tree REL goat one sit LOC-under SG.GEN
-ajá kan tó ń wẹ àgùntàn méjì,dog one REL.SG.TNS PROG wash sheep two
-Ilé tí àgùntàn kan ń fò lórí rẹ̀,House REL sheep one PROG jump LOC-head SG.GEN
-ewúrẹ́ méjì tó ń ti olóńgbò kan,goat two REL SG.TNS PROG push cat one
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-Ajá kan tí adìyẹ ń ju bọ́ọ̀lù lù,Dog one REL hen PROG throw ball hit
-olóńgbò kan tí pẹ́pẹ́yẹ ń fún ní òdòdó,cat one REL duck PROG give LOC flower
-adìyẹ kan tí ọ̀pọ̀lọ́ ń ju ọsàn lù,hen one REL toad PROG throw orange hit
-ewúrẹ́ kan tí olóńgbò méjì ń fà,goat one REL cat two PROG pull
-ibùsùn kan tí olóńgbò kan ti ń fò,bed one REL cat one PERF PROG jump
-Ọ̀pọ̀lọ́ méjì tó mú pẹ́pẹ́yẹ kan,Toad two REL.SG.TNS hold duck one
-,
-Ehoro tó ń jẹun ló pa àwọ̀ dà,Rabbit RELSG.TNS PROG eat FOC SG.TNS change- colour -change
-,
-,
-,
-,
-Ológbò kan tí pẹ́pẹ́yẹ fún ní òdòdó,Cat one REL duck give LOC flower
-Ehoro tó ṣubú,Rabbit REL.SG.TNS fall
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sí abẹ́ rẹ̀,Table REL toad one sit LOC under SG
-,
-Ajá kan tí adìyẹ ń ju bọ́ọ̀lù sí,Dog one REL chicken PROG throw ball LOC
-Kìnìún tó fa màlúù méjì ló pàwọ̀ dà,Lion REL.SG.TNS pull cow two FOC.SG.TNS change-colour -change
-,
-Ajá kan tó ń wẹ àgùtàn méjì,Dog one REL.SG.TNS PROG bath sheep two
-Ewúrẹ́ kan tí àgùtàn méjì ń fà,Goat one REL sheep two PROG pull
-Ibùsùn tí olóńgbò ń fò lórí ẹ̀,Bed REL cat PROG fly LOC.head SG
-Ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,Toad one REL duck two PROG bath
-Ewúrẹ́ méjì tó ń ti olóńgbò kan,Goat two REL.SG.TNS PROG push cat one
-Ẹṣin kan tó ń fa màlúù méjì,Horse one REL.SG.TNS PROG pull cow two
-Adìyẹ kan tí ọ̀pọ̀lọ́ ń ju ọsàn sí,Chicken one REL toad PROG throw orange LOC
-Igi kan tí ewúrẹ́ kan jókòó sí abẹ́ rẹ̀,Tree one REL goat one sit LOC under SG
-Ẹṣin méjì tí màlúù kan ń tì,Horse two REL cow one PROG push
-Ilé tí àgùntàn kan ti ń fò lórí rẹ̀,House REL sheep one PERF PROG fly LOC-head SG
-Ajá méjì tí àgùntàn kan ń mú,Dog two PERF sheep one PROG hold
-Adìyẹ kan tí eku kan ń fún ní èso,Chicken one REL rat one PROG give LOC fruit
-,
-,
-,
-,
-,
-Ehoro kan tó ń jẹun,Rabbit one REL.SG.TNS PROG eat
-Ehoro eléyìí tí ó ṣubú,Rabbit the-one REL SG.TNS fall
-Bọ́ọ̀lù tí ń yí gbirigbiri,Ball REL.SG.TNS PROG roll rolling-manner
-Kìnìún kan tí ń fa màlúù méjì,Lion one REL.SG.TNS PROG pull cow two
-,
-ajá kan tó ń wẹ àgùntàn méjì,dog one REL.SG.TNS PROG wash sheep two
-adìyẹ kan tí ọ̀pọ̀lọ́ ń ju ọsàn sí,hen one REL toad PROG throw orange to
-ẹṣin kan tó ń fà màlúù méjì,horse one REL.SG.TNS PROG pull cow two
-Ilé tí àgùntàn tó ń fò wà,House REL sheep REL SG.TNS PROG jump be
-ọ̀pọ̀lọ́ méjì tó ń mú pẹ́pẹ́yẹ kan,toad two REL SG.TNS PROG catch duck one
-ewúrẹ́ kan tí olóńgbò méjì ń fà,goat one REL cat two PROG pull
-ewúrẹ́ méjì tó ń ti olóńgbò kan,goat two REL.SG.TNS PROG push cat one
-Ajá kan tí adìyẹ ń ju bọ́ọ̀lù sí,Dog one REL hen PROG throw ball to
-Tábìlì tí ọ̀pọ̀lọ́ jókòó sí .. tó jókòó lábẹ́ rẹ̀,Table REL toad sit LOC REL.SG.TNS sit LOC-under SG.GEN
-ibùsùn tí olóńgbò kan ti ń fò,bed REL cat one PERF PROG jump
-olóńgbò kan tí pẹ́pẹ́yẹ ń fún ní òdòdó,cat one REL duck PROG give LOC flower
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-adìyẹ kan tí eku kan ń fún ní èso,hen one REL rat one PROG give LOC fruit
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-?igi tí ewúrẹ́ kan ti jókòó,tree REL goat one PERF sit
-,
-,
-,
-,
-,
-Ehoro tó ń jẹun,Rabbit REL.SG.TNS PROG eat
-Ehoro tí ó ṣubú,Rabbit REL SG.TNS fall
-Bọ́ọ̀lù tó ń yí gbiri,Ball REL.SG.TNS PROG roll rolling-manner
-Kìnìún tó ń fa màlúù méjì,Lion REL.SG.TNS PROG pull cow two
-,
-ajá kan ó ń wẹ àgùntàn méjì,dog one TNS PROG wash sheep two
-ọ̀pọ̀lọ́ tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad REL duck two PROG wash
-ẹṣin kan tó ń fà màlúù méjì,horse one RELSG.TNS PROG pull cow two
-Tábìlì tí ọ̀pọ̀lọ́ wà ní abẹ́ rẹ̀,Table REL toad one LOC under SG.GEN
-adìyẹ tí ọ̀pọ̀lọ́ ń ju ọsàn sí,hen REL toad PROG throw orange to
-Ilé tí àgùntàn jókòó lé,House REL sheep sit on
-olóńgbò kan tó ń fún pẹ́pẹ́yẹ ní òdòdó,cat one REL PROG give duck LOC flower
-igi tí ewúrẹ́ jókòó sí lábẹ́ igi,tree REL goat sit LOC LOC-under tree
-adìyẹ tí eku kan ń fún ní èso,hen REL rat one PROG give LOC fruit
-ajá méjì tí àgùntàn kan ń tì,dog two REL sheep one PROG catch
-olóńgbò méjì ń fà ewúrẹ́ kan,cat two PROG pull goat one
-ibùsùn tí olóńgbò ń fò lórí rẹ̀,bed REL cat PROG jump LOC-head SG.GEN
-ọ̀pọ̀lọ́ méjì tó ń ti pẹ́pẹ́yẹ kan,toad two REL.SG.TNS PROG push duck one
-ewúrẹ́ méjì ń ti olóńgbò kan,goat two PROG push cat one
-màlúù kan ń tì ẹṣin méjì,cow one PROG push horse two
-Ajá kan ó ń ju bọ́ọ̀lù sí adìyẹ kan,Dog one TNS hen PROG throw ball hen one
-,
-,
-,
-,
-,
-Ehoro tó ń jẹun,Rabbit REL.SG.TNS PROG eat
-Ehoro tó ń ṣubú,Rabbit REL.SG.TNS PROG fall
-Bọ́ọ̀lù tó ń yí gbirigbiri,Ball REL.SG.TNS PROG roll rolling-manner
-Kìnìún tó ń fa màlúù méjì,Lion REL.SG.TNS PROG pull cow two
-,
-igi tí ewúrẹ́ jókòó sábẹ́ rẹ̀,tree REL goat sit LOC-under SG.GEN
-adìyẹ tí eku kan ń fún léso,hen REL rat one PROG give LOC-fruit
-ibùsùn tí olóńgbò ń fò lórí ẹ̀,bed REL cat PROG jump LOC-head SG.GEN
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sábẹ́ rẹ̀,Table REL toad one sit LOC-under SG.GEN
-olóńgbò tí pẹ́pẹ́yẹ ń fún lódòdó,cat REL duck PROG give LOC-flower
-Ajá tí adìyẹ ń ju bọ́ọ̀lù sí,Dog REL hen PROG throw ball to
-ajá kan tó ń wẹ àgùntàn méjì,dog one REL.SG.TNS PROG wash sheep two
-ewúrẹ́ kan tólóńgbò méjì ń fà,goat one REL-cat two PROG pull
-ajá méjì tí àgùntàn ẹyọ kan ń mú,dog two REL sheep piece one PROG catch
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-ọ̀pọ̀lọ́ méjì tó ń mú pẹ́pẹ́yẹ ẹyọ kan,toad two REL.SG.TNS PROG catch duck piece one
-adìyẹ tí ọ̀pọ̀lọ́ ń ju ọsàn sí,hen REL toad PROG throw orange to
-ewúrẹ́ méjì tó ń ti olóńgbò kan,goat two REL.SG.TNS PROG push cat one
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-Ilé kan tí àgùntàn ń fò lórí ẹ̀,House one REL sheep PROG jump LOC-head SG.GEN
-ẹṣin kan tó ń fà màlúù méjì,horse one REL.SG.TNS PROG pull cow two
-,
-,
-,
-,
-,
-Ehoro tí ó ń jẹun,Rabbit REL SG.TNS PROG eat
-Ehoro tí ó ń ṣubú,Rabbit REL SG.TNS PROG fall
-Bọ́ọ̀lù tí ó ń yí gbirigbiri,Ball REL SG.TNS PROG roll rolling-manner’
-Kìnìún tí ó ń fa màlúù méjì,Lion REL SG.TNS PROG pull cow two
-,
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ,toad two REL SG.TNS PROG catch duck
-Tábìlì tí ọ̀pọ̀lọ́ jókòó sábẹ́ ẹ̀,Table REL toad sit LOC-under SG.GEN
-adìyẹ tí ọ̀pọ̀lọ́ ń ju ọsàn sí,hen REL toad PROG throw orange LOC
-ewúrẹ́ méjì tí ó ń ti olóńgbò,goat two REL SG.TNS PROG push cat
-ọ̀pọ̀lọ́ tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad REL duck two PROG wash
-igi tí ewúrẹ́ jókòó sábẹ́ ẹ̀,tree REL goat sit LOC-under SG.GEN
-ẹṣin méjì tí màlúù ń tì,horse two REL cow PROG push
-,
-adìyẹ tí eku ń fún ní èso,hen REL rat PROG give LOC fruit
-Ilé tí àgùntàn kan ń fò lórí ẹ̀,House REL sheep one PROG jump LOC-head SG.GEN
-ẹṣin tí ó ń fà màlúù méjì,horse REL SG.TNS PROG pull cow two
-ewúrẹ́ tí olóńgbò méjì ń fà,goat REL cat two PROG pull
-ibùsùn tí olóńgbò ń fò lórí ẹ̀,bed REL cat PROG jump LOC-head SG.GEN
-olóńgbò tí pẹ́pẹ́yẹ ń fún ní òdòdó,cat REL duck PROG give LOC flower
-ajá tí ó ń wẹ àgùntàn méjì,dog REL SG.TNS PROG wash sheep two
-Ajá tí adìyẹ ń ju bọ́ọ̀lù sí,Dog REL hen PROG throw ball to
-Ẹṣin kan tí ó fa màlúù méjì,Horse one REL SG.TNS. pull cow two
-,
-Ehoro tí ó ń jẹun ni ó pa àwọ̀ dà,Rabbit REL SG.TNS PROG eat FOC SG.TNS change- colour -change
-,
-,
-,
-,
-Igi tí ewúrẹ́ kan jókòó sí abẹ́ rẹ̀,Tree REL goat one sit LOC under SG
-Ehoro tí ó ṣubú,Rabbit REL SG.TNS fall
-Ẹṣin méjì tí màlúù kan ń tì,Horse two REL cow one PROG push
-Bọ́ọ̀lù tí ó ń yí gbirigbiri,Ball REL SG.TNS PROG roll rolling-manner
-Ewúrẹ́ kan tí olóńgbò méjì ń fà,Goat one REL cat two PROG pull
-Kìnìún kan tí ó fa màlúù méjì,Lion one REL SG.TNS. pull cow two
-,
-,
-Ajá kan tó ń wẹ àgùntàn méjì,Dog one REL.SG.TNS PROG bath sheep two
-Ajá kan tí adìyẹ ń ju bọ́ọ̀lù sí,Dog one REL chicken PROG throw ball LOC
-Ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,Toad one REL duck two PROG bath
-Ilé tí àgùntàn kan ń fò ní orí rẹ̀,House REL sheep one PROG jump LOC head SG.GEN
-Ológbò kan tí pẹ́pẹ́yẹ ń fún ní òdòdó,Cat one REL duck PROG give LOC flower
-Ọ̀pọ̀lọ́ méjì tí ó mú pẹ́pẹ́yẹ kan,Toad two REL SG.TNS hold duck one
-Ewúrẹ́ méjì tí ó ń ti olóńgbò kan,Goat two REL SG.TNS PROG push cat one
-Ibùsùn tí olóńgbò kan ń fò ní orí rẹ̀,Bed REL cat one PROG Jump LOC head SG.GEN
-Adìyẹ kan tí ọ̀pọ̀lọ́ ń ju ọsàn sí,Chicken one REL toad PROG throw orange LOC
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sí abẹ́ rẹ̀,Table REL toad one sit LOC under SG
-Adìyẹ kan tí eku ń fún ní èso,Chicken one REL rat one PROG give LOC fruit
-,
-,
-,
-,
-,
-Ehoro tó ń jẹun,Rabbit REL.SG.TNS PROG eat
-Ehoro tó ń ṣubú,Rabbit REL.SG.TNS PROG fall
-Bọ́ọ̀lù tó ń yí gbirigbiri,Ball REL.SG.TNS PROG roll rolling-manner
-Kìnìún tó ń fa màlúù méjì,Lion REL.SG.TNS PROG pull cow two
-,
-ewúrẹ́ tó jókòó sábẹ́ igi,goat REL.SG.TNS sit LOC-under tree
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-ajá méjì tí àgùntàn ń mú,dog two REL sheep PROG catch
-adìyẹ kan tí eku ń fún ní èso,hen one REL rat PROG give LOC fruit
-ọ̀pọ̀lọ́ méjì tí ń mú pẹ́pẹ́yẹ kan,toad two REL.SG.TNS PROG catch duck one
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-ẹṣin kan tí ń fà màlúù méjì,horse one REL.SG.TNS PROG pull cow two
-ibùsùn tí olóńgbò kan ń fò lórí rẹ̀,bed REL cat one PROG jump LOC-head SG.GEN
-ajá tí ń wẹ àgùntàn méjì,dog REL.SG.TNS PROG wash sheep two
-olóńgbò tí pẹ́pẹ́yẹ kan ń fún ní òdòdó,cat REL duck one PROG give LOC flower
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sábẹ́ rẹ̀,Table REL toad one sit LOC-under SG.GEN
-ewúrẹ́ tí olóńgbò méjì ń fà,goat REL cat two PROG pull
-Ajá tí adìyẹ kan ń ju bọ́ọ̀lù sí,Dog REL hen one PROG throw ball to
-ewúrẹ́ méjì tó ń ti olóńgbò kan,goat two REL.SG.TNS PROG push cat one
-adìyẹ tí ọ̀pọ̀lọ́ ń ju ọsàn sí,hen REL toad PROG throw orange to
-Ilé tí àgùntàn kan ń fò lórí rẹ̀,House REL sheep one PROG jump LOC-head SG.GEN
-,
-,
-,
-,
-,
-Ehoro tí ń jẹun,Rabbit REL.SG.TNS PROG eat
-Ehoro tó ṣubú,Rabbit REL.SG.TNS fall
-Bọ́ọ̀lù tó ń yí gbirigbiri,Ball REL.SG.TNS PROG roll rolling-manner
-Kìnìún tó ń fa màlúù méjì,Lion REL.SG.TNS PROG pull cow two
-,
-ọ̀pọ̀lọ́ kan tí ń ju ọsàn sí adìyẹ,toad one REL PROG throw orange LOC hen
-ajá kan tó ń wẹ àgùntàn méjì,dog one REL.SG.TNS PROG wash sheep two
-olóńgbò tó ń fò lórí ibùsùn,cat REL.SG.TNS PROG jump LOC-head bed
-ewúrẹ́ kan tí olóńgbò méjì ń fà,goat one REL cat two PROG pull
-ẹṣin kan tó ń fà màlúù méjì,horse one REL.SG.TNS PROG pull cow two
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-,
-igi tí ewúrẹ́ kan jókòó sábẹ́ rẹ̀,tree REL goat one sit LOC-under SG.GEN
-ewúrẹ́ méjì tó ń ti olóńgbò kan,goat two REL.SG.TNS PROG push cat one
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-ẹṣin méjì tí màlúù ń tì,horse two REL cow PROG push
-Ilé kan tí àgùntàn ń fò lórí rẹ̀,House one REL sheep PROG jump LOC-head SG.GEN
-adìyẹ kan tí eku ń fún ní èso,hen one REL rat PROG give LOC fruit
-olóńgbò tí pẹ́pẹ́yẹ kan fún ní òdòdó,cat REL duck one give LOC flower
-Ajá tí adìyẹ kan ju bọ́ọ̀lù sí,Dog REL hen one throw ball to
-ọ̀pọ̀lọ́ méjì tó ń mú pẹ́pẹ́yẹ kan,toad two REL.SG.TNS PROG catch duck one
-,
-,
-,
-,
-,
-Ehoro tí ó ń jẹun ni ó pa àwọ̀ dà,ehoro tí.REL ó.SG.TNS. ń.PROG jẹun ni.FOC ó.SG.TNS. pa àwọ̀ dà
-Ehoro tí ó ṣubú ni ó pa àwọ̀ dà,ehoro tí.REL ó.SG.TNS. ṣubú ni.FOC ó.SG.TNS. pa àwọ̀ dà
-Bọ́ọ̀lù tí ó ń yí gbirigbiri ni ó pa àwọ̀ dà,bọ́ọ̀lù tí.REL ó.SG.TNS. ń.PROG yí gbirigbiri ni.FOC ó.SG.TNS. pa àwọ̀ dà
-Kìnìún tí ó ń fa màlúù méjì ni ó pa àwọ̀ dà,kìnìún tí.REL ó.SG.TNS. ń.PROG fa màlúù méjì ni.FOC ó.SG.TNS. pa àwọ̀ dà
-,
-ọ̀pọ̀lọ́ tí pẹ́pẹ́yẹ méjì ń wẹ̀ ni ó pa àwọ̀ dà,ọ̀pọ̀lọ́ tí.REL pẹ́pẹ́yẹ méjì ń.PROG wẹ̀ ni.FOC ó.SG.TNS. pa àwọ̀ dà
-Ajá kan tí adìyẹ ń ju bọ́ọ̀lù sí ni ó pa àwọ̀ dà,ajá kan tí.REL adìyẹ ń.PROG ju bọ́ọ̀lù sí ni.FOC ó.SG.TNS. pa àwọ̀ dà
-Ilé tí adìyẹ àti àgùntàn tí ó ń fò ati àgùntàn tí ó jókòó lórí rẹ̀ ni ó pa àwọ̀ dà,ilé tí.REL adìyẹ àti àgùntàn tí.REL ó.SG.TNS. ń.PROG fò ati àgùntàn tí.REL ó.SG.TNS. jókòó lórí rẹ̀.SG.GEN. ni.FOC ó.SG.TNS. pa àwọ̀ dà
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sí abẹ́ rẹ̀ ni ó pa àwọ̀ dà,tábìlì tí.REL ọ̀pọ̀lọ́ kan jókòó sí.LOC abẹ́ rẹ̀.SG.GEN. ni.FOC ó.SG.TNS. pa àwọ̀ dà
-adìyẹ kan tí eku kan ń fún ní èso ni ó pa àwọ̀ dà,adìyẹ kan tí.REL eku kan ń.PROG fún ní.LOC èso ni.FOC ó.SG.TNS. pa àwọ̀ dà
-ewúrẹ́ méjì tí ó ń ti olóńgbò kan ni ó pa àwọ̀ dà,ewúrẹ́ méjì tí.REL ó.SG.TNS. ń.PROG ti olóńgbò kan ni.FOC ó.SG.TNS. pa àwọ̀ dà
-ewúrẹ́ kan tí olóńgbò méjì ń fà ni ó pa àwọ̀ dà,ewúrẹ́ kan tí.REL olóńgbò méjì ń.PROG fà ni.FOC ó.SG.TNS. pa àwọ̀ dà
-ẹṣin kan tí ó ń fà màlúù méjì ni ó pa àwọ̀ dà,ẹṣin kan tí.REL ó.SG.TNS. ń.PROG fà màlúù méjì ni.FOC ó.SG.TNS. pa àwọ̀ dà
-ajá kan tí ó ń wẹ àgùntàn méjì ni ó pa àwọ̀ dà,ajá kan tí.REL ó.SG.TNS. ń.PROG wẹ àgùntàn méjì ni.FOC ó.SG.TNS. pa àwọ̀ dà
-ẹṣin méjì tí màlúù kan ń tì ni ó pa àwọ̀ dà,ẹṣin méjì tí.REL màlúù kan ń.PROG tì ni.FOC ó.SG.TNS. pa àwọ̀ dà
-adìyẹ kan tí ọ̀pọ̀lọ́ kan ń ju ọsàn sókè sí ni ó pa àwọ̀ dà,adìyẹ kan tí.REL ọ̀pọ̀lọ́ kan ń.PROG ju ọsàn sókè sí ni.FOC ó.SG.TNS. pa àwọ̀ dà
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan ni ó pa àwọ̀ dà,ọ̀pọ̀lọ́ méjì tí.REL ó.SG.TNS. ń.PROG mú pẹ́pẹ́yẹ kan ni.FOC ó.SG.TNS. pa àwọ̀ dà
-ibùsùn tí olóńgbò kan ń fò lórí rẹ̀ ni ó pa àwọ̀ dà,ibùsùn tí.REL olóńgbò kan ń.PROG fò lórí rẹ̀.SG.GEN. ni.FOC ó.SG.TNS. pa àwọ̀ dà
-ajá méjì tí àgùntàn kan ń mú ni ó pa àwọ̀ dà,ajá méjì tí.REL àgùntàn kan ń.PROG mú ni.FOC ó.SG.TNS. pa àwọ̀ dà
-olóńgbò kan tí pẹ́pẹ́yẹ kan ń fún ní òdòdó ni ó pa àwọ̀ dà,olóńgbò kan tí.REL pẹ́pẹ́yẹ kan ń.PROG fún ní.LOC òdòdó ni.FOC ó.SG.TNS. pa àwọ̀ dà
-igi tí ewúrẹ́ kan jókòó sí abẹ́ rẹ̀ ni ó pa àwọ̀ dà,igi tí.REL ewúrẹ́ kan jókòó sí.LOC abẹ́ rẹ̀.SG.GEN. ni.FOC ó.SG.TNS. pa àwọ̀ dà
-,
-,
-,
-,
-,
-Ehoro tó ń jẹun,Rabbit REL.SG.TNS PROG eat
-Ehoro tó ń ṣubú,Rabbit REL.SG.TNS PROG fall
-Bọ́ọ̀lù tó ń yí gbirigbiri,Ball REL.SG.TNS PROG roll rolling-manner
-Kìnìún kan tó ń fa màlúù méjì,Lion one REL.SG.TNS PROG pull cow two
-,
-ajá kan tó ń wẹ àgùntàn méjì,dog one REL.SG.TNS PROG wash sheep two
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-olóńgbò kan tí pẹ́pẹ́yẹ kan ń fún ní òdòdó,cat one REL duck one PROG give LOC flower
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sábẹ́ rẹ̀,Table REL toad one sit LOC-under SG.GEN
-ewúrẹ́ kan tí olóńgbò méjì ń fà,goat one REL cat two PROG pull
-ẹṣin kan tó ń fà màlúù méjì,horse one REL.SG.TNS PROG pull cow two
-ewúrẹ́ méjì tó ń ti olóńgbò kan,goat two REL.SG.TNS PROG push cat one
-% orí ilé kan tí àgùntàn kan ń fò lórí rẹ̀,head house REL sheep one one PROG jump LOC-head SG.GEN
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-igi tí ewúrẹ́ kan jókòó sábẹ́ rẹ̀,tree REL goat one sit LOC-under SG.GEN
-Ajá kan tí adìyẹ kan ń ju bọ́ọ̀lù sí,Dog one REL hen one PROG throw ball to
-ibùsùn tí olóńgbò kan ń fò lórí rẹ̀,bed REL cat one PROG jump LOC-head SG.GEN
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-ọ̀pọ̀lọ́ méjì tó ń mú pẹ́pẹ́yẹ kan,toad two REL.SG.TNS PROG catch duck one
-adìyẹ kan tí eku kan ń fún ní èso,hen one REL rat one PROG give LOC fruit
-adìyẹ tí ọ̀pọ̀lọ́ kan ń ju ọsàn sí,hen REL toad one PROG throw orange to
-,
-,
-,
-,
-,
-Ehoro tí ó ń jẹun,Rabbit REL SG.TNS PROG eat
-Ehoro tí ó ṣubú,Rabbit REL SG.TNS fall
-Bọ́ọ̀lù tó ń yí gbirigbiri,Ball REL.SG.TNS PROG roll rolling-manner
-Kìnìún tó ń fa màlúù méjì,Lion REL.SG.TNS PROG pull cow two
-,
-Ajá tí adìyẹ kan ń ju bọ́ọ̀lù sí,Dog REL hen one PROG throw ball to
-igi tí ewúrẹ́ kan jókòó sí abẹ́ ẹ̀,tree REL goat one sit LOC under SG.GEN
-ajá tí ó ń wẹ àgùntàn méjì,dog REL SG.TNS PROG wash sheep two
-ewúrẹ́ tí olóńgbò méjì ń fà,goat REL cat two PROG pull
-adìyẹ tí eku kan ń fún ní èso,hen REL rat one PROG give LOC fruit
-Ilé tí àgùntàn kan ń fò lórí rẹ̀,House REL sheep one PROG jump LOC-head SG.GEN
-ẹṣin tí ó ń fà màlúù méjì,horse REL SG.TNS PROG pull cow two
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan,toad two REL SG.TNS PROG catch duck one
-olóńgbò tí pẹ́pẹ́yẹ kan ń fún ní òdòdó,cat REL duck one PROG give LOC flower
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sí abẹ́ rẹ̀,Table REL toad one sit LOC under SG.GEN
-ibùsùn tí olóńgbò kan ń fò lórí rẹ̀,bed REL cat one PROG jump LOC-head SG.GEN
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
-adìyẹ kan tí ọ̀pọ̀lọ́ ń ju ọsàn sí,hen one REL toad PROG throw orange to
-ewúrẹ́ méjì tí ó ń ti olóńgbò kan,goat two REL SG.TNS PROG push cat one
-,
-,
-,
-,
-,
-Ehoro tí ó ń jẹun,Rabbit REL SG.TNS PROG eat
-Ehoro tí ó ṣubú,Rabbit REL SG.TNS fall
-Bọ́ọ̀lù tí ó ń yí gbirigbiri,Ball REL SG.TNS PROG roll rolling-manner
-Kìnìún tí ó ń fa màlúù méjì,Lion REL SG.TNS PROG pull cow two
-,
-ọ̀pọ̀lọ́ méjì tí ó ń mú pẹ́pẹ́yẹ kan,toad two REL SG.TNS PROG catch duck one
-ajá kan tí ó ń wẹ àgùntàn méjì,dog one REL SG.TNS PROG wash sheep two
-ewúrẹ́ kan tó ń fa olóńgbò méjì,goat one REL.SG.TNS PROG pull cat two
-igi tí ewúrẹ́ kan jókòó lábẹ́ rẹ̀,tree REL goat one sit LOC-under SG.GEN
-ibùsùn tí olóńgbò kan ń fò lórí rẹ̀,bed REL cat one PROG jump LOC-head SG.GEN
-adìyẹ tí ọ̀pọ̀lọ́ kan ju ọsàn sí,hen REL toad one throw orange to
-ẹṣin kan tí ó ń fà màlúù méjì,horse one REL SG.TNS PROG pull cow two
-adìyẹ tí eku kan ń fún ní èso,hen REL rat one PROG give LOC fruit
-olóńgbò kan tí pẹ́pẹ́yẹ ń fún ní òdòdó,cat one REL duck PROG give LOC flower
-ẹṣin méjì tí màlúù kan ń tì,horse two REL cow one PROG push
-ewúrẹ́ méjì tó ń ti olóńgbò kan,goat two REL.SG.TNS PROG push cat one
-Ilé tí àgùntàn kan ń fò lórí rẹ̀,House REL sheep one PROG jump LOC-head SG.GEN
-Tábìlì tí ọ̀pọ̀lọ́ kan jókòó sábẹ́ rẹ̀,Table REL toad one sit LOC-under SG.GEN
-Ajá tí adìyẹ kan ń ju bọ́ọ̀lù sí,Dog REL hen one PROG throw ball to
-ajá méjì tí àgùntàn kan ń mú,dog two REL sheep one PROG catch
-ọ̀pọ̀lọ́ kan tí pẹ́pẹ́yẹ méjì ń wẹ̀,toad one REL duck two PROG wash
+text,UDfeats
+"['Ehoro', 'tí', 'ó', 'ń', 'jẹun']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'ṣubú']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Bọ́ọ̀lù', 'tí', 'ó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'kan', 'tí', 'ó', 'ń', 'fa', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['adìyẹ', 'kan', 'tí', 'eku', 'ń', 'fún', 'ní', 'èso']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ajá', 'kan', 'tí', 'ó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ewúrẹ́', 'méjì', 'tí', 'ó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ẹṣin', 'kan', 'tí', 'ó', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'ń', 'ju', 'ọsàn', 'sí']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['olóńgbò', 'tí', 'pẹ́pẹ́yẹ', 'ń', 'fún', 'ní', 'òdòdó']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['Ajá', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ń', 'jẹun']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tó', 'ṣubú']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', '_']"
+"['Bọ́ọ̀lù', 'tó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ajá', 'kan', 'tó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['igi', 'tí', 'àgùntàn', 'jókòó', 'sí', 'abẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen']"
+"['ẹṣin', 'tó', 'ń', 'fà', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['àkùkọ', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ewúrẹ́', 'méjì', 'tó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'sí']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['olóńgbò', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'kan', 'ń', 'fún', 'ní', 'òdòdó']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['Ajá', 'kan', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀', 'fún']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_']"
+"['ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'jókòó', 'sí', 'abẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen']"
+"['Ehoro', 'tí', 'ó', 'ṣubú', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Bọ́ọ̀lù', 'tí', 'ó', 'ń', 'yí', 'gbirigbiri', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Kìnìún', 'tí', 'ó', 'ń', 'fa', 'màlúù', 'méjì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ajá', 'kan', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['*Ilé', 'tí', 'adìyẹ', 'àti', 'àgùntàn', 'tí', 'ó', 'ń', 'fò', 'ati', 'àgùntàn', 'tí', 'ó', 'jókòó', 'lórí', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ewúrẹ́', 'méjì', 'tí', 'ó', 'ń', 'ti', 'olóńgbò', 'kan', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ẹṣin', 'kan', 'tí', 'ó', 'ń', 'fà', 'màlúù', 'méjì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ajá', 'kan', 'tí', 'ó', 'ń', 'wẹ', 'àgùntàn', 'méjì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'ń', 'ju', 'ọsàn', 'sókè', 'sí', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['olóńgbò', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'kan', 'ń', 'fún', 'ní', 'òdòdó', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ehoro', 'tó', 'ń', 'jẹun']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tó', 'ṣubú']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', '_']"
+"['Bọ́ọ̀lù', 'tó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ajá', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'méjì', 'tó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ẹṣin', 'tó', 'ń', 'fà', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sábẹ́', 'ẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['adìyẹ', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['adìyẹ', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'ń', 'ju', 'ọsàn', 'sí']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sábẹ́', 'ẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ajá', 'tó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['olóńgbò', 'tí', 'pẹ́pẹ́yẹ', 'ń', 'fún', 'ní', 'òdòdó']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ti', 'ń', 'fò']","['_', 'PronType=Rel', '_', '_', 'Tense=Perf', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tó', 'ń', 'jẹun']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tó', 'ṣubú']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', '_']"
+"['Bọ́ọ̀lù', 'tó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'kan', 'tó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['màlúù', 'kan', 'tó', 'ń', 'fa', 'ẹṣin', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ewúrẹ́', 'méjì', 'tó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'lórí', 'ẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'sí']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'ẹ̀']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'lórí', 'ẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['Ajá', 'tí', 'adìyẹ', 'kan', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kán', 'mú']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Tns', '_']"
+"['ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['olóńgbò', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'ń', 'fún', 'ní', 'òdòdó']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'ẹ̀']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen']"
+"['Ehoro', 'tó', 'ń', 'jẹun']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tó', 'ṣubú']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', '_']"
+"['Bọ́ọ̀lù', 'tó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ọ̀pọ̀lọ́', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ewúrẹ́', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ewúrẹ́', 'méjì', 'tó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['olóńgbò', 'tí', 'pẹ́pẹ́yẹ', 'ń', 'fún', 'ní', 'òdòdó']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['adìyẹ', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ajá', 'tó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'ń', 'ju', 'ọsàn', 'sí']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['Ajá', 'tí', 'adìyẹ', 'kan', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['Ehoro', 'tí', 'ó', 'ń', 'jẹun']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ó', 'ṣubú']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_']"
+"['Kìnìún', 'kan', 'tí', 'ó', 'fa', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'mú']","['_', '_', 'PronType=Rel', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'ó', 'jókòó', 'sábẹ́', 'tábìlì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ajá', 'kan', 'tí', 'ó', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['olóńgbò', 'kan', 'tí', 'ó', 'ń', 'fò', 'lórí', 'ibùsùn']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ẹṣin', 'kan', 'tí', 'ó', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['igi', 'kan', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'lábẹ́', 'rẹ̀']","['_', '_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ajá', 'kan', 'tí', 'adìyẹ', 'kan', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'ń', 'ju', 'ọsàn', 'sí']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['adìyẹ', 'kan', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['olóńgbò', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'kan', 'ń', 'fún', 'ní', 'òdòdó']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ewúrẹ́', 'méjì', 'tí', 'ó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ehoro', 'kan', 'tí', 'ń', 'jẹun']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'kan', 'tí', 'ó', 'ṣubú']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_']"
+"['Bọ́ọ̀lù', 'tí', 'ó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tí', 'ó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['olóńgbò', 'tí', 'pẹ́pẹ́yẹ', 'ń', 'fún', 'ní', 'òdòdó']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'tí', 'eku', 'ń', 'fún', 'ní', 'èso']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['Ajá', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ẹṣin', 'tí', 'ń', 'fà', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['adìyẹ', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'sí']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ajá', 'tí', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ewúrẹ́', 'méjì', 'tí', 'ó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ọ̀pọ̀lọ́', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'jẹun']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'ṣubú']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Bọ́ọ̀lù', 'tó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'tó', 'ń', 'fa', 'olóńgbò', 'méjì', 'olóńgbò', 'méjì', 'tó', 'ń', 'fa', 'ewúrẹ́', 'kan']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', '_', '_', 'VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'méjì', 'tó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'jókòó', 'sí', 'abẹ́', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ajá', 'kan', 'tí', 'ó', 'ń', 'wẹ', 'àgùntàn', 'méjì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'ní', 'orí', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ajá', 'tí', 'adìyẹ', 'kan', 'ń', 'ju', 'bọ́ọ̀lù', 'sí', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['olóńgbò', 'tí', 'ó', 'ń', 'gba', 'òdòdó', 'lọ́wọ́', 'pẹ́pẹ́yẹ', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['màlúù', 'méjì', 'tí', 'ẹṣin', 'kan', 'ń', 'tì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'eku', 'ń', 'fún', 'ní', 'èso', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ẹṣin', 'kan', 'tí', 'ó', 'ń', 'fà', 'màlúù', 'méjì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'sí', 'ló', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc|Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'tì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'jẹun']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'ṣubú']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Bọ́ọ̀lù', 'tí', 'ó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'kan', 'tí', 'ó', 'ń', 'fa', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'méjì', 'tí', 'ó', 'ń', 'ti', 'olóńgbò']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['màlúù', 'méjì', 'tí', 'ẹṣin', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ewúrẹ́', 'kan', 'tí', 'ó', 'jókòó', 'sí', 'abẹ́', 'igi', 'igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'rẹ̀']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', 'Case=Loc', '_', '_', '_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ajá', 'kan', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'ń', 'ju', 'ọsàn', 'sókè', 'sí']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ẹṣin', 'kan', 'tí', 'ó', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ibùsùn', 'kan', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ọ̀pọ̀lọ́', 'kjan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['olóńgbò', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'kan', 'ń', 'fún', 'ní', 'òdòdó']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['adìyẹ', 'kan', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso', 'adìyẹ', 'kan', 'tí', 'eku', 'ń', 'fún', 'ní', 'èso']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_', '_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen']"
+"['ajá', 'kan', 'tí', 'ó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'jẹun']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'ṣubú']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Bọ́ọ̀lù', 'tí', 'ó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tí', 'ó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'ń', 'ju', 'ọsàn', 'sí']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ajá', 'tí', 'ó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ọ̀pọ̀lọ́', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ewúrẹ́', 'méjì', 'tí', 'ó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ẹṣin', 'kan', 'tí', 'ó', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['adìyẹ', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['olóńgbò', 'tí', 'pẹ́pẹ́yẹ', 'kan', 'ń', 'fún', 'ní', 'òdòdó']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['Ajá', 'tí', 'adìyẹ', 'kan', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'jẹun']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ó', 'ṣubú']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_']"
+"['Bọ́ọ̀lù', 'tí', 'ó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tí', 'ó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['màlúù', 'méjì', 'tí', 'ẹṣin', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ẹṣin', 'kan', 'tí', 'ó', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'kan', 'tí', 'ó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['àgùntàn', 'kan', 'tí', 'ó', 'ń', 'fò', 'lórí', 'ilé']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'sí']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'ó', 'jókòó', 'lábẹ́', 'tábìlì']","['_', '_', 'PronType=Rel', 'Number=Sing', '_', '_', '_']"
+"['Ajá', 'kan', 'tí', 'ó', 'ń', 'ju', 'bọ́ọ̀lù', 'sí', 'adìyẹ', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', 'Case=Loc', '_', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'lábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ewúrẹ́', 'méjì', 'tó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['adìyẹ', 'kan', 'tí', 'eku', 'ń', 'fún', 'ní', 'èso']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['olóńgbò', 'kan', 'tí', 'adìyẹ', 'kan', 'ń', 'fún', 'ní', 'òdòdó']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'jẹun', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ehoro', 'tí', 'ó', 'ṣubú', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Bọ́ọ̀lù', 'tó', 'ń', 'yí', 'gbirigbiri', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Kìnìún', 'tó', 'ń', 'fa', 'màlúù', 'méjì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'ń', 'tì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ajá', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['adìyẹ', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'bọ́ọ̀lú', 'sí', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['adìyẹ', 'tí', 'eku', 'ń', 'fún', 'ní', 'èso', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ewúrẹ́', 'tó', 'jókòó', 'sábẹ́', 'igi', '…', 'igi', 'tí', 'ewúrẹ́', 'jókòó', 'sábẹ́', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', '_', '_', '_', '_', '_', 'PronType=Rel', '_', '_', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['olóńgbò', 'tí', 'pẹ́pẹ́yẹ', 'ń', 'fún', 'ní', 'òdòdó', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ewúrẹ́', 'méjì', 'tí', 'ó', 'ń', 'ti', 'olóńgbò', 'kan', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ẹṣin', 'kan', 'tí', 'ó', 'ń', 'fà', 'màlúù', 'méjì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['àgùntàn', 'méjì', 'tí', 'ajá', 'ń', 'mú', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ewúrẹ́', 'tí', 'ó', 'ń', 'fà', 'olóńgbò', 'méjì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà', 'ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'ń', 'fà', '.', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_', '_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ajá', 'kan', 'tí', 'ó', 'ń', 'wẹ', 'àgùntàn', 'méjì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Tábìlì', 'tí', 'ewúrẹ́', 'wà', 'lábẹ́', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'ń', 'fò', 'lórí', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['pẹ́pẹ́yẹ', 'méjì', 'tí', 'ó', 'ń', 'mú', 'ọ̀pọ̀lọ́', 'kan', 'ni', 'ó', 'pa', 'àwọ̀', 'dà', 'ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_', '_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ehoro', 'tó', 'ń', 'jẹun']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'ṣubú']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Bọ́ọ̀lù', 'tí', 'ó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tí', 'ó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'tí', 'ó', 'jókòó', 'sábẹ́', 'igi']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['àgùntàn', 'tí', 'ó', 'ń', 'fò', 'lórí', 'ilé']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ajá', 'kan', 'tí', 'ó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'ó', 'jókòó', 'sábẹ́', 'tábìlì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['Ajá', 'kan', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ẹṣin', 'kan', 'tí', 'ó', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tó', 'ń', 'jẹun']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tó', 'ṣubú']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', '_']"
+"['Bọ́ọ̀lù', 'tó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'tí', 'eku', 'ń', 'fún', 'ní', 'èso']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ẹṣin', 'kan', 'tó', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ajá', 'kan', 'tó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ajá', 'kan', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'lù']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['olóńgbò', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'ń', 'fún', 'ní', 'òdòdó']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'lù']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ibùsùn', 'kan', 'tí', 'olóńgbò', 'kan', 'ti', 'ń', 'fò']","['_', '_', 'PronType=Rel', '_', '_', 'Tense=Perf', 'VerbForm=Prog', '_']"
+"['Ọ̀pọ̀lọ́', 'méjì', 'tó', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ológbò', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'fún', 'ní', 'òdòdó']","['_', '_', 'PronType=Rel', '_', '_', 'Case=Loc', '_']"
+"['Ehoro', 'tó', 'ṣubú']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing']"
+"['Ajá', 'kan', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Case=Loc']"
+"['Kìnìún', 'tó', 'fa', 'màlúù', 'méjì', 'ló', 'pàwọ̀', 'dà']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', '_', '_', '_', 'Voice=Foc|Number=Sing|VerbForm=Tns', '_', '_']"
+"['Ajá', 'kan', 'tó', 'ń', 'wẹ', 'àgùtàn', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ewúrẹ́', 'kan', 'tí', 'àgùtàn', 'méjì', 'ń', 'fà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ibùsùn', 'tí', 'olóńgbò', 'ń', 'fò', 'lórí', 'ẹ̀']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', 'Number=Sing']"
+"['Ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ewúrẹ́', 'méjì', 'tó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ẹṣin', 'kan', 'tó', 'ń', 'fa', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'sí']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Case=Loc']"
+"['Igi', 'kan', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'rẹ̀']","['_', '_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing']"
+"['Ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ti', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'Tense=Perf', 'VerbForm=Prog', '_', '_', 'Number=Sing']"
+"['Ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'Tense=Perf', '_', '_', 'VerbForm=Prog', '_']"
+"['Adìyẹ', 'kan', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['Ehoro', 'kan', 'tó', 'ń', 'jẹun']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'eléyìí', 'tí', 'ó', 'ṣubú']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_']"
+"['Bọ́ọ̀lù', 'tí', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'kan', 'tí', 'ń', 'fa', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'kan', 'tó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'sí']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ẹṣin', 'kan', 'tó', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ewúrẹ́', 'méjì', 'tó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ajá', 'kan', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ti', 'ń', 'fò']","['_', 'PronType=Rel', '_', '_', 'Tense=Perf', 'VerbForm=Prog', '_']"
+"['olóńgbò', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'ń', 'fún', 'ní', 'òdòdó']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['adìyẹ', 'kan', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['?igi', 'tí', 'ewúrẹ́', 'kan', 'ti', 'jókòó']","['_', 'PronType=Rel', '_', '_', 'Tense=Perf', '_']"
+"['Ehoro', 'tó', 'ń', 'jẹun']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ó', 'ṣubú']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_']"
+"['Bọ́ọ̀lù', 'tó', 'ń', 'yí', 'gbiri']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'kan', 'ó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ẹṣin', 'kan', 'tó', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'wà', 'ní', 'abẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen']"
+"['adìyẹ', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'sí']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'jókòó', 'lé']","['_', 'PronType=Rel', '_', '_', '_']"
+"['olóńgbò', 'kan', 'tó', 'ń', 'fún', 'pẹ́pẹ́yẹ', 'ní', 'òdòdó']","['_', '_', 'PronType=Rel', 'VerbForm=Prog', '_', '_', 'Case=Loc', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'jókòó', 'sí', 'lábẹ́', 'igi']","['_', 'PronType=Rel', '_', '_', 'Case=Loc', '_', '_']"
+"['adìyẹ', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['olóńgbò', 'méjì', 'ń', 'fà', 'ewúrẹ́', 'kan']","['_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tó', 'ń', 'ti', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'méjì', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['màlúù', 'kan', 'ń', 'tì', 'ẹṣin', 'méjì']","['_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['Ajá', 'kan', 'ó', 'ń', 'ju', 'bọ́ọ̀lù', 'sí', 'adìyẹ', 'kan']","['_', '_', 'VerbForm=Tns', '_', 'VerbForm=Prog', '_', '_', '_', '_']"
+"['Ehoro', 'tó', 'ń', 'jẹun']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tó', 'ń', 'ṣubú']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Bọ́ọ̀lù', 'tó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['adìyẹ', 'tí', 'eku', 'kan', 'ń', 'fún', 'léso']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'ń', 'fò', 'lórí', 'ẹ̀']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['olóńgbò', 'tí', 'pẹ́pẹ́yẹ', 'ń', 'fún', 'lódòdó']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_']"
+"['Ajá', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'kan', 'tó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'kan', 'tólóńgbò', 'méjì', 'ń', 'fà']","['_', '_', '_', '_', 'VerbForm=Prog', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'ẹyọ', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', '_', 'VerbForm=Prog', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'ẹyọ', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', '_']"
+"['adìyẹ', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'sí']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'méjì', 'tó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ilé', 'kan', 'tí', 'àgùntàn', 'ń', 'fò', 'lórí', 'ẹ̀']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ẹṣin', 'kan', 'tó', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'jẹun']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'ṣubú']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Bọ́ọ̀lù', 'tí', 'ó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tí', 'ó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'jókòó', 'sábẹ́', 'ẹ̀']","['_', 'PronType=Rel', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['adìyẹ', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'sí']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Case=Loc']"
+"['ewúrẹ́', 'méjì', 'tí', 'ó', 'ń', 'ti', 'olóńgbò']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['ọ̀pọ̀lọ́', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'jókòó', 'sábẹ́', 'ẹ̀']","['_', 'PronType=Rel', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_']"
+"['adìyẹ', 'tí', 'eku', 'ń', 'fún', 'ní', 'èso']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'lórí', 'ẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ẹṣin', 'tí', 'ó', 'ń', 'fà', 'màlúù', 'méjì']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'ń', 'fò', 'lórí', 'ẹ̀']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['olóńgbò', 'tí', 'pẹ́pẹ́yẹ', 'ń', 'fún', 'ní', 'òdòdó']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ajá', 'tí', 'ó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ajá', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['Ẹṣin', 'kan', 'tí', 'ó', 'fa', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'jẹun', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing']"
+"['Ehoro', 'tí', 'ó', 'ṣubú']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_']"
+"['Ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Bọ́ọ̀lù', 'tí', 'ó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Kìnìún', 'kan', 'tí', 'ó', 'fa', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ajá', 'kan', 'tó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ajá', 'kan', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Case=Loc']"
+"['Ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'ní', 'orí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen']"
+"['Ológbò', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'ń', 'fún', 'ní', 'òdòdó']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['Ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ewúrẹ́', 'méjì', 'tí', 'ó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ibùsùn', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'ní', 'orí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen']"
+"['Adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'sí']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Case=Loc']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing']"
+"['Ehoro', 'tó', 'ń', 'jẹun']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tó', 'ń', 'ṣubú']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Bọ́ọ̀lù', 'tó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'tó', 'jókòó', 'sábẹ́', 'igi']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_']"
+"['adìyẹ', 'kan', 'tí', 'eku', 'ń', 'fún', 'ní', 'èso']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ẹṣin', 'kan', 'tí', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ajá', 'tí', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['olóńgbò', 'tí', 'pẹ́pẹ́yẹ', 'kan', 'ń', 'fún', 'ní', 'òdòdó']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ewúrẹ́', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['Ajá', 'tí', 'adìyẹ', 'kan', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'méjì', 'tó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'sí']","['_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['Ehoro', 'tí', 'ń', 'jẹun']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tó', 'ṣubú']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', '_']"
+"['Bọ́ọ̀lù', 'tó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'ń', 'ju', 'ọsàn', 'sí', 'adìyẹ']","['_', '_', 'PronType=Rel', 'VerbForm=Prog', '_', '_', 'Case=Loc', '_']"
+"['ajá', 'kan', 'tó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['olóńgbò', 'tó', 'ń', 'fò', 'lórí', 'ibùsùn']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ẹṣin', 'kan', 'tó', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ewúrẹ́', 'méjì', 'tó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_']"
+"['Ilé', 'kan', 'tí', 'àgùntàn', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['adìyẹ', 'kan', 'tí', 'eku', 'ń', 'fún', 'ní', 'èso']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['olóńgbò', 'tí', 'pẹ́pẹ́yẹ', 'kan', 'fún', 'ní', 'òdòdó']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_']"
+"['Ajá', 'tí', 'adìyẹ', 'kan', 'ju', 'bọ́ọ̀lù', 'sí']","['_', 'PronType=Rel', '_', '_', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'jẹun', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ehoro', 'tí', 'ó', 'ṣubú', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Bọ́ọ̀lù', 'tí', 'ó', 'ń', 'yí', 'gbirigbiri', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Kìnìún', 'tí', 'ó', 'ń', 'fa', 'màlúù', 'méjì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ajá', 'kan', 'tí', 'adìyẹ', 'ń', 'ju', 'bọ́ọ̀lù', 'sí', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ilé', 'tí', 'adìyẹ', 'àti', 'àgùntàn', 'tí', 'ó', 'ń', 'fò', 'ati', 'àgùntàn', 'tí', 'ó', 'jókòó', 'lórí', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ewúrẹ́', 'méjì', 'tí', 'ó', 'ń', 'ti', 'olóńgbò', 'kan', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ẹṣin', 'kan', 'tí', 'ó', 'ń', 'fà', 'màlúù', 'méjì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ajá', 'kan', 'tí', 'ó', 'ń', 'wẹ', 'àgùntàn', 'méjì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'ń', 'ju', 'ọsàn', 'sókè', 'sí', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['olóńgbò', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'kan', 'ń', 'fún', 'ní', 'òdòdó', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'rẹ̀', 'ni', 'ó', 'pa', 'àwọ̀', 'dà']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen', 'Voice=Foc', 'Number=Sing|VerbForm=Tns', '_', '_', '_']"
+"['Ehoro', 'tó', 'ń', 'jẹun']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tó', 'ń', 'ṣubú']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Bọ́ọ̀lù', 'tó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'kan', 'tó', 'ń', 'fa', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'kan', 'tó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['olóńgbò', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'kan', 'ń', 'fún', 'ní', 'òdòdó']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ewúrẹ́', 'kan', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ẹṣin', 'kan', 'tó', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'méjì', 'tó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['Ajá', 'kan', 'tí', 'adìyẹ', 'kan', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'kan', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['adìyẹ', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'ń', 'ju', 'ọsàn', 'sí']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'jẹun']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ó', 'ṣubú']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_']"
+"['Bọ́ọ̀lù', 'tó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ajá', 'tí', 'adìyẹ', 'kan', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'ẹ̀']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen']"
+"['ajá', 'tí', 'ó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'tí', 'olóńgbò', 'méjì', 'ń', 'fà']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['adìyẹ', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ẹṣin', 'tí', 'ó', 'ń', 'fà', 'màlúù', 'méjì']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['olóńgbò', 'tí', 'pẹ́pẹ́yẹ', 'kan', 'ń', 'fún', 'ní', 'òdòdó']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sí', 'abẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', 'Case=Loc', '_', 'Number=Sing|Case=Gen']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['adìyẹ', 'kan', 'tí', 'ọ̀pọ̀lọ́', 'ń', 'ju', 'ọsàn', 'sí']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'méjì', 'tí', 'ó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ehoro', 'tí', 'ó', 'ń', 'jẹun']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_']"
+"['Ehoro', 'tí', 'ó', 'ṣubú']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', '_']"
+"['Bọ́ọ̀lù', 'tí', 'ó', 'ń', 'yí', 'gbirigbiri']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_']"
+"['Kìnìún', 'tí', 'ó', 'ń', 'fa', 'màlúù', 'méjì']","['_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ọ̀pọ̀lọ́', 'méjì', 'tí', 'ó', 'ń', 'mú', 'pẹ́pẹ́yẹ', 'kan']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'kan', 'tí', 'ó', 'ń', 'wẹ', 'àgùntàn', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['ewúrẹ́', 'kan', 'tó', 'ń', 'fa', 'olóńgbò', 'méjì']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['igi', 'tí', 'ewúrẹ́', 'kan', 'jókòó', 'lábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['ibùsùn', 'tí', 'olóńgbò', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['adìyẹ', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'ju', 'ọsàn', 'sí']","['_', 'PronType=Rel', '_', '_', '_', '_', '_']"
+"['ẹṣin', 'kan', 'tí', 'ó', 'ń', 'fà', 'màlúù', 'méjì']","['_', '_', 'PronType=Rel', 'Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['adìyẹ', 'tí', 'eku', 'kan', 'ń', 'fún', 'ní', 'èso']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['olóńgbò', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'ń', 'fún', 'ní', 'òdòdó']","['_', '_', 'PronType=Rel', '_', 'VerbForm=Prog', '_', 'Case=Loc', '_']"
+"['ẹṣin', 'méjì', 'tí', 'màlúù', 'kan', 'ń', 'tì']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ewúrẹ́', 'méjì', 'tó', 'ń', 'ti', 'olóńgbò', 'kan']","['_', '_', 'PronType=Rel|Number=Sing|VerbForm=Tns', 'VerbForm=Prog', '_', '_', '_']"
+"['Ilé', 'tí', 'àgùntàn', 'kan', 'ń', 'fò', 'lórí', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', 'Number=Sing|Case=Gen']"
+"['Tábìlì', 'tí', 'ọ̀pọ̀lọ́', 'kan', 'jókòó', 'sábẹ́', 'rẹ̀']","['_', 'PronType=Rel', '_', '_', '_', '_', 'Number=Sing|Case=Gen']"
+"['Ajá', 'tí', 'adìyẹ', 'kan', 'ń', 'ju', 'bọ́ọ̀lù', 'sí']","['_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_', '_', '_']"
+"['ajá', 'méjì', 'tí', 'àgùntàn', 'kan', 'ń', 'mú']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"
+"['ọ̀pọ̀lọ́', 'kan', 'tí', 'pẹ́pẹ́yẹ', 'méjì', 'ń', 'wẹ̀']","['_', '_', 'PronType=Rel', '_', '_', 'VerbForm=Prog', '_']"

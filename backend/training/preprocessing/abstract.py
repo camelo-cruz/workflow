@@ -66,7 +66,7 @@ class BasePreprocessor(ABC):
                 self.logger.info(f"Starting session: {path.name}")
                 try:
                     df = self._read_file(path)
-                    self.logger.info(f"Loaded DataFrame ({len(df)} rows) from {path.name}")
+                    self.logger.info(f"Loaded DataFrame ({len(df)} rows) from {path}")
 
                     processed = self._process_dataframe(df)
                     processed_dfs.append(processed)
@@ -81,6 +81,7 @@ class BasePreprocessor(ABC):
             else:
                 self.logger.warning("No processed data to write.")
         finally:
+            self._after_write()
             self.logger.removeHandler(file_handler)
             file_handler.close()
 
@@ -106,6 +107,13 @@ class BasePreprocessor(ABC):
         data_dir.mkdir(parents=True, exist_ok=True)
         filename = f"{self.__class__.__name__}_{self.lang}_{self.study}.csv"
         df.to_csv(data_dir / filename, index=False)
+    
+    def _after_write(self) -> None:
+        """
+        Optional hook for additional processing after writing the DataFrame.
+        Can be overridden by subclasses if needed.
+        """
+        pass
 
     @abstractmethod
     def _process_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:

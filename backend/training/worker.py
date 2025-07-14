@@ -3,6 +3,11 @@ import argparse
 from training.preprocessing.UD import UDPreprocessor
 
 class TrainingWorker:
+    '''
+    This works as the interface for the CLI or API to run the training preprocessing.
+    It uses a Preprocessor to handle the preprocessing of annotated files.
+    and then it uses a trainer to handle the training logics.
+    '''
     def __init__(self, base_dir, language, action, study, job=None):
         self.base_dir = base_dir
         self.language = language
@@ -10,7 +15,7 @@ class TrainingWorker:
         self.study = study
         self.job = job
 
-        self.job_id = job.id if job else None
+        self.job_id = job.id if job else 'local_job'
         self.q = job.queue if job else None
         self.cancel = job.cancel_event if job else None
     

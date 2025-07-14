@@ -5,6 +5,13 @@ import argparse
 from inference.processors.factory import ProcessorFactory
 
 class BaseWorker:
+    '''
+    This works as the interface for the CLI or API to run the training preprocessing.
+    It defines how folders should be given to the processor and how to handle the job lifecycle.
+    In case they need to be yielded.
+    It also initializes the processor based on the action and language.
+    It also provides hooks for initial messages, per‐folder processing, and finalization.
+    '''
     def __init__(self, base_dir, action, language, instruction,
                  translationModel=None, glossingModel=None, job=None):
         self.base_dir = base_dir
