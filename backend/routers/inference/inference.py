@@ -15,7 +15,7 @@ from routers.helpers.job_manager import JobManager
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-MODELS_BASE = Path(__file__).resolve().parent.parent / "models"
+MODELS_BASE = Path(__file__).resolve().parent.parent.parent / "models"
 
 async def run_worker(process_fn):
     proc = Process(target=process_fn, daemon=True)
