@@ -10,7 +10,7 @@ from fastapi import APIRouter, HTTPException, Request, Form, UploadFile, File, B
 from fastapi.responses import JSONResponse, FileResponse
 from sse_starlette.sse import EventSourceResponse
 from multiprocessing import Process, Queue, Event
-from routers.api_inference_workers import OneDriveWorker, ZipWorker
+from routers.helpers.inference_workers import OneDriveWorker, ZipWorker
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

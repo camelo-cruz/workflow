@@ -24,10 +24,11 @@ import pandas as pd
 import argparse
 import json
 
-file_dir = os.path.dirname(os.path.abspath(__file__))
-columns_path = os.path.abspath(os.path.join(file_dir, '..', 'materials', 'OBLIGATORY_COLUMNS'))
-nolatin_path = os.path.abspath(os.path.join(file_dir, '..', 'materials', 'NO_LATIN'))
-languages_path = os.path.abspath(os.path.join(file_dir,'..', 'materials', 'LANGUAGES'))
+from utils.functions import (
+    set_global_variables,
+)
+
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 
 MAPPING = {
     "latin_transcription_everything": "transcription",
@@ -39,15 +40,6 @@ MAPPING = {
     "translation_comment": "translation_comments",
     "glossing_comment": "glossing_comments"
     }
-
-with open(languages_path, 'r', encoding='utf-8') as file:
-    LANGUAGES = json.load(file)
-
-with open(columns_path, 'r', encoding='utf-8') as file:
-    OBLIGATORY_COLUMNS = file.read().splitlines()
-
-with open(nolatin_path, 'r', encoding='utf-8') as file:
-    NO_LATIN = file.read().splitlines()
 
 def update_columns(df):
     for column in OBLIGATORY_COLUMNS:

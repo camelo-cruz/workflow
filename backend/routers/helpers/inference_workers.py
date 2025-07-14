@@ -7,7 +7,7 @@ from pathlib import Path
 
 from inference.processors.factory import ProcessorFactory
 from inference.worker import BaseWorker
-from utils.onedrive import (
+from routers.helpers.onedrive import (
     download_sharepoint_folder,
     upload_file_replace_in_onedrive,
     list_session_children,
@@ -133,5 +133,3 @@ class OneDriveWorker(BaseWorker):
         shutil.rmtree(tmp_dir, ignore_errors=True)
         self.put(f"[DONE UPLOADED] {name}")
 
-class TrainSpacyWorker(BaseWorker):
-    pass

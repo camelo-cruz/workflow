@@ -51,9 +51,9 @@ def set_global_variables():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(script_dir)
     
-    languages_path = os.path.join(parent_dir, 'materials', 'LANGUAGES')
-    columns_path = os.path.join(parent_dir, 'materials', 'OBLIGATORY_COLUMNS')
-    nolatin_path = os.path.join(parent_dir, 'materials', 'NO_LATIN')
+    languages_path = os.path.join(parent_dir, 'materials', 'global_variables', 'LANGUAGES')
+    columns_path = os.path.join(parent_dir, 'materials', 'global_variables', 'OBLIGATORY_COLUMNS')
+    nolatin_path = os.path.join(parent_dir, 'materials', 'global_variables', 'NO_LATIN')
 
     LANGUAGES = load_json_file(languages_path)
     OBLIGATORY_COLUMNS = load_text_file(columns_path)

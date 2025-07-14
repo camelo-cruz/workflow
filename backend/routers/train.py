@@ -11,7 +11,7 @@ import tempfile
 from fastapi import APIRouter, Request, Form, UploadFile, File, Body, HTTPException, BackgroundTasks
 from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
 
-from .train_workers import _offline_train_worker, _online_train_worker  # Uses the updated two-phase online worker
+from routers.helpers.train_workers import _offline_train_worker, _online_train_worker  # Uses the updated two-phase online worker
 
 router = APIRouter()
 

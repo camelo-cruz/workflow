@@ -9,7 +9,7 @@ from pathlib import Path
 from training.glossing.train_spacy import train_spacy
 from training.translation.train import train_m2m100
 from training.preprocessing.spacy import GlossingPreprocessor
-from utils.onedrive import (download_sharepoint_folder, 
+from routers.helpers.onedrive import (download_sharepoint_folder, 
                             upload_file_replace_in_onedrive, 
                             encode_share_link,
                             list_session_children)
