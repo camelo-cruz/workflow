@@ -23,7 +23,7 @@ class OneDriveWorker(AbstractTrainingWorker):
         self.token = token
         self.sessions_meta = []
 
-        self._tempdir_obj = tempfile.TemporaryDirectory(prefix=f"{self.job}_")
+        self._tempdir_obj = tempfile.TemporaryDirectory(prefix=f"{self.job_id}_")
         self.temp_root = Path(self._tempdir_obj.name)
 
         # Fetch metadata for the shared item
