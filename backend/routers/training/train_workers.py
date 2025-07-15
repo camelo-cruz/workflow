@@ -36,6 +36,9 @@ class OneDriveWorker(AbstractTrainingWorker):
         self.item = resp.json()
         self.root_drive_id = self.item["parentReference"]["driveId"]
         self.root_parent_folder_id = self.item["id"]
+    
+    def _initial_message(self):
+        self._put("Checking for sessions on OneDrive…")
 
     def _folder_to_process(self) -> List[Dict[str, str]]:
         self._put(f"[INFO] Temporary root directory: {self.temp_root}")
@@ -84,7 +87,6 @@ class OneDriveWorker(AbstractTrainingWorker):
 
         self._tempdir_obj.cleanup()
         self._put(f"[INFO] Deleted temporary directory {self.temp_root}")
-
+    
     def _after_train(self):
-        """ Handle any post-training tasks, like uploading models or results. """
-        self._put(f"[INFO] Training completed for job {self.job_id} – action: {self.action}")
+        return super()._after_train()

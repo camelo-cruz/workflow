@@ -25,12 +25,12 @@ class ZipWorker(AbstractInferenceWorker):
     def folder_to_process(self):
         yield self.base_dir
 
-    def after_process(self, folder_path):
+    def after_process(self):
         # Name the zip after the job
         zip_path = Path(tempfile.gettempdir()) / f"{self.job_id}_output.zip"
         with ZipFile(zip_path, "w") as zf:
             # Walk the processed folder and only include certain filenames
-            for root, _, files in os.walk(folder_path):
+            for root, _, files in os.walk(self.current_folder):
                 for fname in files:
                     if fname in (
                         "trials_and_sessions_annotated.xlsx",
@@ -101,7 +101,7 @@ class OneDriveWorker(AbstractInferenceWorker):
             }
             yield session_path
 
-    def after_process(self, folder_path):
+    def after_process(self):
         info = self._current
         name = info["session_name"]
         drive_id = info["drive_id"]
@@ -116,7 +116,7 @@ class OneDriveWorker(AbstractInferenceWorker):
             if self.cancel.is_set():
                 self.put("[CANCELLED UPLOAD]")
                 break
-            local_fp = os.path.join(folder_path, fname)
+            local_fp = os.path.join(self.current_folder, fname)
             if not os.path.exists(local_fp):
                 self.put(f"Skipping missing file: {fname}")
                 continue
