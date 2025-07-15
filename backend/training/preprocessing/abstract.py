@@ -9,11 +9,6 @@ from typing import List, Union
 import pandas as pd
 from tqdm import tqdm
 
-from utils.functions import (
-    find_language,
-    set_global_variables,
-)
-
 class BasePreprocessor(ABC):
     """
     Abstract base class for data preprocessing:
@@ -30,9 +25,7 @@ class BasePreprocessor(ABC):
         self.file_pattern = file_pattern
 
         # Language setup
-        self.LANGUAGES, self.NO_LATIN, self.OBLIGATORY_COLUMNS = set_global_variables()
-        self.lang = find_language(lang, self.LANGUAGES)
-
+        self.lang = lang
         # Ensure UTF-8 for stdout/stderr once
         sys.stdout.reconfigure(encoding="utf-8")
         sys.stderr.reconfigure(encoding="utf-8")
@@ -84,6 +77,8 @@ class BasePreprocessor(ABC):
             self._after_write()
             self.logger.removeHandler(file_handler)
             file_handler.close()
+            return combined
+        
 
     def _find_files(self, base_dir: Path) -> List[Path]:
         matches = list(base_dir.rglob(self.file_pattern))

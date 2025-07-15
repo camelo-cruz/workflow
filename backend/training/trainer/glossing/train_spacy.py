@@ -1,155 +1,136 @@
+import os
 import random
 import tempfile
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional, Dict
 
+from abc import ABC, abstractmethod
 import spacy
-import srsly
-
-
+from spacy import util
 from spacy.tokens import DocBin
-from spacy.training.corpus import Corpus
+from spacy.cli import download
+from spacy.util import is_package, load_config
+from spacy.cli.debug_data import debug_data
+from spacy.cli.init_config import fill_config
 from spacy.training.initialize import init_nlp
 from spacy.training.loop import train as train_nlp
-from spacy.util import load_config
+from spacy.cli._util import setup_gpu
 from wasabi import msg
+
+from training.trainer.abstract import AbstractTrainer
 from utils.functions import find_language, set_global_variables
 
 METRICS = ["token_acc", "morph_acc"]
 LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 
-def chunk(l: List, n: int):
-    """Split a list l into n chunks of fairly equal number of elements"""
-    k, m = divmod(len(l), n)
-    return (l[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in range(n))
-
-
-def get_all_except(l: List, idx: int):
-    """Get all elements of a list except a given index"""
-    return l[:idx] + l[(idx + 1):]
-
-
-def flatten(l: List) -> List:
-    """Flatten a list of lists"""
-    return [item for sublist in l for item in sublist]
-
-def train_spacy(
-    input_dir: str,
-    lang: str,
-    study: str,
-    pretrained_model: Optional[str] = None,
-    shuffle: bool = True,
-    use_gpu: int = 0,
-    log_to_wandb: bool = True,
-    wandb_project: str = "spacy-training",
-):
+class SpacyTrainer(AbstractTrainer):
     """
-    Train a spaCy model on 90% of the data and evaluate on 10% test split.
-    Optionally log metrics to Weights & Biases if available.
+    Concrete Trainer for spaCy glossing models.
+
+    Inherits GPU/W&B setup and run workflow from AbstractTrainer.
     """
-    # Determine language code
-    lang = find_language(lang, LANGUAGES)
+    DEFAULT_SPACY = {
+        'de': 'de_core_news_lg', 'en': 'en_core_web_lg', 'fr': 'fr_core_news_lg',
+        'zh': 'zh_core_news_lg', 'el': 'el_core_news_lg', 'it': 'it_core_news_lg',
+        'ja': 'ja_core_news_lg', 'pt': 'pt_core_news_lg', 'ro': 'ro_core_news_lg',
+        'ru': 'ru_core_news_lg', 'uk': 'uk_core_news_lg'
+    }
 
-    # Optional GPU setup
-    from spacy.cli._util import setup_gpu
-    if use_gpu >= 0:
-        setup_gpu(use_gpu)
-    else:
-        msg.info("Using CPU mode.")
+    def __init__(
+        self,
+        lang: str,
+        study: str,
+        log_to_wandb: bool = True,
+        wandb_project: str = "spacy-training",
+    ):
+        super().__init__(lang, study, log_to_wandb, wandb_project)
+        # Paths for config, data, and model
+        base_dir = Path(__file__).parents[1]
+        self.base_config_path = base_dir / 'glossing' / 'configs' / 'base_config.cfg'
+        self.output_config_path = Path(base_dir / 'glossing' / 'configs' / f'{self.lang}_{self.study}_config.cfg')
+        self.output_data_path = Path(self.data_dir / f'{self.lang}_{self.study}_data')
+        self.model_dir = Path(self.models_dir / 'glossing' / f'{self.lang}_{self.study}_custom_glossing')
 
-    # Initialize W&B if requested
-    wandb_run = None
-    if log_to_wandb:
-        try:
-            import wandb
-            wandb_run = wandb.init(
-                project=wandb_project,
-                config={"language": lang, "study": study, "use_gpu": use_gpu}
-            )
-            msg.info("Initialized Weights & Biases logging")
-        except ImportError:
-            msg.warning("wandb not installed; skipping W&B logging")
+        self.pretrained_model = self._load_pretrained(self.lang)
 
-    # Build binary docs from annotated data
-    msg.info("Building DocBin from input directory")
+    def _load_pretrained(self, model_key: str) -> Optional[str]:
+        """
+        Load or download a default spaCy package, or verify a custom model directory.
+        Returns the model name or path for spacy.load().
+        """
+        if model_key in self.DEFAULT_SPACY:
+            pkg = self.DEFAULT_SPACY[model_key]
+            if not is_package(pkg):
+                msg.info(f"SpaCy model {pkg} not found – downloading...")
+                download(pkg)
+            return pkg
+        else:
+            return None
+    
+    def _setup_gpu(self) -> None:
+        spacy.prefer_gpu()
 
-    # Paths for data and config
-    corpus_path = Path(f"training/data/{lang}_{study}_train.spacy")
-    config_path = Path("training/glossing/configs/config.cfg")
-    if not config_path.exists():
-        raise FileNotFoundError(f"Config file not found at {config_path}")
+    def _prepare_config(self) -> None:
+        """
+        Load base config, set paths, and write out debugged config.
+        """
+        cfg = util.load_config(self.base_config_path)
+        cfg['nlp']['lang'] = self.lang
+        cfg['paths']['train'] = cfg['paths']['dev'] = str(self.output_data_path)
+        if self.pretrained_model:
+            cfg['paths']['vectors'] = self.pretrained_model
+        cfg.to_disk(self.base_config_path)
+        fill_config(self.base_config_path, self.base_config_path)
+        debug_data(self.base_config_path, silent=False, verbose=True)
 
-    # Load or blank spaCy model
-    if pretrained_model:
-        nlp = spacy.load(pretrained_model)
-    else:
-        nlp = spacy.blank(lang)
+    def _make_docbins(self, corpus_path: Path, shuffle: bool = True) -> Dict[str, Path]:
+        """
+        Split .spacy docs in corpus_path into train/dev and return file paths.
+        """
+        nlp = spacy.load(self.pretrained_model) if self.pretrained_model else spacy.blank(self.lang)
+        docs = list(DocBin().from_disk(corpus_path).get_docs(nlp.vocab))
+        if shuffle:
+            random.shuffle(docs)
+        split_idx = int(len(docs) * 0.9)
+        train_docs, dev_docs = docs[:split_idx], docs[split_idx:]
 
-    # Load all docs from corpus
-    doc_bin = DocBin().from_disk(corpus_path)
-    docs = list(doc_bin.get_docs(nlp.vocab))
-    if shuffle:
-        random.shuffle(docs)
-
-    # Split into 90% train and 10% test
-    total = len(docs)
-    split_idx = int(total * 0.9)
-    train_docs = docs[:split_idx]
-    test_docs = docs[split_idx:]
-    msg.info(f"Total docs: {total}, train: {len(train_docs)}, test: {len(test_docs)}")
-
-    # Write out temporary train/test spacy files
-    with tempfile.TemporaryDirectory() as tmpdir_str:
-        tmpdir = Path(tmpdir_str)
+        tmpdir = Path(tempfile.mkdtemp(prefix=f"spacy_split_{self.lang}_{self.study}_"))
         train_path = tmpdir / "train.spacy"
-        test_path = tmpdir / "test.spacy"
-
+        dev_path = tmpdir / "dev.spacy"
         DocBin(docs=train_docs).to_disk(train_path)
-        DocBin(docs=test_docs).to_disk(test_path)
+        DocBin(docs=dev_docs).to_disk(dev_path)
+        msg.info(f"Docs split: train={len(train_docs)}, dev={len(dev_docs)}")
+        return {"train": train_path, "dev": dev_path}
 
-        # Load and adjust config for training
-        config = load_config(config_path)
-        config["nlp"]["lang"] = lang
-        config["paths"]["train"] = str(train_path)
-        config["paths"]["dev"] = str(test_path)
-
-        # Initialize and train on 90% split
-        msg.divider("Training model on 90% of data")
-        nlp_final = init_nlp(config)
-        trained_nlp, _ = train_nlp(nlp_final, None, use_gpu=use_gpu)
-
-        # Evaluate on 10% test set
-        msg.info("Evaluating on 10% test set")
+    def train(self) -> Dict[str, float]:
+        """
+        Full training workflow using configured paths and AbstractTrainer.run logic.
+        """
+        splits = self._make_docbins(Path(self.output_data_path))
+        # 1. Prepare spaCy config
+        self._prepare_config()
+        # 2. Ensure data folder exists
+        corpus_files = list(Path(self.output_data_path).glob("*.spacy"))
+        if not corpus_files:
+            raise FileNotFoundError(f"No .spacy files found in {self.output_data_path}")
+        # 4. Load and train
+        config = load_config(self.output_config_path)
+        config['nlp']['lang'] = self.lang
+        config['paths']['train'] = str(splits['train'])
+        config['paths']['dev'] = str(splits['dev'])
+        nlp = init_nlp(config)
+        msg.divider("Training started")
+        trained_nlp, _ = train_nlp(nlp, None, use_gpu=self.use_gpu)
+        # 5. Evaluate
         from spacy.training.corpus import Corpus
-        corpus = Corpus(str(test_path), gold_preproc=False)
+        corpus = Corpus(str(splits['dev']), gold_preproc=False)
         examples = list(corpus(trained_nlp))
         scores = trained_nlp.evaluate(examples)
-
-        # Log metrics locally and to W&B
-        metrics_to_log = {}
-        for metric in METRICS:
-            val = scores.get(metric)
-            if val is not None:
-                msg.info(f"{metric}: {val:.3f}")
-                metrics_to_log[metric] = val
-
-        if wandb_run:
-            wandb_run.log(metrics_to_log)
-            msg.good("Logged metrics to Weights & Biases")
-            wandb_run.finish()
-
-        # Save final model
-        model_dir = Path(f"models/glossing/{lang}_{study}_custom_glossing")
-        model_dir.mkdir(parents=True, exist_ok=True)
-        trained_nlp.to_disk(model_dir)
-        msg.good(f"Saved final model to {model_dir}")
-
-    return scores
-
-
-if __name__ == "__main__":
-    lang = "german"
-    study = "H"
-    #input_dir = "C:/Users/camelo.cruz/Leibniz-ZAS/Leibniz Dream Data - Studies/H_Dependencies/H06a-Relative-Clause-Production-study/H06a_raw_files_deu"
-    input_dir = '/Users/alejandra/Library/CloudStorage/OneDrive-FreigegebeneBibliotheken–Leibniz-ZAS/Leibniz Dream Data - Studies/tests_alejandra/german/H06a_deu_adults Kopie'
-    train_spacy(input_dir=input_dir, lang=lang, study=study, n_folds=1, shuffle=True, use_gpu=0)
+        metrics = {m: scores[m] for m in METRICS if m in scores}
+        for m, v in metrics.items():
+            msg.info(f"{m}: {v:.3f}")
+        # 6. Save model
+        self.model_dir.mkdir(parents=True, exist_ok=True)
+        trained_nlp.to_disk(self.model_dir)
+        msg.good(f"Saved model to {self.model_dir}")
+        return metrics

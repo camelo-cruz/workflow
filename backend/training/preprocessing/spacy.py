@@ -71,7 +71,7 @@ class GlossingPreprocessor(BasePreprocessor):
         log_path = self.input_dir / 'glossing_traindata.log'
         log_path.parent.mkdir(parents=True, exist_ok=True)
         handler = self._setup_file_handler(log_path)
-
+ 
         nlp = spacy.load(self.pretrained_model) if self.pretrained_model else spacy.blank(self.lang)
         self.logger.info(f"Using model: {self.pretrained_model or 'blank'}")
 

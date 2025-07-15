@@ -1,7 +1,13 @@
+from pathlib import Path
 import traceback
 import argparse
-from training.preprocessing.UD import UDPreprocessor
+import pandas as pd
+from training.preprocessing.factory import PreProcessorFactory
+from training.trainer.factory import TrainerFactory
 from abc import ABC, abstractmethod
+from utils.functions import find_language, set_global_variables
+
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 
 
 class AbstractTrainingWorker(ABC):
@@ -23,10 +29,12 @@ class AbstractTrainingWorker(ABC):
             job (optional): Optional job object when running in a queued environment.
         """
         self.base_dir = base_dir
-        self.language = language
+        self.language = find_language(language, LANGUAGES)
         self.action = action
         self.study = study
         self.job = job
+        self.preprocessor = PreProcessorFactory.get_preprocessor(self.action, self.language, self.study)
+        self.trainer = TrainerFactory.get_trainer(self.action, self.language, self.study)
 
         # Determine job-related identifiers and messaging queue
         self.job_id = job.id if job else 'local_job'
@@ -73,23 +81,16 @@ class AbstractTrainingWorker(ABC):
         This method sends status messages before and after processing.
         """
         self._put(f"Starting preprocessing for job {self.job_id} – action: {self.action}")
-        self.preprocessor = UDPreprocessor(
-            lang=self.language,
-            study=self.study,
-            file_pattern="*annotated.xlsx"
-        )
-        # Run preprocessing on target folder
         self.preprocessor.preprocess(self._folder_to_process())
-        self._after_preprocess()
         self._put(f"Preprocessing completed for job {self.job_id}")
 
     def _train(self):
-        """
-        Execute the training workflow.
-
-        Subclasses should override this method to implement specific training logic.
-        """
-        pass
+        data_dir = Path(__file__).resolve().parent / 'data'
+        if self.action == 'gloss':
+            df_data = pd.read_csv(data_dir / f'{self.preprocessor.__class__.__name__}_{self.language}_{self.study}.csv')
+        self._put(f"Starting training for job {self.job_id} – action: {self.action}")
+        self.trainer.run(df_data)
+        self._put(f"Training completed for job {self.job_id}")
 
     def run(self):
         """
@@ -99,8 +100,10 @@ class AbstractTrainingWorker(ABC):
         """
         self._put(f"Starting job {self.job_id} – action: {self.action}")
         try:
-            self._preprocess()
+            #self._preprocess()
+            #self._after_preprocess()
             self._train()
+            self._after_train()
         except Exception as e:
             self._put(f"[ERROR] {str(e)}")
             traceback.print_exc()
@@ -129,16 +132,6 @@ class TrainingWorker(AbstractTrainingWorker):
 
     def _after_train(self):
         self._put(f"Local training completed for job {self.job_id} – action: {self.action}")
-
-    def _train(self):
-        """
-        Example training logic placeholder.
-
-        Replace this method's content with actual training steps (e.g., model.fit()).
-        """
-        # Placeholder for training implementation
-        self._put(f"Training logic for {self.language} with action {self.action} would run here.")
-        self._after_train()
 
 
 def main():
