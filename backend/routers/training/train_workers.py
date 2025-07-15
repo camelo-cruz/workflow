@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List, Dict
 
 import requests
-from training.worker import TrainingWorker
+from training.worker import AbstractTrainingWorker
 from routers.helpers.onedrive import (
     download_sharepoint_folder,
     upload_file_replace_in_onedrive,
@@ -16,7 +16,7 @@ from routers.helpers.onedrive import (
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class OneDriveWorker(TrainingWorker):
+class OneDriveWorker(AbstractTrainingWorker):
     def __init__(self, base_dir, language, action, study, token, job):
         super().__init__(base_dir, language, action, study, job)
         self.share_link = base_dir
@@ -37,13 +37,13 @@ class OneDriveWorker(TrainingWorker):
         self.root_drive_id = self.item["parentReference"]["driveId"]
         self.root_parent_folder_id = self.item["id"]
 
-    def folder_to_process(self) -> List[Dict[str, str]]:
-        self.put(f"[INFO] Temporary root directory: {self.temp_root}")
+    def _folder_to_process(self) -> List[Dict[str, str]]:
+        self._put(f"[INFO] Temporary root directory: {self.temp_root}")
         entries = list_session_children(self.share_link, self.token)
 
         for entry in entries:
             name = entry.get("name", "root")
-            self.put(f"[INFO] Downloading session '{name}'")
+            self._put(f"[INFO] Downloading session '{name}'")
 
             session_dir = self.temp_root / name
             session_dir.mkdir(parents=True, exist_ok=True)
@@ -56,18 +56,18 @@ class OneDriveWorker(TrainingWorker):
                     file_suffix=["annotated.xlsx"],
                 )
             except Exception as e:
-                self.put(f"[ERROR] Download failed for '{name}': {e}")
+                self._put(f"[ERROR] Download failed for '{name}': {e}")
                 logger.exception("Download error for session %s", name)
                 continue
 
         # Return the path your TrainingWorker expects:
         return str(self.temp_root)
 
-    def after_preprocess(self):
+    def _after_preprocess(self):
         """ Upload the training log back to OneDrive, then delete the temp dir. """
         log_file = self.temp_root / f"{self.preprocessor.__class__.__name__}.log"
         if not log_file.exists():
-            self.put(f"[WARNING] Log file {log_file} not found, skipping upload")
+            self._put(f"[WARNING] Log file {log_file} not found, skipping upload")
         else:
             try:
                 upload_file_replace_in_onedrive(
@@ -77,10 +77,14 @@ class OneDriveWorker(TrainingWorker):
                     file_name_in_folder=log_file.name,
                     access_token=self.token
                 )
-                self.put(f"[INFO] Uploaded '{log_file.name}'")
+                self._put(f"[INFO] Uploaded '{log_file.name}'")
             except Exception as e:
-                self.put(f"[ERROR] Upload failed for '{log_file.name}': {e}")
+                self._put(f"[ERROR] Upload failed for '{log_file.name}': {e}")
                 logger.exception("Upload error for %s", log_file)
 
         self._tempdir_obj.cleanup()
-        self.put(f"[INFO] Deleted temporary directory {self.temp_root}")
+        self._put(f"[INFO] Deleted temporary directory {self.temp_root}")
+
+    def _after_train(self):
+        """ Handle any post-training tasks, like uploading models or results. """
+        self._put(f"[INFO] Training completed for job {self.job_id} – action: {self.action}")

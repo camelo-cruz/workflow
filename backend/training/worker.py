@@ -1,13 +1,9 @@
 import traceback
 import argparse
 from training.preprocessing.UD import UDPreprocessor
+from abc import ABC, abstractmethod
 
-class TrainingWorker:
-    '''
-    This works as the interface for the CLI or API to run the training preprocessing.
-    It uses a Preprocessor to handle the preprocessing of annotated files.
-    and then it uses a trainer to handle the training logics.
-    '''
+class AbstractTrainingWorker(ABC):
     def __init__(self, base_dir, language, action, study, job=None):
         self.base_dir = base_dir
         self.language = language
@@ -19,36 +15,68 @@ class TrainingWorker:
         self.q = job.queue if job else None
         self.cancel = job.cancel_event if job else None
     
-    def put(self, msg):
+    def _put(self, msg):
         if self.q:
             self.q.put(msg)
         else:
             print(msg)
 
-    def folder_to_process(self):
-        return self.base_dir
-    
-    def after_preprocess(self):
+    @abstractmethod
+    def _initial_message(self):
+        pass
+
+    @abstractmethod
+    def _folder_to_process(self):
+        pass
+
+    @abstractmethod
+    def _after_preprocess(self):
+        pass
+
+    @abstractmethod
+    def _after_train(self):
+        pass
+
+    def _preprocess(self):
+        self._put(f"Starting preprocessing for job {self.job_id} – action: {self.action}")
+        self.preprocessor = UDPreprocessor(
+            lang=self.language,
+            study=self.study,
+            file_pattern="*annotated.xlsx"
+        )
+        self.preprocessor.preprocess(self.folder_to_process())
+        self._after_preprocess()
+        self._put(f"Training completed for job {self.job_id}")
+
+    def _train(self):
         pass
 
     def run(self):
+        self._put(f"Starting training job {self.job_id} – action: {self.action}")
         try:
-            self.put(f"Starting training job {self.job_id} – action: {self.action}")
-
-            self.preprocessor = UDPreprocessor(
-                lang=self.language,
-                study=self.study,
-                file_pattern="*annotated.xlsx"
-            )
-            self.preprocessor.preprocess(self.folder_to_process())
-            self.after_preprocess()
-            self.put(f"Training completed for job {self.job_id}")
-
+            self._preprocess()
+            self._train()
         except Exception as e:
-            self.put(f"[ERROR] {str(e)}")
+            self._put(f"[ERROR] {str(e)}")
             traceback.print_exc()
         finally:
-            self.put("[DONE ALL]")
+            self._put("[DONE ALL]")
+
+class TrainingWorker:
+    '''
+    This works as the interface for the CLI or API to run the training preprocessing.
+    It uses a Preprocessor to handle the preprocessing of annotated files.
+    and then it uses a trainer to handle the training logics.
+    '''
+
+    def _folder_to_process(self):
+        yield self.base_dir
+
+    def _after_preprocess(self):
+        self._put(f"Local preprocessing completed for job {self.job_id} – action: {self.action}")
+
+    def _after_train(self):
+        self._put(f"Local training completed for job {self.job_id} – action: {self.action}")
 
 def main():
     parser = argparse.ArgumentParser(

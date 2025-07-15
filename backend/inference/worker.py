@@ -1,17 +1,13 @@
 import os
 import traceback
 import argparse
+from abc import ABC, abstractmethod
 
 from inference.processors.factory import ProcessorFactory
 
-class BaseWorker:
-    '''
-    This works as the interface for the CLI or API to run the training preprocessing.
-    It defines how folders should be given to the processor and how to handle the job lifecycle.
-    In case they need to be yielded.
-    It also initializes the processor based on the action and language.
-    It also provides hooks for initial messages, per‐folder processing, and finalization.
-    '''
+
+class AbstractInferenceWorker(ABC):
+
     def __init__(self, base_dir, action, language, instruction,
                  translationModel=None, glossingModel=None, job=None):
         self.base_dir = base_dir
@@ -20,28 +16,29 @@ class BaseWorker:
         self.instruction = instruction
         self.translationModel = translationModel
         self.glossingModel = glossingModel
-        self.job_id = job.id if job else 0
+        self.job = job
+
+        self.job_id = job.id if job else 'local_job'
         self.q = job.queue if job else None
         self.cancel = job.cancel_event if job else None
-
+    
     def put(self, msg):
         if self.q:
             self.q.put(msg)
         else:
             print(msg)
 
+    @abstractmethod
     def initial_message(self):
-        # Hook: override in subclasses if you need to log or prepare before processing.
-        self.put(f"Starting job {self.job_id} – action: {self.action}")
+        raise NotImplementedError("Subclasses must implement initial_message()")
 
+    @abstractmethod
     def folder_to_process(self):
-        # By default, just process the single base_dir. In some cases
-        # you might want to override this to yield multiple folders.
-        yield self.base_dir
+        raise NotImplementedError("Subclasses must implement folder_to_process()")
 
+    @abstractmethod
     def after_process(self, folder_path):
-        # Hook: override in subclasses for per‐folder teardown (e.g. zipping or uploading)
-        pass
+        raise NotImplementedError("Subclasses must implement after_process()")
 
     def run(self):
         try:
@@ -70,6 +67,25 @@ class BaseWorker:
         finally:
             self.put("[DONE ALL]")
 
+
+class LocalWorker(AbstractInferenceWorker):
+    '''
+    This works as the interface for the CLI or API to run the training preprocessing.
+    It defines how folders should be given to the processor and how to handle the job lifecycle.
+    In case they need to be yielded.
+    It also initializes the processor based on the action and language.
+    It also provides hooks for initial messages, per‐folder processing, and finalization.
+    '''
+    def initial_message(self):
+        self.put(f"Starting job {self.job_id} – action: {self.action}")
+
+    def folder_to_process(self):
+        yield self.base_dir
+
+    def after_process(self, folder):
+        self.put(f"Processed folder: {folder}")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Run BaseWorker from the command line"
@@ -92,7 +108,7 @@ def main():
 
     args = parser.parse_args()
 
-    worker = BaseWorker(
+    worker = LocalWorker(
         base_dir = args.base_dir,
         action = args.action,
         language = args.language,

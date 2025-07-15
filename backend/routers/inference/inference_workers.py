@@ -6,14 +6,14 @@ from zipfile import ZipFile
 from pathlib import Path
 
 from inference.processors.factory import ProcessorFactory
-from inference.worker import BaseWorker
+from inference.worker import AbstractInferenceWorker
 from routers.helpers.onedrive import (
     download_sharepoint_folder,
     upload_file_replace_in_onedrive,
     list_session_children,
 )
 
-class ZipWorker(BaseWorker):
+class ZipWorker(AbstractInferenceWorker):
     """
     Processes a single local folder (or multiple if your base_dir contains
     sub-folders named “Session_*”), then zips up only the output files you care
@@ -21,6 +21,9 @@ class ZipWorker(BaseWorker):
     """
     def initial_message(self):
         self.put("Preparing to process and zip outputs…")
+    
+    def folder_to_process(self):
+        yield self.base_dir
 
     def after_process(self, folder_path):
         # Name the zip after the job
@@ -41,7 +44,7 @@ class ZipWorker(BaseWorker):
         self.put(f"[ZIP PATH] {zip_path}")
 
 
-class OneDriveWorker(BaseWorker):
+class OneDriveWorker(AbstractInferenceWorker):
     """
     Downloads every session folder from a OneDrive share, processes them,
     then uploads the outputs back to OneDrive and cleans up.
