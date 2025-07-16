@@ -44,7 +44,9 @@ class SpaCyGlossingStrategy(GlossingStrategy):
             self.nlp = spacy.load(pkg)
 
         elif self.glossing_model:
-            model_dir = Path("models/glossing") / (self.glossing_model)
+            models_dir = Path(__file__).resolve().parents[2] / "models/glossing"
+            model_dir = models_dir / (self.glossing_model)
+            print(f"Loading custom glossing model from {model_dir}")
             if not model_dir.exists():
                 raise ValueError(f"Custom glossing model not found at {model_dir}")
             self.nlp = spacy.load(model_dir)

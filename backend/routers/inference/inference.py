@@ -43,6 +43,9 @@ async def process(
     glossingModel = None if glossingModel == "Default" else glossingModel
     translationModel = None if translationModel == "Default" else translationModel
 
+    print('glossingModel:', glossingModel)
+    print('translationModel:', translationModel)
+
     if not language:
         job.queue.put("[ERROR] Missing language")
         return {"job_id": job.id}

@@ -23,8 +23,8 @@ class GlossingProcessor(DataProcessor):
         self,
         language: str,
         instruction: str,
-        glossing_model: str | None = None,
         translation_model: str | None = None,
+        glossing_model: str | None = None
     ):
         super().__init__(language=language, instruction=instruction)
         self.glossing_model = glossing_model

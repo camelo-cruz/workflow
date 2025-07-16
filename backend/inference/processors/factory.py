@@ -7,13 +7,13 @@ from inference.processors.ColumnCreation import ColumnCreationProcessor
 
 class ProcessorFactory:
     @staticmethod
-    def get_processor(language: str, action: str, instruction: str, glossingModel = None, translationModel = None) -> DataProcessor:
+    def get_processor(language: str, action: str, instruction: str, translationModel = None, glossingModel = None) -> DataProcessor:
         if action == "transcribe":
             return TranscriptionProcessor(language, instruction)
         elif action == "translate":
             return TranslationProcessor(language, instruction, translationModel)
         elif action == "gloss":
-            return GlossingProcessor(language, instruction, glossingModel, translationModel)
+            return GlossingProcessor(language, instruction, translationModel, glossingModel)
         elif action == "transliterate":
             return Transliterator(language, instruction)
         elif action == "create columns":
