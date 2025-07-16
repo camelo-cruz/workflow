@@ -3,7 +3,7 @@ import traceback
 import argparse
 import pandas as pd
 from training.preprocessing.factory import PreProcessorFactory
-from training.trainer.factory import TrainerFactory
+from training.training.factory import TrainerFactory
 from abc import ABC, abstractmethod
 from utils.functions import find_language, set_global_variables
 
@@ -81,15 +81,13 @@ class AbstractTrainingWorker(ABC):
         This method sends status messages before and after processing.
         """
         self._put(f"Starting preprocessing for job {self.job_id} – action: {self.action}")
-        self.preprocessor.preprocess(self._folder_to_process())
+        data_df = self.preprocessor.preprocess(self._folder_to_process())
         self._put(f"Preprocessing completed for job {self.job_id}")
+        return data_df
 
-    def _train(self):
-        data_dir = Path(__file__).resolve().parent / 'data'
-        if self.action == 'gloss':
-            df_data = pd.read_csv(data_dir / f'{self.preprocessor.__class__.__name__}_{self.language}_{self.study}.csv')
+    def _train(self, data_df: pd.DataFrame):
         self._put(f"Starting training for job {self.job_id} – action: {self.action}")
-        self.trainer.run(df_data)
+        self.trainer.train(data_df)
         self._put(f"Training completed for job {self.job_id}")
 
     def run(self):
@@ -100,9 +98,12 @@ class AbstractTrainingWorker(ABC):
         """
         self._put(f"Starting job {self.job_id} – action: {self.action}")
         try:
-            #self._preprocess()
-            #self._after_preprocess()
-            self._train()
+            data_df = self._preprocess()
+            if data_df.empty:
+                self._put(f"[WARNING] dataframe is empty after preprocessing for job {self.job_id} – action: {self.action}")
+                return
+            self._after_preprocess()
+            self._train(data_df)
             self._after_train()
         except Exception as e:
             self._put(f"[ERROR] {str(e)}")

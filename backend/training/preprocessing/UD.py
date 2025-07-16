@@ -9,15 +9,22 @@ from utils.functions import (
 
 class UDPreprocessor(BasePreprocessor):
     def _process_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
-        # Clean text and gloss columns
-        cleaned_texts = df[self.TEXT_COLUMN].map(self._clean_text)
-        cleaned_glosses = df[self.GLOSS_COLUMN].map(self._clean_text)
+        rows = []
+        # Iterate through each original row to preserve raw text and translation
+        for idx, row in df.iterrows():
+            raw_text = str(row.get(self.TEXT_COLUMN, ""))
+            raw_translation = str(row.get(self.TRANSLATION_COLUMN, ""))
+            raw_gloss = str(row.get(self.GLOSS_COLUMN, ""))
 
-        # Split by line and filter out blank lines, keeping only well-aligned rows
-        texts, glosses = [], []
-        for raw_text, raw_gloss in zip(cleaned_texts, cleaned_glosses):
-            text_lines = [line.strip() for line in raw_text.split("\n") if line.strip()]
-            gloss_lines = [line.strip() for line in raw_gloss.split("\n") if line.strip()]
+            # Clean the text and gloss
+            raw_gloss_text = self._clean_text(raw_text)
+            cleaned_gloss = self._clean_text(raw_gloss).replace(',', ' PUNCT ')
+
+            # Split into non-empty lines
+            text_lines = [line.strip() for line in raw_gloss_text.split("\n") if line.strip()]
+            gloss_lines = [line.strip() for line in cleaned_gloss.split("\n") if line.strip()]
+
+            # Ensure line count matches
             if len(text_lines) != len(gloss_lines):
                 msg.warn(
                     f"Skipped row due to line count mismatch: {len(text_lines)} texts vs {len(gloss_lines)} glosses"
@@ -26,36 +33,49 @@ class UDPreprocessor(BasePreprocessor):
                     f"Skipped row: {len(text_lines)} texts vs {len(gloss_lines)} glosses"
                 )
                 continue
-            texts.extend(text_lines)
-            glosses.extend(gloss_lines)
 
-        # Prepare rows list, comparing token counts not character counts
-        rows = []
-        for text, gloss in zip(texts, glosses):
-            feats = self._map_gloss(gloss)
-            tokens = text.split()  # split on whitespace to get tokens
-            if len(tokens) != len(feats):
-                msg.warn(
-                    f"Token mismatch for text: '{text}' (num tokens={len(tokens)}, num feats={len(feats)})"
-                )
-                self.logger.warning(
-                    f"Token mismatch: '{text}' (tokens={len(tokens)}, feats={len(feats)})"
-                )
-                continue
-            rows.append({'text': tokens, 'UDfeats': feats})
+            # Process each line pair
+            for text_line, gloss_line in zip(text_lines, gloss_lines):
+                feats = self._map_gloss(gloss_line)
+                tokens = text_line.split()
 
-        # Create DataFrame with correct columns even if empty
-        if rows:
-            new_df = pd.DataFrame(rows)
-        else:
-            new_df = pd.DataFrame(columns=['text', 'UDfeats'])
+                # Ensure token count matches feature count
+                if len(tokens) != len(feats):
+                    msg.warn(
+                        f"Token mismatch for text: '{text_line}' (tokens={len(tokens)}, feats={len(feats)})"
+                    )
+                    self.logger.warning(
+                        f"Token mismatch: '{text_line}' (tokens={len(tokens)}, feats={len(feats)})"
+                    )
+                    continue
 
-        # Drop rows where text is empty AND gloss list is empty
-        mask = ~(
-            (new_df['text'].apply(lambda lst: len(lst) == 0)) &
-            (new_df['UDfeats'].apply(lambda lst: len(lst) == 0))
+                # Append a row with all required columns
+                rows.append({
+                    'raw_text': raw_text,
+                    'translation': raw_translation,
+                    'clean_text': raw_gloss_text,
+                    'tokens': tokens,
+                    'gloss': gloss_line,
+                    'UDfeats': feats
+                })
+
+        # Construct DataFrame (will be empty if no valid rows)
+        columns = ['raw_text', 'translation', 'clean_text', 'tokens', 'gloss', 'UDfeats']
+        new_df = pd.DataFrame(rows, columns=columns)
+        new_df = new_df[~new_df.apply(self._is_placeholder, axis=1)].reset_index(drop=True)
+        return new_df
+    
+    @staticmethod
+    def _is_placeholder(row):
+        return (
+            row['raw_text'] == 'nan' and
+            row['translation'] == 'nan' and
+            row['clean_text'] == 'nan' and
+            row['tokens'] == ['nan'] and
+            row['gloss'] == 'nan' and
+            row['UDfeats'] == ['_']
         )
-        return new_df.loc[mask].reset_index(drop=True)
+
 
     def _clean_text(self, text: Union[str, float]) -> str:
         """
@@ -67,7 +87,7 @@ class UDPreprocessor(BasePreprocessor):
             return ""
 
         # Replace double dots, standardize commas, remove outer dots
-        text = text.replace('..', '.').replace(',', ' PUNCT ')
+        text = text.replace('..', '.')
         text = text.strip().strip('.')
 
         # Remove bracket characters and leading digits
