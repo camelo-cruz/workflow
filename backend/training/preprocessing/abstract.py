@@ -64,7 +64,7 @@ class BasePreprocessor(ABC):
 
             if processed_dfs:
                 combined = pd.concat(processed_dfs, ignore_index=True)
-                self._write_combined_file(combined)
+                self._write_files(combined)
                 self.logger.info(f"Wrote combined processed data ({len(combined)} rows)")
             else:
                 self.logger.warning("No processed data to write.")
@@ -90,7 +90,7 @@ class BasePreprocessor(ABC):
         else:
             raise ValueError(f"Unsupported file format: {path.suffix}")
 
-    def _write_combined_file(self, df: pd.DataFrame) -> None:
+    def _write_files(self, df: pd.DataFrame) -> None:
         """
         Write the combined DataFrame back to disk as a single CSV.
         """

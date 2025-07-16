@@ -34,6 +34,7 @@ class AbstractInferenceWorker(ABC):
         self.translationModel = translationModel
         self.glossingModel = glossingModel
         self.job = job
+        self.current_folder = None
 
         # Setup job identification and messaging queue
         self.job_id = job.id if job else 'local_job'

@@ -90,11 +90,11 @@ class UDPreprocessor(BasePreprocessor):
         text = text.replace('..', '.')
         text = text.strip().strip('.')
 
-        # Remove bracket characters and leading digits
-        text = re.sub(r"[\[\]\(\)\{\}01-9]+", "", text)
-
         # Normalize grammatical SG/PL markers
         text = re.sub(r"\b(\d)(SG|PL)\b", r"\1.\2", text)
+
+        # Remove bracket characters
+        text = re.sub(r"[\[\]\(\)\{\}]+", "", text)
 
         # Collapse whitespace
         text = re.sub(r"\s+", " ", text)
