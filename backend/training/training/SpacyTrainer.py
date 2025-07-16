@@ -103,9 +103,9 @@ class SpacyTrainer(AbstractTrainer):
         docs = list(doc_bin.get_docs(self.nlp.vocab))
         random.shuffle(docs)
 
-        # Split into 90% train and 10% test
+        # Split into 95% train and 5% test
         total = len(docs)
-        split_idx = int(total * 0.9)
+        split_idx = int(total * 0.95)
         train_docs = docs[:split_idx]
         test_docs = docs[split_idx:]
         msg.info(f"Total docs: {total}, train: {len(train_docs)}, test: {len(test_docs)}")
