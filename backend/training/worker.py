@@ -29,6 +29,7 @@ class AbstractTrainingWorker(ABC):
             job (optional): Optional job object when running in a queued environment.
         """
         self.base_dir = base_dir
+        self.current_folder = base_dir
         self.language = find_language(language, LANGUAGES)
         self.action = action
         self.study = study
@@ -61,7 +62,24 @@ class AbstractTrainingWorker(ABC):
     @abstractmethod
     def _folder_to_process(self):
         """Determine and return the folder path to be processed."""
-        pass
+        yield self.current_folder
+
+    def _preprocess(self):
+        """
+        Execute the preprocessing workflow using UDPreprocessor.
+
+        This method sends status messages before and after processing.
+        """
+        for folder in self._folder_to_process():
+            self._put(f"Starting preprocessing for job {self.job_id} – action: {self.action}")
+            data_df = self.preprocessor.preprocess(folder)
+            self._put(f"Preprocessing completed for job {self.job_id}")
+            return data_df
+
+    def _train(self, data_df: pd.DataFrame):
+        self._put(f"Starting training for job {self.job_id} – action: {self.action}")
+        self.trainer.train(data_df)
+        self._put(f"Training completed for job {self.job_id}")
 
     @abstractmethod
     def _after_preprocess(self):
@@ -73,22 +91,6 @@ class AbstractTrainingWorker(ABC):
     def _after_train(self):
         """Actions to perform immediately after training step completes."""
         pass
-
-    def _preprocess(self):
-        """
-        Execute the preprocessing workflow using UDPreprocessor.
-
-        This method sends status messages before and after processing.
-        """
-        self._put(f"Starting preprocessing for job {self.job_id} – action: {self.action}")
-        data_df = self.preprocessor.preprocess(self._folder_to_process())
-        self._put(f"Preprocessing completed for job {self.job_id}")
-        return data_df
-
-    def _train(self, data_df: pd.DataFrame):
-        self._put(f"Starting training for job {self.job_id} – action: {self.action}")
-        self.trainer.train(data_df)
-        self._put(f"Training completed for job {self.job_id}")
 
     def run(self):
         """

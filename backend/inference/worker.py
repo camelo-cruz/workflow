@@ -28,19 +28,44 @@ class AbstractInferenceWorker(ABC):
             job (optional): Job object providing id, queue, and cancel_event.
         """
         self.base_dir = base_dir
+        self.current_folder = self.base_dir
         self.action = action
         self.language = language
         self.instruction = instruction
         self.translationModel = translationModel
         self.glossingModel = glossingModel
         self.job = job
-        self.current_folder = None
 
         # Setup job identification and messaging queue
         self.job_id = job.id if job else 'local_job'
         self.q = getattr(job, 'queue', None)
         self.cancel = getattr(job, 'cancel_event', None)
 
+    @abstractmethod
+    def _initial_message(self) -> None:
+        """
+        Hook for sending an initial start-up message.
+        """
+        raise NotImplementedError("Subclasses must implement initial_message()")
+
+    @abstractmethod
+    def _folder_to_process(self):
+        """
+        Hook for yielding or listing directories to process.
+
+        Returns:
+            Iterable[str]: A sequence of folder paths.
+        """
+        yield self.current_folder
+
+    @abstractmethod
+    def _after_process(self) -> None:
+        """
+        Actions to perform immediately after preprocessing step completes.
+        use self.current_folder to access the folder being processed.
+        """
+        raise NotImplementedError("Subclasses must implement after_process()")
+    
     def put(self, msg: str) -> None:
         """
         Send a status message to the job queue or print to console.
@@ -52,31 +77,6 @@ class AbstractInferenceWorker(ABC):
             self.q.put(msg)
         else:
             print(msg)
-
-    @abstractmethod
-    def initial_message(self) -> None:
-        """
-        Hook for sending an initial start-up message.
-        """
-        raise NotImplementedError("Subclasses must implement initial_message()")
-
-    @abstractmethod
-    def folder_to_process(self):
-        """
-        Hook for yielding or listing directories to process.
-
-        Returns:
-            Iterable[str]: A sequence of folder paths.
-        """
-        raise NotImplementedError("Subclasses must implement folder_to_process()")
-
-    @abstractmethod
-    def after_process(self) -> None:
-        """
-        Actions to perform immediately after preprocessing step completes.
-        use self.current_folder to access the folder being processed.
-        """
-        raise NotImplementedError("Subclasses must implement after_process()")
 
     def run(self) -> None:
         """
@@ -130,13 +130,13 @@ class LocalWorker(AbstractInferenceWorker):
     Defines simple folder iteration and messaging behavior.
     """
 
-    def initial_message(self) -> None:
+    def _initial_message(self) -> None:
         """
         Print or queue the initial job start message.
         """
         self.put(f"Starting job {self.job_id} – action: {self.action}")
 
-    def folder_to_process(self):
+    def _folder_to_process(self):
         """
         Yield the single base directory for processing.
 
@@ -145,7 +145,7 @@ class LocalWorker(AbstractInferenceWorker):
         """
         yield self.base_dir
 
-    def after_process(self) -> None:
+    def _after_process(self) -> None:
         """
         Print or queue a message after processing a folder.
         """

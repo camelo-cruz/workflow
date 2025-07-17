@@ -19,13 +19,13 @@ class ZipWorker(AbstractInferenceWorker):
     sub-folders named “Session_*”), then zips up only the output files you care
     about and reports the zip path.
     """
-    def initial_message(self):
+    def _initial_message(self):
         self.put("Preparing to process and zip outputs…")
     
-    def folder_to_process(self):
+    def _folder_to_process(self):
         yield self.base_dir
 
-    def after_process(self):
+    def _after_process(self):
         # Name the zip after the job
         zip_path = Path(tempfile.gettempdir()) / f"{self.job_id}_output.zip"
         with ZipFile(zip_path, "w") as zf:
@@ -57,7 +57,7 @@ class OneDriveWorker(AbstractInferenceWorker):
         self.token = token
         self.sessions_meta = []
 
-    def initial_message(self):
+    def _initial_message(self):
         self.put("Checking for sessions on OneDrive…")
         self.sessions_meta = list_session_children(self.share_link, self.token)
 
@@ -66,7 +66,7 @@ class OneDriveWorker(AbstractInferenceWorker):
             self.sessions_meta = [{"webUrl": self.share_link}]
         self.put(f"Found {len(self.sessions_meta)} session(s).")
 
-    def folder_to_process(self):
+    def _folder_to_process(self):
         for meta in self.sessions_meta:
             if self.cancel.is_set():
                 break
@@ -76,7 +76,7 @@ class OneDriveWorker(AbstractInferenceWorker):
             self._tempdir_obj = tempfile.TemporaryDirectory(prefix=f"{self.job_id}_")
             self.temp_root = Path(self._tempdir_obj.name)
             try:
-                inp, drive_id, _, sess_map = download_sharepoint_folder(
+                self.current_folder, drive_id, _, sess_map = download_sharepoint_folder(
                     share_link=link,
                     temp_dir=str(self.temp_root),
                     access_token=self.token,
@@ -88,24 +88,24 @@ class OneDriveWorker(AbstractInferenceWorker):
 
             # session folder on disk
 
-            name = meta.get("name") or next(iter(sess_map.keys()), Path(inp).name)
-            session_path = os.path.join(inp, name)
+            name = meta.get("name") or next(iter(sess_map.keys()), Path(self.current_folder).name)
+            session_path = os.path.join(self.current_folder, name)
             if not os.path.isdir(session_path):
-                session_path = inp
+                self.current_folder = self.current_folder
 
             # stash some state for after_process
-            self._current = {
+            global current_info
+            current_info = {
                 "drive_id": drive_id,
                 "sess_map": sess_map,
                 "session_name": name,
             }
-            yield session_path
+            yield self.current_folder
 
-    def after_process(self):
-        info = self._current
-        name = info["session_name"]
-        drive_id = info["drive_id"]
-        sess_map = info["sess_map"]
+    def _after_process(self):
+        name = current_info["session_name"]
+        drive_id = current_info["drive_id"]
+        sess_map = current_info["sess_map"]
 
         # upload any relevant outputs
         uploads = [
