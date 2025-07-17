@@ -22,15 +22,15 @@
     ],
     "morphologizer":[
       "_",
-      "Number=Sing|Person=3|PronType=Rel|VerbForm=Tns",
-      "VerbForm=Prog",
       "PronType=Rel",
       "Number=Sing|Person=3|VerbForm=Tns",
+      "VerbForm=Prog",
+      "Case=Loc",
+      "Number=Sing|Person=3|PronType=Rel|VerbForm=Tns",
       "Voice=Foc",
       "Case=Gen|Number=Sing|Person=3",
-      "Number=Sing|Person=3",
-      "Case=Loc",
       "Tense=Perf",
+      "Number=Sing|Person=3",
       "VerbForm=Tns",
       "Number=Sing|Person=3|VerbForm=Tns|Voice=Foc"
     ]
@@ -48,12 +48,17 @@
   ],
   "performance":{
     "pos_acc":0.0,
-    "morph_acc":0.9953488372,
+    "morph_acc":0.9947643979,
     "morph_per_feat":{
       "PronType":{
-        "p":0.9615384615,
+        "p":1.0,
         "r":1.0,
-        "f":0.9803921569
+        "f":1.0
+      },
+      "VerbForm":{
+        "p":1.0,
+        "r":0.9722222222,
+        "f":0.985915493
       },
       "Case":{
         "p":1.0,
@@ -62,26 +67,21 @@
       },
       "Number":{
         "p":1.0,
-        "r":0.9523809524,
-        "f":0.9756097561
+        "r":1.0,
+        "f":1.0
       },
       "Person":{
         "p":1.0,
-        "r":0.9523809524,
-        "f":0.9756097561
-      },
-      "VerbForm":{
-        "p":1.0,
-        "r":0.972972973,
-        "f":0.9863013699
+        "r":1.0,
+        "f":1.0
       },
       "Voice":{
         "p":1.0,
-        "r":0.875,
-        "f":0.9333333333
+        "r":1.0,
+        "f":1.0
       }
     },
-    "tok2vec_loss":0.8277873986,
-    "morphologizer_loss":54.5223562876
+    "tok2vec_loss":0.5979310827,
+    "morphologizer_loss":53.2904558072
   }
 }
