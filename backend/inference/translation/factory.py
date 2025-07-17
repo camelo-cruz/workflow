@@ -10,9 +10,9 @@ class TranslationStrategyFactory:
     def get_strategy(language_code: str, translationModel: str = None) -> TranslationStrategy:
         if translationModel:
             return CustomTranslationStrategy(language_code, translationModel)
-        elif language_code in ['tr']:
+        elif language_code in ['tr', 'de']:
             return DeeplStrategy(language_code)
-        elif language_code in ['en', 'de']:
+        elif language_code in ['en']:
             try:
                 return MarianStrategy(language_code)
             except Exception as e:
