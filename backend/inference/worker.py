@@ -86,19 +86,19 @@ class AbstractInferenceWorker(ABC):
         """
         try:
             # Notify start
-            self.initial_message()
+            self._initial_message()
 
             # Iterate through target directories
-            for folder in self.folder_to_process():
+            for folder in self._folder_to_process():
                 self.current_folder = folder
                 # Check for cancellation
                 if self.cancel and self.cancel.is_set():
-                    self.put("[CANCELLED]")
+                    self._put("[CANCELLED]")
                     break
 
                 # Report current session folder
                 session_name = os.path.basename(os.path.normpath(self.current_folder))
-                self.put(f"Processing session: {session_name}")
+                self._put(f"Processing session: {session_name}")
 
                 # Create a processor based on configuration
                 self.processor = ProcessorFactory.get_processor(
@@ -113,15 +113,15 @@ class AbstractInferenceWorker(ABC):
                 self.processor.process(self.current_folder)
 
                 # Post-processing hook
-                self.after_process()
+                self._after_process()
 
         except Exception as e:
             # Report errors and stack trace
-            self.put(f"[ERROR] {e}")
-            self.put(traceback.format_exc())
+            self._put(f"[ERROR] {e}")
+            self._put(traceback.format_exc())
         finally:
             # Always signal completion
-            self.put("[DONE ALL]")
+            self._put("[DONE ALL]")
 
 
 class LocalWorker(AbstractInferenceWorker):
@@ -134,7 +134,7 @@ class LocalWorker(AbstractInferenceWorker):
         """
         Print or queue the initial job start message.
         """
-        self.put(f"Starting job {self.job_id} – action: {self.action}")
+        self._put(f"Starting job {self.job_id} – action: {self.action}")
 
     def _folder_to_process(self):
         """
@@ -149,7 +149,7 @@ class LocalWorker(AbstractInferenceWorker):
         """
         Print or queue a message after processing a folder.
         """
-        self.put(f"Processed folder {self.current_folder} for job {self.job_id}")
+        self._put(f"Processed folder {self.current_folder} for job {self.job_id}")
 
 
 def main() -> None:

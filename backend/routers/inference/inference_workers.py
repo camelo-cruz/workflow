@@ -72,9 +72,10 @@ class OneDriveWorker(AbstractInferenceWorker):
                 break
 
             link = meta.get("webUrl")
-            self._put(f"Downloading from OneDrive")
+            self._put("Downloading from OneDrive…")
             self._tempdir_obj = tempfile.TemporaryDirectory(prefix=f"{self.job_id}_")
             self.temp_root = Path(self._tempdir_obj.name)
+
             try:
                 self.current_folder, drive_id, _, sess_map = download_sharepoint_folder(
                     share_link=link,
@@ -82,24 +83,26 @@ class OneDriveWorker(AbstractInferenceWorker):
                     access_token=self.token,
                 )
             except Exception as e:
-                self._put(f"Failed to download session': {e}. Skipping.")
+                self._put(f"Failed to download session: {e}. Skipping.")
                 shutil.rmtree(self.temp_root, ignore_errors=True)
                 continue
 
-            # session folder on disk
-
+            # Determine the session directory on disk
             name = meta.get("name") or next(iter(sess_map.keys()), Path(self.current_folder).name)
             session_path = os.path.join(self.current_folder, name)
-            if not os.path.isdir(session_path):
-                self.current_folder = self.current_folder
+            if os.path.isdir(session_path):
+                self.current_folder = session_path
+            else:
+                self._put(f"Warning: expected session folder '{name}' not found; using {self.current_folder}")
 
-            # stash some state for after_process
+            # stash state for upload step
             global current_info
             current_info = {
                 "drive_id": drive_id,
                 "sess_map": sess_map,
                 "session_name": name,
             }
+
             yield self.current_folder
 
     def _after_process(self):
@@ -112,6 +115,10 @@ class OneDriveWorker(AbstractInferenceWorker):
             "trials_and_sessions_annotated.xlsx",
             f"{self.processor.__class__.__name__}.log"
         ]
+        print("Contents of current folder:")
+        for f in os.listdir(self.current_folder):
+            print(" -", f)
+
         for fname in uploads:
             if self.cancel.is_set():
                 self._put("[CANCELLED UPLOAD]")
