@@ -60,7 +60,7 @@ class AbstractTrainingWorker(ABC):
         pass
 
     @abstractmethod
-    def _folder_to_process(self):
+    def _folder_to_preprocess(self):
         """Determine and return the folder path to be processed."""
         yield self.current_folder
 
@@ -70,7 +70,7 @@ class AbstractTrainingWorker(ABC):
 
         This method sends status messages before and after processing.
         """
-        for folder in self._folder_to_process():
+        for folder in self._folder_to_preprocess():
             self._put(f"Starting preprocessing for job {self.job_id} – action: {self.action}")
             data_df = self.preprocessor.preprocess(folder)
             self._put(f"Preprocessing completed for job {self.job_id}")

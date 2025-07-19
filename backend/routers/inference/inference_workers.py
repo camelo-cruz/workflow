@@ -20,7 +20,7 @@ class ZipWorker(AbstractInferenceWorker):
     about and reports the zip path.
     """
     def _initial_message(self):
-        self.put("Preparing to process and zip outputs…")
+        self._put("Preparing to process and zip outputs…")
     
     def _folder_to_process(self):
         yield self.base_dir
@@ -41,7 +41,7 @@ class ZipWorker(AbstractInferenceWorker):
                         # make the archive paths relative to the base_dir
                         rel = os.path.relpath(full, self.base_dir)
                         zf.write(full, arcname=rel)
-        self.put(f"[ZIP PATH] {zip_path}")
+        self._put(f"[ZIP PATH] {zip_path}")
 
 
 class OneDriveWorker(AbstractInferenceWorker):
@@ -58,13 +58,13 @@ class OneDriveWorker(AbstractInferenceWorker):
         self.sessions_meta = []
 
     def _initial_message(self):
-        self.put("Checking for sessions on OneDrive…")
+        self._put("Checking for sessions on OneDrive…")
         self.sessions_meta = list_session_children(self.share_link, self.token)
 
         if not self.sessions_meta:
             # if there are no nested Session_ folders, assume share_link points directly to a single Session
             self.sessions_meta = [{"webUrl": self.share_link}]
-        self.put(f"Found {len(self.sessions_meta)} session(s).")
+        self._put(f"Found {len(self.sessions_meta)} session(s).")
 
     def _folder_to_process(self):
         for meta in self.sessions_meta:
@@ -72,7 +72,7 @@ class OneDriveWorker(AbstractInferenceWorker):
                 break
 
             link = meta.get("webUrl")
-            self.put(f"Downloading from OneDrive")
+            self._put(f"Downloading from OneDrive")
             self._tempdir_obj = tempfile.TemporaryDirectory(prefix=f"{self.job_id}_")
             self.temp_root = Path(self._tempdir_obj.name)
             try:
@@ -82,7 +82,7 @@ class OneDriveWorker(AbstractInferenceWorker):
                     access_token=self.token,
                 )
             except Exception as e:
-                self.put(f"Failed to download session': {e}. Skipping.")
+                self._put(f"Failed to download session': {e}. Skipping.")
                 shutil.rmtree(self.temp_root, ignore_errors=True)
                 continue
 
@@ -114,15 +114,15 @@ class OneDriveWorker(AbstractInferenceWorker):
         ]
         for fname in uploads:
             if self.cancel.is_set():
-                self.put("[CANCELLED UPLOAD]")
+                self._put("[CANCELLED UPLOAD]")
                 break
             local_fp = os.path.join(self.current_folder, fname)
             if not os.path.exists(local_fp):
-                self.put(f"Skipping missing file: {fname}")
+                self._put(f"Skipping missing file: {fname}")
                 continue
 
             parent_id = sess_map.get(name, "")
-            self.put(f"Uploading '{fname}' for session '{name}'")
+            self._put(f"Uploading '{fname}' for session '{name}'")
             upload_file_replace_in_onedrive(
                 local_file_path=local_fp,
                 target_drive_id=drive_id,
@@ -132,8 +132,8 @@ class OneDriveWorker(AbstractInferenceWorker):
             )
 
         shutil.rmtree(self.temp_root, ignore_errors=True)
-        self.put(f"[DONE UPLOADED] {name}")
+        self._put(f"[DONE UPLOADED] {name}")
 
         self._tempdir_obj.cleanup()
-        self.put(f"[INFO] Deleted temporary directory {self.temp_root}")
+        self._put(f"[INFO] Deleted temporary directory {self.temp_root}")
 

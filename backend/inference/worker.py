@@ -66,7 +66,7 @@ class AbstractInferenceWorker(ABC):
         """
         raise NotImplementedError("Subclasses must implement after_process()")
     
-    def put(self, msg: str) -> None:
+    def _put(self, msg: str) -> None:
         """
         Send a status message to the job queue or print to console.
 
