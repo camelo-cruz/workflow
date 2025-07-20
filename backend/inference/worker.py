@@ -2,8 +2,11 @@ import os
 import traceback
 import argparse
 from abc import ABC, abstractmethod
+from utils.functions import find_language, set_global_variables
 
 from inference.processors.factory import ProcessorFactory
+
+LANGUAGES, NO_LATIN, OBLIGATORY_COLUMNS = set_global_variables()
 
 
 class AbstractInferenceWorker(ABC):
@@ -30,7 +33,7 @@ class AbstractInferenceWorker(ABC):
         self.base_dir = base_dir
         self.current_folder = self.base_dir
         self.action = action
-        self.language = language
+        self.language = find_language(language, LANGUAGES)
         self.instruction = instruction
         self.translationModel = translationModel
         self.glossingModel = glossingModel

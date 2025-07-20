@@ -6,7 +6,6 @@ import pandas as pd
 from tqdm import tqdm
 
 from utils.functions import (
-    find_language,
     set_global_variables,
     format_excel_output,
 )
@@ -24,7 +23,7 @@ class DataProcessor(ABC):
     It also logs, next to the input file, the processing steps in a log file.
     '''
     def __init__(self, language: str, instruction: str):
-        self.language = find_language(language, LANGUAGES)
+        self.language = language
         self.instruction = instruction
         # one logger per subclass
         self.logger = logging.getLogger(f"{self.__class__.__name__}")
