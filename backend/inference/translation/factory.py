@@ -10,12 +10,19 @@ class TranslationStrategyFactory:
     def get_strategy(language_code: str, translationModel: str = None) -> TranslationStrategy:
         if translationModel:
             return CustomTranslationStrategy(language_code, translationModel)
-        elif language_code in ['tr', 'de']:
-            return DeeplStrategy(language_code)
-        elif language_code in ['en']:
-            try:
-                return MarianStrategy(language_code)
-            except Exception as e:
-                return M2M100Strategy(language_code)
+
+        strategy_chain = []
+        if language_code in ['tr', 'de']:
+            strategy_chain = [DeeplStrategy, MarianStrategy, M2M100Strategy]
+        elif language_code == 'en':
+            strategy_chain = [MarianStrategy, M2M100Strategy]
         else:
             raise ValueError(f"No pretrained translation strategy available for language code: {language_code}")
+
+        for Strategy in strategy_chain:
+            try:
+                return Strategy(language_code)
+            except Exception as e:
+                print(f"{Strategy.__name__} failed for {language_code}: {e}")
+
+        raise RuntimeError(f"All translation strategies failed for {language_code}")
