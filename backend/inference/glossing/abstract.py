@@ -39,8 +39,8 @@ class GlossingStrategy(ABC):
     def map_leipzig(morph, feat):
         val = morph.get(feat)
         entry = LEIPZIG_GLOSSARY.get(val, {})
-        return entry.get("leipzig", val)
-    
+        return entry.get("leipzig", val.upper() if val else val)
+
     def UD2LEIPZIG(self, morph):
         # Map all morphological features via LEIPZIG_GLOSSARY in defined order
         features_in_order = [

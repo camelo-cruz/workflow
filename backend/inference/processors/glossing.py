@@ -31,14 +31,8 @@ class GlossingProcessor(DataProcessor):
         self.translation_model = translation_model
 
         self.strategy: GlossingStrategy = GlossingStrategyFactory.get_strategy(
-            self.language, self.glossing_model
+            self.language, self.glossing_model, self.translation_model
         )
-        try: 
-            self.TranslationStrategy = TranslationStrategyFactory.get_strategy(
-                self.language, self.translation_model
-            )
-        except Exception as e:
-            self.logger.error(f"Error initializing translation strategy: {e}")
         
         self.columns_to_highlight = ["glossing_utterance_used"]
 
