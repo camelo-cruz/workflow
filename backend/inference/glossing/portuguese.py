@@ -93,11 +93,12 @@ class PortugueseGlossingStrategy(GlossingStrategy):
             lemmas.append(lemma)
 
             # Optional translation (commented out)
-            if self.translation_strategy:
-                translated_lemma = self.translation_strategy.translate(text=lemma)
-                if not translated_lemma:
-                    translated_lemma = lemma
+            #if self.translation_strategy:
+            #    translated_lemma = self.translation_strategy.translate(text=lemma)
+            #    if not translated_lemma:
+            #        translated_lemma = lemma
 
+            translated_lemma = lemma
             lemma = translated_lemma.replace(" ", "-")
 
             feats = self.UD2LEIPZIG(token.morph.to_dict())
