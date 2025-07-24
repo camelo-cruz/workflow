@@ -115,7 +115,7 @@ class OneDriveWorker(AbstractInferenceWorker):
             "trials_and_sessions_annotated.xlsx",
             f"{self.processor.__class__.__name__}.log"
         ]
-        print("Contents of current folder:")
+        print(f"Contents of current folder: {self.current_folder}")
         for f in os.listdir(self.current_folder):
             print(" -", f)
 

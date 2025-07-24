@@ -4,6 +4,7 @@ import torch
 import warnings
 import pandas as pd
 from tqdm import tqdm
+import logging
 
 from abc import ABC
 from inference.pii_identifier.factory import PIIIdentifierFactory
@@ -161,3 +162,24 @@ class TranscriptionProcessor(DataProcessor):
             for (row_idx, _), _ in series.items():
                 self._append_to_cell(df, row_idx, 'automatic_transcription', text_auto + suffix)
                 self._append_to_cell(df, row_idx, col_name,      text_auto + suffix)
+    
+    def process(self, input_dir: str):
+        files = self._find_files(input_dir)
+        for path in tqdm(files, desc=f"Processing {self.__class__.__name__} files"):
+            log_name = f"{self.__class__.__name__}.log"
+            log_path = os.path.join(path, log_name)
+            print(f"[DEBUG] Writing log to: {log_path}")
+
+            fh = logging.FileHandler(log_path, mode="a")
+            fh.setFormatter(logging.Formatter("%(asctime)s %(levelname)s: %(message)s"))
+            self.logger.addHandler(fh)
+
+            try:
+                self.logger.info(f"Processing Session {path}")
+                df = self._read_file(path)
+                self.logger.info(f"Loaded DataFrame with {len(df)} rows")
+                df = self._process_dataframe(df)
+                self._write_file(path, df)
+            finally:
+                self.logger.removeHandler(fh)
+                fh.close()

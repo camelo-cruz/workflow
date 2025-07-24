@@ -49,6 +49,7 @@ class SpacyTrainer(AbstractTrainer):
         self.base_backend_dir = Path(__file__).resolve().parents[2]
         self.configs_dir = Path(self.base_training_dir) / 'spacy_configs'
         self.base_config_path = Path(self.configs_dir / 'base_config.cfg')
+        self.train_config_path = Path(self.configs_dir / f'{self.lang}_{self.study}_config.cfg')
         self.models_dir = self.base_backend_dir / 'models'
         print(f'models_dir: {self.models_dir}')
 
@@ -92,9 +93,9 @@ class SpacyTrainer(AbstractTrainer):
             cfg['paths']['train'] = cfg['paths']['dev'] = str(out_spacy)
             if self.pretrained_model:
                 cfg['paths']['vectors'] = self.pretrained_model
-            cfg.to_disk(self.base_config_path)
-            fill_config(self.base_config_path, self.base_config_path)
-            debug_data(self.base_config_path, silent=False, verbose=True)
+            cfg.to_disk(self.train_config_path)
+            fill_config(self.train_config_path, self.train_config_path)
+            debug_data(self.train_config_path, silent=False, verbose=True)
 
         return docbin
     
@@ -120,7 +121,7 @@ class SpacyTrainer(AbstractTrainer):
             DocBin(docs=test_docs).to_disk(test_path)
 
             # Load and adjust config for training
-            config = load_config(self.base_config_path)
+            config = load_config(self.train_config_path)
             config["nlp"]["lang"] = self.lang
             config["paths"]["train"] = str(train_path)
             config["paths"]["dev"] = str(test_path)
