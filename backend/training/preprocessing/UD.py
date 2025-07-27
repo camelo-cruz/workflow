@@ -13,7 +13,6 @@ class UDPreprocessor(BasePreprocessor):
         # Iterate through each original row to preserve raw text and translation
         for idx, row in df.iterrows():
             raw_text = str(row.get(self.TEXT_COLUMN, ""))
-            raw_translation = str(row.get(self.TRANSLATION_COLUMN, ""))
             raw_gloss = str(row.get(self.GLOSS_COLUMN, ""))
 
             # Clean the text and gloss
@@ -52,7 +51,6 @@ class UDPreprocessor(BasePreprocessor):
                 # Append a row with all required columns
                 rows.append({
                     'raw_text': raw_text,
-                    'translation': raw_translation,
                     'clean_text': raw_gloss_text,
                     'tokens': tokens,
                     'gloss': gloss_line,
@@ -60,16 +58,16 @@ class UDPreprocessor(BasePreprocessor):
                 })
 
         # Construct DataFrame (will be empty if no valid rows)
-        columns = ['raw_text', 'translation', 'clean_text', 'tokens', 'gloss', 'UDfeats']
+        columns = ['raw_text', 'clean_text', 'tokens', 'gloss', 'UDfeats']
         new_df = pd.DataFrame(rows, columns=columns)
         new_df = new_df[~new_df.apply(self._is_placeholder, axis=1)].reset_index(drop=True)
+        
         return new_df
     
     @staticmethod
     def _is_placeholder(row):
         return (
             row['raw_text'] == 'nan' and
-            row['translation'] == 'nan' and
             row['clean_text'] == 'nan' and
             row['tokens'] == ['nan'] and
             row['gloss'] == 'nan' and
@@ -86,15 +84,15 @@ class UDPreprocessor(BasePreprocessor):
         if not isinstance(text, str):
             return ""
 
-        # Replace double dots, standardize commas, remove outer dots
+        # Replace double dots, standardize commas
         text = text.replace('..', '.')
-        text = text.strip().strip('.')
+        text = text.strip()
 
         # Normalize grammatical SG/PL markers
         text = re.sub(r"\b(\d)(SG|PL)\b", r"\1.\2", text)
 
-        # Remove bracket characters
-        text = re.sub(r"[\[\]\(\)\{\}]+", "", text)
+        text = re.sub(r"[\[\(\{]\d+[\]\)\}]", "", text) # Remove numeric brackets
+        text = re.sub(r"[\[\(\{]([^\[\]\(\)\{\}\d]+)[\]\)\}]", r"\1", text) # Remove non-numeric brackets
 
         # Collapse whitespace
         text = re.sub(r"\s+", " ", text)

@@ -147,7 +147,7 @@ class SpacyTrainer(AbstractTrainer):
                     metrics_to_log[metric] = val
 
             # Save final model
-            model_dir = Path(self.base_backend_dir / f'{self.lang}_{self.study}_custom_glossing')
+            model_dir = Path(self.models_dir / 'glossing' / f'{self.lang}_{self.study}_custom_glossing')
             model_dir.mkdir(parents=True, exist_ok=True)
             trained_nlp.to_disk(model_dir)
             msg.good(f"Saved final model to {model_dir}")

@@ -40,10 +40,17 @@ class OneDriveWorker(AbstractTrainingWorker):
     def _initial_message(self):
         self._put("Checking for sessions on OneDrive…")
 
-    def _folder_to_process(self) -> List[Dict[str, str]]:
+    def _folder_to_preprocess(self) -> Path:
+        """
+        Download all session folders under the SharePoint link and return
+        the root directory containing downloaded sessions.
+        """
+        # Log the temporary root directory
         self._put(f"[INFO] Temporary root directory: {self.temp_root}")
+        # Retrieve entries for each session folder
         entries = list_session_children(self.share_link, self.token)
 
+        # Iterate and download each session into its own subdirectory
         for entry in entries:
             name = entry.get("name", "root")
             self._put(f"[INFO] Downloading session '{name}'")
@@ -52,7 +59,7 @@ class OneDriveWorker(AbstractTrainingWorker):
             session_dir.mkdir(parents=True, exist_ok=True)
 
             try:
-                inp_dir, drive_id, parent_id, children = download_sharepoint_folder(
+                download_sharepoint_folder(
                     share_link=entry["webUrl"],
                     temp_dir=str(session_dir),
                     access_token=self.token,
@@ -63,8 +70,8 @@ class OneDriveWorker(AbstractTrainingWorker):
                 logger.exception("Download error for session %s", name)
                 continue
 
-        # Return the path your TrainingWorker expects:
-        return str(self.temp_root)
+        # Return the root directory containing all downloaded session folders
+        yield self.temp_root
 
     def _after_preprocess(self):
         """ Upload the training log back to OneDrive, then delete the temp dir. """

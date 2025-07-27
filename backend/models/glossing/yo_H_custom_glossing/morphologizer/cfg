@@ -1,0 +1,31 @@
+{
+  "extend":false,
+  "label_smoothing":0.05,
+  "labels_morph":{
+    "_":"",
+    "PronType=Rel":"PronType=Rel",
+    "VerbForm=Prog":"VerbForm=Prog",
+    "Number=Sing|Person=3|VerbForm=Tns":"Number=Sing|Person=3|VerbForm=Tns",
+    "Case=Loc":"Case=Loc",
+    "Number=Sing|Person=3|PronType=Rel|VerbForm=Tns":"Number=Sing|Person=3|PronType=Rel|VerbForm=Tns",
+    "Case=Gen|Number=Sing|Person=3":"Case=Gen|Number=Sing|Person=3",
+    "VerbForm=Tns":"VerbForm=Tns",
+    "Number=Sing|Person=3":"Number=Sing|Person=3",
+    "Tense=Perf":"Tense=Perf",
+    "Number=Sing|Person=3|VerbForm=Tns|Voice=Foc":"Number=Sing|Person=3|VerbForm=Tns|Voice=Foc"
+  },
+  "labels_pos":{
+    "_":0,
+    "PronType=Rel":0,
+    "VerbForm=Prog":0,
+    "Number=Sing|Person=3|VerbForm=Tns":0,
+    "Case=Loc":0,
+    "Number=Sing|Person=3|PronType=Rel|VerbForm=Tns":0,
+    "Case=Gen|Number=Sing|Person=3":0,
+    "VerbForm=Tns":0,
+    "Number=Sing|Person=3":0,
+    "Tense=Perf":0,
+    "Number=Sing|Person=3|VerbForm=Tns|Voice=Foc":0
+  },
+  "overwrite":true
+}

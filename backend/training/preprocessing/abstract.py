@@ -44,7 +44,9 @@ class BasePreprocessor(ABC):
         and returns the combined DataFrame.
         """
         input_dir = Path(input_dir)
+        print(f"Inside preprocessor: Preprocessing files in: {input_dir}")
         files = self._find_files(input_dir)
+        print(f"Found {len(files)} files matching '{self.file_pattern}' in {input_dir}")
         log_path = input_dir / f"{self.__class__.__name__}.log"
         file_handler = logging.FileHandler(log_path, mode="a", encoding="utf-8")
         file_handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s: %(message)s"))
@@ -92,12 +94,39 @@ class BasePreprocessor(ABC):
 
     def _write_files(self, df: pd.DataFrame) -> None:
         """
-        Write the combined DataFrame back to disk as a single CSV.
+        Write the combined DataFrame back to disk as a single CSV,
+        handling columns with unhashable types by converting lists to tuples
+        before dropping duplicates.
         """
         data_dir = Path(__file__).parent.parent / "data"
         data_dir.mkdir(parents=True, exist_ok=True)
         filename = f"{self.__class__.__name__}_{self.lang}_{self.study}.csv"
-        df.to_csv(data_dir / filename, index=False)
+        file_path = data_dir / filename
+
+        if file_path.exists():
+            self.logger.info(f"File {filename} already exists, appending and deduplicating.")
+
+            # Load existing data
+            existing_df = pd.read_csv(file_path)
+
+            # Append new rows
+            combined_df = pd.concat([existing_df, df], ignore_index=True)
+
+            # Convert any list values to tuples for hashing
+            for col in combined_df.columns:
+                if combined_df[col].apply(lambda x: isinstance(x, list)).any():
+                    combined_df[col] = combined_df[col].apply(
+                        lambda x: tuple(x) if isinstance(x, list) else x
+                    )
+
+            # Drop duplicates (based on all columns; specify subset if needed)
+            combined_df = combined_df.drop_duplicates().reset_index(drop=True)
+
+            # Save the deduplicated result
+            combined_df.to_csv(file_path, index=False)
+        else:
+            df.to_csv(file_path, index=False)
+
     
     def _after_write(self) -> None:
         """
