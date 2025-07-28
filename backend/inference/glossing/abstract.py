@@ -47,12 +47,12 @@ class GlossingStrategy(ABC):
             # Lexical Features
             "PronType", "NumType", "Other", #"Poss", "Reflex",
             "Abbr",  "ExtPos", "Clusivity", #"Typo", "Foreign",
-            # Verbal Features
-            "VerbForm", "Mood", "Tense", "Aspect", "Voice", 
-            "Evident", "Polarity", "Person", "Polite",
             # Nominal Features
             "Number", "Gender", "Animacy", "NounClass", "Case", 
             "Definite", "Deixis", "DeixisRef", "Degree",
+            # Verbal Features
+            "VerbForm", "Mood", "Tense", "Aspect", "Voice", 
+            "Evident", "Polarity", "Person", "Polite",
         ]
 
         mapped_parts = []
