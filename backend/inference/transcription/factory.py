@@ -12,5 +12,5 @@ class TranscriptionStrategyFactory:
                              'ur', 'te', 'hi', 'ca', 'ml', 'no', 'nn', 'sk', 'sl', 'hr', 'ro',
                              'eu', 'gl', 'ka', 'lv', 'tl', 'zh']:
             return WhisperxStrategy(language_code)
-        elif language_code in ['ar']:
+        elif language_code in ['ar', 'bn']:
             return WhisperStrategy(language_code)

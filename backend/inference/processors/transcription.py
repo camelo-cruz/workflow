@@ -64,7 +64,7 @@ class TranscriptionProcessor(DataProcessor):
             path = os.path.join(bin_dir, file)
             try:
                 text = self.strategy.transcribe(path)
-                if self.pii_identifier.nlp:
+                if self.pii_identifier:
                     _, text = self.pii_identifier.identify_and_annotate(text)
                 if self.language == 'de':
                     text = clean_german_transcription(text)
