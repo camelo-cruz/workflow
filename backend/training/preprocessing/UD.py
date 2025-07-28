@@ -10,6 +10,8 @@ from utils.functions import (
 class UDPreprocessor(BasePreprocessor):
     def _process_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
         rows = []
+        self.tokens_without_gloss = set()
+        self.unknown_codes = set()
         # Iterate through each original row to preserve raw text and translation
         for idx, row in df.iterrows():
             raw_text = str(row.get(self.TEXT_COLUMN, ""))
@@ -17,7 +19,7 @@ class UDPreprocessor(BasePreprocessor):
 
             # Clean the text and gloss
             raw_gloss_text = self._clean_text(raw_text)
-            cleaned_gloss = self._clean_text(raw_gloss).replace(',', ' PUNCT ')
+            cleaned_gloss = self._clean_text(raw_gloss)
 
             # Split into non-empty lines
             text_lines = [line.strip() for line in raw_gloss_text.split("\n") if line.strip()]
@@ -41,10 +43,10 @@ class UDPreprocessor(BasePreprocessor):
                 # Ensure token count matches feature count
                 if len(tokens) != len(feats):
                     msg.warn(
-                        f"Token mismatch for text: '{text_line}' (tokens={len(tokens)}, feats={len(feats)})"
+                        f"Token mismatch for text: '{tokens} vs {feats}' (tokens={len(tokens)}, feats={len(feats)})"
                     )
                     self.logger.warning(
-                        f"Token mismatch: '{text_line}' (tokens={len(tokens)}, feats={len(feats)})"
+                        f"Token mismatch for text: '{tokens} vs {feats}' (tokens={len(tokens)}, feats={len(feats)})"
                     )
                     continue
 
@@ -84,23 +86,19 @@ class UDPreprocessor(BasePreprocessor):
         if not isinstance(text, str):
             return ""
 
-        # Replace double dots, standardize commas
-        text = text.replace('..', '.')
-        text = text.strip()
-
-        # Normalize grammatical SG/PL markers
-        text = re.sub(r"\b(\d)(SG|PL)\b", r"\1.\2", text)
+        # Replace multiple dots and normalize punctuation
+        text = re.sub(r'\.{2,}', '', text)
 
         text = re.sub(r"[\[\(\{]\d+[\]\)\}]", "", text) # Remove numeric brackets
-        text = re.sub(r"[\[\(\{]([^\[\]\(\)\{\}\d]+)[\]\)\}]", r"\1", text) # Remove non-numeric brackets
+
+        text = text.replace('(', ' ( ').replace(')', ' ) ').replace(',', ' , ')
 
         # Collapse whitespace
         text = re.sub(r"\s+", " ", text)
         return text.strip()
     
     def _map_gloss(self, gloss: str) -> list[str]:
-        self.tokens_without_gloss = set()
-        self.unknown_codes = set()
+        
         self.LEIPZIG_GLOSSARY = load_glossing_rules("LEIPZIG_GLOSSARY.json")
         self.LEIPZIG2UD = {
             entry["leipzig"]: (entry["category"], key)
@@ -110,7 +108,7 @@ class UDPreprocessor(BasePreprocessor):
             return []
         feats = []
         for token in gloss.split():
-            is_gloss = '.' in token or token.isupper() or any(c.isdigit() for c in token)
+            is_gloss = '.' in token or token.isupper()
             if not is_gloss:
                 feats.append('_')
                 self.tokens_without_gloss.add(token)

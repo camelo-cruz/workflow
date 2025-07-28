@@ -103,29 +103,7 @@ class BasePreprocessor(ABC):
         filename = f"{self.__class__.__name__}_{self.lang}_{self.study}.csv"
         file_path = data_dir / filename
 
-        if file_path.exists():
-            self.logger.info(f"File {filename} already exists, appending and deduplicating.")
-
-            # Load existing data
-            existing_df = pd.read_csv(file_path)
-
-            # Append new rows
-            combined_df = pd.concat([existing_df, df], ignore_index=True)
-
-            # Convert any list values to tuples for hashing
-            for col in combined_df.columns:
-                if combined_df[col].apply(lambda x: isinstance(x, list)).any():
-                    combined_df[col] = combined_df[col].apply(
-                        lambda x: tuple(x) if isinstance(x, list) else x
-                    )
-
-            # Drop duplicates (based on all columns; specify subset if needed)
-            combined_df = combined_df.drop_duplicates().reset_index(drop=True)
-
-            # Save the deduplicated result
-            combined_df.to_csv(file_path, index=False)
-        else:
-            df.to_csv(file_path, index=False)
+        df.to_csv(file_path, index=False)
 
     
     def _after_write(self) -> None:
