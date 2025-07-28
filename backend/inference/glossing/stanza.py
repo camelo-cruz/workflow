@@ -44,7 +44,7 @@ class StanzaGlossingStrategy(GlossingStrategy):
                 lemma = token.lemma.lower()
                 if not lemma:
                     lemma = token.text.lower()
-
+                
                 feats_dict = self.parse_stanza_feats(token.feats)
                 gloss_feats = self.UD2LEIPZIG(feats_dict)
                 if gloss_feats:
