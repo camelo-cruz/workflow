@@ -50,7 +50,7 @@ class JapaneseGlossingStrategy(StanzaGlossingStrategy):
             elif lemma == 'で':
                 rule_feat = 'INS'
 
-            out_tokens.append(f"{lemma}.{pos}.{rule_feat}" if rule_feat else f"{lemma}-{pos}")
+            out_tokens.append(f"{lemma}-{pos}-{rule_feat}" if rule_feat else f"{lemma}-{pos}")
 
 
         return " ".join(out_tokens)

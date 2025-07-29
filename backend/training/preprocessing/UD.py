@@ -91,8 +91,6 @@ class UDPreprocessor(BasePreprocessor):
             return ""
         text = re.sub(r'\.{2,}', '', text)
         text = re.sub(r"[\[\(\{]\d+[\]\)\}]", "", text)
-        text = text.replace('(', ' ( ').replace(')', ' ) ')
-        text = text.replace(',', '')
         text = re.sub(r"\s+", " ", text)
         return text.strip()
 

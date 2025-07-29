@@ -42,9 +42,9 @@ class PortugueseGlossingStrategy(GlossingStrategy):
 
                 # Clean inflectional codes and map REL/IND to INT for wh-words
                 token = glossed_tokens[idx]
-                parts = token.split('.', 1)
+                parts = token.split('-', 1)
                 lemma = parts[0]
-                feats = parts[1].split('.') if len(parts) > 1 else []
+                feats = parts[1].split('-') if len(parts) > 1 else []
 
                 # Remove gender/number specifications
                 core_feats = [f for f in feats if f not in ("F", "M", "SG", "PL")]
