@@ -92,6 +92,8 @@ class UDPreprocessor(BasePreprocessor):
         text = re.sub(r'\.{2,}', '', text)
         text = re.sub(r"[\[\(\{]\d+[\]\)\}]", "", text)
         text = re.sub(r"\s+", " ", text)
+        text = re.sub(r"[\[\(\{\]\)\}]", "", text)
+
         return text.strip()
 
     def _map_gloss(self, gloss: str) -> list[str]:
