@@ -28,7 +28,7 @@ def extract_atomic_from_gloss(gloss: str) -> set[str]:
     return set(gloss.split('.')) if gloss else set()
 
 
-def process_dir(dir_path: str, gloss_col: str, gold_col: str):
+def process_dir(dir_path: str, gloss_col: str, gold_col: str, language: str):
     per_atom_records = []
 
     for root, _, files in os.walk(dir_path):
@@ -69,7 +69,7 @@ def process_dir(dir_path: str, gloss_col: str, gold_col: str):
 
     df_atoms = pd.DataFrame(per_atom_records)
     current_dir = Path(__file__).resolve().parent
-    df_atoms.to_csv(current_dir / 'per_atom_records.csv', index=False)
+    df_atoms.to_csv(current_dir / f'{language}_per_atom_records.csv', index=False)
     return df_atoms
 
 
@@ -107,7 +107,7 @@ def compute_per_label_report(df_atoms: pd.DataFrame) -> pd.DataFrame:
     return report_df
 
 
-def plot_metrics(report_df: pd.DataFrame):
+def plot_metrics(report_df: pd.DataFrame, language):
     """
     Create an enhanced, clean bar chart of precision, recall, and F1-score per label.
 
@@ -146,7 +146,7 @@ def plot_metrics(report_df: pd.DataFrame):
     plt.legend(fontsize=12)
     plt.tight_layout()
 
-    save_path = Path(__file__).resolve().parent / 'per_atomic_feature_metrics.png'
+    save_path = Path(__file__).resolve().parent / f'{language}_per_atomic_feature_metrics.png'
     plt.savefig(save_path, dpi=300)
 
 
@@ -155,9 +155,10 @@ if __name__ == '__main__':
     DATA_DIR = '/Users/alejandra/Library/CloudStorage/OneDrive-FreigegebeneBibliotheken–Leibniz-ZAS/Leibniz Dream Data - Studies/tests_alejandra/german/H06a_deu_adults Kopie/Session_1269576'
     GLOSS_COL = 'automatic_glossing'
     GOLD_COL  = 'glossing_utterance_used'
+    LANGUAGE = 'de'
 
     # 1) Build one row PER TOKEN-PER ATOMIC FEATURE
-    df_atoms = process_dir(DATA_DIR, GLOSS_COL, GOLD_COL)
+    df_atoms = process_dir(DATA_DIR, GLOSS_COL, GOLD_COL, LANGUAGE)
 
     # 2) Compute per-label metrics
     report_df = compute_per_label_report(df_atoms)
@@ -165,7 +166,7 @@ if __name__ == '__main__':
     print(report_df.round(3))
 
     # 3) Plot metrics
-    plot_metrics(report_df)
+    plot_metrics(report_df, LANGUAGE)
 
     # 4) Overall multilabel metrics
     mlb = MultiLabelBinarizer()
