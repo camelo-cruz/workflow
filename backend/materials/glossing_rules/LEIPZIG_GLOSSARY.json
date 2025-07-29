@@ -32,7 +32,8 @@
 "Impf":{"category":"Tense","leipzig":"IMPF"},
 "Perf":{"category":"Tense","leipzig":"PERF"},
 "Fin":{"category":"VerbForm","leipzig":"FIN"},
-"Part":{"category":"VerbForm","leipzig":"PARTP"},
+"Partp":{"category":"VerbForm","leipzig":"PARTP"},
+"Parta":{"category":"VerbForm","leipzig":"PARTA"},
 "Prog":{"category":"VerbForm","leipzig":"PROG"},
 "Tns":{"category":"VerbForm","leipzig":"TNS"},
 "1":{"category":"Person","leipzig":"1"},
@@ -49,5 +50,6 @@
 "Pos":{"category":"Degree","leipzig":"POS"},
 "Cau":{"category":"Voice","leipzig":"CAU"},
 "Hab":{"category":"Aspect","leipzig":"HAB"},
-"Cnd":{"category":"Mood","leipzig":"CND"}
+"Cnd":{"category":"Mood","leipzig":"CND"},
+"Circ":{"category":"Other","leipzig":"CIRC"}
 }

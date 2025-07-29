@@ -65,7 +65,7 @@ class SpacyTrainer(AbstractTrainer):
             if not is_package(pkg):
                 print(f"{pkg} not found — downloading…")
                 download(pkg)
-            self.pretrained_model = True
+            self.pretrained_model = pkg
             msg.info(f"Using pretrained spaCy model: {pkg}")
             return spacy.load(pkg)
         else:

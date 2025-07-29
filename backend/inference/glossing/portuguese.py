@@ -53,7 +53,7 @@ class PortugueseGlossingStrategy(GlossingStrategy):
 
                 # Reconstruct cleaned token
                 if core_feats:
-                    glossed_tokens[idx] = lemma + '.' + '.'.join(core_feats)
+                    glossed_tokens[idx] = lemma + '-' + '-'.join(core_feats)
                 else:
                     glossed_tokens[idx] = lemma
 
@@ -99,7 +99,7 @@ class PortugueseGlossingStrategy(GlossingStrategy):
             #        translated_lemma = lemma
 
             translated_lemma = lemma
-            lemma = translated_lemma.replace(" ", "-")
+            lemma = translated_lemma.replace(" ", ".")
 
             feats = self.UD2LEIPZIG(token.morph.to_dict())
             if feats:

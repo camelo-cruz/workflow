@@ -9,6 +9,12 @@ import matplotlib.pyplot as plt
 
 def clean_text(text: str) -> str:
     text = re.sub(r'^[^A-Za-z0-9]+|[^A-Za-z0-9.]+$', '', text)
+    match = re.match(r'(.*)>(.*)<(.*)', text)
+    if match:
+        before = match.group(1)
+        middle = match.group(2)
+        after = match.group(3)
+        text = f"{middle}.{before}.{after}"
     if '.' in text:
         before, after = text.split('.', 1)
         if before.islower():
@@ -146,7 +152,7 @@ def plot_metrics(report_df: pd.DataFrame):
 
 
 if __name__ == '__main__':
-    DATA_DIR = '/Users/alejandra/Library/CloudStorage/OneDrive-FreigegebeneBibliotheken–Leibniz-ZAS/Leibniz Dream Data - Studies/tests_alejandra/yoruba/to_test'
+    DATA_DIR = '/Users/alejandra/Library/CloudStorage/OneDrive-FreigegebeneBibliotheken–Leibniz-ZAS/Leibniz Dream Data - Studies/tests_alejandra/german/H06a_deu_adults Kopie/Session_1269576'
     GLOSS_COL = 'automatic_glossing'
     GOLD_COL  = 'glossing_utterance_used'
 

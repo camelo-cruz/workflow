@@ -44,15 +44,18 @@ class GlossingStrategy(ABC):
     def UD2LEIPZIG(self, morph):
         # Map all morphological features via LEIPZIG_GLOSSARY in defined order
         features_in_order = [
+            #Defined order
+            "PronType", "Definite", "Gender", "Person", "Number", "Case",
+
             # Lexical Features
-            "PronType", "NumType", "Other", #"Poss", "Reflex",
+            "NumType", "Other", #"Poss", "Reflex",
             "Abbr",  "ExtPos", "Clusivity", #"Typo", "Foreign",
             # Nominal Features
-            "Number", "Gender", "Animacy", "NounClass", "Case", 
-            "Definite", "Deixis", "DeixisRef", "Degree",
+            "Animacy", "NounClass", 
+             "Deixis", "DeixisRef", "Degree",
             # Verbal Features
             "VerbForm", "Mood", "Tense", "Aspect", "Voice", 
-            "Evident", "Polarity", "Person", "Polite",
+            "Evident", "Polarity", "Polite",
         ]
 
         mapped_parts = []
@@ -61,7 +64,7 @@ class GlossingStrategy(ABC):
             if value and value != "None":
                 mapped_parts.append(value)
 
-        mapped_features = ".".join(mapped_parts)
+        mapped_features = "-".join(mapped_parts)
 
         return mapped_features
 

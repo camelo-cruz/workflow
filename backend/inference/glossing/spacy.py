@@ -68,11 +68,11 @@ class SpaCyGlossingStrategy(GlossingStrategy):
             if not lemma:
                 lemma = token.text.lower()
 
-            lemma = lemma.replace(" ", "-")  # replace spaces with hyphens
+            lemma = lemma.replace(" ", ".")  # replace spaces with hyphens
 
             gloss_feats = self.UD2LEIPZIG(token.morph.to_dict())
             if gloss_feats:
-                out_tokens.append(f"{lemma}.{gloss_feats}")
+                out_tokens.append(f"{lemma}-{gloss_feats}")
             else:
                 out_tokens.append(lemma)
 

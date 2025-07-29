@@ -48,7 +48,7 @@ class StanzaGlossingStrategy(GlossingStrategy):
                 feats_dict = self.parse_stanza_feats(token.feats)
                 gloss_feats = self.UD2LEIPZIG(feats_dict)
                 if gloss_feats:
-                    out_tokens.append(f"{lemma}.{gloss_feats}")
+                    out_tokens.append(f"{lemma}-{gloss_feats}")
                 else:
                     out_tokens.append(lemma)
 

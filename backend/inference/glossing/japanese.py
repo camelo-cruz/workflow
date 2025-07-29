@@ -19,39 +19,38 @@ class JapaneseGlossingStrategy(StanzaGlossingStrategy):
     def gloss(self, sentence: str) -> str:
         doc = self.nlp(sentence)
         out_tokens = []
-        for sent in doc.sentences:
-            for token in sent.words:
-                # passthrough bracketed/digits
-                if re.search(r"[\(\[\]\)\d]", token.text):
-                    out_tokens.append(token.text)
-                    continue
 
-                # get a normalized lemma
-                lemma = token.lemma.lower()
-                if not lemma:
-                    lemma = token.text.lower()
+        for token in doc:
+            # passthrough bracketed/digits
+            if re.search(r"[\(\[\]\)\d]", token.text):
+                out_tokens.append(token.text)
+                continue
 
-                lemma = lemma.replace(" ", "-")  # replace spaces with hyphens
-                pos = token.upos # Universal POS tag
-                rule_feat = None
-                if token.text == 'が':
-                    rule_feat = 'NOM'
-                elif token.text == 'は':
-                    rule_feat = 'TOP'
-                elif token.text == 'の':
-                    rule_feat = 'GEN'
-                elif token.text == 'を':
-                    rule_feat = 'ACC'
-                elif token.text == 'に':
-                    rule_feat = 'DAT'
-                elif token.text == 'へ':
-                    rule_feat = 'ALL'
-                elif token.text == 'から':
-                    rule_feat = 'ABL'
-                elif token.text == 'で':
-                    rule_feat = 'INS'
+            # get a normalized lemma
+            lemma = token.lemma.lower()
+            if not lemma:
+                lemma = token.text.lower()
 
-                out_tokens.append(f"{lemma}.{pos}.{rule_feat}" if rule_feat else f"{lemma}.{pos}")
+            lemma = lemma.replace(" ", ".")  # replace spaces with hyphens
+            pos = token.upos
+            if lemma == 'が':
+                rule_feat = 'NOM'
+            elif lemma == 'は':
+                rule_feat = 'TOP'
+            elif lemma == 'の':
+                rule_feat = 'GEN'
+            elif lemma == 'を':
+                rule_feat = 'ACC'
+            elif lemma == 'に':
+                rule_feat = 'DAT'
+            elif lemma == 'へ':
+                rule_feat = 'ALL'
+            elif lemma == 'から':
+                rule_feat = 'ABL'
+            elif lemma == 'で':
+                rule_feat = 'INS'
+
+            out_tokens.append(f"{lemma}.{pos}.{rule_feat}" if rule_feat else f"{lemma}-{pos}")
 
 
         return " ".join(out_tokens)
