@@ -1,6 +1,8 @@
 from inference.transcription.abstract import TranscriptionStrategy
 from inference.transcription.whisperx import WhisperxStrategy
 from inference.transcription.whisper import WhisperStrategy
+from inference.transcription.indicWhisper import IndicWhisperStrategy
+from inference.transcription.indicConformer import IndicConformerStrategy
 
 
 
@@ -12,5 +14,9 @@ class TranscriptionStrategyFactory:
                              'ur', 'te', 'hi', 'ca', 'ml', 'no', 'nn', 'sk', 'sl', 'hr', 'ro',
                              'eu', 'gl', 'ka', 'lv', 'tl', 'zh']:
             return WhisperxStrategy(language_code)
-        elif language_code in ['ar', 'bn']:
+        elif language_code in ['ar']:
             return WhisperStrategy(language_code)
+        elif language_code in []:
+            return IndicWhisperStrategy(language_code)
+        elif language_code in ['bn']:
+            return IndicConformerStrategy(language_code)

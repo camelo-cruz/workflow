@@ -1,0 +1,71 @@
+name: tgt
+channels:
+  - defaults
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      # MacOS dependencies
+      - torch==2.6.0; sys_platform == "darwin"
+      - torchvision==0.21.0; sys_platform == "darwin"
+      - torchaudio==2.6.0; sys_platform == "darwin"
+
+      # Windows dependencies
+      - --extra-index-url https://download.pytorch.org/whl/cu124
+      - torch==2.6.0+cu124; sys_platform == "win32"
+      - torchvision==0.21.0+cu124; sys_platform == "win32"
+      - torchaudio==2.6.0+cu124; sys_platform == "win32"
+
+      # General dependencies
+      - annotated-types
+      - anyio
+      - click
+      - fastapi
+      - h11
+      - idna
+      - pydantic
+      - pydantic_core
+      - sniffio
+      - starlette
+      - typing-inspection
+      - typing_extensions
+      - uvicorn
+      - dotenv
+      - jinja2
+      - requests
+      - msal
+      - pandas
+      - tqdm
+      - whisperx
+      - openai-whisper
+      - openpyxl
+      - deepl
+      - deep_translator
+      - spacy
+      - spacy_stanza
+      - stanza
+      - python-multipart
+      - sacremoses
+      - pypinyin
+      - pykakasi
+      - cupy-cuda12x; sys_platform == "win32"
+      - wandb
+      - sse_starlette
+      - jax==0.4.13
+      - jaxlib==0.4.13
+      - git+https://github.com/sanchit-gandhi/whisper-jax.git
+      - numpy<2.0
+      - huggingface_hub<0.18
+      - git+https://github.com/NVIDIA/NeMo.git@$BRANCH#egg=nemo_toolkit[asr]
+      - hydra-core
+      - librosa
+      - inflect
+      - webdataset
+      - Cython
+      - youtokentome
+      - editdistance
+      - jiwer
+      - ipython
