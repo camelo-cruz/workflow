@@ -1,13 +1,8 @@
 import whisperx
-import os
-from dotenv import load_dotenv
 from whisperx.diarize import DiarizationPipeline
-from pathlib import Path
+
 
 from inference.transcription.abstract import TranscriptionStrategy
-
-_this_file = Path(__file__).resolve()
-parent_dir = _this_file.parent.parent.parent
 
 
 class WhisperxStrategy(TranscriptionStrategy):
@@ -15,20 +10,7 @@ class WhisperxStrategy(TranscriptionStrategy):
         """
         Initialize the Whisperx transcription strategy.	"""
         super().__init__(*args, **kwargs)
-        self.hugging_key = self._load_hugging_face_token()
         self.batch_size = kwargs.get('batch_size', 8)
-    
-    def _load_hugging_face_token(self):
-        token = os.getenv("HUGGING_KEY")
-        if not token:
-            secrets_path = os.path.join(parent_dir, 'materials', 'secrets.env')
-            print(f"Loading Hugging Face token from {secrets_path}")
-            if os.path.exists(secrets_path):
-                load_dotenv(secrets_path, override=True)
-                token = os.getenv("HUGGING_KEY")
-        if not token:
-            raise ValueError("Hugging Face key not found. Set it in Hugging Face Secrets or in materials/secrets.env")
-        return token
     
     def load_model(self):
         try:

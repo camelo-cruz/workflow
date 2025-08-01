@@ -70,10 +70,21 @@ class SpaCyGlossingStrategy(GlossingStrategy):
 
             lemma = lemma.replace(" ", ".")  # replace spaces with hyphens
 
+            print(token.morph.to_dict())
             gloss_feats = self.UD2LEIPZIG(token.morph.to_dict())
             if gloss_feats:
                 out_tokens.append(f"{lemma}-{gloss_feats}")
             else:
                 out_tokens.append(lemma)
 
-        return " ".join(out_tokens)
+        glossed_text = " ".join(out_tokens)
+        print(f"Glossed text: {glossed_text}")  # Debug output
+        return glossed_text
+
+
+if __name__ == "__main__":
+    # Example usage
+    strategy = SpaCyGlossingStrategy(language_code='de')
+    strategy.load_model()
+    glossed_text = strategy.gloss("Der linke Hund.")
+    print(glossed_text)

@@ -1,10 +1,29 @@
+import os
 from abc import ABC, abstractmethod
+from pathlib import Path
+from dotenv import load_dotenv
+
+_this_file = Path(__file__).resolve()
+parent_dir = _this_file.parent.parent.parent
 
 class TranscriptionStrategy(ABC):
     def __init__(self, language_code: str, device: str = "cpu"):
         self.language_code = language_code.lower()
         self.device = device
+        self.hugging_key = self._load_hugging_face_token()
         self.load_model()
+    
+    def _load_hugging_face_token(self):
+        token = os.getenv("HUGGING_KEY")
+        if not token:
+            secrets_path = os.path.join(parent_dir, 'materials', 'secrets.env')
+            print(f"Loading Hugging Face token from {secrets_path}")
+            if os.path.exists(secrets_path):
+                load_dotenv(secrets_path, override=True)
+                token = os.getenv("HUGGING_KEY")
+        if not token:
+            raise ValueError("Hugging Face key not found. Set it in Hugging Face Secrets or in materials/secrets.env")
+        return token
     
     @abstractmethod
     def load_model(self):
