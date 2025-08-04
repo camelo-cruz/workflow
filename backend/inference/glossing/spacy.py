@@ -78,5 +78,6 @@ class SpaCyGlossingStrategy(GlossingStrategy):
                 out_tokens.append(lemma)
 
         glossed_text = " ".join(out_tokens)
+        glossed_text = glossed_text.replace("--", "")
         print(f"Glossed text: {glossed_text}")  # Debug output
         return glossed_text

@@ -49,7 +49,7 @@ class SpacyTrainer(AbstractTrainer):
         self.base_backend_dir = Path(__file__).resolve().parents[2]
         self.configs_dir = Path(self.base_training_dir) / 'spacy_configs'
         self.base_config_path = Path(self.configs_dir / 'base_config.cfg')
-        self.train_config_path = Path(self.configs_dir / f'{self.lang}_{self.study}_config.cfg')
+        self.train_config_path = Path(self.configs_dir / 'train_config.cfg')
         self.models_dir = self.base_backend_dir / 'models'
         print(f'models_dir: {self.models_dir}')
 
@@ -60,16 +60,16 @@ class SpacyTrainer(AbstractTrainer):
             msg.info("Using CPU mode.")
     
     def _load_model(self) -> str:
-        if self.lang in self.DEFAULT_SPACY:
-            pkg = self.DEFAULT_SPACY[self.lang]
-            if not is_package(pkg):
-                print(f"{pkg} not found — downloading…")
-                download(pkg)
-            self.pretrained_model = pkg
-            msg.info(f"Using pretrained spaCy model: {pkg}")
-            return spacy.load(pkg)
-        else:
-            return spacy.blank(self.lang)
+        #if self.lang in self.DEFAULT_SPACY:
+        #    pkg = self.DEFAULT_SPACY[self.lang]
+        #    if not is_package(pkg):
+        #        print(f"{pkg} not found — downloading…")
+        #        download(pkg)
+        #    self.pretrained_model = pkg
+        #    msg.info(f"Using pretrained spaCy model: {pkg}")
+        #    return spacy.load(pkg)
+        #else:
+        return spacy.blank(self.lang)
 
     def create_docbin(self, data_df) -> DocBin:
         """Create a DocBin from the annotated data in the input directory."""
@@ -99,17 +99,25 @@ class SpacyTrainer(AbstractTrainer):
 
         return docbin
     
-    def training_step(self, data_df):
+    def training_step(self, data_df, seed = 42):
         doc_bin = self.create_docbin(data_df)
         docs = list(doc_bin.get_docs(self.nlp.vocab))
         random.shuffle(docs)
 
-        # Split into 95% train and 5% test
+        random.seed(seed)
+        random.shuffle(docs)
+
         total = len(docs)
-        split_idx = int(total * 0.95)
-        train_docs = docs[:split_idx]
-        test_docs = docs[split_idx:]
-        msg.info(f"Total docs: {total}, train: {len(train_docs)}, test: {len(test_docs)}")
+        dev_size = max(1, int(total * 0.05))
+        test_size = max(1, int(total * 0.05))
+        train_end = total - dev_size - test_size
+
+        train_docs = docs[:train_end]
+        dev_docs = docs[train_end: train_end + dev_size]
+        test_docs = docs[train_end + dev_size:]
+
+        msg.info(f"Total docs: {total}, train: {len(train_docs)}, dev: {len(dev_docs)}, test: {len(test_docs)} (90/5/5 split)")
+
 
         # Write out temporary train/test spacy files
         with tempfile.TemporaryDirectory() as tmpdir_str:

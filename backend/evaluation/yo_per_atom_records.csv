@@ -1,0 +1,1630 @@
+gold,pred
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'PROG'}
+{'LOC'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PERF'},{'PERF'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'FOC'},{'FOC'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'LOC'},{'REL'}
+{'LOC'},{'REL'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'FOC'},{'FOC'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'SG', '3'}",{'LOC'}
+"{'SG', '3'}",{'LOC'}
+"{'SG', '3'}",{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'FOC'},{'FOC'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'FOC'},{'FOC'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'FOC'},{'FOC'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'REL'}
+{'LOC'},{'REL'}
+{'REL'},"{'TNS', 'SG', '3'}"
+{'REL'},"{'TNS', 'SG', '3'}"
+{'REL'},"{'TNS', 'SG', '3'}"
+{'REL'},"{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+{'PROG'},{'LOC'}
+{'PROG'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+"{'TNS', 'SG', '3'}",{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PERF'},{'PERF'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},"{'TNS', 'SG', 'REL', '3'}"
+{'LOC'},"{'TNS', 'SG', 'REL', '3'}"
+{'LOC'},"{'TNS', 'SG', 'REL', '3'}"
+{'LOC'},"{'TNS', 'SG', 'REL', '3'}"
+{'LOC'},"{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}",{'LOC'}
+"{'TNS', 'SG', 'REL', '3'}",{'LOC'}
+"{'TNS', 'SG', 'REL', '3'}",{'LOC'}
+"{'TNS', 'SG', 'REL', '3'}",{'LOC'}
+"{'TNS', 'SG', 'REL', '3'}",{'LOC'}
+{'LOC'},"{'SG', '3'}"
+{'LOC'},"{'SG', '3'}"
+{'LOC'},"{'SG', '3'}"
+{'REL'},{'REL'}
+{'PERF'},{'PERF'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'FOC'},{'FOC'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', '3'}","{'SG', '3'}"
+"{'SG', '3'}","{'SG', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+"{'TNS', 'SG', '3'}",{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', '3'}","{'SG', '3'}"
+"{'SG', '3'}","{'SG', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'TNS'},"{'TNS', 'SG', 'REL', '3'}"
+{'TNS'},"{'TNS', 'SG', 'REL', '3'}"
+{'TNS'},"{'TNS', 'SG', 'REL', '3'}"
+{'TNS'},"{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'PROG'},{'PROG'}
+{'PROG'},{'PROG'}
+{'TNS'},"{'TNS', 'SG', 'REL', '3'}"
+{'TNS'},"{'TNS', 'SG', 'REL', '3'}"
+{'TNS'},"{'TNS', 'SG', 'REL', '3'}"
+{'TNS'},"{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'PROG'}
+{'REL'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'REL'},"{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'FOC'},{'FOC'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'FOC'},{'FOC'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'FOC'},{'FOC'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'FOC'},{'FOC'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'FOC'},{'FOC'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'FOC'},{'FOC'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'REL'},{'REL'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+"{'TNS', 'SG', 'REL', '3'}","{'TNS', 'SG', 'REL', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+{'REL'},{'REL'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'LOC'},{'LOC'}
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+"{'SG', 'GEN', '3'}","{'SG', 'GEN', '3'}"
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+{'PROG'},{'PROG'}
+{'REL'},{'REL'}
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+"{'TNS', 'SG', '3'}","{'TNS', 'SG', '3'}"
+{'PROG'},{'PROG'}

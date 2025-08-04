@@ -8,24 +8,21 @@ import matplotlib.pyplot as plt
 
 
 def clean_text(text: str) -> str:
+    text = re.sub(r'[\(\[][^()\[\]]*[\)\]]', '', text)
+
+    # Remove non-alphanumeric characters from the start and end
     text = re.sub(r'^[^A-Za-z0-9]+|[^A-Za-z0-9.]+$', '', text)
-    match = re.match(r'(.*)>(.*)<(.*)', text)
-    if match:
-        before = match.group(1)
-        middle = match.group(2)
-        after = match.group(3)
-        text = f"{middle}.{before}.{after}"
-    if '.' in text:
-        before, after = text.split('.', 1)
+    if '-' in text:
+        before, after = text.split('-', 1)
         if before.islower():
             return after
-        return text.strip('.')
+        return text.strip('-')
     if text.isupper():
         return text
     return ''
 
 def extract_atomic_from_gloss(gloss: str) -> set[str]:
-    return set(gloss.split('.')) if gloss else set()
+    return set(gloss.split('-')) if gloss else set()
 
 
 def process_dir(dir_path: str, gloss_col: str, gold_col: str, language: str):
@@ -36,19 +33,21 @@ def process_dir(dir_path: str, gloss_col: str, gold_col: str, language: str):
             if not fname.endswith("annotated.xlsx"):
                 continue
 
-            df = pd.read_excel(os.path.join(root, fname))
+            path = os.path.join(root, fname)
+            df = pd.read_excel(path)
 
             if gloss_col not in df.columns or gold_col not in df.columns:
-                print(f" → missing expected columns in {fname}, skipping")
+                print(f" → missing expected columns in {fname} in {root}, skipping")
                 continue
+            else:
+                print(f" → processing {fname}...")
 
-            for _, row in df.iterrows():
+            for i, row in df.iterrows():
                 preds_lines = [ln.split() for ln in str(row[gloss_col]).split('\n') if ln]
                 golds_lines = [ln.split() for ln in str(row[gold_col]).split('\n') if ln]
-
-                # for each sentence
+                
+                # for each sentence pair (stop at min length)
                 for p_raw, g_raw in zip(preds_lines, golds_lines):
-                    # build per-token atomic sets
                     p_sets = [
                         extract_atomic_from_gloss(clean_text(tok))
                         for tok in p_raw if clean_text(tok)
@@ -58,19 +57,32 @@ def process_dir(dir_path: str, gloss_col: str, gold_col: str, language: str):
                         for tok in g_raw if clean_text(tok)
                     ]
 
-                    # now iterate per token, not merging across the sentence
+                    # iterate per token up to min length
                     for p_atoms, g_atoms in zip(p_sets, g_sets):
-                        # for each atomic feature in this token
-                        for atomic in sorted(p_atoms | g_atoms):
+                        union_atoms = sorted(p_atoms | g_atoms)
+                        if not union_atoms:
+                            # still record empty case if you want, or skip with debug
+                            per_atom_records.append({'gold': set(), 'pred': set()})
+                            continue
+                        for atomic in union_atoms:
                             per_atom_records.append({
-                                'gold':  g_atoms,
-                                'pred':  p_atoms
+                                'gold': g_atoms,
+                                'pred': p_atoms
                             })
 
     df_atoms = pd.DataFrame(per_atom_records)
+
+    # Debug info
+    print(f"[{language}] Built per-atom DataFrame with shape {df_atoms.shape}")
+    if 'gold' not in df_atoms.columns or 'pred' not in df_atoms.columns:
+        print(f"WARNING: expected columns missing: {df_atoms.columns.tolist()}")
+    else:
+        print(f"Example rows:\n{df_atoms.head(5)}")
+
     current_dir = Path(__file__).resolve().parent
     df_atoms.to_csv(current_dir / f'{language}_per_atom_records.csv', index=False)
     return df_atoms
+
 
 
 def compute_per_label_report(df_atoms: pd.DataFrame) -> pd.DataFrame:
@@ -152,10 +164,10 @@ def plot_metrics(report_df: pd.DataFrame, language):
 
 
 if __name__ == '__main__':
-    DATA_DIR = '/Users/alejandra/Library/CloudStorage/OneDrive-FreigegebeneBibliotheken–Leibniz-ZAS/Leibniz Dream Data - Studies/tests_alejandra/german/H06a_deu_adults Kopie/Session_1269576'
+    DATA_DIR = '/Users/alejandra/Library/CloudStorage/OneDrive-FreigegebeneBibliotheken–Leibniz-ZAS/Leibniz Dream Data - Studies/tests_alejandra/tesis_data/yoruba/to_test'
     GLOSS_COL = 'automatic_glossing'
-    GOLD_COL  = 'glossing_utterance_used'
-    LANGUAGE = 'de'
+    GOLD_COL  = 'gold_glossing'
+    LANGUAGE = 'yo'
 
     # 1) Build one row PER TOKEN-PER ATOMIC FEATURE
     df_atoms = process_dir(DATA_DIR, GLOSS_COL, GOLD_COL, LANGUAGE)
