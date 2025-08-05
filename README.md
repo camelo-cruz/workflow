@@ -37,8 +37,8 @@ DEEPL_API_KEY=your_deepl_api_key_here
 
 If you're part of ZAS:
 
-1. Contact your system administrator for server connection details
-2. Follow the specific connection instructions provided by your administrator
+1. Contact the code owner for server connection details
+2. Follow the specific connection instructions provided by the owner
 
 > 🔒 **Security Note**: Server paths are not included in this documentation for security reasons.
 
@@ -46,7 +46,7 @@ If you're part of ZAS:
 
 For containerized deployment:
 
-1. Obtain the Docker command from your code administrator
+1. Obtain the Docker command from the code owner
 2. Run the provided Docker command
 3. Set up Watchtower for automatic updates:
 
