@@ -66,10 +66,10 @@ For local development or custom server deployment:
 
 ```bash
 # Create environment from configuration file
-conda env create -f environment.yml
+conda env create -f environment.yml -n tgt
 
 # Activate the environment
-conda activate your_env_name
+conda activate tgt
 ```
 
 ## 2. Start the Application
