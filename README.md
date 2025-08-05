@@ -11,7 +11,7 @@
 
 Create a `.env` file in the `backend/materials/` directory to store your API keys and configuration secrets.
 
-> ⚠️ **Important**: Without this file, OneDrive integration will not be available.
+> ⚠️ **Important**: Without this file, OneDrive integration will not be available nor using of some models for transcription and translation.
 
 ### Required `.env` File Contents
 
