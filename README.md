@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- **Python**: Version `3.11.0` (required for compatibility with the installed PyTorch version and CUDA usage) 
+- **Python**: Version `3.11.0`  (ensures compatibility with the installed PyTorch and CUDA versions)
 - **Conda**: For environment management (recommended)
 
 ## Configuration
@@ -33,7 +33,7 @@ DEEPL_API_KEY=your_deepl_api_key_here
 
 ## Installation & Deployment Options
 
-### Option 1: ZAS Organization Members
+### Option 1: ZAS Members
 
 If you're part of ZAS:
 
@@ -60,9 +60,21 @@ docker run -d \
 
 ### Option 3: Local Development Setup
 
-For local development or custom server deployment:
+For local development or custom server deployment (always pull the latest version of the code):
 
-#### 1. Create Conda Environment
+#### 1. Clone repository
+
+```bash
+# Clone repository
+git clone https://github.com/camelo-cruz/TGT.git
+
+# Navigate into the project directory
+cd TGT
+```
+
+#### 2. Create Conda Environment
+
+Create envirionment from root of TGT:
 
 ```bash
 # Create environment from configuration file
@@ -72,7 +84,7 @@ conda env create -f environment.yml -n tgt
 conda activate tgt
 ```
 
-#### 2. Start the Application
+#### 3. Start the Application
 
 Deploy frontend `dist` by running inside the `frontend` folder:
 
@@ -125,6 +137,6 @@ If OneDrive is used, be sure to:
 ## Support
 
 For additional help:
-- Contact your system administrator camelo.cruz@leibniz-zas.de
+- Contact your code administrator at camelo.cruz@leibniz-zas.de
 - Check the application logs for error details
 - Verify all environment variables are correctly set
