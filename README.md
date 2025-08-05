@@ -72,7 +72,7 @@ conda env create -f environment.yml -n tgt
 conda activate tgt
 ```
 
-## 2. Start the Application
+#### 2. Start the Application
 
 Deploy frontend `dist` by running inside the `frontend` folder:
 
