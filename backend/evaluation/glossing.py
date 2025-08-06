@@ -5,6 +5,9 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.metrics import precision_recall_fscore_support, accuracy_score, hamming_loss
 import pandas as pd
 import matplotlib.pyplot as plt
+import math
+from sklearn.metrics import multilabel_confusion_matrix
+
 
 
 def clean_text(text: str) -> str:
@@ -119,48 +122,51 @@ def compute_per_label_report(df_atoms: pd.DataFrame) -> pd.DataFrame:
     return report_df
 
 
-def plot_metrics(report_df: pd.DataFrame, language):
+
+def plot_confusion_matrices(df_atoms: pd.DataFrame, language: str):
     """
-    Create an enhanced, clean bar chart of precision, recall, and F1-score per label.
-
-    If save_path is provided, saves the figure to that path.
+    Compute and plot a 2×2 confusion matrix (TN, FP, FN, TP)
+    for each atomic feature label in a grid of heatmaps.
     """
-    labels = list(report_df.index)
-    x = range(len(labels))
-    width = 0.25
+    # Binarize the multilabel data
+    mlb = MultiLabelBinarizer()
+    y_true = mlb.fit_transform(df_atoms['gold'])
+    y_pred = mlb.transform(df_atoms['pred'])
 
-    p = report_df['precision'].values
-    r = report_df['recall'].values
-    f = report_df['f1-score'].values
+    labels = mlb.classes_
+    # Get one confusion matrix per label
+    cms = multilabel_confusion_matrix(y_true, y_pred)
 
-    plt.figure(figsize=(12, 8))
-    # Bars
-    bars_p = plt.bar([i - width for i in x], p, width, label='Precision', edgecolor='black')
-    bars_r = plt.bar(x, r, width, label='Recall', edgecolor='black')
-    bars_f = plt.bar([i + width for i in x], f, width, label='F1-score', edgecolor='black')
+    n_labels = len(labels)
+    cols = 3  # you can tweak this
+    rows = math.ceil(n_labels / cols)
 
-    # Add value labels above each bar
-    for bars in (bars_p, bars_r, bars_f):
-        for bar in bars:
-            height = bar.get_height()
-            plt.annotate(f'{height:.2f}',
-                         xy=(bar.get_x() + bar.get_width() / 2, height),
-                         xytext=(0, 3),
-                         textcoords='offset points',
-                         ha='center', va='bottom', fontsize=10)
+    fig, axes = plt.subplots(rows, cols, figsize=(cols * 4, rows * 4))
+    axes = axes.flatten()
 
-    # Layout adjustments
-    plt.xticks(x, labels, rotation=45, ha='right', fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.ylabel('Score', fontsize=14)
-    plt.title('Per-Atomic-Feature Classification Metrics', fontsize=16, pad=15)
-    plt.grid(axis='y', linestyle='--', linewidth=0.7, alpha=0.7)
-    plt.legend(fontsize=12)
+    for idx, (cm, label) in enumerate(zip(cms, labels)):
+        ax = axes[idx]
+        im = ax.imshow(cm, interpolation='nearest', cmap='Blues')
+        ax.set_title(label, fontsize=12)
+        ax.set_xticks([0, 1])
+        ax.set_xticklabels(['Pred 0', 'Pred 1'])
+        ax.set_yticks([0, 1])
+        ax.set_yticklabels(['True 0', 'True 1'])
+
+        # Annotate counts
+        for i in (0, 1):
+            for j in (0, 1):
+                ax.text(j, i, cm[i, j],
+                        ha='center', va='center', fontsize=10)
+
+    # Turn off any extra subplots
+    for j in range(idx + 1, len(axes)):
+        axes[j].axis('off')
+
     plt.tight_layout()
-
-    save_path = Path(__file__).resolve().parent / f'{language}_per_atomic_feature_metrics.png'
+    save_path = Path(__file__).resolve().parent / f'{language}_confusion_matrices.png'
     plt.savefig(save_path, dpi=300)
-
+    plt.close(fig)
 
 
 if __name__ == '__main__':
