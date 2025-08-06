@@ -9,7 +9,39 @@ env:
   GHCR_USER: ${{ github.repository_owner }}
 
 jobs:
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: 3.11
+          auto-update-conda: true
+          initialize-environment: true
+
+      - name: Create conda environment
+        run: |
+          conda env create --file environment.yml --name ci_env
+          source ~/.bashrc
+          conda activate ci_env
+
+      - name: Install test dependencies
+        run: |
+          conda activate ci_env
+          conda install pytest pytest-cov
+
+      - name: Run tests with coverage
+        run: |
+          conda activate ci_env
+          pytest --cov=.
+
   build-and-push:
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
