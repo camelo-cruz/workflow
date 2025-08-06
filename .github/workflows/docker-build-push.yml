@@ -28,7 +28,7 @@ jobs:
         run: conda env create --file environment.yml --name ci_env
 
       - name: Install test dependencies
-        run: conda install -n ci_env pytest pytest-cov
+        run: conda install -n ci_env pytest pytest-cov httpx
 
       - name: Run tests with coverage
         run: conda run -n ci_env pytest --cov=.
