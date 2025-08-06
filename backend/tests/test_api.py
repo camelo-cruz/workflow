@@ -2,8 +2,8 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
 
-from gui.app import app
-from backend.inference.processors.factory import ProcessorFactory
+from app import app
+from inference.processors.factory import ProcessorFactory
 
 @pytest.fixture
 def client():

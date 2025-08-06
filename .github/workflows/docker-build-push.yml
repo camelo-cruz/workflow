@@ -25,20 +25,13 @@ jobs:
           initialize-environment: true
 
       - name: Create conda environment
-        run: |
-          conda env create --file environment.yml --name ci_env
-          source ~/.bashrc
-          conda activate ci_env
+        run: conda env create --file environment.yml --name ci_env
 
       - name: Install test dependencies
-        run: |
-          conda activate ci_env
-          conda install pytest pytest-cov
+        run: conda install -n ci_env pytest pytest-cov
 
       - name: Run tests with coverage
-        run: |
-          conda activate ci_env
-          pytest --cov=.
+        run: conda run -n ci_env pytest --cov=.
 
   build-and-push:
     needs: test
