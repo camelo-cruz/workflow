@@ -1,7 +1,7 @@
 import sys
 from unittest.mock import patch
 
-import backend.inference.worker as worker_module
+import inference.worker as worker_module
 
 def test_main_cli_invokes_run(monkeypatch, tmp_path):
     # Prepare dummy args

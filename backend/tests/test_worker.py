@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock, patch
 
-from backend.inference.worker import LocalWorker
-from backend.inference.processors.factory import ProcessorFactory
+from inference.worker import LocalWorker
+from inference.processors.factory import ProcessorFactory
 
 class DummyProcessor:
     def __init__(self):
