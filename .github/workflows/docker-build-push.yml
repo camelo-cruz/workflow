@@ -32,4 +32,4 @@ jobs:
           tags: ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
 
       - name: Show pull command
-        run: echo "Pull with: docker pull ghcr.io/${GHCR_USER}/${IMAGE_NAME}:latest"
+        run: echo "Pull with: docker pull ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest"
