@@ -207,7 +207,7 @@ def main() -> None:
         glossingModel=args.glossing_model,
         job=None  # CLI usage, no job object
     )
-    worker.run() 
+    worker.run()
 
 
 if __name__ == "__main__":
