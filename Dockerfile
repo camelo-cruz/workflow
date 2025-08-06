@@ -7,9 +7,10 @@ WORKDIR /app
 COPY environment.yml .
 
 # Create the conda environment
-RUN conda env create -f environment.yml
+RUN conda env create -f environment.yml && \
+    conda clean -afy
 
-# Activate the environment for subsequent commands
+# Make RUN commands use the new environment
 SHELL ["conda", "run", "-n", "tgt", "/bin/bash", "-c"]
 
 # Copy all source code (backend + frontend/dist)

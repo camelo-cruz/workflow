@@ -78,7 +78,7 @@ Create envirionment from root of TGT:
 
 ```bash
 # Create environment from configuration file
-conda env create -f environment.yml -n tgt
+conda env create -f environment.yml
 
 # Activate the environment
 conda activate tgt
