@@ -14,8 +14,9 @@ REM ==== Ensure logs folder exists ====
 if not exist ".\logs" mkdir ".\logs"
 
 REM ==== Launch Uvicorn ====
+cd /d C:\Users\camelo.cruz\Documents\GitHub\TGT\backend
 python -m uvicorn app:app --host 127.0.0.1 --port 8000 ^
-    >> ".\logs\uvicorn.log" 2>&1
+    >> "..\logs\uvicorn.log" 2>&1
 
 REM ==== Script ends when Uvicorn exits ====
 exit

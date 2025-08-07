@@ -39,3 +39,4 @@ uvicorn-log.txt
 *.sh
 *.bat
 /backend/wandb
+*.bat
