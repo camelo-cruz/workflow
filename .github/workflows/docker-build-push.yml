@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 env:
-  IMAGE_NAME: TGT
+  IMAGE_NAME: tgt
   GHCR_USER: ${{ github.repository_owner }}
 
 jobs:
