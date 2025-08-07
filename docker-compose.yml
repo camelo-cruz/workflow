@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   tgt:
-    image: ghcr.io/camelo-cruz/tgt:latest
+    image: ghcr.io/camelo-cruz/TGT:latest
     ports:
       - "8000:8000"
     environment:

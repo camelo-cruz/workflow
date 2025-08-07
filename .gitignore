@@ -30,6 +30,8 @@ dist-ssr
 *.sln
 *.sw?
 
+/frontend/dist/*
+
 # venv
 tgt-venv/*
 uvicorn-log.txt
