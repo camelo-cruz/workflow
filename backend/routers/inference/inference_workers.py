@@ -2,7 +2,7 @@ import os
 import tempfile
 import traceback
 import shutil
-from zipfile import ZipFile
+from zipfile import ZipFile, ZIP_DEFLATED
 from pathlib import Path
 
 from inference.processors.factory import ProcessorFactory
@@ -14,6 +14,13 @@ from routers.helpers.onedrive import (
 )
 
 class ZipWorker(AbstractInferenceWorker):
+    # allow-list for files to include in the zip
+    ALLOWED_FILENAMES = {
+        "trials_and_sessions_annotated.xlsx",
+        "transcription.log",
+        "translation.log",
+    }
+
     """
     Processes a single local folder (or multiple if your base_dir contains
     sub-folders named “Session_*”), then zips up only the output files you care
@@ -26,22 +33,29 @@ class ZipWorker(AbstractInferenceWorker):
         yield self.base_dir
 
     def _after_process(self):
-        # Name the zip after the job
+        """
+        After processing each folder, walk the folder tree and zip
+        up only the files in ALLOWED_FILENAMES, preserving their
+        path relative to self.base_dir.
+        """
+        base_dir = Path(self.base_dir)
         zip_path = Path(tempfile.gettempdir()) / f"{self.job_id}_output.zip"
-        with ZipFile(zip_path, "w") as zf:
-            # Walk the processed folder and only include certain filenames
-            for root, _, files in os.walk(self.current_folder):
-                for fname in files:
-                    if fname in (
-                        "trials_and_sessions_annotated.xlsx",
-                        "transcription.log",
-                        "translation.log",
-                    ):
-                        full = os.path.join(root, fname)
-                        # make the archive paths relative to the base_dir
-                        rel = os.path.relpath(full, self.base_dir)
-                        zf.write(full, arcname=rel)
-        self._put(f"[ZIP PATH] {zip_path}")
+        
+        try:
+            self._put(f"Creating ZIP archive at {zip_path}")
+            with ZipFile(zip_path, "w", compression=ZIP_DEFLATED) as zf:
+                for file_path in Path(self.current_folder).rglob("*"):
+                    # only include files in our allow-list
+                    if file_path.name in self.ALLOWED_FILENAMES:
+                        # compute path inside zip relative to the base dir
+                        arcname = file_path.relative_to(base_dir)
+                        zf.write(file_path, arcname=arcname)
+                        print(f"Added to zip: {arcname}")
+            print(f"Created ZIP archive at {zip_path}")
+            self._put(f"[ZIP PATH] {zip_path}")
+        except Exception as e:
+            print(f"Failed to create ZIP for job {self.job_id}: {e}")
+            self._put(f"[ERROR] Could not bundle outputs: {e}")
 
 
 class OneDriveWorker(AbstractInferenceWorker):

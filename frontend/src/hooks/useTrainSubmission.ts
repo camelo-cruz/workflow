@@ -81,7 +81,7 @@ export function useTrainSubmission(
 
         addLog("Uploading zip…", "info");
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", "api/train/process");
+        xhr.open("POST", "/api/train/process");
         xhr.withCredentials = true;
         xhr.upload.onprogress = (e) => {
           if (e.lengthComputable) {

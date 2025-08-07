@@ -55,7 +55,7 @@ export function useJobSubmission(
       }
       form.append("access_token", token);
 
-      const res = await fetch("api/inference/process", {
+      const res = await fetch("/api/inference/process", {
         method: "POST",
         body: form,
         credentials: "same-origin",
@@ -83,7 +83,7 @@ export function useJobSubmission(
 
       addLog("Uploading zip…", "info");
       const xhr = new XMLHttpRequest();
-      xhr.open("POST", "api/inference/process");
+      xhr.open("POST", "/api/inference/process");
       xhr.withCredentials = true;
       xhr.upload.onprogress = (e) => {
         if (e.lengthComputable) {

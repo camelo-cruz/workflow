@@ -16,8 +16,6 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 MODELS_BASE = Path(__file__).resolve().parent.parent.parent / "models"
-VALID_TASKS = {"transcribe", "translate", "transliterate", "gloss"}
-
 
 @router.post("/process")
 async def process(
@@ -171,12 +169,6 @@ async def cancel(payload: dict = Body(...)):
 @router.get("/models/{task}")
 async def list_models(task: str):
     """List available models for a given task."""
-    if task not in VALID_TASKS:
-        raise HTTPException(
-            status_code=400, 
-            detail=f"Invalid task. Must be one of: {', '.join(VALID_TASKS)}"
-        )
-
     dir_path = MODELS_BASE / task
     
     if not dir_path.exists():

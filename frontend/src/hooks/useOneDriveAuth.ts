@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 const TOKEN_KEY = "access_token";
-const ONE_DRIVE_POPUP_URL = "api/auth/start";
+const ONE_DRIVE_POPUP_URL = "/api/auth/start";
 
 type LogType = "info" | "success" | "error" | "warning";
 

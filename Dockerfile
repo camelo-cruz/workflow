@@ -1,26 +1,38 @@
-FROM continuumio/miniconda3:latest
+### STAGE 1: frontend builder ###
+FROM node:18-alpine AS frontend-builder
+WORKDIR /app/frontend
 
-# Set working directory to /app
+# only copy package files first for caching
+COPY frontend/package*.json ./
+RUN npm ci
+
+# now copy rest and build
+COPY frontend/ ./
+RUN npm run build        # produces ./dist/
+
+
+### STAGE 2: final image ###
+FROM continuumio/miniconda3:latest
 WORKDIR /app
 
-# Copy only environment.yml first (better caching for rebuilds)
-COPY environment.yml .
-
-# Create the conda environment
+# 1) Install conda environment
+COPY environment.yml ./
 RUN conda env create -f environment.yml && \
     conda clean -afy
 
-# Make RUN commands use the new environment
+# 2) Make conda env the default for all RUN/ENTRYPOINT/CMD
 SHELL ["conda", "run", "-n", "tgt", "/bin/bash", "-c"]
 
-# Copy all source code (backend + frontend/dist)
-COPY . .
+# 3) Copy in backend code
+COPY backend/ ./backend/
 
-# Change working directory to backend so uvicorn runs from there
+# 4) Copy built frontend assets
+COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
+
+# 5) Expose and run
 WORKDIR /app/backend
-
-# Expose API port
 EXPOSE 8000
 
-# Run FastAPI app with Uvicorn
-CMD ["conda", "run", "-n", "tgt", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# ENTRYPOINT will prefix every invocation with `conda run -n tgt`
+ENTRYPOINT ["conda", "run", "-n", "tgt"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
