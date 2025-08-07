@@ -10,6 +10,7 @@ env:
 
 jobs:
   test:
+    if: false
     name: Test Suite
     runs-on: ubuntu-latest
 

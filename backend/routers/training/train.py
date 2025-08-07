@@ -34,10 +34,8 @@ async def process(
     access_token: str | None = Form(None),
     zipfile: UploadFile | None = File(None),
 ):
-    # Initialize job
     job = JobManager.create()
     job.token = access_token
-
 
     if not language:
         job.queue.put("[ERROR] Missing language")
@@ -78,29 +76,6 @@ async def stream(job_id: str):
                 break
 
     return EventSourceResponse(event_generator())
-
-
-@router.get("/{job_id}/download")
-async def download(job_id: str, background_tasks: BackgroundTasks):
-    job = JobManager.get(job_id)
-    if not job.zip_path:
-        raise HTTPException(status_code=404, detail="Results not ready")
-
-    def cleanup():
-        try:
-            os.remove(job.zip_path)
-        except OSError:
-            logger.warning(f"Failed to delete zip file {job.zip_path}")
-        if job.base_dir and os.path.isdir(job.base_dir):
-            shutil.rmtree(job.base_dir, ignore_errors=True)
-        JobManager.remove(job_id)
-
-    background_tasks.add_task(cleanup)
-    return FileResponse(
-        path=job.zip_path,
-        media_type="application/zip",
-        filename=f"{job.id}_results.zip"
-    )
 
 @router.post("/cancel")
 async def cancel(payload: dict = Body(...)):
