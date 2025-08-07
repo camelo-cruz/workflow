@@ -1,11 +1,10 @@
 import os
 import shutil
-import tempfile
 import asyncio
 import logging
 from pathlib import Path
-from zipfile import ZipFile
 from typing import Optional
+from fastapi import status
 from fastapi import APIRouter, HTTPException, Request, Form, UploadFile, File, Body, BackgroundTasks
 from fastapi.responses import FileResponse
 from sse_starlette.sse import EventSourceResponse
@@ -186,3 +185,36 @@ async def list_models(task: str):
     except Exception as e:
         logger.error(f"Error listing models in {dir_path}: {e}")
         return {"models": []}
+
+@router.delete(
+    "/models/{task}/{model_name}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete a custom model"
+)
+async def delete_model(task: str, model_name: str):
+    """
+    Remove a custom model directory under MODELS_BASE/task/model_name.
+    Returns 204 No Content on success, 404 if not found.
+    """
+    dir_path = MODELS_BASE / task / model_name
+
+    if not dir_path.exists():
+        raise HTTPException(status_code=404, detail="Model not found")
+
+    if not dir_path.is_dir():
+        raise HTTPException(
+            status_code=400,
+            detail=f"Path exists but is not a directory: {dir_path}"
+        )
+
+    try:
+        shutil.rmtree(dir_path)
+    except Exception as e:
+        logger.error(f"Failed to delete model at {dir_path}: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to delete model directory"
+        )
+
+    # 204 No Content has no body
+    return

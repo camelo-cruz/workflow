@@ -302,6 +302,39 @@ export default function Inference() {
     addLog("Logs copied to clipboard", "success");
   };
 
+  const handleModelDelete = async (modelName: string, modelType: "translation" | "glossing") => {
+    try {
+      const response = await fetch(`/api/inference/models/${modelType}/${modelName}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        addLog(`Model "${modelName}" deleted successfully`, "success");
+
+        // Remove from appropriate model list
+        if (modelType === "translation") {
+          setAvailableModels(prev => prev.filter(m => m !== modelName));
+          setAvailableTranslationModels(prev => prev.filter(m => m !== modelName));
+          // Reset to Default if deleted model was selected
+          if (selectedTranslationModel === modelName) {
+            setSelectedTranslationModel("Default");
+          }
+        } else {
+          setAvailableGlossingModels(prev => prev.filter(m => m !== modelName));
+          // Reset to Default if deleted model was selected
+          if (selectedGlossingModel === modelName) {
+            setSelectedGlossingModel("Default");
+          }
+        }
+      } else {
+        const errorText = await response.text();
+        addLog(`Failed to delete model: ${errorText}`, "error");
+      }
+    } catch (error) {
+      addLog(`Error deleting model: ${error instanceof Error ? error.message : 'Unknown error'}`, "error");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -384,7 +417,7 @@ export default function Inference() {
                 <Label htmlFor="baseDir">OneDrive Directory Path</Label>
                 <Input
                   id="baseDir"
-                  value={baseDir}
+                  value={baseDir || ""}
                   onChange={(e) => setBaseDir(e.target.value)}
                   placeholder="e.g., /Documents/my-project"
                   disabled={!isConnected}
@@ -396,21 +429,29 @@ export default function Inference() {
                 )}
               </div>
             ) : (
-              <div className="space-y-2">
-                <Label htmlFor="fileUpload">Select Files</Label>
-                <Input
-                  ref={fileInputRef}
-                  id="fileUpload"
-                  type="file"
-                  multiple
-                  // @ts-ignore
-                  webkitdirectory=""
-                  directory=""
-                  className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                />
-                <p className="text-sm text-gray-600">
-                  Select a folder to upload all its contents
-                </p>
+              <div className="space-y-3">
+                <Label htmlFor="fileUpload" className="text-base font-medium">Select Files</Label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <Input
+                    ref={fileInputRef}
+                    id="fileUpload"
+                    type="file"
+                    multiple
+                    // @ts-ignore
+                    webkitdirectory=""
+                    directory=""
+                    className="h-16 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:text-base file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 file:cursor-pointer cursor-pointer"
+                  />
+                  <div className="mt-4 text-center">
+                    <Upload className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+                    <p className="text-base font-medium text-gray-700">
+                      Choose a folder to upload
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      All contents of the selected folder will be uploaded
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
           </CardContent>
@@ -431,7 +472,7 @@ export default function Inference() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="action">Action</Label>
-                <Select value={action} onValueChange={setAction}>
+                <Select value={action || "transcribe"} onValueChange={setAction}>
                   <SelectTrigger id="action">
                     <SelectValue placeholder="Select action" />
                   </SelectTrigger>
@@ -446,7 +487,7 @@ export default function Inference() {
 
               <div className="space-y-2">
                 <Label htmlFor="instruction">Instruction</Label>
-                <Select value={instruction} onValueChange={setInstruction}>
+                <Select value={instruction || "automatic"} onValueChange={setInstruction}>
                   <SelectTrigger id="instruction">
                     <SelectValue placeholder="Select instruction" />
                   </SelectTrigger>
@@ -466,6 +507,7 @@ export default function Inference() {
                 models={availableModels}
                 selectedModel={selectedTranslationModel}
                 onModelChange={setSelectedTranslationModel}
+                onModelDelete={(model) => handleModelDelete(model, "translation")}
               />
             )}
 
@@ -477,12 +519,14 @@ export default function Inference() {
                   models={availableGlossingModels}
                   selectedModel={selectedGlossingModel}
                   onModelChange={setSelectedGlossingModel}
+                  onModelDelete={(model) => handleModelDelete(model, "glossing")}
                 />
                 <ModelToggle
                   label="Choose Translation Model"
                   models={availableTranslationModels}
                   selectedModel={selectedTranslationModel}
                   onModelChange={setSelectedTranslationModel}
+                  onModelDelete={(model) => handleModelDelete(model, "translation")}
                 />
               </div>
             )}
@@ -491,7 +535,7 @@ export default function Inference() {
               <Label htmlFor="language">Language</Label>
               <Input
                 id="language"
-                value={language}
+                value={language || ""}
                 onChange={(e) => setLanguage(e.target.value)}
                 placeholder="Enter the language (e.g., English, Spanish, French...)"
               />
