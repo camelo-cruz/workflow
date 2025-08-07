@@ -37,4 +37,5 @@ tgt-venv/*
 uvicorn-log.txt
 *.pyc
 *.sh
+*.bat
 /backend/wandb
