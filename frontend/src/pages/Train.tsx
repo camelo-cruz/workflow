@@ -71,7 +71,6 @@ export default function Train() {
     "train",
   );
 
-  // Use the hook for submission and processing state
   const { fileInputRef, submit } = useTrainSubmission(
     isTraining,
     setIsTraining,
@@ -81,7 +80,6 @@ export default function Train() {
   );
 
   const handleTrainSubmit = () => {
-    // validations
     if (!trainAction) return addLog("Please select train action", "error");
     if (!language.trim()) return addLog("Please enter a language", "error");
     if (!study.trim()) return addLog("Please enter a study", "error");
@@ -100,11 +98,9 @@ export default function Train() {
       }
     }
 
-    // start
     addLog("Starting training job...", "info");
     setIsTraining(true);
 
-    // call hook-submitted function
     submit({
       mode,
       baseDir: directoryPath,
@@ -157,7 +153,6 @@ export default function Train() {
             </div>
           </div>
 
-          {/* OneDrive Status */}
           <Card className="bg-white/80 backdrop-blur-sm">
             <CardContent className="flex items-center gap-3 p-4">
               <Globe className="h-5 w-5 text-blue-600" />
@@ -231,21 +226,31 @@ export default function Train() {
                 )}
               </div>
             ) : (
-              <div className="space-y-2">
-                <Label htmlFor="fileUpload">Select Training Files</Label>
-                <Input
-                  ref={fileInputRef}
-                  id="fileUpload"
-                  type="file"
-                  multiple
-                  // @ts-ignore
-                  webkitdirectory=""
-                  directory=""
-                  className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
-                />
-                <p className="text-sm text-gray-600">
-                  Select a folder containing your training data
-                </p>
+              <div className="space-y-3">
+                <Label htmlFor="fileUpload" className="text-base font-medium">
+                  Select Training Files
+                </Label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <Input
+                    ref={fileInputRef}
+                    id="fileUpload"
+                    type="file"
+                    multiple
+                    // @ts-ignore
+                    webkitdirectory=""
+                    directory=""
+                    className="h-16 file:mr-4 file:py-3 file:px-6 file:rounded-lg file:border-0 file:text-base file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 file:cursor-pointer cursor-pointer"
+                  />
+                  <div className="mt-4 text-center">
+                    <Upload className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+                    <p className="text-base font-medium text-gray-700">
+                      Choose a folder containing your training data
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      All contents of the selected folder will be uploaded
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
           </CardContent>
