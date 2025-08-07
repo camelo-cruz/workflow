@@ -1,15 +1,12 @@
-version: "3.8"
-
 services:
   tgt:
     image: ghcr.io/camelo-cruz/tgt:latest
     ports:
       - "8000:8000"
     environment:
-      # Required API keys - users must provide these
-      - HUGGING_KEY=${HUGGING_KEY}
-      - TENANT_ID=${TENANT_ID}
-      - CLIENT_ID=${CLIENT_ID}
-      - CLIENT_SECRET=${CLIENT_SECRET}
-      - DEEPL_API_KEY=${DEEPL_API_KEY}
+      - HUGGING_KEY
+      - TENANT_ID
+      - CLIENT_ID
+      - CLIENT_SECRET
+      - DEEPL_API_KEY
     restart: unless-stopped
