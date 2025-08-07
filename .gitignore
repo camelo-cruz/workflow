@@ -38,3 +38,4 @@ uvicorn-log.txt
 *.pyc
 *.sh
 /backend/wandb
+*.bat
