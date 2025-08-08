@@ -38,31 +38,35 @@ export function useStreamer(
 
     if (data === "[DONE ALL]") {
       addLog("Workflow completed successfully!", "success");
+      if (prefix === "inference") {
+        const downloadUrl = `/api/${prefix}/${jobId}/download`;
+        try {
+          // try to GET the zip; if it 404s, this'll go to catch
+          const res = await fetch(downloadUrl);
+          if (!res.ok) throw new Error(`No ZIP (status ${res.status})`);
 
-      const downloadUrl = `/api/${prefix}/${jobId}/download`;
-      try {
-        // try to GET the zip; if it 404s, this'll go to catch
-        const res = await fetch(downloadUrl);
-        if (!res.ok) throw new Error(`No ZIP (status ${res.status})`);
+          // pull it down as a blob…
+          const blob = await res.blob();
+          const blobUrl = window.URL.createObjectURL(blob);
 
-        // pull it down as a blob…
-        const blob = await res.blob();
-        const blobUrl = window.URL.createObjectURL(blob);
+          // …and trigger the download
+          const a = document.createElement("a");
+          a.href = blobUrl;
+          a.download = `${jobId}_results.zip`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(blobUrl);
 
-        // …and trigger the download
-        const a = document.createElement("a");
-        a.href = blobUrl;
-        a.download = `${jobId}_results.zip`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(blobUrl);
-
-        addLog("Download started…", "info");
-      } catch (err) {
-        // either a 404 or network error → no files to download
-        addLog("No files to download.");
-      } finally {
+          addLog("Download started…", "info");
+        } catch (err) {
+          // either a 404 or network error → no files to download
+          addLog("No files to download.");
+        } finally {
+          finish();
+        }
+      } else {
+        addLog("Model saved in models!", "success");
         finish();
       }
     } else {
