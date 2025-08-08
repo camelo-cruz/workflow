@@ -31,6 +31,24 @@ export function useJobSubmission(
     glossingModel?: string;
     translationModel?: string;
   }) => {
+    // Hosts where offline uploads are NOT allowed
+    const OFFLINE_BLOCKED_HOSTS = new Set<string>([
+      "172.20.49.10",
+    ]);
+
+    function isOfflineAllowed(hostname: string) {
+      return !OFFLINE_BLOCKED_HOSTS.has(hostname);
+    }
+
+    const offlineAllowed = typeof window !== "undefined" && isOfflineAllowed(window.location.hostname);
+
+    // Block the upload path on disallowed hosts
+    if (mode === "upload" && !offlineAllowed) {
+      addLog("Offline upload is disabled on this host.", "warning");
+      return;
+    }
+      
+
     setIsProcessing(true);
     addLog("Submitting job…", "info");
 

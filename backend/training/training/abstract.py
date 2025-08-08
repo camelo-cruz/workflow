@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Dict
 import pandas as pd
 from abc import ABC, abstractmethod
+import wandb
 
 from wasabi import msg
 
@@ -39,7 +40,6 @@ class AbstractTrainer(ABC):
             msg.info("W&B logging disabled.")
             return
         try:
-            import wandb
             self.wandb_run = wandb.init(
                 project=self.wandb_project,
                 config={"lang": self.lang, "study": self.study, "use_gpu": True}
@@ -74,7 +74,7 @@ class AbstractTrainer(ABC):
         - Finalize W&B
         """
         self._setup_gpu()
-        self._setup_wandb()
+        #self._setup_wandb()
         metrics = self.training_step(data_df)
         if self.wandb_run:
             self.wandb_run.log(metrics)

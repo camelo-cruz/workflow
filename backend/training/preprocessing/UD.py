@@ -71,9 +71,6 @@ class UDPreprocessor(BasePreprocessor):
         new_df = pd.DataFrame(rows, columns=columns)
         # Filter out pure placeholder rows
         new_df = new_df[~new_df.apply(self._is_placeholder, axis=1)].reset_index(drop=True)
-
-        # Log any missing or unknown items
-        self._after_write()
         return new_df
 
     @staticmethod
