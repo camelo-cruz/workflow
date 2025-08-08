@@ -79,7 +79,8 @@ export default function Train() {
     getToken,
   );
 
-  const handleTrainSubmit = () => {
+  const handleTrainSubmit = async () => {
+    // Validation checks - don't set processing state until these pass
     if (!trainAction) return addLog("Please select train action", "error");
     if (!language.trim()) return addLog("Please enter a language", "error");
     if (!study.trim()) return addLog("Please enter a study", "error");
@@ -99,9 +100,10 @@ export default function Train() {
     }
 
     addLog("Starting training job...", "info");
-    setIsTraining(true);
-
-    submit({
+    
+    // Only set training state after all validations pass
+    // The submit function will handle setting/resetting the processing state
+    await submit({
       mode,
       baseDir: directoryPath,
       action: trainAction,
