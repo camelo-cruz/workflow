@@ -10,29 +10,32 @@ RUN npm ci
 COPY frontend/ ./
 RUN npm run build        # produces ./dist/
 
-
-### STAGE 2: final image ###
-FROM continuumio/miniconda3:latest
+### STAGE 2: final image (micromamba) ###
+FROM mambaorg/micromamba:1.5.8 as runtime
+# Create env
 WORKDIR /app
+COPY --chown=micromamba:micromamba environment.yml /tmp/environment.yml
+RUN micromamba create -y -n tgt -f /tmp/environment.yml \
+ && micromamba clean --all --yes
 
-# 1) Install conda environment
-COPY environment.yml ./
-RUN conda env create -f environment.yml && \
-    conda clean -afy
+# Make the env default for RUN/CMD
+SHELL ["/usr/local/bin/_entrypoint.sh", "micromamba", "run", "-n", "tgt", "/bin/bash", "-lc"]
 
-# 2) Make conda env the default for all RUN/ENTRYPOINT/CMD
-SHELL ["conda", "run", "-n", "tgt", "/bin/bash", "-c"]
+# Copy backend code
+COPY --chown=micromamba:micromamba backend/ /app/backend/
 
-# 3) Copy in backend code
-COPY backend/ ./backend/
+# Copy built frontend assets from builder
+COPY --from=frontend-builder --chown=micromamba:micromamba /app/frontend/dist /app/frontend/dist
 
-# 4) Copy built frontend assets
-COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
+# Route caches to a writable mount so models aren't baked into layers
+ENV HF_HOME=/cache/hf \
+    HF_HUB_CACHE=/cache/hf \
+    TRANSFORMERS_CACHE=/cache/hf \
+    XDG_CACHE_HOME=/cache \
+    WHISPER_CACHE_DIR=/cache/whisper
 
-# 5) Expose and run
 WORKDIR /app/backend
 EXPOSE 8000
 
-# ENTRYPOINT will prefix every invocation with `conda run -n tgt`
-ENTRYPOINT ["conda", "run", "-n", "tgt"]
+ENTRYPOINT ["/usr/local/bin/_entrypoint.sh", "micromamba", "run", "-n", "tgt"]
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

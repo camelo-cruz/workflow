@@ -1,6 +1,8 @@
 services:
   tgt:
     image: ghcr.io/camelo-cruz/tgt:latest
+    # If you build locally instead of pulling:
+    # build: .
     ports:
       - "8000:8000"
     environment:
@@ -9,4 +11,23 @@ services:
       - CLIENT_ID
       - CLIENT_SECRET
       - DEEPL_API_KEY
+    volumes:
+      - whisper-cache:/cache
+    deploy:
+      # Compose v2 feature; if your engine supports it,
+      # the engine will try to pull on start
+      restart_policy:
+        condition: unless-stopped
+    pull_policy: always
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+  watchtower:
+    image: containrrr/watchtower
     restart: unless-stopped
+    command: --label-enable --cleanup --interval 300 --rolling-restart
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  whisper-cache:
