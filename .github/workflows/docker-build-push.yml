@@ -4,6 +4,10 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: read
+  packages: write
+
 env:
   IMAGE_NAME: tgt
   GHCR_USER: ${{ github.repository_owner }}
@@ -13,7 +17,6 @@ jobs:
     if: false
     name: Test Suite
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -34,7 +37,6 @@ jobs:
       - name: Run tests with coverage
         run: conda run -n ci_env pytest --cov=.
 
-  jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
