@@ -8,46 +8,20 @@ permissions:
   contents: read
   packages: write
 
-env:
-  IMAGE_NAME: tgt
-  GHCR_USER: ${{ github.repository_owner }}
-
 jobs:
-  test:
-    if: false
-    name: Test Suite
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Miniconda
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          python-version: 3.11
-          auto-update-conda: true
-          initialize-environment: true
-
-      - name: Create conda environment
-        run: conda env create --file environment.yml --name ci_env
-
-      - name: Install test dependencies
-        run: conda install -n ci_env pytest pytest-cov httpx
-
-      - name: Run tests with coverage
-        run: conda run -n ci_env pytest --cov=.
-
   build-and-push:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Buildx (docker-container driver)
+      - name: Set up QEMU (for cross-build)
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Buildx (docker-container)
         uses: docker/setup-buildx-action@v3
         with:
           install: true
           driver: docker-container
-          buildkitd-flags: --debug
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -56,12 +30,13 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build & Push (with registry cache)
+      - name: Build & Push (multi-arch + registry cache)
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/tgt:latest
+          platforms: linux/amd64,linux/arm64
           cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/tgt:buildcache
           cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/tgt:buildcache,mode=max
