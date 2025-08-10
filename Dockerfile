@@ -1,40 +1,38 @@
 ### STAGE 1: frontend builder ###
 FROM node:18-alpine AS frontend-builder
 WORKDIR /app/frontend
-
-# only copy package files first for caching
 COPY frontend/package*.json ./
 RUN npm ci
-
-# now copy rest and build
 COPY frontend/ ./
-RUN npm run build        # produces ./dist/
+RUN npm run build
 
-### STAGE 2: final image (micromamba) ###
-FROM mambaorg/micromamba:1.5.8 as runtime
-# Create env
+### STAGE 2: runtime ###
+FROM mambaorg/micromamba:1.5.8 AS runtime
 WORKDIR /app
-COPY --chown=micromamba:micromamba environment.yml /tmp/environment.yml
+USER root
+
+# default non-root user in this image is mambauser
+ENV MAMBA_USER=mambauser
+
+# env first for caching
+COPY --chown=${MAMBA_USER}:${MAMBA_USER} environment.yml /tmp/environment.yml
 RUN micromamba create -y -n tgt -f /tmp/environment.yml \
  && micromamba clean --all --yes
 
-# Make the env default for RUN/CMD
-SHELL ["/usr/local/bin/_entrypoint.sh", "micromamba", "run", "-n", "tgt", "/bin/bash", "-lc"]
+# writable dirs
+RUN install -d -m 0775 -o ${MAMBA_USER} -g ${MAMBA_USER} /app/backend/training/data /app/backend/models
 
-# Copy backend code
-COPY --chown=micromamba:micromamba backend/ /app/backend/
+# app code
+COPY --chown=${MAMBA_USER}:${MAMBA_USER} backend/ /app/backend/
+# use stage INDEX to avoid name resolution issues
+COPY --from=0 --chown=${MAMBA_USER}:${MAMBA_USER} /app/frontend/dist /app/frontend/dist
 
-# Copy built frontend assets from builder
-COPY --from=frontend-builder --chown=micromamba:micromamba /app/frontend/dist /app/frontend/dist
-
-# Route caches to a writable mount so models aren't baked into layers
-ENV HF_HOME=/cache/hf \
-    HF_HUB_CACHE=/cache/hf \
-    TRANSFORMERS_CACHE=/cache/hf \
-    XDG_CACHE_HOME=/cache \
-    WHISPER_CACHE_DIR=/cache/whisper
+# ensure group-write
+RUN chown -R ${MAMBA_USER}:${MAMBA_USER} /app && chmod -R g+rwX /app
 
 WORKDIR /app/backend
+USER ${MAMBA_USER}
+
 EXPOSE 8000
 
 ENTRYPOINT ["/usr/local/bin/_entrypoint.sh", "micromamba", "run", "-n", "tgt"]

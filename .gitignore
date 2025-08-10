@@ -40,3 +40,6 @@ uvicorn-log.txt
 *.bat
 /backend/wandb
 *.bat
+
+cache/
+/frontend/dist

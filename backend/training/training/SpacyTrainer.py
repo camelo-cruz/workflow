@@ -54,9 +54,13 @@ class SpacyTrainer(AbstractTrainer):
         print(f'models_dir: {self.models_dir}')
 
     def _setup_gpu(self) -> None:
-        if self.use_gpu >= 0:
-            setup_gpu(self.use_gpu)
-        else:
+        try:
+            if self.use_gpu >= 0:
+                setup_gpu(self.use_gpu)
+            else:
+                msg.info("Using CPU mode.")
+        except Exception as e:
+            msg.fail(f"Failed to set up GPU: {e}")
             msg.info("Using CPU mode.")
     
     def _load_model(self) -> str:
