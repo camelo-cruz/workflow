@@ -28,7 +28,8 @@ ENV PIP_NO_CACHE_DIR=1
 COPY --chown=${MAMBA_USER}:${MAMBA_USER} environment.yml /tmp/environment.yml
 RUN micromamba create -y -n tgt -f /tmp/environment.yml \
  && micromamba run -n tgt pip cache purge || true \
- && micromamba clean --all --yes
+ && micromamba clean --all --yes \
+ && chown -R ${MAMBA_USER}:${MAMBA_USER} /opt/conda/envs/tgt   # <-- make site-packages writable
 
 # Writable dirs used at runtime
 RUN install -d -m 0775 -o ${MAMBA_USER} -g ${MAMBA_USER} \
@@ -47,9 +48,6 @@ WORKDIR /app/backend
 USER ${MAMBA_USER}
 
 EXPOSE 8000
-
-# Optional healthcheck (add a /health endpoint in your app if you enable this)
-# HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD wget -qO- http://localhost:8000/health || exit 1
 
 ENTRYPOINT ["/usr/local/bin/_entrypoint.sh", "micromamba", "run", "-n", "tgt"]
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
