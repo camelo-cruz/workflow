@@ -41,3 +41,38 @@ node_modules/
 Dockerfile
 .gitignore
 cache/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+.eggs/
+.mypy_cache/
+pytest_cache/
+.cache/
+*.coverage
+.coverage.*
+
+# JS/Frontend extras
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.next/
+out/
+coverage/
+
+# Conda / venv
+env/
+venv/
+.venv/
+*.conda
+*.ipynb_checkpoints
+
+# OS
+Thumbs.db
+ehthumbs.db
+Icon?

@@ -11,8 +11,19 @@ permissions:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
+      # Free up ~20–30 GB on the runner to prevent "no space left on device"
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/local/lib/android \
+                      /usr/share/dotnet \
+                      /opt/ghc \
+                      "$AGENT_TOOLSDIRECTORY"
+          docker system prune -af || true
+          df -h
 
       - name: Set up QEMU (for cross-build)
         uses: docker/setup-qemu-action@v3
@@ -30,13 +41,23 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build & Push (multi-arch + registry cache)
+      - name: Build & Push (multi-arch, with GHA cache)
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/tgt:latest
+          # If disk is still tight, temporarily set this to just linux/amd64
           platforms: linux/amd64,linux/arm64
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/tgt:buildcache
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/tgt:buildcache,mode=max
+          tags: ghcr.io/${{ github.repository_owner }}/tgt:latest
+          # Use GitHub Actions cache backend (doesn't bloat GHCR or local disk)
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          # Slightly smaller output; provenance can be re-enabled later
+          provenance: false
+
+      - name: Show disk usage after build (debug)
+        if: always()
+        run: |
+          df -h
+          sudo du -sh /var/lib/docker /var/lib/buildkit || true
