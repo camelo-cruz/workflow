@@ -1,3 +1,4 @@
+import math
 import random
 import tempfile
 from pathlib import Path
@@ -103,65 +104,63 @@ class SpacyTrainer(AbstractTrainer):
 
         return docbin
     
-    def training_step(self, data_df, seed = 42):
-        doc_bin = self.create_docbin(data_df)
-        docs = list(doc_bin.get_docs(self.nlp.vocab))
-        random.shuffle(docs)
-
-        random.seed(seed)
-        random.shuffle(docs)
-
-        total = len(docs)
-        dev_size = max(1, int(total * 0.05))
-        test_size = max(1, int(total * 0.05))
-        train_end = total - dev_size - test_size
-
-        train_docs = docs[:train_end]
-        dev_docs = docs[train_end: train_end + dev_size]
-        test_docs = docs[train_end + dev_size:]
-
-        msg.info(f"Total docs: {total}, train: {len(train_docs)}, dev: {len(dev_docs)}, test: {len(test_docs)} (90/5/5 split)")
-
-
-        # Write out temporary train/test spacy files
+    def _train_once(self, train_docs, dev_docs, seed=42):
+        """Train a model once on the provided docs; return (trained_nlp, scores)."""
         with tempfile.TemporaryDirectory() as tmpdir_str:
             tmpdir = Path(tmpdir_str)
             train_path = tmpdir / "train.spacy"
-            test_path = tmpdir / "test.spacy"
+            dev_path   = tmpdir / "dev.spacy"
 
             DocBin(docs=train_docs).to_disk(train_path)
-            DocBin(docs=test_docs).to_disk(test_path)
+            DocBin(docs=dev_docs).to_disk(dev_path)
 
-            # Load and adjust config for training
             config = load_config(self.train_config_path)
             config["nlp"]["lang"] = self.lang
             config["paths"]["train"] = str(train_path)
-            config["paths"]["dev"] = str(test_path)
+            config["paths"]["dev"] = str(dev_path)
+            # Optional: fix seeds for reproducibility
+            config["training"]["seed"] = seed
 
-            # Initialize and train on 90% split
-            msg.divider("Training model on 90% of data")
-            nlp_final = init_nlp(config)
-            trained_nlp, _ = train_nlp(nlp_final, None, use_gpu=self.use_gpu)
+            nlp_init = init_nlp(config)
+            trained_nlp, _ = train_nlp(nlp_init, None, use_gpu=self.use_gpu)
 
-            # Evaluate on 10% test set
-            msg.info("Evaluating on 10% test set")
+            # Evaluate on dev_docs
             from spacy.training.corpus import Corpus
-            corpus = Corpus(str(test_path), gold_preproc=False)
+            corpus = Corpus(str(dev_path), gold_preproc=False)
             examples = list(corpus(trained_nlp))
             scores = trained_nlp.evaluate(examples)
+            return trained_nlp, scores
 
-            # Log metrics locally and to W&B
-            metrics_to_log = {}
-            for metric in METRICS:
-                val = scores.get(metric)
-                if val is not None:
-                    msg.info(f"{metric}: {val:.3f}")
-                    metrics_to_log[metric] = val
+    def training_step(self, data_df, seed=42):
+        """
+        strategy:
+          - "cv_then_all" (recommended): K-fold CV to estimate performance, then retrain on ALL docs.
+          - "all_only": use ALL docs for training and (for spaCy bookkeeping) also as dev.
+        """
+        # Build docs from DataFrame using your current pipeline
+        doc_bin = self.create_docbin(data_df)
+        docs = list(doc_bin.get_docs(self.nlp.vocab))
 
-            # Save final model
-            model_dir = Path(self.models_dir / 'glossing' / f'{self.lang}_{self.study}_custom_glossing')
-            model_dir.mkdir(parents=True, exist_ok=True)
-            trained_nlp.to_disk(model_dir)
-            msg.good(f"Saved final model to {model_dir}")
+        # Shuffle once for reproducibility
+        random.seed(seed)
+        random.shuffle(docs)
 
+        msg.divider("Training one final model on 100% of the data (dev==train)")
+        trained_nlp, scores = self._train_once(train_docs=docs, dev_docs=docs, seed=seed)
+        self._save_model(trained_nlp)
+        self._log_metrics(scores, prefix="final(all)")
+        msg.warn("Dev==Train: evaluation is optimistic; use CV for a real estimate.")
         return scores
+
+    # ---- small helpers ----
+    def _save_model(self, trained_nlp):
+        model_dir = Path(self.models_dir / 'glossing' / f'{self.lang}_{self.study}_custom_glossing')
+        model_dir.mkdir(parents=True, exist_ok=True)
+        trained_nlp.to_disk(model_dir)
+        msg.good(f"Saved final model to {model_dir}")
+
+    def _log_metrics(self, scores: dict, prefix: str = ""):
+        for metric in METRICS:
+            val = scores.get(metric)
+            if val is not None:
+                msg.info(f"{prefix} {metric}: {val:.3f}")

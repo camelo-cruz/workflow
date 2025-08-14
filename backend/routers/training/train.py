@@ -67,12 +67,17 @@ async def stream(job_id: str):
     async def event_generator():
         loop = asyncio.get_event_loop()
         while True:
-            message = await loop.run_in_executor(None, job.queue.get)
-            if isinstance(message, str) and message.startswith("[ZIP PATH] "):
-                job.zip_path = message.replace("[ZIP PATH] ", "").strip()
-                continue
-            yield {"data": message}
-            if message == "[DONE ALL]":
+            try:
+                message = await loop.run_in_executor(None, job.queue.get)
+                if isinstance(message, str) and message.startswith("[ZIP PATH] "):
+                    job.zip_path = message.replace("[ZIP PATH] ", "").strip()
+                    continue
+                yield {"data": message}
+                if message == "[DONE ALL]":
+                    break
+            except Exception as e:
+                logger.error(f"Error in event generator for job {job_id}: {e}")
+                yield {"data": f"[ERROR] Stream error: {str(e)}"}
                 break
 
     return EventSourceResponse(event_generator())
