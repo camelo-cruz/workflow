@@ -25,18 +25,21 @@ class OneDriveWorker(AbstractTrainingWorker):
 
         self._tempdir_obj = tempfile.TemporaryDirectory(prefix=f"{self.job_id}_")
         self.temp_root = Path(self._tempdir_obj.name)
-
-        # Fetch metadata for the shared item
-        metadata_url = (
-            f"https://graph.microsoft.com/v1.0/shares/"
-            f"{encode_share_link(self.share_link)}/driveItem"
-        )
-        resp = requests.get(metadata_url, headers={"Authorization": f"Bearer {self.token}"})
-        resp.raise_for_status()
-        self.item = resp.json()
-        self.root_drive_id = self.item["parentReference"]["driveId"]
-        self.root_parent_folder_id = self.item["id"]
-    
+        try:
+            # Fetch metadata for the shared item
+            metadata_url = (
+                f"https://graph.microsoft.com/v1.0/shares/"
+                f"{encode_share_link(self.share_link)}/driveItem"
+            )
+            resp = requests.get(metadata_url, headers={"Authorization": f"Bearer {self.token}"})
+            resp.raise_for_status()
+            self.item = resp.json()
+            self.root_drive_id = self.item["parentReference"]["driveId"]
+            self.root_parent_folder_id = self.item["id"]
+        except Exception as e:
+            self._put(f"Failed to fetch metadata for share link {self.share_link}: {e}")
+            raise ValueError(f"Failed to fetch metadata for share link {self.share_link}: {e}")
+        
     def _initial_message(self):
         self._put("Checking for sessions on OneDrive…")
 

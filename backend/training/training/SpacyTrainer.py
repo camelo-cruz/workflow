@@ -64,16 +64,16 @@ class SpacyTrainer(AbstractTrainer):
             msg.info("Using CPU mode.")
     
     def _load_model(self) -> str:
-        #if self.lang in self.DEFAULT_SPACY:
-        #    pkg = self.DEFAULT_SPACY[self.lang]
-        #    if not is_package(pkg):
-        #        print(f"{pkg} not found — downloading…")
-        #        download(pkg)
-        #    self.pretrained_model = pkg
-        #    msg.info(f"Using pretrained spaCy model: {pkg}")
-        #    return spacy.load(pkg)
-        #else:
-        return spacy.blank(self.lang)
+        if self.lang in self.DEFAULT_SPACY:
+            pkg = self.DEFAULT_SPACY[self.lang]
+            if not is_package(pkg):
+                print(f"{pkg} not found — downloading…")
+                download(pkg)
+            self.pretrained_model = pkg
+            msg.info(f"Using pretrained spaCy model: {pkg}")
+            return spacy.load(pkg)
+        else:
+            return spacy.blank(self.lang)
 
     def create_docbin(self, data_df) -> DocBin:
         """Create a DocBin from the annotated data in the input directory."""
