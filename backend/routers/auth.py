@@ -4,9 +4,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
 
-templates = Jinja2Templates(directory="templates")
 router = APIRouter()
 
 TENANT_ID = os.getenv("TENANT_ID")
