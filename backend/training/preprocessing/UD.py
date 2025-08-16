@@ -114,9 +114,10 @@ class UDPreprocessor(BasePreprocessor):
                 self.logger.warning(f"Skipped row {idx}: {len(text_lines)} texts vs {len(gloss_lines)} glosses")
                 continue
 
+            # 🔹 Instead of joining lines, emit one row per line
             for text_line, gloss_line in zip(text_lines, gloss_lines):
-                tokens = self._tokenize(text_line)                 # spaCy tokenizer
-                feats  = self._map_gloss_aligned(tokens, gloss_line)  # align to non-punct tokens
+                tokens = self._tokenize(text_line)
+                feats  = self._map_gloss_aligned(tokens, gloss_line)
 
                 if len(tokens) != len(feats):
                     msg.warn(
@@ -130,8 +131,8 @@ class UDPreprocessor(BasePreprocessor):
                     continue
 
                 rows.append({
-                    'raw_text': raw_text,
-                    'clean_text': "\n".join(text_lines),   # preserve line breaks
+                    'raw_text': text_line,
+                    'clean_text': text_line,
                     'tokens': tokens,
                     'gloss': gloss_line,
                     'UDfeats': feats
@@ -142,6 +143,7 @@ class UDPreprocessor(BasePreprocessor):
         if not new_df.empty:
             new_df = new_df[~new_df.apply(self._is_placeholder, axis=1)].reset_index(drop=True)
         return new_df
+
 
     @staticmethod
     def _is_placeholder(row):

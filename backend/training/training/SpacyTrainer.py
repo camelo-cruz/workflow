@@ -2,7 +2,8 @@ import math
 import random
 import tempfile
 from pathlib import Path
-from typing import Optional, List
+from typing import Optional
+import sys
 
 import pandas as pd
 import spacy
@@ -59,6 +60,7 @@ class SpacyTrainer(AbstractTrainer):
         self.base_backend_dir = Path(__file__).resolve().parents[2]
         self.configs_dir = self.base_training_dir / "spacy_configs"
         self.base_config_path = self.configs_dir / "base_config.cfg"
+        self.base_config_pretrained_path = self.configs_dir / "base_config_pretrained.cfg"
         self.train_config_path = self.configs_dir / "train_config.cfg"
         self.models_dir = self.base_backend_dir / "models"
         print(f"models_dir: {self.models_dir}")
@@ -80,18 +82,18 @@ class SpacyTrainer(AbstractTrainer):
 
     def _load_model(self, preserve_hyphenated: bool) -> spacy.language.Language:
         """Load a pipeline (vectors if available), then force the tokenizer to blank(lang)."""
-        #if self.lang in self.DEFAULT_SPACY:
-        #    pkg = self.DEFAULT_SPACY[self.lang]
-        #    if not is_package(pkg):
-        #        print(f"{pkg} not found — downloading…")
-        #        download(pkg)
-        #    nlp = spacy.load(pkg)
-        #    self.pretrained_model = pkg  # keep handle to vectors package
-        #    msg.info(f"Using pretrained spaCy model: {pkg}")
-        #else:
-        nlp = spacy.blank(self.lang)
-        self.pretrained_model = None
-        msg.info(f"Using blank spaCy pipeline for lang='{self.lang}'")
+        if self.lang in self.DEFAULT_SPACY:
+            pkg = self.DEFAULT_SPACY[self.lang]
+            if not is_package(pkg):
+                print(f"{pkg} not found — downloading…")
+                download(pkg)
+            nlp = spacy.load(pkg)
+            self.pretrained_model = pkg  # keep handle to vectors package
+            msg.info(f"Using pretrained spaCy model: {pkg}")
+        else:
+            nlp = spacy.blank(self.lang)
+            self.pretrained_model = None
+            msg.info(f"Using blank spaCy pipeline for lang='{self.lang}'")
 
         # 🔒 Force tokenizer parity with your preprocessor:
         tok_nlp = spacy.blank(self.lang)
@@ -105,11 +107,24 @@ class SpacyTrainer(AbstractTrainer):
 
         for _, row in data_df.iterrows():
             text = row['clean_text']
-            tokens = row['tokens']
             feats = row['UDfeats']
             doc = self.nlp.make_doc(text)
+
+
+            #Debug: Check tokenization matches your 'tokens' list
+            print("\n--- DEBUG DOC ---")
+            print("TEXT:", text)
+            print("TOKENS FROM NLP:", [t.text for t in doc])
+
+            # Assign morphology
             for token, feat in zip(doc, feats):
                 token.set_morph(feat)
+
+            # Debug: Check morphological features assigned
+            for token in doc:
+                print(f"{token.text:<15} {token.morph}")
+
+            print("--- END DEBUG ---\n")
             docbin.add(doc)
 
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -117,10 +132,12 @@ class SpacyTrainer(AbstractTrainer):
             docbin.to_disk(out_spacy)
             msg.good(f"DocBin saved to {out_spacy}")
             cfg = util.load_config(self.base_config_path)
+            #if self.pretrained_model:
+            #    cfg = util.load_config(self.base_config_pretrained_path)
+            #    cfg['paths']['vectors'] = self.pretrained_model
             cfg['nlp']['lang'] = self.lang
             cfg['paths']['train'] = cfg['paths']['dev'] = str(out_spacy)
-            if self.pretrained_model:
-                cfg['paths']['vectors'] = self.pretrained_model
+
             cfg.to_disk(self.train_config_path)
             fill_config(self.train_config_path, self.train_config_path)
 

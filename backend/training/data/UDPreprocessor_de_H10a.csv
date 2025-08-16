@@ -1,61 +1,27 @@
 raw_text,clean_text,tokens,gloss,UDfeats
-"[1] Ein Pulli
-[9] Da ist","Ein Pulli
-Da ist","['Ein', 'Pulli']",DET-INDF-M-SG-NOM sweater,"['PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Nom', '_']"
-"[1] Ein Pulli
-[9] Da ist","Ein Pulli
-Da ist","['Da', 'ist']",there be-3-SG,"['_', 'Person=3|Number=Sing']"
+Ein Pulli,Ein Pulli,"['Ein', 'Pulli']",DET-INDF-M-SG-NOM sweater,"['PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Nom', '_']"
+Da ist,Da ist,"['Da', 'ist']",there be-3-SG,"['_', 'Person=3|Number=Sing']"
 "Er erzählt, er gestreichelt hab","Er erzählt, er gestreichelt hab","['Er', 'erzählt', ',', 'er', 'gestreichelt', 'hab']",PRO-M-3-SG-NOM tell-3-SG- PRO-M-3-SG-NOM pet-PART-CIRC have-1-SG,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'VerbForm=Part|Other=Circ', 'Person=1|Number=Sing']"
 "Sie versucht, ein Lolli verstecken","Sie versucht, ein Lolli verstecken","['Sie', 'versucht', ',', 'ein', 'Lolli', 'verstecken']",PRO-F-3-SG-NOM attempt-3-SG DET-INDF-N-SG-ACC lollipop-M-SG-ACC hide-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Acc', 'Gender=Masc|Number=Sing|Case=Acc', 'VerbForm=Inf']"
-"[1] Sie kauft
-[6] Ein Apfel
-[7] Da ist ein Blatt und ein Stiel ","Sie kauft
-Ein Apfel
-Da ist ein Blatt und ein Stiel","['Sie', 'kauft']",PRO-F-3-SG-NOM buy-3-SG,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing']"
-"[1] Sie kauft
-[6] Ein Apfel
-[7] Da ist ein Blatt und ein Stiel ","Sie kauft
-Ein Apfel
-Da ist ein Blatt und ein Stiel","['Ein', 'Apfel']",DET-INDF-M-SG-NOM apple,"['PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Nom', '_']"
-"[1] Sie kauft
-[6] Ein Apfel
-[7] Da ist ein Blatt und ein Stiel ","Sie kauft
-Ein Apfel
-Da ist ein Blatt und ein Stiel","['Da', 'ist', 'ein', 'Blatt', 'und', 'ein', 'Stiel']",there be-3-SG DET-INDF-M-SG-NOM leaf and DET-INDF-M-SG-NOM stem,"['_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Nom', '_', '_', 'PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Nom', '_']"
-"
-[1] Sie möchte, sie möchte den Lehrer erschrecken
-[2] Sie möchte ein Lehrer erschrecken","Sie möchte, sie möchte den Lehrer erschrecken
-Sie möchte ein Lehrer erschrecken","['Sie', 'möchte', ',', 'sie', 'möchte', 'den', 'Lehrer', 'erschrecken']",PRO-F-3-SG-NOM like-3-SG PRO-F-3-SG-NOM like-3-SG DET-DEF-M-SG-ACC teacher scare-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
-"
-[1] Sie möchte, sie möchte den Lehrer erschrecken
-[2] Sie möchte ein Lehrer erschrecken","Sie möchte, sie möchte den Lehrer erschrecken
-Sie möchte ein Lehrer erschrecken","['Sie', 'möchte', 'ein', 'Lehrer', 'erschrecken']",PRO-F-3-SG-NOM like-3-SG DET-INDF-N-SG-ACC teacher-M-SG-ACC scare-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Acc', 'Gender=Masc|Number=Sing|Case=Acc', 'VerbForm=Inf']"
-"[1] Er springt, er springt auf ein Sandburg
-[2] Auf Sandburg spielt ein Hund ","Er springt, er springt auf ein Sandburg
-Auf Sandburg spielt ein Hund","['Er', 'springt', ',', 'er', 'springt', 'auf', 'ein', 'Sandburg']",PRO-M-3-SG-NOM jump-3-SG PRO-M-3-SG-NOM jump-3-SG on DET-INDF-N-SG-ACC sand.castle-F-SG-ACC,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Acc', 'Gender=Fem|Number=Sing|Case=Acc']"
-"[1] Er springt, er springt auf ein Sandburg
-[2] Auf Sandburg spielt ein Hund ","Er springt, er springt auf ein Sandburg
-Auf Sandburg spielt ein Hund","['Auf', 'Sandburg', 'spielt', 'ein', 'Hund']",on sand.castle-F-SG-DAT/ACC play-3-SG DET-INDF-M-SG-NOM dog,"['_', 'Gender=Fem|Number=Sing', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Nom', '_']"
-"[1] Er weiß, dass die Schokolade aufgegessen hab
-[2] Er hab die Schokolade aufgegessen","Er weiß, dass die Schokolade aufgegessen hab
-Er hab die Schokolade aufgegessen","['Er', 'weiß', ',', 'dass', 'die', 'Schokolade', 'aufgegessen', 'hab']",PRO-M-3-SG-NOM know-3-SG COMP-DECL DET-DEF-F-SG-NOM/ACC chocolate up.eat-PART-CIRC have-1-SG,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom,Acc', '_', 'VerbForm=Part|Other=Circ', 'Person=1|Number=Sing']"
-"[1] Er weiß, dass die Schokolade aufgegessen hab
-[2] Er hab die Schokolade aufgegessen","Er weiß, dass die Schokolade aufgegessen hab
-Er hab die Schokolade aufgegessen","['Er', 'hab', 'die', 'Schokolade', 'aufgegessen']",PRO-M-3-SG-NOM have-1-SG DET-DEF-F-SG-ACC chocolate up.eat.PART-CIRC,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=1|Number=Sing', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_', 'Other=Circ']"
-"[1] Sie schafft, da zu kitzeln","Sie schafft, da zu kitzeln","['Sie', 'schafft', ',', 'da', 'zu', 'kitzeln']",PRO-F-3-SG-NOM manage-3-SG there to tickle-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', '_', '_', 'VerbForm=Inf']"
-[1] Er will ein Auto anmalen,Er will ein Auto anmalen,"['Er', 'will', 'ein', 'Auto', 'anmalen']",PRO-M-3-SG-NOM want-3-SG DET-INDF-N-SG-ACC car on.paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
-"[1] Er fängt an, den Buch abzuschneiden","Er fängt an, den Buch abzuschneiden","['Er', 'fängt', 'an', ',', 'den', 'Buch', 'abzuschneiden']",PRO-M-3-SG-NOM start-3-SG at DET-DEF-M-SG-ACC book-N-SG-ACC off.to.cut-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', '_', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', 'Gender=Neut|Number=Sing|Case=Acc', 'VerbForm=Inf']"
-"[1] Er sagt, er hat ihn erschreckt","Er sagt, er hat ihn erschreckt","['Er', 'sagt', ',', 'er', 'hat', 'ihn', 'erschreckt']",PRO-M-3-SG-NOM say-3-SG PRO-M-3-SG-NOM have-3-SG PRO-M-3-SG-ACC scare-PART,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', 'VerbForm=Part']"
-"[1] Sie sieht die junge Katze füttert, oder
-[2] Er sieht, die Junge füttert die Katze","Sie sieht die junge Katze füttert, oder
-Er sieht, die Junge füttert die Katze","['Sie', 'sieht', 'die', 'junge', 'Katze', 'füttert', ',', 'oder']",PRO-F-3-SG-NOM see-3-SG DET-DEF-F-SG-NOM/ACC boy-M-SG-NOM/ACC cat-F-SG-NOM/ACC feed-3-SG or,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom,Acc', 'Gender=Masc|Number=Sing|Case=Nom,Acc', 'Gender=Fem|Number=Sing|Case=Nom,Acc', 'Person=3|Number=Sing', '_', '_']"
-"[1] Sie sieht die junge Katze füttert, oder
-[2] Er sieht, die Junge füttert die Katze","Sie sieht die junge Katze füttert, oder
-Er sieht, die Junge füttert die Katze","['Er', 'sieht', ',', 'die', 'Junge', 'füttert', 'die', 'Katze']",PRO-M-3-SG-NOM see-3-SG DET-DEF-F-SG-NOM/ACC boy-M-SG-NOM/ACC feed-3-SG ART-DEF-F-SG-NOM/ACC cat-F-SG-NOM/ACC,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom,Acc', 'Gender=Masc|Number=Sing|Case=Nom,Acc', 'Person=3|Number=Sing', 'PronType=Art|Definite=Def|Gender=Fem|Number=Sing|Case=Nom,Acc', 'Gender=Fem|Number=Sing|Case=Nom,Acc']"
-"[1] Er probiert, die Hund zu füttern","Er probiert, die Hund zu füttern","['Er', 'probiert', ',', 'die', 'Hund', 'zu', 'füttern']",PRO-M-SG-NOM try-3-SG DET-DEF-F-SG-NOM/ACC dog-M-SG-NOM/ACC to feed-INF,"['Other=Pro|Gender=Masc|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom,Acc', 'Gender=Masc|Number=Sing|Case=Nom,Acc', '_', 'VerbForm=Inf']"
-"[1] Er glaubt, er hat die Schlüssel verloren","Er glaubt, er hat die Schlüssel verloren","['Er', 'glaubt', ',', 'er', 'hat', 'die', 'Schlüssel', 'verloren']",PRO-M-3-SG-NOM think-3-SG PRO-M-3-SG have-3-SG DET-DEF-PL-ACC key-PL lose-PRS,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Number=Plur|Case=Acc', 'Number=Plur', 'Tense=Pres']"
-"[1] Sie hört die Junge eis packe xxx@a und ihr das Eis, oder","Sie hört die Junge eis packe xxx@a und ihr das Eis, oder","['Sie', 'hört', 'die', 'Junge', 'eis', 'packe', 'xxx@a', 'und', 'ihr', 'das', 'Eis', ',', 'oder']",PRO-F-3-SG-NOM hear-3-SG DET-DEF-F-SG-NOM/ACC boy-M-SG-NOM/ACC ice.cream-N-SG-NOM/ACC/DAT pack-1-SG xxx@a and PRO-F-3-SG-DAT DET-DEF-N-SG-NOM/ACC ice.cream-N-SG-NOM/ACC or,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom,Acc', 'Gender=Masc|Number=Sing|Case=Nom,Acc', 'Gender=Neut|Number=Sing|Case=Nom,Acc,Dat', 'Person=1|Number=Sing', '_', '_', 'Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Dat', 'PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom,Acc', 'Gender=Neut|Number=Sing|Case=Nom,Acc', '_', '_']"
-Da ist ein T-Shirt ,Da ist ein T-Shirt,"['Da', 'ist', 'ein', 'T-Shirt']",there be-3-SG DET-INDF-N-SG-NOM tshirt,"['_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Nom', '_']"
+Sie kauft,Sie kauft,"['Sie', 'kauft']",PRO-F-3-SG-NOM buy-3-SG,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing']"
+Ein Apfel,Ein Apfel,"['Ein', 'Apfel']",DET-INDF-M-SG-NOM apple,"['PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Nom', '_']"
+Da ist ein Blatt und ein Stiel,Da ist ein Blatt und ein Stiel,"['Da', 'ist', 'ein', 'Blatt', 'und', 'ein', 'Stiel']",there be-3-SG DET-INDF-M-SG-NOM leaf and DET-INDF-M-SG-NOM stem,"['_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Nom', '_', '_', 'PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Nom', '_']"
+"Sie möchte, sie möchte den Lehrer erschrecken","Sie möchte, sie möchte den Lehrer erschrecken","['Sie', 'möchte', ',', 'sie', 'möchte', 'den', 'Lehrer', 'erschrecken']",PRO-F-3-SG-NOM like-3-SG PRO-F-3-SG-NOM like-3-SG DET-DEF-M-SG-ACC teacher scare-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
+Sie möchte ein Lehrer erschrecken,Sie möchte ein Lehrer erschrecken,"['Sie', 'möchte', 'ein', 'Lehrer', 'erschrecken']",PRO-F-3-SG-NOM like-3-SG DET-INDF-N-SG-ACC teacher-M-SG-ACC scare-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Acc', 'Gender=Masc|Number=Sing|Case=Acc', 'VerbForm=Inf']"
+"Er springt, er springt auf ein Sandburg","Er springt, er springt auf ein Sandburg","['Er', 'springt', ',', 'er', 'springt', 'auf', 'ein', 'Sandburg']",PRO-M-3-SG-NOM jump-3-SG PRO-M-3-SG-NOM jump-3-SG on DET-INDF-N-SG-ACC sand.castle-F-SG-ACC,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Acc', 'Gender=Fem|Number=Sing|Case=Acc']"
+Auf Sandburg spielt ein Hund,Auf Sandburg spielt ein Hund,"['Auf', 'Sandburg', 'spielt', 'ein', 'Hund']",on sand.castle-F-SG-DAT/ACC play-3-SG DET-INDF-M-SG-NOM dog,"['_', 'Gender=Fem|Number=Sing', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Nom', '_']"
+"Er weiß, dass die Schokolade aufgegessen hab","Er weiß, dass die Schokolade aufgegessen hab","['Er', 'weiß', ',', 'dass', 'die', 'Schokolade', 'aufgegessen', 'hab']",PRO-M-3-SG-NOM know-3-SG COMP-DECL DET-DEF-F-SG-NOM/ACC chocolate up.eat-PART-CIRC have-1-SG,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom,Acc', '_', 'VerbForm=Part|Other=Circ', 'Person=1|Number=Sing']"
+Er hab die Schokolade aufgegessen,Er hab die Schokolade aufgegessen,"['Er', 'hab', 'die', 'Schokolade', 'aufgegessen']",PRO-M-3-SG-NOM have-1-SG DET-DEF-F-SG-ACC chocolate up.eat.PART-CIRC,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=1|Number=Sing', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_', 'Other=Circ']"
+"Sie schafft, da zu kitzeln","Sie schafft, da zu kitzeln","['Sie', 'schafft', ',', 'da', 'zu', 'kitzeln']",PRO-F-3-SG-NOM manage-3-SG there to tickle-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', '_', '_', 'VerbForm=Inf']"
+Er will ein Auto anmalen,Er will ein Auto anmalen,"['Er', 'will', 'ein', 'Auto', 'anmalen']",PRO-M-3-SG-NOM want-3-SG DET-INDF-N-SG-ACC car on.paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
+"Er fängt an, den Buch abzuschneiden","Er fängt an, den Buch abzuschneiden","['Er', 'fängt', 'an', ',', 'den', 'Buch', 'abzuschneiden']",PRO-M-3-SG-NOM start-3-SG at DET-DEF-M-SG-ACC book-N-SG-ACC off.to.cut-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', '_', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', 'Gender=Neut|Number=Sing|Case=Acc', 'VerbForm=Inf']"
+"Er sagt, er hat ihn erschreckt","Er sagt, er hat ihn erschreckt","['Er', 'sagt', ',', 'er', 'hat', 'ihn', 'erschreckt']",PRO-M-3-SG-NOM say-3-SG PRO-M-3-SG-NOM have-3-SG PRO-M-3-SG-ACC scare-PART,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', 'VerbForm=Part']"
+"Sie sieht die junge Katze füttert, oder","Sie sieht die junge Katze füttert, oder","['Sie', 'sieht', 'die', 'junge', 'Katze', 'füttert', ',', 'oder']",PRO-F-3-SG-NOM see-3-SG DET-DEF-F-SG-NOM/ACC boy-M-SG-NOM/ACC cat-F-SG-NOM/ACC feed-3-SG or,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom,Acc', 'Gender=Masc|Number=Sing|Case=Nom,Acc', 'Gender=Fem|Number=Sing|Case=Nom,Acc', 'Person=3|Number=Sing', '_', '_']"
+"Er sieht, die Junge füttert die Katze","Er sieht, die Junge füttert die Katze","['Er', 'sieht', ',', 'die', 'Junge', 'füttert', 'die', 'Katze']",PRO-M-3-SG-NOM see-3-SG DET-DEF-F-SG-NOM/ACC boy-M-SG-NOM/ACC feed-3-SG ART-DEF-F-SG-NOM/ACC cat-F-SG-NOM/ACC,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom,Acc', 'Gender=Masc|Number=Sing|Case=Nom,Acc', 'Person=3|Number=Sing', 'PronType=Art|Definite=Def|Gender=Fem|Number=Sing|Case=Nom,Acc', 'Gender=Fem|Number=Sing|Case=Nom,Acc']"
+"Er probiert, die Hund zu füttern","Er probiert, die Hund zu füttern","['Er', 'probiert', ',', 'die', 'Hund', 'zu', 'füttern']",PRO-M-SG-NOM try-3-SG DET-DEF-F-SG-NOM/ACC dog-M-SG-NOM/ACC to feed-INF,"['Other=Pro|Gender=Masc|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom,Acc', 'Gender=Masc|Number=Sing|Case=Nom,Acc', '_', 'VerbForm=Inf']"
+"Er glaubt, er hat die Schlüssel verloren","Er glaubt, er hat die Schlüssel verloren","['Er', 'glaubt', ',', 'er', 'hat', 'die', 'Schlüssel', 'verloren']",PRO-M-3-SG-NOM think-3-SG PRO-M-3-SG have-3-SG DET-DEF-PL-ACC key-PL lose-PRS,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Number=Plur|Case=Acc', 'Number=Plur', 'Tense=Pres']"
+"Sie hört die Junge eis packe xxx@a und ihr das Eis, oder","Sie hört die Junge eis packe xxx@a und ihr das Eis, oder","['Sie', 'hört', 'die', 'Junge', 'eis', 'packe', 'xxx@a', 'und', 'ihr', 'das', 'Eis', ',', 'oder']",PRO-F-3-SG-NOM hear-3-SG DET-DEF-F-SG-NOM/ACC boy-M-SG-NOM/ACC ice.cream-N-SG-NOM/ACC/DAT pack-1-SG xxx@a and PRO-F-3-SG-DAT DET-DEF-N-SG-NOM/ACC ice.cream-N-SG-NOM/ACC or,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom,Acc', 'Gender=Masc|Number=Sing|Case=Nom,Acc', 'Gender=Neut|Number=Sing|Case=Nom,Acc,Dat', 'Person=1|Number=Sing', '_', '_', 'Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Dat', 'PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom,Acc', 'Gender=Neut|Number=Sing|Case=Nom,Acc', '_', '_']"
+Da ist ein T-Shirt,Da ist ein T-Shirt,"['Da', 'ist', 'ein', 'T-Shirt']",there be-3-SG DET-INDF-N-SG-NOM tshirt,"['_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Nom', '_']"
 Er glaubt unter dem Tisch,Er glaubt unter dem Tisch,"['Er', 'glaubt', 'unter', 'dem', 'Tisch']",PRO-M-3-SG-NOM think-3-SG under DET-DEF-M-SG-DAT table,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Dat', '_']"
 Sie schafft ihn zu kitzeln,Sie schafft ihn zu kitzeln,"['Sie', 'schafft', 'ihn', 'zu', 'kitzeln']",PRO-F-3-SG-NOM manage-3-SG PRO-M-3-SG-ACC to tickle-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
 Sie kauft Bananen,Sie kauft Bananen,"['Sie', 'kauft', 'Bananen']",PRO-F-3-SG-NOM buy-3-SG banana-PL-ACC,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Number=Plur|Case=Acc']"
@@ -63,295 +29,83 @@ Sie sieht die Katze,Sie sieht die Katze,"['Sie', 'sieht', 'die', 'Katze']",PRO-F
 Er springt auf die Burg,Er springt auf die Burg,"['Er', 'springt', 'auf', 'die', 'Burg']",PRO-M-3-SG-NOM jump-3-SG on DET-DEF-F-SG-ACC castle,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_']"
 "Er erzählt, dass er den Hamster gestreichelt hat","Er erzählt, dass er den Hamster gestreichelt hat","['Er', 'erzählt', ',', 'dass', 'er', 'den', 'Hamster', 'gestreichelt', 'hat']",PRO-M-3-SG-NOM tell-3-SG COMP-DECL PRO-M-3-SG- DET-DEF-M-SG-ACC hamster pet-PART have-3-SG,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', '_', 'VerbForm=Part', 'Person=3|Number=Sing']"
 "Er fängt an, drauf zu malen","Er fängt an, drauf zu malen","['Er', 'fängt', 'an', ',', 'drauf', 'zu', 'malen']",PRO-M-3-SG-NOM start-3-SG on over to paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', '_', '_', '_', 'VerbForm=Inf']"
-"Sie hört, dass der Junge auspackt ","Sie hört, dass der Junge auspackt","['Sie', 'hört', ',', 'dass', 'der', 'Junge', 'auspackt']",PRO-F-3-SG-NOM hear-3-SG COMP-DECL DET-DEF-M-SG-NOM boy un.pack-3-SG,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing']"
-"Er probiert, den Hund zu füttern ","Er probiert, den Hund zu füttern","['Er', 'probiert', ',', 'den', 'Hund', 'zu', 'füttern']",PRO-M-3-SG-NOM try-3-SG DET-DEF-M-SG-ACC dog to feed-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', '_', '_', 'VerbForm=Inf']"
+"Sie hört, dass der Junge auspackt","Sie hört, dass der Junge auspackt","['Sie', 'hört', ',', 'dass', 'der', 'Junge', 'auspackt']",PRO-F-3-SG-NOM hear-3-SG COMP-DECL DET-DEF-M-SG-NOM boy un.pack-3-SG,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing']"
+"Er probiert, den Hund zu füttern","Er probiert, den Hund zu füttern","['Er', 'probiert', ',', 'den', 'Hund', 'zu', 'füttern']",PRO-M-3-SG-NOM try-3-SG DET-DEF-M-SG-ACC dog to feed-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', '_', '_', 'VerbForm=Inf']"
 "Er weiß, dass er sie gegessen hat","Er weiß, dass er sie gegessen hat","['Er', 'weiß', ',', 'dass', 'er', 'sie', 'gegessen', 'hat']",PRO-M-3-SG-NOM know-3-SG COMP-DECL PRO-M-3-SG-NOM PRO-F-3-SG-ACC eat-PART-CIRC have-3-SG,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Acc', 'VerbForm=Part|Other=Circ', 'Person=3|Number=Sing']"
 Sie möchte den Lehrer anbrüllen,Sie möchte den Lehrer anbrüllen,"['Sie', 'möchte', 'den', 'Lehrer', 'anbrüllen']",PRO-F-3-SG-NOM like-3-SG DET-DEF-M-SG-ACC teacher at.yell-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
-"Sie versucht, einen Lolli zu verstecken ","Sie versucht, einen Lolli zu verstecken","['Sie', 'versucht', ',', 'einen', 'Lolli', 'zu', 'verstecken']",PRO-F-3-SG-NOM attempt-3-SG DET-INDF-M-3-SG-ACC lollipop to hide-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Indf|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_', '_', 'VerbForm=Inf']"
+"Sie versucht, einen Lolli zu verstecken","Sie versucht, einen Lolli zu verstecken","['Sie', 'versucht', ',', 'einen', 'Lolli', 'zu', 'verstecken']",PRO-F-3-SG-NOM attempt-3-SG DET-INDF-M-3-SG-ACC lollipop to hide-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Indf|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_', '_', 'VerbForm=Inf']"
 "Er sagt, er hat sie erschreckt","Er sagt, er hat sie erschreckt","['Er', 'sagt', ',', 'er', 'hat', 'sie', 'erschreckt']",PRO-M-3-SG-NOM say-3-SG PRO-M-3-SG-NOM have-3-SG PRO-F-3-SG-ACC scare-PART,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Acc', 'VerbForm=Part']"
 Er will den Wagen anmalen,Er will den Wagen anmalen,"['Er', 'will', 'den', 'Wagen', 'anmalen']",PRO-M-3-SG-NOM want-3-SG ART-DEF-M-ACC cart on.paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Art|Definite=Def|Gender=Masc|Case=Acc', '_', 'VerbForm=Inf']"
-"[1] Ein T-Shirt
-[3] Eine Frau
-[4] Eine Schnecke
-[5] Da ist ein T-Shirt
-[6] Ich habe gesagt, das T-Shirt. Habe ich schon gesagt, T-Shirt","Ein T-Shirt
-Eine Frau
-Eine Schnecke
-Da ist ein T-Shirt
-Ich habe gesagt, das T-Shirt. Habe ich schon gesagt, T-Shirt","['Ein', 'T-Shirt']",DET-INDF-N-SG-NOM tshirt,"['PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Nom', '_']"
-"[1] Ein T-Shirt
-[3] Eine Frau
-[4] Eine Schnecke
-[5] Da ist ein T-Shirt
-[6] Ich habe gesagt, das T-Shirt. Habe ich schon gesagt, T-Shirt","Ein T-Shirt
-Eine Frau
-Eine Schnecke
-Da ist ein T-Shirt
-Ich habe gesagt, das T-Shirt. Habe ich schon gesagt, T-Shirt","['Eine', 'Frau']",DET-INDF-F-SG-NOM/ACC woman,"['PronType=Det|Definite=Indf|Gender=Fem|Number=Sing|Case=Nom,Acc', '_']"
-"[1] Ein T-Shirt
-[3] Eine Frau
-[4] Eine Schnecke
-[5] Da ist ein T-Shirt
-[6] Ich habe gesagt, das T-Shirt. Habe ich schon gesagt, T-Shirt","Ein T-Shirt
-Eine Frau
-Eine Schnecke
-Da ist ein T-Shirt
-Ich habe gesagt, das T-Shirt. Habe ich schon gesagt, T-Shirt","['Eine', 'Schnecke']",DET-INDF-F-SG-NOM/ACC snail,"['PronType=Det|Definite=Indf|Gender=Fem|Number=Sing|Case=Nom,Acc', '_']"
-"[1] Ein T-Shirt
-[3] Eine Frau
-[4] Eine Schnecke
-[5] Da ist ein T-Shirt
-[6] Ich habe gesagt, das T-Shirt. Habe ich schon gesagt, T-Shirt","Ein T-Shirt
-Eine Frau
-Eine Schnecke
-Da ist ein T-Shirt
-Ich habe gesagt, das T-Shirt. Habe ich schon gesagt, T-Shirt","['Da', 'ist', 'ein', 'T-Shirt']",there be-3-SG DET-INDF-N-SG-NOM tshirt,"['_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Nom', '_']"
-"[1] Ein T-Shirt
-[3] Eine Frau
-[4] Eine Schnecke
-[5] Da ist ein T-Shirt
-[6] Ich habe gesagt, das T-Shirt. Habe ich schon gesagt, T-Shirt","Ein T-Shirt
-Eine Frau
-Eine Schnecke
-Da ist ein T-Shirt
-Ich habe gesagt, das T-Shirt. Habe ich schon gesagt, T-Shirt","['Ich', 'habe', 'gesagt', ',', 'das', 'T-Shirt', '.', 'Habe', 'ich', 'schon', 'gesagt', ',', 'T-Shirt']",PRO-1-SG-NOM have-3-SG say-PART-CIRC DET-DEF-N-SG-NOM tshirt have-1-SG PRO-1-SG-NOM already say-PART-CIRC tshirt,"['Other=Pro|Person=1|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'VerbForm=Part|Other=Circ', '_', 'PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom', '_', '_', 'Person=1|Number=Sing', 'Other=Pro|Person=1|Number=Sing|Case=Nom', '_', 'VerbForm=Part|Other=Circ', '_', '_']"
-"[1] Er glaubt, der Schlüssel ist unter dem Tisch
-[2] Er glaubt, das ist unter dem Tisch","Er glaubt, der Schlüssel ist unter dem Tisch
-Er glaubt, das ist unter dem Tisch","['Er', 'glaubt', ',', 'der', 'Schlüssel', 'ist', 'unter', 'dem', 'Tisch']",PRO-M-3-SG-NOM think-3-SG DET-DEF-M-SG-NOM key be-3-SG under DET-DEF-M-SG-DAT table,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Dat', '_']"
-"[1] Er glaubt, der Schlüssel ist unter dem Tisch
-[2] Er glaubt, das ist unter dem Tisch","Er glaubt, der Schlüssel ist unter dem Tisch
-Er glaubt, das ist unter dem Tisch","['Er', 'glaubt', ',', 'das', 'ist', 'unter', 'dem', 'Tisch']",PRO-M-3-SG-NOM think-3-SG PRO-DEM-N-SG-NOM be-3-SG under DET-M-SG-DAT table,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|PronType=Dem|Gender=Neut|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Gender=Masc|Number=Sing|Case=Dat', '_']"
-"[1] Zu kitzeln 
-[2] Sie schafft zu kitzeln","Zu kitzeln
-Sie schafft zu kitzeln","['Zu', 'kitzeln']",to tickle-INF,"['_', 'VerbForm=Inf']"
-"[1] Zu kitzeln 
-[2] Sie schafft zu kitzeln","Zu kitzeln
-Sie schafft zu kitzeln","['Sie', 'schafft', 'zu', 'kitzeln']",PRO-F-3-SG-NOM manage-3-SG to tickle-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'VerbForm=Inf']"
-"[1] Sie kauft Banane
-[2] Ich habe gesagt, sie kauft eine Banane","Sie kauft Banane
-Ich habe gesagt, sie kauft eine Banane","['Sie', 'kauft', 'Banane']",PRO-F-3-SG-NOM buy-3-SG banana,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_']"
-"[1] Sie kauft Banane
-[2] Ich habe gesagt, sie kauft eine Banane","Sie kauft Banane
-Ich habe gesagt, sie kauft eine Banane","['Ich', 'habe', 'gesagt', ',', 'sie', 'kauft', 'eine', 'Banane']",PRO-1-SG-NOM have-3-SG say-PART-CIRC PRO-F-3-SG-NOM buy-3-SG DET-INDF-F-SG-ACC banana,"['Other=Pro|Person=1|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'VerbForm=Part|Other=Circ', '_', 'Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Fem|Number=Sing|Case=Acc', '_']"
-"[1] Sie sieht die Katze futtert
-[2] Ich habe gesagt, die Katze futtert","Sie sieht die Katze futtert
-Ich habe gesagt, die Katze futtert","['Sie', 'sieht', 'die', 'Katze', 'futtert']",PRO-F-3-SG-NOM see-3-SG DET-DEF-F-SG-NOM cat eat-3-SG,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing']"
-"[1] Sie sieht die Katze futtert
-[2] Ich habe gesagt, die Katze futtert","Sie sieht die Katze futtert
-Ich habe gesagt, die Katze futtert","['Ich', 'habe', 'gesagt', ',', 'die', 'Katze', 'futtert']",PRO-1-SG-NOM have-3-SG say-PART-CIRC DET-DEF-F-SG-NOM cat eat-3-SG,"['Other=Pro|Person=1|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'VerbForm=Part|Other=Circ', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing']"
-"er springt auf das Sand
-gesagt er spingt auf das Sand","er springt auf das Sand
-gesagt er spingt auf das Sand","['er', 'springt', 'auf', 'das', 'Sand']",PRO-M-3-SG-NOM jump-3-SG on DET-DET-M-3-SG-ACC sand,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|PronType=Det|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_']"
-"er springt auf das Sand
-gesagt er spingt auf das Sand","er springt auf das Sand
-gesagt er spingt auf das Sand","['gesagt', 'er', 'spingt', 'auf', 'das', 'Sand']",say-PART-CIRC PRO-M-3-SG-NOM jump-3-SG on DET-DET-M-3-SG-ACC sand,"['VerbForm=Part|Other=Circ', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|PronType=Det|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_']"
-"[1] Er erzählt xxx@a das kitzelt ihn
-[2] xxx@a er kitzelt ihn
-[3] Ich habe gesagt, er xxx@a dann hat er ihn gekitzelt","Er erzählt xxx@a das kitzelt ihn
-xxx@a er kitzelt ihn
-Ich habe gesagt, er xxx@a dann hat er ihn gekitzelt","['Er', 'erzählt', 'xxx@a', 'das', 'kitzelt', 'ihn']",PRO-M-3-SG-NOM tell-3-SG xxx@a DEM-DET-DEF-N-SG-NOM tickle-3-SG PRO-M-3-SG-ACC,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Dem|PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc']"
-"[1] Er erzählt xxx@a das kitzelt ihn
-[2] xxx@a er kitzelt ihn
-[3] Ich habe gesagt, er xxx@a dann hat er ihn gekitzelt","Er erzählt xxx@a das kitzelt ihn
-xxx@a er kitzelt ihn
-Ich habe gesagt, er xxx@a dann hat er ihn gekitzelt","['xxx@a', 'er', 'kitzelt', 'ihn']",xxx@a PRO-M-3-SG-NOM tickle-3-SG PRO-M-3-SG-ACC,"['_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc']"
-"[1] Er erzählt xxx@a das kitzelt ihn
-[2] xxx@a er kitzelt ihn
-[3] Ich habe gesagt, er xxx@a dann hat er ihn gekitzelt","Er erzählt xxx@a das kitzelt ihn
-xxx@a er kitzelt ihn
-Ich habe gesagt, er xxx@a dann hat er ihn gekitzelt","['Ich', 'habe', 'gesagt', ',', 'er', 'xxx@a', 'dann', 'hat', 'er', 'ihn', 'gekitzelt']",PRO-1-SG-NOM have-1-SG say-PART-CIRC PRO-M-3-SG-NOM xxx@a then have-3-SG PRO-M-3-SG-NOM PRO-M-3-SG-ACC tickle-PART-CIRC,"['Other=Pro|Person=1|Number=Sing|Case=Nom', 'Person=1|Number=Sing', 'VerbForm=Part|Other=Circ', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', '_', '_', 'Person=3|Number=Sing', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', 'VerbForm=Part|Other=Circ']"
-Er fängt an mit malen ,Er fängt an mit malen,"['Er', 'fängt', 'an', 'mit', 'malen']",PRO-M-3-SG-NOM start-3-SG at with paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', '_', 'VerbForm=Inf']"
-"[1] Sie hört, ein Eis packt der Junge aus
-[2] xxx@a dass er hört, das Junge packt ein Eis aus
-[3] Ich habe gesagt, das Mädchen hört das Junge das Eis packt","Sie hört, ein Eis packt der Junge aus
-xxx@a dass er hört, das Junge packt ein Eis aus
-Ich habe gesagt, das Mädchen hört das Junge das Eis packt","['Sie', 'hört', ',', 'ein', 'Eis', 'packt', 'der', 'Junge', 'aus']",PRO-F-3-SG-NOM hear-3-SG DET-INDF-N-SG-ACC ice.cream pack-3-SG DET-DEF-M-SG-NOM boy out,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Acc', '_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Nom', '_', '_']"
-"[1] Sie hört, ein Eis packt der Junge aus
-[2] xxx@a dass er hört, das Junge packt ein Eis aus
-[3] Ich habe gesagt, das Mädchen hört das Junge das Eis packt","Sie hört, ein Eis packt der Junge aus
-xxx@a dass er hört, das Junge packt ein Eis aus
-Ich habe gesagt, das Mädchen hört das Junge das Eis packt","['xxx@a', 'dass', 'er', 'hört', ',', 'das', 'Junge', 'packt', 'ein', 'Eis', 'aus']",xxx@a COMP-DECL PRO-M-3-SG-NOM hear-3-SG DET-DEF-N-SG-NOM boy-M-SG-NOM pack-3-SG DET-INDF-M-SG-ACC ice.cream-M-SG-ACC out,"['_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom', 'Gender=Masc|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Acc', 'Gender=Masc|Number=Sing|Case=Acc', '_']"
-"[1] Sie hört, ein Eis packt der Junge aus
-[2] xxx@a dass er hört, das Junge packt ein Eis aus
-[3] Ich habe gesagt, das Mädchen hört das Junge das Eis packt","Sie hört, ein Eis packt der Junge aus
-xxx@a dass er hört, das Junge packt ein Eis aus
-Ich habe gesagt, das Mädchen hört das Junge das Eis packt","['Ich', 'habe', 'gesagt', ',', 'das', 'Mädchen', 'hört', 'das', 'Junge', 'das', 'Eis', 'packt']",PRO-1-SG-NOM have-3-SG say-PART-CIRC DET-DEF-F-SG-NOM girl hear-3-SG DET-DEF-N-SG-NOM boy-M-SG-NOM DET-DEF-N-ACC ice.cream pack-3-SG,"['Other=Pro|Person=1|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'VerbForm=Part|Other=Circ', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom', 'Gender=Masc|Number=Sing|Case=Nom', 'PronType=Det|Definite=Def|Gender=Neut|Case=Acc', '_', 'Person=3|Number=Sing']"
+Ein T-Shirt,Ein T-Shirt,"['Ein', 'T-Shirt']",DET-INDF-N-SG-NOM tshirt,"['PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Nom', '_']"
+Eine Frau,Eine Frau,"['Eine', 'Frau']",DET-INDF-F-SG-NOM/ACC woman,"['PronType=Det|Definite=Indf|Gender=Fem|Number=Sing|Case=Nom,Acc', '_']"
+Eine Schnecke,Eine Schnecke,"['Eine', 'Schnecke']",DET-INDF-F-SG-NOM/ACC snail,"['PronType=Det|Definite=Indf|Gender=Fem|Number=Sing|Case=Nom,Acc', '_']"
+Da ist ein T-Shirt,Da ist ein T-Shirt,"['Da', 'ist', 'ein', 'T-Shirt']",there be-3-SG DET-INDF-N-SG-NOM tshirt,"['_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Nom', '_']"
+"Ich habe gesagt, das T-Shirt. Habe ich schon gesagt, T-Shirt","Ich habe gesagt, das T-Shirt. Habe ich schon gesagt, T-Shirt","['Ich', 'habe', 'gesagt', ',', 'das', 'T-Shirt', '.', 'Habe', 'ich', 'schon', 'gesagt', ',', 'T-Shirt']",PRO-1-SG-NOM have-3-SG say-PART-CIRC DET-DEF-N-SG-NOM tshirt have-1-SG PRO-1-SG-NOM already say-PART-CIRC tshirt,"['Other=Pro|Person=1|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'VerbForm=Part|Other=Circ', '_', 'PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom', '_', '_', 'Person=1|Number=Sing', 'Other=Pro|Person=1|Number=Sing|Case=Nom', '_', 'VerbForm=Part|Other=Circ', '_', '_']"
+"Er glaubt, der Schlüssel ist unter dem Tisch","Er glaubt, der Schlüssel ist unter dem Tisch","['Er', 'glaubt', ',', 'der', 'Schlüssel', 'ist', 'unter', 'dem', 'Tisch']",PRO-M-3-SG-NOM think-3-SG DET-DEF-M-SG-NOM key be-3-SG under DET-DEF-M-SG-DAT table,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Dat', '_']"
+"Er glaubt, das ist unter dem Tisch","Er glaubt, das ist unter dem Tisch","['Er', 'glaubt', ',', 'das', 'ist', 'unter', 'dem', 'Tisch']",PRO-M-3-SG-NOM think-3-SG PRO-DEM-N-SG-NOM be-3-SG under DET-M-SG-DAT table,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|PronType=Dem|Gender=Neut|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Gender=Masc|Number=Sing|Case=Dat', '_']"
+Zu kitzeln,Zu kitzeln,"['Zu', 'kitzeln']",to tickle-INF,"['_', 'VerbForm=Inf']"
+Sie schafft zu kitzeln,Sie schafft zu kitzeln,"['Sie', 'schafft', 'zu', 'kitzeln']",PRO-F-3-SG-NOM manage-3-SG to tickle-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'VerbForm=Inf']"
+Sie kauft Banane,Sie kauft Banane,"['Sie', 'kauft', 'Banane']",PRO-F-3-SG-NOM buy-3-SG banana,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_']"
+"Ich habe gesagt, sie kauft eine Banane","Ich habe gesagt, sie kauft eine Banane","['Ich', 'habe', 'gesagt', ',', 'sie', 'kauft', 'eine', 'Banane']",PRO-1-SG-NOM have-3-SG say-PART-CIRC PRO-F-3-SG-NOM buy-3-SG DET-INDF-F-SG-ACC banana,"['Other=Pro|Person=1|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'VerbForm=Part|Other=Circ', '_', 'Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Fem|Number=Sing|Case=Acc', '_']"
+Sie sieht die Katze futtert,Sie sieht die Katze futtert,"['Sie', 'sieht', 'die', 'Katze', 'futtert']",PRO-F-3-SG-NOM see-3-SG DET-DEF-F-SG-NOM cat eat-3-SG,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing']"
+"Ich habe gesagt, die Katze futtert","Ich habe gesagt, die Katze futtert","['Ich', 'habe', 'gesagt', ',', 'die', 'Katze', 'futtert']",PRO-1-SG-NOM have-3-SG say-PART-CIRC DET-DEF-F-SG-NOM cat eat-3-SG,"['Other=Pro|Person=1|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'VerbForm=Part|Other=Circ', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing']"
+er springt auf das Sand,er springt auf das Sand,"['er', 'springt', 'auf', 'das', 'Sand']",PRO-M-3-SG-NOM jump-3-SG on DET-DET-M-3-SG-ACC sand,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|PronType=Det|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_']"
+gesagt er spingt auf das Sand,gesagt er spingt auf das Sand,"['gesagt', 'er', 'spingt', 'auf', 'das', 'Sand']",say-PART-CIRC PRO-M-3-SG-NOM jump-3-SG on DET-DET-M-3-SG-ACC sand,"['VerbForm=Part|Other=Circ', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|PronType=Det|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_']"
+Er erzählt xxx@a das kitzelt ihn,Er erzählt xxx@a das kitzelt ihn,"['Er', 'erzählt', 'xxx@a', 'das', 'kitzelt', 'ihn']",PRO-M-3-SG-NOM tell-3-SG xxx@a DEM-DET-DEF-N-SG-NOM tickle-3-SG PRO-M-3-SG-ACC,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Dem|PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc']"
+xxx@a er kitzelt ihn,xxx@a er kitzelt ihn,"['xxx@a', 'er', 'kitzelt', 'ihn']",xxx@a PRO-M-3-SG-NOM tickle-3-SG PRO-M-3-SG-ACC,"['_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc']"
+"Ich habe gesagt, er xxx@a dann hat er ihn gekitzelt","Ich habe gesagt, er xxx@a dann hat er ihn gekitzelt","['Ich', 'habe', 'gesagt', ',', 'er', 'xxx@a', 'dann', 'hat', 'er', 'ihn', 'gekitzelt']",PRO-1-SG-NOM have-1-SG say-PART-CIRC PRO-M-3-SG-NOM xxx@a then have-3-SG PRO-M-3-SG-NOM PRO-M-3-SG-ACC tickle-PART-CIRC,"['Other=Pro|Person=1|Number=Sing|Case=Nom', 'Person=1|Number=Sing', 'VerbForm=Part|Other=Circ', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', '_', '_', 'Person=3|Number=Sing', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', 'VerbForm=Part|Other=Circ']"
+Er fängt an mit malen,Er fängt an mit malen,"['Er', 'fängt', 'an', 'mit', 'malen']",PRO-M-3-SG-NOM start-3-SG at with paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', '_', 'VerbForm=Inf']"
+"Sie hört, ein Eis packt der Junge aus","Sie hört, ein Eis packt der Junge aus","['Sie', 'hört', ',', 'ein', 'Eis', 'packt', 'der', 'Junge', 'aus']",PRO-F-3-SG-NOM hear-3-SG DET-INDF-N-SG-ACC ice.cream pack-3-SG DET-DEF-M-SG-NOM boy out,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Acc', '_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Nom', '_', '_']"
+"xxx@a dass er hört, das Junge packt ein Eis aus","xxx@a dass er hört, das Junge packt ein Eis aus","['xxx@a', 'dass', 'er', 'hört', ',', 'das', 'Junge', 'packt', 'ein', 'Eis', 'aus']",xxx@a COMP-DECL PRO-M-3-SG-NOM hear-3-SG DET-DEF-N-SG-NOM boy-M-SG-NOM pack-3-SG DET-INDF-M-SG-ACC ice.cream-M-SG-ACC out,"['_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom', 'Gender=Masc|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Acc', 'Gender=Masc|Number=Sing|Case=Acc', '_']"
+"Ich habe gesagt, das Mädchen hört das Junge das Eis packt","Ich habe gesagt, das Mädchen hört das Junge das Eis packt","['Ich', 'habe', 'gesagt', ',', 'das', 'Mädchen', 'hört', 'das', 'Junge', 'das', 'Eis', 'packt']",PRO-1-SG-NOM have-3-SG say-PART-CIRC DET-DEF-F-SG-NOM girl hear-3-SG DET-DEF-N-SG-NOM boy-M-SG-NOM DET-DEF-N-ACC ice.cream pack-3-SG,"['Other=Pro|Person=1|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'VerbForm=Part|Other=Circ', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom', 'Gender=Masc|Number=Sing|Case=Nom', 'PronType=Det|Definite=Def|Gender=Neut|Case=Acc', '_', 'Person=3|Number=Sing']"
 Er probiert den Leckerli,Er probiert den Leckerli,"['Er', 'probiert', 'den', 'Leckerli']",PRO-M-3-SG-NOM try-3-SG DET-DEF-M-SG-ACC treat-N-SG-ACC,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', 'Gender=Neut|Number=Sing|Case=Acc']"
 "Er weiß, dass er gegessen hat","Er weiß, dass er gegessen hat","['Er', 'weiß', ',', 'dass', 'er', 'gegessen', 'hat']",PRO-M-3-SG-NOM know-3-SG COMP-DECL PRO-M-3-SG-NOM eat-PART-CIRC have-3-SG,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'VerbForm=Part|Other=Circ', 'Person=3|Number=Sing']"
 Sie möchte erschrecken,Sie möchte erschrecken,"['Sie', 'möchte', 'erschrecken']",PRO-F-3-SG-NOM like-3-SG scare-3-SG,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Person=3|Number=Sing']"
 Sie versucht ihn zu verstecken,Sie versucht ihn zu verstecken,"['Sie', 'versucht', 'ihn', 'zu', 'verstecken']",PRO-F-3-SG-NOM attempt-3-SG PRO-M-3-SG-ACC to hide-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
-"[1] Er sagt nicht erschrecken
-[2] Er sagt es nicht erschrecken","Er sagt nicht erschrecken
-Er sagt es nicht erschrecken","['Er', 'sagt', 'nicht', 'erschrecken']",PRO-M-3-SG-NOM say-3-SG not scare-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'VerbForm=Inf']"
-"[1] Er sagt nicht erschrecken
-[2] Er sagt es nicht erschrecken","Er sagt nicht erschrecken
-Er sagt es nicht erschrecken","['Er', 'sagt', 'es', 'nicht', 'erschrecken']",PRO-M-3-SG-NOM say-3-SG PRO-N-3-SG-ACC not scare-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Neut|Person=3|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
-Er will den Wagen anmalen ,Er will den Wagen anmalen,"['Er', 'will', 'den', 'Wagen', 'anmalen']",PRO-M-3-SG-NOM want-3-SG DET-DEF-M-SG-ACC cart on.paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
-Da ist ein T-Shirt ,Da ist ein T-Shirt,"['Da', 'ist', 'ein', 'T-Shirt']",there be-3-SG DET-INDF-N-SG-NOM tshirt,"['_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Nom', '_']"
-Er fängt ihn anzumalen ,Er fängt ihn anzumalen,"['Er', 'fängt', 'ihn', 'anzumalen']",PRO-M-3-SG-NOM start-3-SG PRO-M-3-SG-ACC on.to.paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', 'VerbForm=Inf']"
-"Er weiß, dass sie in seiner Hand ist ","Er weiß, dass sie in seiner Hand ist","['Er', 'weiß', ',', 'dass', 'sie', 'in', 'seiner', 'Hand', 'ist']",PRO-M-3-SG-NOM know-3-SG COMP-DECL PRO-F-3-SG-ACC in POSS-M-F-SG-DAT hand be-3-SG,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Acc', '_', 'Other=Poss|Gender=Masc|Gender=Fem|Number=Sing|Case=Dat', '_', 'Person=3|Number=Sing']"
-"[1] Apfel
-[2] Apfel, Apfel
-[3] Apfel, einen Apfel
-[4] Ein Apfel
-[5] Sie hat den gekauft
-[6] Bananen ","Apfel
-Apfel, Apfel
-Apfel, einen Apfel
-Ein Apfel
-Sie hat den gekauft
-Bananen",['Apfel'],apple,['_']
-"[1] Apfel
-[2] Apfel, Apfel
-[3] Apfel, einen Apfel
-[4] Ein Apfel
-[5] Sie hat den gekauft
-[6] Bananen ","Apfel
-Apfel, Apfel
-Apfel, einen Apfel
-Ein Apfel
-Sie hat den gekauft
-Bananen","['Apfel', ',', 'Apfel']",apple apple,"['_', '_', '_']"
-"[1] Apfel
-[2] Apfel, Apfel
-[3] Apfel, einen Apfel
-[4] Ein Apfel
-[5] Sie hat den gekauft
-[6] Bananen ","Apfel
-Apfel, Apfel
-Apfel, einen Apfel
-Ein Apfel
-Sie hat den gekauft
-Bananen","['Apfel', ',', 'einen', 'Apfel']",apple DET-INDF-M-SG-ACC apple,"['_', '_', 'PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Acc', '_']"
-"[1] Apfel
-[2] Apfel, Apfel
-[3] Apfel, einen Apfel
-[4] Ein Apfel
-[5] Sie hat den gekauft
-[6] Bananen ","Apfel
-Apfel, Apfel
-Apfel, einen Apfel
-Ein Apfel
-Sie hat den gekauft
-Bananen","['Ein', 'Apfel']",DET-INDF-M-SG-NOM apple,"['PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Nom', '_']"
-"[1] Apfel
-[2] Apfel, Apfel
-[3] Apfel, einen Apfel
-[4] Ein Apfel
-[5] Sie hat den gekauft
-[6] Bananen ","Apfel
-Apfel, Apfel
-Apfel, einen Apfel
-Ein Apfel
-Sie hat den gekauft
-Bananen","['Sie', 'hat', 'den', 'gekauft']",PRO-F-3-SG-NOM have-3-SG DEM-DET-DEF-M-SG-ACC buy-PART-CIRC,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Dem|PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', 'VerbForm=Part|Other=Circ']"
-"[1] Apfel
-[2] Apfel, Apfel
-[3] Apfel, einen Apfel
-[4] Ein Apfel
-[5] Sie hat den gekauft
-[6] Bananen ","Apfel
-Apfel, Apfel
-Apfel, einen Apfel
-Ein Apfel
-Sie hat den gekauft
-Bananen",['Bananen'],banana-PL,['Number=Plur']
+Er sagt nicht erschrecken,Er sagt nicht erschrecken,"['Er', 'sagt', 'nicht', 'erschrecken']",PRO-M-3-SG-NOM say-3-SG not scare-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'VerbForm=Inf']"
+Er sagt es nicht erschrecken,Er sagt es nicht erschrecken,"['Er', 'sagt', 'es', 'nicht', 'erschrecken']",PRO-M-3-SG-NOM say-3-SG PRO-N-3-SG-ACC not scare-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Neut|Person=3|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
+Er will den Wagen anmalen,Er will den Wagen anmalen,"['Er', 'will', 'den', 'Wagen', 'anmalen']",PRO-M-3-SG-NOM want-3-SG DET-DEF-M-SG-ACC cart on.paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
+Da ist ein T-Shirt,Da ist ein T-Shirt,"['Da', 'ist', 'ein', 'T-Shirt']",there be-3-SG DET-INDF-N-SG-NOM tshirt,"['_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Nom', '_']"
+Er fängt ihn anzumalen,Er fängt ihn anzumalen,"['Er', 'fängt', 'ihn', 'anzumalen']",PRO-M-3-SG-NOM start-3-SG PRO-M-3-SG-ACC on.to.paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', 'VerbForm=Inf']"
+"Er weiß, dass sie in seiner Hand ist","Er weiß, dass sie in seiner Hand ist","['Er', 'weiß', ',', 'dass', 'sie', 'in', 'seiner', 'Hand', 'ist']",PRO-M-3-SG-NOM know-3-SG COMP-DECL PRO-F-3-SG-ACC in POSS-M-F-SG-DAT hand be-3-SG,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Acc', '_', 'Other=Poss|Gender=Masc|Gender=Fem|Number=Sing|Case=Dat', '_', 'Person=3|Number=Sing']"
+Apfel,Apfel,['Apfel'],apple,['_']
+"Apfel, Apfel","Apfel, Apfel","['Apfel', ',', 'Apfel']",apple apple,"['_', '_', '_']"
+"Apfel, einen Apfel","Apfel, einen Apfel","['Apfel', ',', 'einen', 'Apfel']",apple DET-INDF-M-SG-ACC apple,"['_', '_', 'PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Acc', '_']"
+Ein Apfel,Ein Apfel,"['Ein', 'Apfel']",DET-INDF-M-SG-NOM apple,"['PronType=Det|Definite=Indf|Gender=Masc|Number=Sing|Case=Nom', '_']"
+Sie hat den gekauft,Sie hat den gekauft,"['Sie', 'hat', 'den', 'gekauft']",PRO-F-3-SG-NOM have-3-SG DEM-DET-DEF-M-SG-ACC buy-PART-CIRC,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Dem|PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', 'VerbForm=Part|Other=Circ']"
+Bananen,Bananen,['Bananen'],banana-PL,['Number=Plur']
 Sie möchte auch ihn erschrecken,Sie möchte auch ihn erschrecken,"['Sie', 'möchte', 'auch', 'ihn', 'erschrecken']",PRO-F-3-SG-NOM want-3-SG also PRO-M-3-SG-ACC scare-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', 'VerbForm=Inf']"
-Er springt auf die Sandburg ,Er springt auf die Sandburg,"['Er', 'springt', 'auf', 'die', 'Sandburg']",PRO-M-3-SG-NOM jump-3-SG on DET-DEF-F-SG-ACC sand.castle,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_']"
+Er springt auf die Sandburg,Er springt auf die Sandburg,"['Er', 'springt', 'auf', 'die', 'Sandburg']",PRO-M-3-SG-NOM jump-3-SG on DET-DEF-F-SG-ACC sand.castle,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_']"
 "Sie versucht, ihn zu verstecken","Sie versucht, ihn zu verstecken","['Sie', 'versucht', ',', 'ihn', 'zu', 'verstecken']",PRO-F-3-SG-NOM attempt-3-SG PRO-M-3-SG-ACC to hide-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
 "Er glaubt, er ist unterm Tisch","Er glaubt, er ist unterm Tisch","['Er', 'glaubt', ',', 'er', 'ist', 'unterm', 'Tisch']",PRO-M-3-SG-NOM think-3-SG PRO-M-3-SG-NOM be-3-SG under-M-SG-DAT table,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Gender=Masc|Number=Sing|Case=Dat', '_']"
 "Sie sieht, dass der Junge sie füttert","Sie sieht, dass der Junge sie füttert","['Sie', 'sieht', ',', 'dass', 'der', 'Junge', 'sie', 'füttert']",PRO-F-3-SG-NOM see-3-SG COMP-DECL DET-DEF-M-SG-NOM boy PRO-F-SG-ACC feed-3-SG,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Nom', '_', 'Other=Pro|Gender=Fem|Number=Sing|Case=Acc', 'Person=3|Number=Sing']"
 "Er sagt, dass er sie erschreckt hat","Er sagt, dass er sie erschreckt hat","['Er', 'sagt', ',', 'dass', 'er', 'sie', 'erschreckt', 'hat']",PRO-M-3-SG-NOM say-3-SG COMP-DECL PRO-M-3-SG-NOM PRO-F-3-SG-ACC scare-PART have-3-SG,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Acc', 'VerbForm=Part', 'Person=3|Number=Sing']"
 "Er probiert, ihn auch zu füttern","Er probiert, ihn auch zu füttern","['Er', 'probiert', ',', 'ihn', 'auch', 'zu', 'füttern']",PRO-M-SG-NOM try-3-SG PRO-M-3-SG-ACC also to feed-INF,"['Other=Pro|Gender=Masc|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_', '_', 'VerbForm=Inf']"
-Er will den auch anmalen ,Er will den auch anmalen,"['Er', 'will', 'den', 'auch', 'anmalen']",PRO-M-SG-NOM want-3-SG PRO-DEM-M-SG-ACC also on.paint-INF,"['Other=Pro|Gender=Masc|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|PronType=Dem|Gender=Masc|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
-"Er erzählt, dass er ihn gestreichelt hat ","Er erzählt, dass er ihn gestreichelt hat","['Er', 'erzählt', ',', 'dass', 'er', 'ihn', 'gestreichelt', 'hat']",PRO-M-3-SG-NOM tell-3-SG COMP-DECL PRO-M-3-SG-NOM PRO-M-3-SG-ACC pet-PART-CIRC have-3-SG,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', 'VerbForm=Part|Other=Circ', 'Person=3|Number=Sing']"
+Er will den auch anmalen,Er will den auch anmalen,"['Er', 'will', 'den', 'auch', 'anmalen']",PRO-M-SG-NOM want-3-SG PRO-DEM-M-SG-ACC also on.paint-INF,"['Other=Pro|Gender=Masc|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|PronType=Dem|Gender=Masc|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
+"Er erzählt, dass er ihn gestreichelt hat","Er erzählt, dass er ihn gestreichelt hat","['Er', 'erzählt', ',', 'dass', 'er', 'ihn', 'gestreichelt', 'hat']",PRO-M-3-SG-NOM tell-3-SG COMP-DECL PRO-M-3-SG-NOM PRO-M-3-SG-ACC pet-PART-CIRC have-3-SG,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', 'VerbForm=Part|Other=Circ', 'Person=3|Number=Sing']"
 "Sie schafft, ihn zu erschrecken","Sie schafft, ihn zu erschrecken","['Sie', 'schafft', ',', 'ihn', 'zu', 'erschrecken']",PRO-F-3-SG-NOM manage-3-SG PRO-M-3-SG-ACC to scare-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
 "Sie hört, dass er das Eis gegessen hat","Sie hört, dass er das Eis gegessen hat","['Sie', 'hört', ',', 'dass', 'er', 'das', 'Eis', 'gegessen', 'hat']",PRO-F-3-SG-NOM hear-3-SG COMP-DECL PRO-M-3-SG-NOM DET-DEF-N-SG-ACC ice.cream eat-PART-CIRC have-3-SG,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Acc', '_', 'VerbForm=Part|Other=Circ', 'Person=3|Number=Sing']"
-[1] Ein T-Shirt und ein Buch,Ein T-Shirt und ein Buch,"['Ein', 'T-Shirt', 'und', 'ein', 'Buch']",DET-INDF-N-SG-NOM/ACC tshirt and DET-INDF-N-SG-NOM/ACC book,"['PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Nom,Acc', '_', '_', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Nom,Acc', '_']"
-"[1] Ihn auch anzumalen
-[2] Anzumalen
-[3] Die fängt an, anzumalen","Ihn auch anzumalen
-Anzumalen
-Die fängt an, anzumalen","['Ihn', 'auch', 'anzumalen']",PRO-M-3-SG-ACC also on.to.paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
-"[1] Ihn auch anzumalen
-[2] Anzumalen
-[3] Die fängt an, anzumalen","Ihn auch anzumalen
-Anzumalen
-Die fängt an, anzumalen",['Anzumalen'],on.to.paint-INF,['VerbForm=Inf']
-"[1] Ihn auch anzumalen
-[2] Anzumalen
-[3] Die fängt an, anzumalen","Ihn auch anzumalen
-Anzumalen
-Die fängt an, anzumalen","['Die', 'fängt', 'an', ',', 'anzumalen']",PRO-DEM-F-SG-NOM start-3-SG at on.to.paint-INF,"['Other=Pro|PronType=Dem|Gender=Fem|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', '_', 'VerbForm=Inf']"
-"[1] Er hat die Schokolade gegessen
-[2] Sie hat Schokolade gegessen
-[3] Dass er die Schokolade gegessen hat
-[4] Der hat gewusst, dass der die Schokolade gegessen hat ","Er hat die Schokolade gegessen
-Sie hat Schokolade gegessen
-Dass er die Schokolade gegessen hat
-Der hat gewusst, dass der die Schokolade gegessen hat","['Er', 'hat', 'die', 'Schokolade', 'gegessen']",PRO-M-3-SG-NOM have-3-SG DET-DEF-F-SG-ACC chocolate eat-PART-CIRC,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_', 'VerbForm=Part|Other=Circ']"
-"[1] Er hat die Schokolade gegessen
-[2] Sie hat Schokolade gegessen
-[3] Dass er die Schokolade gegessen hat
-[4] Der hat gewusst, dass der die Schokolade gegessen hat ","Er hat die Schokolade gegessen
-Sie hat Schokolade gegessen
-Dass er die Schokolade gegessen hat
-Der hat gewusst, dass der die Schokolade gegessen hat","['Sie', 'hat', 'Schokolade', 'gegessen']",PRO-F-3-SG-NOM have-3-SG chcocolate-F-SG-ACC eat-PART-CIRC,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Gender=Fem|Number=Sing|Case=Acc', 'VerbForm=Part|Other=Circ']"
-"[1] Er hat die Schokolade gegessen
-[2] Sie hat Schokolade gegessen
-[3] Dass er die Schokolade gegessen hat
-[4] Der hat gewusst, dass der die Schokolade gegessen hat ","Er hat die Schokolade gegessen
-Sie hat Schokolade gegessen
-Dass er die Schokolade gegessen hat
-Der hat gewusst, dass der die Schokolade gegessen hat","['Dass', 'er', 'die', 'Schokolade', 'gegessen', 'hat']",COMP-DECL PRO-M-3-SG-NOM DET-DEF-F-SG-ACC chocolate eat-PART-CIRC have-3-SG,"['Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_', 'VerbForm=Part|Other=Circ', 'Person=3|Number=Sing']"
-"[1] Er hat die Schokolade gegessen
-[2] Sie hat Schokolade gegessen
-[3] Dass er die Schokolade gegessen hat
-[4] Der hat gewusst, dass der die Schokolade gegessen hat ","Er hat die Schokolade gegessen
-Sie hat Schokolade gegessen
-Dass er die Schokolade gegessen hat
-Der hat gewusst, dass der die Schokolade gegessen hat","['Der', 'hat', 'gewusst', ',', 'dass', 'der', 'die', 'Schokolade', 'gegessen', 'hat']",PRO-DEM-M-SG-NOM have-3-SG know-PART-CIRC COMP-DECL PRO-DEM-M-3-SG-NOM DET-DEF-F-SG-ACC chocolate eat-PART-CIRC have-3-SG,"['Other=Pro|PronType=Dem|Gender=Masc|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'VerbForm=Part|Other=Circ', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|PronType=Dem|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_', 'VerbForm=Part|Other=Circ', 'Person=3|Number=Sing']"
-Die kauft Bananen ,Die kauft Bananen,"['Die', 'kauft', 'Bananen']",PRO-DEM-F-3-SG-NOM buy-3-SG banana-F-PL-ACC,"['Other=Pro|PronType=Dem|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Gender=Fem|Number=Plur|Case=Acc']"
-Die möchte auch alles nachmachen ,Die möchte auch alles nachmachen,"['Die', 'möchte', 'auch', 'alles', 'nachmachen']",PRO-DEM-F-3-SG-NOM like-3-SG also everything after.make-INF,"['Other=Pro|PronType=Dem|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', '_', 'VerbForm=Inf']"
-Die springt in eine Sandburg ,Die springt in eine Sandburg,"['Die', 'springt', 'in', 'eine', 'Sandburg']",PRO-DEM-3-SG-NOM jump.3-SG in DET-INDF-F-SG-ACC sand.castle,"['Other=Pro|PronType=Dem|Person=3|Number=Sing|Case=Nom', 'Number=Sing', '_', 'PronType=Det|Definite=Indf|Gender=Fem|Number=Sing|Case=Acc', '_']"
+Ein T-Shirt und ein Buch,Ein T-Shirt und ein Buch,"['Ein', 'T-Shirt', 'und', 'ein', 'Buch']",DET-INDF-N-SG-NOM/ACC tshirt and DET-INDF-N-SG-NOM/ACC book,"['PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Nom,Acc', '_', '_', 'PronType=Det|Definite=Indf|Gender=Neut|Number=Sing|Case=Nom,Acc', '_']"
+Ihn auch anzumalen,Ihn auch anzumalen,"['Ihn', 'auch', 'anzumalen']",PRO-M-3-SG-ACC also on.to.paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_', 'VerbForm=Inf']"
+Anzumalen,Anzumalen,['Anzumalen'],on.to.paint-INF,['VerbForm=Inf']
+"Die fängt an, anzumalen","Die fängt an, anzumalen","['Die', 'fängt', 'an', ',', 'anzumalen']",PRO-DEM-F-SG-NOM start-3-SG at on.to.paint-INF,"['Other=Pro|PronType=Dem|Gender=Fem|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', '_', 'VerbForm=Inf']"
+Er hat die Schokolade gegessen,Er hat die Schokolade gegessen,"['Er', 'hat', 'die', 'Schokolade', 'gegessen']",PRO-M-3-SG-NOM have-3-SG DET-DEF-F-SG-ACC chocolate eat-PART-CIRC,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_', 'VerbForm=Part|Other=Circ']"
+Sie hat Schokolade gegessen,Sie hat Schokolade gegessen,"['Sie', 'hat', 'Schokolade', 'gegessen']",PRO-F-3-SG-NOM have-3-SG chcocolate-F-SG-ACC eat-PART-CIRC,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Gender=Fem|Number=Sing|Case=Acc', 'VerbForm=Part|Other=Circ']"
+Dass er die Schokolade gegessen hat,Dass er die Schokolade gegessen hat,"['Dass', 'er', 'die', 'Schokolade', 'gegessen', 'hat']",COMP-DECL PRO-M-3-SG-NOM DET-DEF-F-SG-ACC chocolate eat-PART-CIRC have-3-SG,"['Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_', 'VerbForm=Part|Other=Circ', 'Person=3|Number=Sing']"
+"Der hat gewusst, dass der die Schokolade gegessen hat","Der hat gewusst, dass der die Schokolade gegessen hat","['Der', 'hat', 'gewusst', ',', 'dass', 'der', 'die', 'Schokolade', 'gegessen', 'hat']",PRO-DEM-M-SG-NOM have-3-SG know-PART-CIRC COMP-DECL PRO-DEM-M-3-SG-NOM DET-DEF-F-SG-ACC chocolate eat-PART-CIRC have-3-SG,"['Other=Pro|PronType=Dem|Gender=Masc|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'VerbForm=Part|Other=Circ', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|PronType=Dem|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_', 'VerbForm=Part|Other=Circ', 'Person=3|Number=Sing']"
+Die kauft Bananen,Die kauft Bananen,"['Die', 'kauft', 'Bananen']",PRO-DEM-F-3-SG-NOM buy-3-SG banana-F-PL-ACC,"['Other=Pro|PronType=Dem|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Gender=Fem|Number=Plur|Case=Acc']"
+Die möchte auch alles nachmachen,Die möchte auch alles nachmachen,"['Die', 'möchte', 'auch', 'alles', 'nachmachen']",PRO-DEM-F-3-SG-NOM like-3-SG also everything after.make-INF,"['Other=Pro|PronType=Dem|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', '_', 'VerbForm=Inf']"
+Die springt in eine Sandburg,Die springt in eine Sandburg,"['Die', 'springt', 'in', 'eine', 'Sandburg']",PRO-DEM-3-SG-NOM jump.3-SG in DET-INDF-F-SG-ACC sand.castle,"['Other=Pro|PronType=Dem|Person=3|Number=Sing|Case=Nom', 'Number=Sing', '_', 'PronType=Det|Definite=Indf|Gender=Fem|Number=Sing|Case=Acc', '_']"
 Sie versucht den Lolli auch verstecken,Sie versucht den Lolli auch verstecken,"['Sie', 'versucht', 'den', 'Lolli', 'auch', 'verstecken']",PRO-F-3-SG-NOM try-3-SG DET-DEF-M-SG-ACC lollipop also hide-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', '_', '_', 'VerbForm=Inf']"
-"Er glaubt, dass er unterm Tisch ist ","Er glaubt, dass er unterm Tisch ist","['Er', 'glaubt', ',', 'dass', 'er', 'unterm', 'Tisch', 'ist']",PRO-M-3-SG-NOM think-3-SG COMP-DECL PRO-M-3-SG-NOM under-M-SG-DAT table be-3-SG,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Gender=Masc|Number=Sing|Case=Dat', '_', 'Person=3|Number=Sing']"
-"[1] Dass der Junge die Katze füttert
-[2] Das Mädchen guckt und der Junge füttert die Katze 
-[3] Dass die Katze von dem Jungen gefüttert wird
-[4] Das Mädchen guckt raus aus dem Fenster und die Katze wird gefüttert","Dass der Junge die Katze füttert
-Das Mädchen guckt und der Junge füttert die Katze
-Dass die Katze von dem Jungen gefüttert wird
-Das Mädchen guckt raus aus dem Fenster und die Katze wird gefüttert","['Dass', 'der', 'Junge', 'die', 'Katze', 'füttert']",COMP-DECL DET-DEF-M-SG-NOM boy DET-DEF-F-SG-ACC cat feed-3-SG,"['Other=Comp|PronType=Decl', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Nom', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_', 'Person=3|Number=Sing']"
-"[1] Dass der Junge die Katze füttert
-[2] Das Mädchen guckt und der Junge füttert die Katze 
-[3] Dass die Katze von dem Jungen gefüttert wird
-[4] Das Mädchen guckt raus aus dem Fenster und die Katze wird gefüttert","Dass der Junge die Katze füttert
-Das Mädchen guckt und der Junge füttert die Katze
-Dass die Katze von dem Jungen gefüttert wird
-Das Mädchen guckt raus aus dem Fenster und die Katze wird gefüttert","['Das', 'Mädchen', 'guckt', 'und', 'der', 'Junge', 'füttert', 'die', 'Katze']",DET-DEF-N-SG-NOM girl look-3-SG and DET-DEF-M-SG-NOM boy feed-3-SG DET-DEF-F-SG-ACC cat,"['PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_']"
-"[1] Dass der Junge die Katze füttert
-[2] Das Mädchen guckt und der Junge füttert die Katze 
-[3] Dass die Katze von dem Jungen gefüttert wird
-[4] Das Mädchen guckt raus aus dem Fenster und die Katze wird gefüttert","Dass der Junge die Katze füttert
-Das Mädchen guckt und der Junge füttert die Katze
-Dass die Katze von dem Jungen gefüttert wird
-Das Mädchen guckt raus aus dem Fenster und die Katze wird gefüttert","['Dass', 'die', 'Katze', 'von', 'dem', 'Jungen', 'gefüttert', 'wird']",COMP-DECL DET-DEF-F-SG-NOM cat by DET-DEF-PL-DAT boy-PL-DAT feed-PART-CIRC be-3-SG-PASS,"['Other=Comp|PronType=Decl', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom', '_', '_', 'PronType=Det|Definite=Def|Number=Plur|Case=Dat', 'Number=Plur|Case=Dat', 'VerbForm=Part|Other=Circ', 'Person=3|Number=Sing|Voice=Pass']"
-"[1] Dass der Junge die Katze füttert
-[2] Das Mädchen guckt und der Junge füttert die Katze 
-[3] Dass die Katze von dem Jungen gefüttert wird
-[4] Das Mädchen guckt raus aus dem Fenster und die Katze wird gefüttert","Dass der Junge die Katze füttert
-Das Mädchen guckt und der Junge füttert die Katze
-Dass die Katze von dem Jungen gefüttert wird
-Das Mädchen guckt raus aus dem Fenster und die Katze wird gefüttert","['Das', 'Mädchen', 'guckt', 'raus', 'aus', 'dem', 'Fenster', 'und', 'die', 'Katze', 'wird', 'gefüttert']",DET-DEF-N-SG-NOM girl look-3-SG out of DET-DEF-M-SG-DAT window and DET-DEF-F-SG-NOM cat be-3-SG-PASS feed-PART-CIRC,"['PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing', '_', '_', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Dat', '_', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing|Voice=Pass', 'VerbForm=Part|Other=Circ']"
-[1] Er sagt dem Papa weiß ich nicht,Er sagt dem Papa weiß ich nicht,"['Er', 'sagt', 'dem', 'Papa', 'weiß', 'ich', 'nicht']",PRO-M-3-SG-NOM say-3-SG DET-DEF-M-SG-DAT dad know-1-SG PRO-1-SG-NOM not,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Dat', '_', 'Person=1|Number=Sing', 'Other=Pro|Person=1|Number=Sing|Case=Nom', '_']"
-"[1] Er probiert weiß ich auch nicht  
-[3] Er probiert das Mittagessen","Er probiert weiß ich auch nicht
-Er probiert das Mittagessen","['Er', 'probiert', 'weiß', 'ich', 'auch', 'nicht']",PRO-M-3-SG-NOM try-3-SG know-1-SG-NOM PRO-1-SG also not,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Person=1|Number=Sing|Case=Nom', 'Other=Pro|Person=1|Number=Sing', '_', '_']"
-"[1] Er probiert weiß ich auch nicht  
-[3] Er probiert das Mittagessen","Er probiert weiß ich auch nicht
-Er probiert das Mittagessen","['Er', 'probiert', 'das', 'Mittagessen']",PRO-M-3-SG-NOM try-3-SG DET-DEF-N-SG-ACC lunch,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Acc', '_']"
-Er will auch das anmalen ,Er will auch das anmalen,"['Er', 'will', 'auch', 'das', 'anmalen']",PRO-M-3-SG-NOM want-3-SG also PRO-DEM-N-SG-ACC on.paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|PronType=Dem|Gender=Neut|Number=Sing|Case=Acc', 'VerbForm=Inf']"
+"Er glaubt, dass er unterm Tisch ist","Er glaubt, dass er unterm Tisch ist","['Er', 'glaubt', ',', 'dass', 'er', 'unterm', 'Tisch', 'ist']",PRO-M-3-SG-NOM think-3-SG COMP-DECL PRO-M-3-SG-NOM under-M-SG-DAT table be-3-SG,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Gender=Masc|Number=Sing|Case=Dat', '_', 'Person=3|Number=Sing']"
+Dass der Junge die Katze füttert,Dass der Junge die Katze füttert,"['Dass', 'der', 'Junge', 'die', 'Katze', 'füttert']",COMP-DECL DET-DEF-M-SG-NOM boy DET-DEF-F-SG-ACC cat feed-3-SG,"['Other=Comp|PronType=Decl', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Nom', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_', 'Person=3|Number=Sing']"
+Das Mädchen guckt und der Junge füttert die Katze,Das Mädchen guckt und der Junge füttert die Katze,"['Das', 'Mädchen', 'guckt', 'und', 'der', 'Junge', 'füttert', 'die', 'Katze']",DET-DEF-N-SG-NOM girl look-3-SG and DET-DEF-M-SG-NOM boy feed-3-SG DET-DEF-F-SG-ACC cat,"['PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing', '_', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Acc', '_']"
+Dass die Katze von dem Jungen gefüttert wird,Dass die Katze von dem Jungen gefüttert wird,"['Dass', 'die', 'Katze', 'von', 'dem', 'Jungen', 'gefüttert', 'wird']",COMP-DECL DET-DEF-F-SG-NOM cat by DET-DEF-PL-DAT boy-PL-DAT feed-PART-CIRC be-3-SG-PASS,"['Other=Comp|PronType=Decl', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom', '_', '_', 'PronType=Det|Definite=Def|Number=Plur|Case=Dat', 'Number=Plur|Case=Dat', 'VerbForm=Part|Other=Circ', 'Person=3|Number=Sing|Voice=Pass']"
+Das Mädchen guckt raus aus dem Fenster und die Katze wird gefüttert,Das Mädchen guckt raus aus dem Fenster und die Katze wird gefüttert,"['Das', 'Mädchen', 'guckt', 'raus', 'aus', 'dem', 'Fenster', 'und', 'die', 'Katze', 'wird', 'gefüttert']",DET-DEF-N-SG-NOM girl look-3-SG out of DET-DEF-M-SG-DAT window and DET-DEF-F-SG-NOM cat be-3-SG-PASS feed-PART-CIRC,"['PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing', '_', '_', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Dat', '_', '_', 'PronType=Det|Definite=Def|Gender=Fem|Number=Sing|Case=Nom', '_', 'Person=3|Number=Sing|Voice=Pass', 'VerbForm=Part|Other=Circ']"
+Er sagt dem Papa weiß ich nicht,Er sagt dem Papa weiß ich nicht,"['Er', 'sagt', 'dem', 'Papa', 'weiß', 'ich', 'nicht']",PRO-M-3-SG-NOM say-3-SG DET-DEF-M-SG-DAT dad know-1-SG PRO-1-SG-NOM not,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Dat', '_', 'Person=1|Number=Sing', 'Other=Pro|Person=1|Number=Sing|Case=Nom', '_']"
+Er probiert weiß ich auch nicht,Er probiert weiß ich auch nicht,"['Er', 'probiert', 'weiß', 'ich', 'auch', 'nicht']",PRO-M-3-SG-NOM try-3-SG know-1-SG-NOM PRO-1-SG also not,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Person=1|Number=Sing|Case=Nom', 'Other=Pro|Person=1|Number=Sing', '_', '_']"
+Er probiert das Mittagessen,Er probiert das Mittagessen,"['Er', 'probiert', 'das', 'Mittagessen']",PRO-M-3-SG-NOM try-3-SG DET-DEF-N-SG-ACC lunch,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Acc', '_']"
+Er will auch das anmalen,Er will auch das anmalen,"['Er', 'will', 'auch', 'das', 'anmalen']",PRO-M-3-SG-NOM want-3-SG also PRO-DEM-N-SG-ACC on.paint-INF,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|PronType=Dem|Gender=Neut|Number=Sing|Case=Acc', 'VerbForm=Inf']"
 "Er erzählt ihn, dass er mit den gespielt hat","Er erzählt ihn, dass er mit den gespielt hat","['Er', 'erzählt', 'ihn', ',', 'dass', 'er', 'mit', 'den', 'gespielt', 'hat']",PRO-M-3-SG-NOM tell-3-SG PRO-M-3-SG-ACC COMP-DECL PRO-DEF-M-3-SG-NOM mit DEM-DET-DEF-M-SG-ACC play-PART-CIRC have-3-SG-PRS,"['Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|Definite=Def|Gender=Masc|Person=3|Number=Sing|Case=Nom', '_', 'PronType=Dem|PronType=Det|Definite=Def|Gender=Masc|Number=Sing|Case=Acc', 'VerbForm=Part|Other=Circ', 'Person=3|Number=Sing|Tense=Pres']"
 "Sie schafft, ihn auch zu kitzeln","Sie schafft, ihn auch zu kitzeln","['Sie', 'schafft', ',', 'ihn', 'auch', 'zu', 'kitzeln']",PRO-F-3-SG-NOM manage-3-SG PRO-M-3-SG-ACC also to tickle-INF,"['Other=Pro|Gender=Fem|Person=3|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Pro|Gender=Masc|Person=3|Number=Sing|Case=Acc', '_', '_', 'VerbForm=Inf']"
 "Sie hört, dass der das Eis auspackt","Sie hört, dass der das Eis auspackt","['Sie', 'hört', ',', 'dass', 'der', 'das', 'Eis', 'auspackt']",PRO-DEM-F-SG-NOM hear-3-SG COMP-DECL PRO-M-SG-NOM DET-DEF-N-SG-ACC ice.cream un.pack-3-SG,"['Other=Pro|PronType=Dem|Gender=Fem|Number=Sing|Case=Nom', 'Person=3|Number=Sing', '_', 'Other=Comp|PronType=Decl', 'Other=Pro|Gender=Masc|Number=Sing|Case=Nom', 'PronType=Det|Definite=Def|Gender=Neut|Number=Sing|Case=Acc', '_', 'Person=3|Number=Sing']"
