@@ -71,6 +71,8 @@ class SpaCyGlossingStrategy(GlossingStrategy):
             doc = self.nlp(line)
             out_parts = []
 
+            if debug:
+                print(f"Processing line: {line!r}")
             for tok in doc:
                 # keep whitespace handling consistent with the original text
                 ws = tok.whitespace_
@@ -90,7 +92,7 @@ class SpaCyGlossingStrategy(GlossingStrategy):
                 leipzig = self.UD2LEIPZIG(ud)  # should return a string like "PRO-3-SG-NOM" or ""
 
                 if debug:
-                    print(f"TOK: {tok.text:<15} LEMMA: {lemma:<15} MORPH: {tok.morph}  →  {leipzig}")
+                    print(f"TOK: {tok.text:<15} LEMMA: {lemma:<15} MORPH: {tok.morph}  →  {leipzig}\n")
 
                 # safe join to avoid "--"
                 piece = "-".join([p for p in (lemma, leipzig) if p])

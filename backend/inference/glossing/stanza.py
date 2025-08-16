@@ -48,6 +48,9 @@ class StanzaGlossingStrategy(GlossingStrategy):
             doc = self.nlp(line)           # Stanza document
             parts = []
 
+            if debug:
+                print(f"Processing line: {line!r}")
+
             for sent in doc.sentences:
                 for w in sent.words:       # w: stanza.models.common.doc.Word
                     # passthrough for punctuation/brackets/numbers
@@ -67,7 +70,7 @@ class StanzaGlossingStrategy(GlossingStrategy):
                         leipzig = self.UD2LEIPZIG(feats_dict) or ""
 
                         if debug:
-                            print(f"TOK={w.text!r} LEMMA={lemma!r} FEATS={w.feats} → {leipzig!r}")
+                            print(f"TOK={w.text!r} LEMMA={lemma!r} FEATS={w.feats} → {leipzig!r}\n")
 
                         # safe join (no trailing hyphens)
                         piece = "-".join(p for p in (lemma, leipzig) if p)
