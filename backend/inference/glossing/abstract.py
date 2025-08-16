@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from wasabi import msg
 from utils.functions import load_glossing_rules
 from inference.translation.factory import TranslationStrategyFactory
 
@@ -57,15 +58,34 @@ class GlossingStrategy(ABC):
             "VerbForm", "Mood", "Tense", "Aspect", "Voice", 
             "Evident", "Polarity", "Polite",
         ]
+        glossary_categories = {v["category"] for v in LEIPZIG_GLOSSARY.values()}
+        missing_categories = glossary_categories - set(features_in_order)
+        if missing_categories:
+            message = f"Missing categories in features_in_order" \
+                f"check LEIPZIG_GLOSSARY and abstract Glossing strategy to fix: {sorted(missing_categories)}"
+            raise ValueError(message)
 
         mapped_parts = []
+        seen = set()
+
+        # Add in preferred order
         for feature in features_in_order:
             value = self.map_leipzig(morph, feature)
             if value and value != "None":
                 mapped_parts.append(value)
+            seen.add(feature)
 
-        mapped_features = "-".join(mapped_parts)
+        # Add any other features from morph that weren’t in the preferred order
+        for feature, val in morph.items():
+            if feature not in seen:
+                # If it's in the glossary, map it
+                mapped = self.map_leipzig(morph, feature)
+                if mapped and mapped != "None":
+                    mapped_parts.append(mapped)
+                else:
+                    # Otherwise, fall back to "Feature=Value"
+                    mapped_parts.append(f"{feature}={val}")
 
-        return mapped_features
+        return "-".join(mapped_parts)
 
     
