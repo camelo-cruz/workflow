@@ -80,18 +80,18 @@ class SpacyTrainer(AbstractTrainer):
 
     def _load_model(self, preserve_hyphenated: bool) -> spacy.language.Language:
         """Load a pipeline (vectors if available), then force the tokenizer to blank(lang)."""
-        if self.lang in self.DEFAULT_SPACY:
-            pkg = self.DEFAULT_SPACY[self.lang]
-            if not is_package(pkg):
-                print(f"{pkg} not found — downloading…")
-                download(pkg)
-            nlp = spacy.load(pkg)
-            self.pretrained_model = pkg  # keep handle to vectors package
-            msg.info(f"Using pretrained spaCy model: {pkg}")
-        else:
-            nlp = spacy.blank(self.lang)
-            self.pretrained_model = None
-            msg.info(f"Using blank spaCy pipeline for lang='{self.lang}'")
+        #if self.lang in self.DEFAULT_SPACY:
+        #    pkg = self.DEFAULT_SPACY[self.lang]
+        #    if not is_package(pkg):
+        #        print(f"{pkg} not found — downloading…")
+        #        download(pkg)
+        #    nlp = spacy.load(pkg)
+        #    self.pretrained_model = pkg  # keep handle to vectors package
+        #    msg.info(f"Using pretrained spaCy model: {pkg}")
+        #else:
+        nlp = spacy.blank(self.lang)
+        self.pretrained_model = None
+        msg.info(f"Using blank spaCy pipeline for lang='{self.lang}'")
 
         # 🔒 Force tokenizer parity with your preprocessor:
         tok_nlp = spacy.blank(self.lang)
@@ -123,7 +123,6 @@ class SpacyTrainer(AbstractTrainer):
                 cfg['paths']['vectors'] = self.pretrained_model
             cfg.to_disk(self.train_config_path)
             fill_config(self.train_config_path, self.train_config_path)
-            debug_data(self.train_config_path, silent=False, verbose=True)
 
         return docbin
     
@@ -144,11 +143,14 @@ class SpacyTrainer(AbstractTrainer):
             # Optional: fix seeds for reproducibility
             config["training"]["seed"] = seed
 
+            # 👉 Run debug_data on the actual split
+            filled_cfg_path = tmpdir / "config_for_debug.cfg"
+            config.to_disk(filled_cfg_path)
+            debug_data(str(filled_cfg_path), silent=False, verbose=True)
+
             nlp_init = init_nlp(config)
             trained_nlp, _ = train_nlp(nlp_init, None, use_gpu=self.use_gpu)
 
-            # Evaluate on dev_docs
-            from spacy.training.corpus import Corpus
             corpus = Corpus(str(dev_path), gold_preproc=False)
             examples = list(corpus(trained_nlp))
             scores = trained_nlp.evaluate(examples)

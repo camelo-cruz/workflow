@@ -2,7 +2,6 @@
 "Art":{"category":"PronType","leipzig":"ART"},
 "Dem":{"category":"PronType","leipzig":"DEM"},
 "Exc":{"category":"PronType","leipzig":"EXC"},
-"Pro":{"category":"PronType","leipzig":"PRO"},
 "Emp":{"category":"PronType","leipzig":"EMP"},
 "Int":{"category":"PronType","leipzig":"INT"},
 "Neg":{"category":"PronType","leipzig":"NEG"},
@@ -169,5 +168,6 @@
 "Top":{"category":"Other","leipzig":"TOP"},
 "Tr":{"category":"Other","leipzig":"TR"},
 "Intr":{"category":"Other","leipzig":"INTR"},
-"Npst":{"category":"Tense","leipzig":"NPST"}
+"Npst":{"category":"Tense","leipzig":"NPST"},
+"Pro":{"category":"Other","leipzig":"PRO"}
 }
