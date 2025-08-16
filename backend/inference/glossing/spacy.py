@@ -73,6 +73,7 @@ class SpaCyGlossingStrategy(GlossingStrategy):
 
             if debug:
                 print(f"Processing line: {line!r}")
+
             for tok in doc:
                 # keep whitespace handling consistent with the original text
                 ws = tok.whitespace_
