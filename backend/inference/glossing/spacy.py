@@ -52,31 +52,50 @@ class SpaCyGlossingStrategy(GlossingStrategy):
         else:
             raise ValueError("No glossing model specified or available for this language.")
 
-    def gloss(self, sentence: str) -> str:
-        doc = self.nlp(sentence)
-        out_tokens = []
+    def gloss(self, text: str, keep_punct: bool = True, debug: bool = False) -> str:
+        """
+        Build a Leipzig-style gloss string from model predictions.
+        - Preserves newline boundaries: gloss each line independently.
+        - Preserves original whitespace via token.whitespace_.
+        - Avoids double hyphens by joining parts safely.
+        - Passthrough for punctuation/brackets/numbers (configurable).
+        """
+        lines = text.splitlines()  # keep exact user-provided line breaks
+        glossed_lines = []
 
-        for token in doc:
-            # passthrough bracketed/digits
-            if re.search(r"[\(\[\]\)\d]", token.text):
-                out_tokens.append(token.text)
+        for line in lines:
+            if not line.strip():
+                glossed_lines.append("")  # preserve empty lines
                 continue
 
-            # get a normalized lemma
-            lemma = token.lemma_.lower()
-            if not lemma:
-                lemma = token.text.lower()
+            doc = self.nlp(line)
+            out_parts = []
 
-            lemma = lemma.replace(" ", ".")  # replace spaces with hyphens
+            for tok in doc:
+                # keep whitespace handling consistent with the original text
+                ws = tok.whitespace_
 
-            print(token.morph)
-            gloss_feats = self.UD2LEIPZIG(token.morph.to_dict())
-            if gloss_feats:
-                out_tokens.append(f"{lemma}-{gloss_feats}")
-            else:
-                out_tokens.append(lemma)
+                # passthrough rules (match your training "_ for punct" behavior if you prefer)
+                if keep_punct and (tok.is_punct or tok.like_num or re.search(r"[\(\)\[\]]", tok.text)):
+                    out_parts.append(tok.text + ws)
+                    continue
 
-        glossed_text = " ".join(out_tokens)
-        glossed_text = glossed_text.replace("--", "")
-        print(f"Glossed text: {glossed_text}")  # Debug output
-        return glossed_text
+                # lemma fallback + normalization
+                lemma = (tok.lemma_ or tok.text).lower()
+                lemma = lemma.strip().replace(" ", "-")  # multiword lemmas → hyphen-joined
+
+                # map UD → Leipzig (you already have this util)
+                # token.morph.to_dict() returns {'Case': 'Nom', 'Number': 'Sing', ...} (may be empty)
+                ud = tok.morph.to_dict()
+                leipzig = self.UD2LEIPZIG(ud)  # should return a string like "PRO-3-SG-NOM" or ""
+
+                if debug:
+                    print(f"TOK: {tok.text:<15} LEMMA: {lemma:<15} MORPH: {tok.morph}  →  {leipzig}")
+
+                # safe join to avoid "--"
+                piece = "-".join([p for p in (lemma, leipzig) if p])
+                out_parts.append(piece + ws)
+
+            glossed_lines.append("".join(out_parts).rstrip())
+
+        return "\n".join(glossed_lines)

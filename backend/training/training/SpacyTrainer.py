@@ -187,11 +187,17 @@ class SpacyTrainer(AbstractTrainer):
         random.seed(seed)
         random.shuffle(docs)
 
-        msg.divider("Training one final model on 100% of the data (dev==train)")
-        trained_nlp, scores = self._train_once(train_docs=docs, dev_docs=docs, seed=seed)
+        dev_frac = 0.1  # 10% for dev set
+        n = len(docs)
+        dev_n = max(1, int(n * dev_frac))  # 10% for dev
+        dev_docs = docs[:dev_n]
+        train_docs = docs[dev_n:]
+
+        msg.divider(f"Train/dev split: {len(train_docs)} / {len(dev_docs)} (dev={dev_frac:.0%})")
+
+        trained_nlp, scores = self._train_once(train_docs=train_docs, dev_docs=dev_docs, seed=seed)
         self._save_model(trained_nlp)
-        self._log_metrics(scores, prefix="final(all)")
-        msg.warn("Dev==Train: evaluation is optimistic; use CV for a real estimate.")
+        self._log_metrics(scores, prefix="heldout(10%)")
         return scores
 
     # ---- small helpers ----

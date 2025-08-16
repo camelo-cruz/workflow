@@ -30,26 +30,53 @@ class StanzaGlossingStrategy(GlossingStrategy):
             return {}
         return dict(kv.split("=") for kv in feats_str.split("|") if kv and "=" in kv)
 
-    def gloss(self, sentence: str) -> str:
-        doc = self.nlp(sentence)
-        out_tokens = []
-        for sent in doc.sentences:
-            for token in sent.words:
-                # passthrough bracketed/digits
-                if re.search(r"[\(\[\]\)\d]", token.text):
-                    out_tokens.append(token.text)
-                    continue
+    def gloss(self, text: str, keep_punct: bool = True, debug: bool = False) -> str:
+        """
+        Build a Leipzig-style gloss from a Stanza pipeline.
+        - Handles multi-line input
+        - Uses SpaceAfter=No to preserve whitespace
+        - Safe hyphen-join (no '--')
+        """
+        lines = text.splitlines()
+        out_lines = []
 
-                # get a normalized lemma
-                lemma = token.lemma.lower()
-                if not lemma:
-                    lemma = token.text.lower()
-                
-                feats_dict = self.parse_stanza_feats(token.feats)
-                gloss_feats = self.UD2LEIPZIG(feats_dict)
-                if gloss_feats:
-                    out_tokens.append(f"{lemma}-{gloss_feats}")
-                else:
-                    out_tokens.append(lemma)
+        for line in lines:
+            if not line.strip():
+                out_lines.append("")  # preserve blank lines
+                continue
 
-        return " ".join(out_tokens)
+            doc = self.nlp(line)           # Stanza document
+            parts = []
+
+            for sent in doc.sentences:
+                for w in sent.words:       # w: stanza.models.common.doc.Word
+                    # passthrough for punctuation/brackets/numbers
+                    if keep_punct and (
+                        w.upos == "PUNCT" or
+                        re.search(r"[\(\)\[\]]", w.text or "") or
+                        (w.text or "").isdigit()
+                    ):
+                        piece = w.text or ""
+                    else:
+                        # lemma fallback + normalization
+                        lemma = (w.lemma or w.text or "").lower().strip()
+                        lemma = lemma.replace(" ", "-")   # multiword lemma -> hyphens
+
+                        # parse UD feats string like "Case=Nom|Number=Sing"
+                        feats_dict = self.parse_stanza_feats(w.feats) if getattr(w, "feats", None) else {}
+                        leipzig = self.UD2LEIPZIG(feats_dict) or ""
+
+                        if debug:
+                            print(f"TOK={w.text!r} LEMMA={lemma!r} FEATS={w.feats} → {leipzig!r}")
+
+                        # safe join (no trailing hyphens)
+                        piece = "-".join(p for p in (lemma, leipzig) if p)
+
+                    # preserve original spacing using SpaceAfter
+                    misc = getattr(w, "misc", None) or ""
+                    space = "" if "SpaceAfter=No" in misc else " "
+                    parts.append(piece + space)
+
+            out_lines.append("".join(parts).rstrip())
+
+        return "\n".join(out_lines)
