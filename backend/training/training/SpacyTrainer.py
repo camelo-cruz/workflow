@@ -132,9 +132,9 @@ class SpacyTrainer(AbstractTrainer):
             docbin.to_disk(out_spacy)
             msg.good(f"DocBin saved to {out_spacy}")
             cfg = util.load_config(self.base_config_path)
-            #if self.pretrained_model:
+            if self.pretrained_model:
             #    cfg = util.load_config(self.base_config_pretrained_path)
-            #    cfg['paths']['vectors'] = self.pretrained_model
+                cfg['paths']['vectors'] = self.pretrained_model
             cfg['nlp']['lang'] = self.lang
             cfg['paths']['train'] = cfg['paths']['dev'] = str(out_spacy)
 

@@ -26,8 +26,6 @@ class OneDriveWorker(AbstractTrainingWorker):
         self._tempdir_obj = tempfile.TemporaryDirectory(prefix=f"{self.job_id}_")
         self.temp_root = Path(self._tempdir_obj.name)
 
-        # Optional: eager init to reduce surprises later
-        # self._ensure_metadata()
 
     def _ensure_metadata(self):
         """Ensure drive/folder metadata is loaded on demand."""
