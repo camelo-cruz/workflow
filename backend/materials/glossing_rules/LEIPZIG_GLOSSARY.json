@@ -1,6 +1,6 @@
 {
 "Art":{"category":"PronType","leipzig":"ART"},
-"Dem":{"category":"PronType","leipzig":"DEM"},
+"Dem":{"category":"Deixis","leipzig":"DEM"},
 "Exc":{"category":"PronType","leipzig":"EXC"},
 "Emp":{"category":"PronType","leipzig":"EMP"},
 "Int":{"category":"PronType","leipzig":"INT"},

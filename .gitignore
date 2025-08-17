@@ -43,3 +43,4 @@ uvicorn-log.txt
 
 cache/
 /frontend/dist
+/backend/models/glossing/de_H10a_custom_glossing
