@@ -13,7 +13,9 @@ class TranscriptionStrategyFactory:
                              'ur', 'te', 'hi', 'ca', 'ml', 'no', 'nn', 'sk', 'sl', 'hr', 'ro',
                              'eu', 'gl', 'ka', 'lv', 'tl', 'zh']:
             return WhisperxStrategy(language_code)
-        elif language_code in ['ar']:
+        elif language_code in ['ar', 'et']:
             return WhisperStrategy(language_code)
         elif language_code in ['bn']:
             return BengaliStrategy(language_code)
+        else:
+            raise ValueError(f"No transcription strategy available for language code: {language_code}")
