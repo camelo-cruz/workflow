@@ -51,17 +51,23 @@ class TranslationProcessor(DataProcessor):
             "sentences": sent_col,
         }.get(self.instruction, sent_col)
 
+        #if source_col not in df.columns:
+        #    raise ValueError(f"Source column '{source_col}' not found in DataFrame.")
+
         cols_map = {
             "corrected": ["automatic_translation_corrected_transcription", "translation_everything"],
             "automatic": ["automatic_translation_automatic_transcription"],
             "sentences": ["automatic_translation_utterance_used", "translation_utterance_used"],
         }
 
+        print(f"Source column for {self.instruction}: {source_col}")
+
         for idx, row in tqdm(df.iterrows(), desc="Translating rows"):
             if idx >= 100:
                 self.logger.info(f"Reached max rows at {idx}")
                 break
             text = row.get(source_col)
+            print(f"Translating text from {source_col}: {text}")
             if pd.isna(text) or not str(text).strip():
                 continue
             try:
