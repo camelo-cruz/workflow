@@ -60,7 +60,6 @@ class SpacyTrainer(AbstractTrainer):
         self.base_backend_dir = Path(__file__).resolve().parents[2]
         self.configs_dir = self.base_training_dir / "spacy_configs"
         self.base_config_path = self.configs_dir / "base_config.cfg"
-        self.base_config_pretrained_path = self.configs_dir / "base_config_pretrained.cfg"
         self.train_config_path = self.configs_dir / "train_config.cfg"
         self.models_dir = self.base_backend_dir / "models"
         print(f"models_dir: {self.models_dir}")
@@ -133,7 +132,6 @@ class SpacyTrainer(AbstractTrainer):
             msg.good(f"DocBin saved to {out_spacy}")
             cfg = util.load_config(self.base_config_path)
             if self.pretrained_model:
-            #    cfg = util.load_config(self.base_config_pretrained_path)
                 cfg['paths']['vectors'] = self.pretrained_model
             cfg['nlp']['lang'] = self.lang
             cfg['paths']['train'] = cfg['paths']['dev'] = str(out_spacy)
@@ -141,6 +139,7 @@ class SpacyTrainer(AbstractTrainer):
             cfg.to_disk(self.train_config_path)
             fill_config(self.train_config_path, self.train_config_path)
 
+        print("Labels after processing:", list(self.nlp.get_pipe("morphologizer").labels))
         return docbin
     
     def _train_once(self, train_docs, dev_docs, seed=42):

@@ -97,7 +97,7 @@
 "Pos":{"category":"Degree","leipzig":"POS"},
 "Aug":{"category":"Degree","leipzig":"AUG"},
 "Dim":{"category":"Degree","leipzig":"DIM"},
-"Pres":{"category":"Tense","leipzig":"PRS"},
+"Pres":{"category":"Tense","leipzig":"PRO"},
 "Past":{"category":"Tense","leipzig":"PAST"},
 "Fut":{"category":"Tense","leipzig":"FUT"},
 "Imp":{"category":"Tense","leipzig":"IMPF"},
@@ -168,6 +168,6 @@
 "Top":{"category":"Other","leipzig":"TOP"},
 "Tr":{"category":"Other","leipzig":"TR"},
 "Intr":{"category":"Other","leipzig":"INTR"},
-"Npst":{"category":"Tense","leipzig":"NPST"},
-"Pro":{"category":"Other","leipzig":"PRO"}
+"Pro":{"category":"PronType","leipzig":"PRO"},
+"Npst":{"category":"Tense","leipzig":"NPST"}
 }

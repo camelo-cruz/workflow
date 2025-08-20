@@ -58,6 +58,11 @@ class GlossingStrategy(ABC):
             "VerbForm", "Mood", "Tense", "Aspect", "Voice", 
             "Evident", "Polarity", "Polite",
         ]
+
+        binary_features = {
+            "Poss", "Reflex", "Typo", "Foreign"
+        }
+
         glossary_categories = {v["category"] for v in LEIPZIG_GLOSSARY.values()}
         missing_categories = glossary_categories - set(features_in_order)
         if missing_categories:
@@ -79,12 +84,17 @@ class GlossingStrategy(ABC):
         for feature, val in morph.items():
             if feature not in seen:
                 # If it's in the glossary, map it
-                mapped = self.map_leipzig(morph, feature)
-                if mapped and mapped != "None":
-                    mapped_parts.append(mapped)
+                if feature in binary_features and val == 'Yes':
+                    # For binary features, just use the value directly
+                    mapped_parts.append(feature.upper())
                 else:
-                    # Otherwise, fall back to "Feature=Value"
-                    mapped_parts.append(f"{feature}={val}")
+                    # Otherwise, map it using LEIPZIG_GLOSSARY
+                    mapped = self.map_leipzig(morph, feature)
+                    if mapped and mapped != "None":
+                        mapped_parts.append(mapped)
+                    else:
+                        # Otherwise, fall back to "Feature=Value"
+                        mapped_parts.append(f"{feature}={val}")
 
         return "-".join(mapped_parts)
 
