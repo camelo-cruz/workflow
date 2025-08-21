@@ -30,7 +30,7 @@ class StanzaGlossingStrategy(GlossingStrategy):
             return {}
         return dict(kv.split("=") for kv in feats_str.split("|") if kv and "=" in kv)
 
-    def gloss(self, text: str, keep_punct: bool = True, debug: bool = False) -> str:
+    def gloss(self, text: str, keep_punct: bool = True, debug: bool = True) -> str:
         """
         Build a Leipzig-style gloss from a Stanza pipeline.
         - Handles multi-line input
@@ -67,7 +67,7 @@ class StanzaGlossingStrategy(GlossingStrategy):
 
                         # parse UD feats string like "Case=Nom|Number=Sing"
                         feats_dict = self.parse_stanza_feats(w.feats) if getattr(w, "feats", None) else {}
-                        leipzig = self.UD2LEIPZIG(feats_dict) or ""
+                        leipzig = self.map_morph_to_leipzig(feats_dict) or ""
 
                         if debug:
                             print(f"TOK={w.text!r} LEMMA={lemma!r} FEATS={w.feats} → {leipzig!r}\n")

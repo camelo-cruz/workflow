@@ -23,8 +23,8 @@ class UDPreprocessor(BasePreprocessor):
         # Build Leipzig->UD map (case-insensitive lookup)
         glossary = load_glossing_rules("LEIPZIG_GLOSSARY.json")
         self.LEIPZIG2UD = {
-            entry["leipzig"].upper(): (entry["category"], key)
-            for key, entry in glossary.items()
+            leipzig_code.upper(): (entry["category"], entry["UD"])
+            for leipzig_code, entry in glossary.items()
         }
 
         self.tokens_without_gloss = set()
@@ -182,23 +182,65 @@ class UDPreprocessor(BasePreprocessor):
         return feats
 
     def _map_gloss_token(self, token: str) -> str:
-        """Map a single gloss token like PRO-M-3-SG-NOM into UD features."""
+        """
+        Map a single gloss token like PRO-M-3-SG-NOM (and combos like M/N)
+        into UD features (e.g., Gender=Masc|Number=Sing|Case=Nom).
+        """
+        # A gloss token is usually UPPER or contains '-' between atoms
         is_gloss = ('-' in token) or token.isupper()
         if not is_gloss:
             self.tokens_without_gloss.add(token)
             return self.PLACEHOLDER
+
         parts = [c for c in token.split('-') if c]
+
+        # If a leading lemma-like atom slipped in (lowercase), drop it
         if parts and parts[0].islower():
             parts.pop(0)
-        mapped = []
+
+        mapped_pairs = []  # list of strings like "Category=UD,UD"
+
         for raw_code in parts:
             code = raw_code.upper()
+
+            # 1) Try exact match (handles things like "M/N", "NOM/ACC", "NOM/ACC/DAT")
             pair = self.LEIPZIG2UD.get(code)
-            if not pair:
-                self.unknown_codes.add(code)
-            else:
-                mapped.append(f"{pair[0]}={pair[1]}")
-        return '|'.join(mapped) if mapped else self.PLACEHOLDER
+            if pair:
+                cat, ud = pair
+                mapped_pairs.append(f"{cat}={ud}")
+                continue
+
+            # 2) If not found and it's a slash-combo, map each atom and compose UD values
+            if '/' in code:
+                atoms = [a for a in code.split('/') if a]
+                atom_pairs = []
+                for a in atoms:
+                    p = self.LEIPZIG2UD.get(a)
+                    if not p:
+                        # unknown atom inside combo → record and skip entire combo
+                        self.unknown_codes.add(a)
+                        atom_pairs = None
+                        break
+                    atom_pairs.append(p)
+
+                if atom_pairs:
+                    # Ensure all atoms agree on the same category
+                    cats = {c for (c, _) in atom_pairs}
+                    if len(cats) == 1:
+                        cat = atom_pairs[0][0]
+                        uds = [u for (_, u) in atom_pairs]
+                        # join UD values with commas to produce e.g. "Masc,Neut"
+                        composed_ud = ",".join(uds)
+                        mapped_pairs.append(f"{cat}={composed_ud}")
+                    else:
+                        # Mixed categories in a combo shouldn't happen; fall back to raw visibility
+                        mapped_pairs.append("|".join(f"{c}={u}" for (c, u) in atom_pairs))
+                continue
+
+            # 3) Unknown code (neither exact nor slash-combo)
+            self.unknown_codes.add(code)
+
+        return '|'.join(mapped_pairs) if mapped_pairs else self.PLACEHOLDER
 
     # ---------- post-write ----------
     def _after_write(self):

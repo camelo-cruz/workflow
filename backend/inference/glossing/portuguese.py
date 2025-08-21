@@ -101,7 +101,7 @@ class PortugueseGlossingStrategy(GlossingStrategy):
             translated_lemma = lemma
             lemma = translated_lemma.replace(" ", ".")
 
-            feats = self.UD2LEIPZIG(token.morph.to_dict())
+            feats = self.map_morph_to_leipzig(token.morph.to_dict())
             if feats:
                 gloss_tokens.append(f"{lemma}.{feats}")
             else:

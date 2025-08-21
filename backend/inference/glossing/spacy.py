@@ -90,7 +90,7 @@ class SpaCyGlossingStrategy(GlossingStrategy):
                 # map UD → Leipzig (you already have this util)
                 # token.morph.to_dict() returns {'Case': 'Nom', 'Number': 'Sing', ...} (may be empty)
                 ud = tok.morph.to_dict()
-                leipzig = self.UD2LEIPZIG(ud)  # should return a string like "PRO-3-SG-NOM" or ""
+                leipzig = self.map_morph_to_leipzig(ud)  # should return a string like "PRO-3-SG-NOM" or ""
 
                 if debug:
                     print(f"TOK: {tok.text:<15} LEMMA: {lemma:<15} MORPH: {tok.morph}  →  {leipzig}\n")
