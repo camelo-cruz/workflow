@@ -5,7 +5,7 @@
 "Emp":{"category":"PronType","leipzig":"EMP"},
 "Int":{"category":"PronType","leipzig":"INT"},
 "Neg":{"category":"PronType","leipzig":"NEG"},
-"Prs":{"category":"PronType","leipzig":"PRS"},
+"Prs":{"category":"PronType","leipzig":"PRO"},
 "Rcp":{"category":"PronType","leipzig":"RCP"},
 "Rel":{"category":"PronType","leipzig":"REL"},
 "Tot":{"category":"PronType","leipzig":"TOT"},
@@ -97,7 +97,7 @@
 "Pos":{"category":"Degree","leipzig":"POS"},
 "Aug":{"category":"Degree","leipzig":"AUG"},
 "Dim":{"category":"Degree","leipzig":"DIM"},
-"Pres":{"category":"Tense","leipzig":"PRO"},
+"Pres":{"category":"Tense","leipzig":"PRS"},
 "Past":{"category":"Tense","leipzig":"PAST"},
 "Fut":{"category":"Tense","leipzig":"FUT"},
 "Imp":{"category":"Tense","leipzig":"IMPF"},
@@ -168,6 +168,5 @@
 "Top":{"category":"Other","leipzig":"TOP"},
 "Tr":{"category":"Other","leipzig":"TR"},
 "Intr":{"category":"Other","leipzig":"INTR"},
-"Pro":{"category":"PronType","leipzig":"PRO"},
 "Npst":{"category":"Tense","leipzig":"NPST"}
 }

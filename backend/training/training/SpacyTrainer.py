@@ -18,10 +18,9 @@ from spacy.cli.init_config import fill_config
 from spacy.training.initialize import init_nlp
 from spacy.training.loop import train as train_nlp
 from spacy.util import load_config
-from spacy.util import compile_infix_regex, get_lang_class
 from wasabi import msg
 
-from utils.functions import find_language, set_global_variables
+from utils.functions import set_global_variables
 from training.training.abstract import AbstractTrainer
 
 METRICS = ["token_acc", "morph_acc"]
@@ -139,7 +138,6 @@ class SpacyTrainer(AbstractTrainer):
             cfg.to_disk(self.train_config_path)
             fill_config(self.train_config_path, self.train_config_path)
 
-        print("Labels after processing:", list(self.nlp.get_pipe("morphologizer").labels))
         return docbin
     
     def _train_once(self, train_docs, dev_docs, seed=42):
