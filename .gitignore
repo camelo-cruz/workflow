@@ -46,3 +46,5 @@ cache/
 /backend/models/glossing/de_H10a_custom_glossing
 /backend/models/glossing/yo_H06a_custom_glossing
 /backend/models/glossing/de_H10_with_vectors_custom_glossing
+/backend/models/glossing/de_H10a_without_vectors_custom_glossing
+/backend/models/glossing/de_H10a_with_vectors_custom_glossing

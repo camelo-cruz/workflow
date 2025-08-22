@@ -183,7 +183,7 @@ class SpacyTrainer(AbstractTrainer):
         # Shuffle once for reproducibility
         random.seed(seed)
         random.shuffle(docs)
-
+ 
         dev_frac = 0.1  # 10% for dev set
         n = len(docs)
         dev_n = max(1, int(n * dev_frac))  # 10% for dev

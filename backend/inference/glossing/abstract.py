@@ -78,7 +78,8 @@ class GlossingStrategy(ABC):
             "Animacy", "NounClass", "Deixis", "DeixisRef", "Degree",
             # Verbal
             "VerbForm", "Mood", "Tense", "Aspect", "Voice",
-            "Evident", "Polarity", "Polite",
+            "Evident", "Polarity", "Polite", "Foreign", "Abbr", "Typo",
+            "Poss"
         ]
         # sanity check (optional)
         missing = GLOSSARY_CATEGORIES - set(features_in_order)
