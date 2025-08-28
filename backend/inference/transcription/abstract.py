@@ -14,15 +14,15 @@ class TranscriptionStrategy(ABC):
         self.load_model()
     
     def _load_hugging_face_token(self):
-        token = os.getenv("HUGGING_KEY")
+        token = os.getenv("HUGGING_KEY", "").strip()
         if not token:
             secrets_path = os.path.join(parent_dir, 'materials', 'secrets.env')
             print(f"Loading Hugging Face token from {secrets_path}")
             if os.path.exists(secrets_path):
                 load_dotenv(secrets_path, override=True)
-                token = os.getenv("HUGGING_KEY")
+                token = os.getenv("HUGGING_KEY", "").strip()
         if not token:
-            raise ValueError("Hugging Face key not found. Set it in Hugging Face Secrets or in materials/secrets.env")
+            raise ValueError("Hugging Face key not found. Set it in HUGGING_KEY")
         return token
     
     @abstractmethod

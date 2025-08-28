@@ -17,17 +17,25 @@ class WhisperxStrategy(TranscriptionStrategy):
             self.model = whisperx.load_model("large-v2", self.device, compute_type="float16", language=self.language_code)
         except:
             self.model = whisperx.load_model("large-v2", self.device, compute_type="int8", language=self.language_code)
+        finally:
+            print(f"Whisperx model loaded on device {self.device}")
 
     def transcribe(self, path_to_audio):
         audio = whisperx.load_audio(path_to_audio)
         result = self.model.transcribe(audio, batch_size=self.batch_size, language=self.language_code)
 
-        model_a, metadata = whisperx.load_align_model(language_code=result["language"], device=self.device)
+        model_a, metadata = whisperx.load_align_model(
+            language_code=result["language"],
+            device=self.device)
         result = whisperx.align(result["segments"], model_a, metadata, audio, self.device)
 
-        diarize_model = DiarizationPipeline(model_name="pyannote/speaker-diarization-3.1", use_auth_token=self.hugging_key, device=self.device)
+        diarize_model = DiarizationPipeline(
+            use_auth_token=self.hugging_key,
+            device=self.device
+        )
         diarize_segments = diarize_model(audio)
         result = whisperx.assign_word_speakers(diarize_segments, result)
+
 
         full_sentences, buffer_speaker, buffer_text = [], None, ""
         for seg in result["segments"]:
@@ -48,6 +56,8 @@ class WhisperxStrategy(TranscriptionStrategy):
             full_sentences.append(f"{buffer_speaker}: {buffer_text}")
 
         joined_text = "  ".join(full_sentences)
+
+        print('joined_text: ', joined_text)
         
         return joined_text
     
